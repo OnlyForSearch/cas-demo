@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!-- 全局setting配置，根据需要添加 -->
+	
+	<!-- 配置别名 -->
+	<typeAliases>
+		<!-- 批量扫描别名 -->
+		<package name="cn.feng.web.ssm"/>
+	</typeAliases>
+
+	<!-- 配置mapper
+	由于使用spring和mybatis的整合包进行mapper扫描，这里不需要配置了。
+	必须遵循：mapper.xml和mapper.java文件同名且在一个目录 
+	 -->
+
+	<!-- <mappers>
+	
+	</mappers> -->
+
+</configuration>
+
+
+<!-- mybatis的全局配置文件SqlMapConfig.xml，配置内容如下： properties（属性） settings（全局配置参数） 
+	typeAliases（类型别名） typeHandlers（类型处理器） objectFactory（对象工厂） plugins（插件） environments（环境集合属性对象） 
+	environment（环境子属性对象） transactionManager（事务管理） dataSource（数据源） mappers（映射器） -->
+

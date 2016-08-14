@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util.xsd
+  http://www.springframework.org/schema/context 
+  http://www.springframework.org/schema/context/spring-context.xsd
+  http://www.springframework.org/schema/mvc
+  http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  
+  
+<!-- **********************SpringMVC配置************************* -->
+
+
+
+
+	<!-- 默认的注解映射的支持，它是为了简化配置的缩写形式，它相当于以下2个配置： -->
+	<!--注解映射器 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/> -->
+	<!--注解适配器 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/> -->
+
+	<!-- 使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置 mvc:annotation-driven默认加载很多的参数绑定方法， -->
+	<!-- 比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边 的RequestMappingHandlerMapping和RequestMappingHandlerAdapter 
+		实际开发时使用mvc:annotation-driven -->
+	<!-- <mvc:annotation-driven /> -->
+
+	<mvc:annotation-driven validator="validator"
+		conversion-service="conversion-service" />
+
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!--不设置则默认为classpath下的 ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="validatemessageSource" />
+	</bean>
+	<bean id="conversion-service"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	<bean id="validatemessageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+<!--		<property name="basename" value="classpath:validatemessages" />-->
+		<property name="fileEncodings" value="utf-8" />
+		<property name="cacheSeconds" value="120" />
+	</bean>
+	<!-- ************************************************************************* -->
+	<!-- 如果当前请求为“/”时，则转发到“/helloworld/index" -->
+	<mvc:view-controller path="/"
+		view-name="forward:/index" />
+	<!-- 静态资源映射 --><!-- 对静态资源文件映射作一下配置，否则请求这些资源文件会返回404： -->
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+<!--	<mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
+	<mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts/" />
+	<mvc:resources mapping="/plugins/**" location="/WEB-INF/plugins/" />
+	<mvc:resources mapping="images/**" location="/WEB-INF/images/" />-->
+	<!-- 当上面要访问的静态资源不包括在上面的配置中时，则根据此配置来访问 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 开启controller注解支持 -->
+	<!-- use-default-filters="false" 只扫描指定的注解 -->
+	<!-- 可以扫描controller、service、... 这里让扫描controller，指定controller的包 -->
+	<context:component-scan base-package="cn.feng.web.**.controllers"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 视图解析器 并指定视图所在的文件夹： -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="contentType" value="text/html" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- ****************************************************************************************************** -->
+	<!-- 支持上传文件 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为1MB -->
+		<property name="maxUploadSize"><!-- maxUploadSize用于限制上传文件的最大大小 -->
+			<value>1048576</value>
+		</property>
+		<property name="defaultEncoding"><!-- defaultEncoding用于设置上传文件的编码格式 -->
+			<value>UTF-8</value>
+		</property>
+	</bean>
+	<!-- ****************************************************************************************************** -->
+	<!-- 一.基于浏览器请求的国际化实现： -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- 国际化信息所在的文件名 -->
+		<property name="basename" value="messages" />
+		<!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+
+	<!-- 第一种添加的内容要保留 -->
+	<mvc:interceptors>
+		<!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	</mvc:interceptors>
+	<!-- 二.基于Session的国际化实现： -->
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" 
+		/> -->
+	<!-- -基于URL请求的国际化的实现： -->
+	<!-- 然后把实现第二种方法时在项目的springservlet-config.xml文件中添加的 <bean id="localeResolver" 
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" /> 注释掉，并添加以下内容： 
+		<bean id="localeResolver" class="xx.xxx.xxx.MyAcceptHeaderLocaleResolver"/> 
+		“xx.xxx.xxx”是刚才添加的MyAcceptHeaderLocaleResolver 类所在的包名。 保存之后就可以在请求的URL后附上 
+		locale=zh_CN 或 locale=en_US 如 http://xxxxxxxx?locale=zh_CN 来改变语言了， -->
+
+
+
+	<!-- 三.基于Cookie的国际化实现： -->
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<!-- 设置cookieName名称，可以根据名称通过js来修改设置，也可以像上面演示的那样修改设置，默认的名称为 类名+LOCALE（即：org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE -->
+		<property name="cookieName" value="lang" />
+		<!-- 设置最大有效时间，如果是-1，则不存储，浏览器关闭后即失效，默认为Integer.MAX_INT -->
+		<property name="cookieMaxAge" value="100000" />
+		<!-- 设置cookie可见的地址，默认是“/”即对网站所有地址都是可见的，如果设为其它地址，则只有该地址或其后的地址才可见 -->
+		<property name="cookiePath" value="/" />
+	</bean>
+
+
+	<!-- ****************************************************************************************************** -->
+	<!-- 执行每个action方法是都会调用AuthInterceptor处理，当判断action上有我们定义AuthPassport注解时就会执行里面的权限验证逻辑。 -->
+	<mvc:interceptors>
+		<!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		<!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->
+		<bean class="cn.feng.web.interceptor.AuthInterceptor"></bean>
+	</mvc:interceptors>
+
+	<!-- ****************************************************************************************************** -->
+
+	<!-- （10） 之 异常处理 -->
+
+	<!-- <bean id="exceptionResolver" class="cn.feng.web.exception.MyHandlerExceptionResolver"/> -->
+
+	<!-- ****************************************************************************************************** -->
+
+
+</beans>
