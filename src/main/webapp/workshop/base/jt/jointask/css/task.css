@@ -1,0 +1,316 @@
+body{
+	background-color: #F1F1F1;
+	font-family: 'Arial Negreta', 'Arial';
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+    padding: 0 50px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1272px;
+    padding: 0 50px;
+  }
+}
+
+.x-ie-shadow {
+	background-color: transparent;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus  {
+	outline-style: none;	
+}
+
+/*头部标题栏*/
+.task-head {
+	width: 100%;
+	position: relative;
+	background-color: #5EACDA;
+}
+
+.task-head > .task-title {
+	display: inline-block;
+}
+
+.task-title > span {
+	display: inline-block;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	padding: 12px 30px;
+}
+
+.task-head > .task-menu {
+	position: relative;
+	float: right;
+	padding-right: 10%;
+}
+
+.task-menu > li {
+	width: 60px;
+	padding: 4px 2px;
+	font-size: 12px;
+	color: white;
+}
+
+.task-menu > li:HOVER {
+	color: #3276B1;
+}
+
+.task-menu > li > div {
+	text-align: center;	
+	cursor: pointer;
+}
+
+.task-menu > li > div > img {
+	display: block;
+	margin: 0 auto;
+}
+
+/* 联调基本内容  */
+.task-id > label:FIRST-CHILD {
+	font-size:12px;
+	color:#999999;
+}
+.task-id > label:LAST-CHILD {
+	font-size:12px;
+	color:#F35959;
+}
+
+.task-submit-info {
+	float:right;
+	font-size: 12px;
+	color:#999999;
+}
+
+.task-submit-info label:FIRST-CHILD > font {
+	color:#107BE8;
+}
+
+.task-submit-info label:LAST-CHILD {
+	color:#107BE8;
+} 
+
+.task-title-bar {
+	margin-bottom:20px;
+	padding: 4px 0px;
+	background-color: #8CBDE8;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
+.task-title-bar > label {
+	padding: 6px 0px 0px 28px;
+	color: white;
+	font-weight:bold;
+	font-size: 16px;
+	display: inline-block;
+}
+
+.task-title-bar > img {
+	float: right;
+	display: inline-block;
+	padding:8px 22px 0 0 ;
+	cursor: pointer;
+}
+
+.task-form {
+	background-color: white;
+}
+
+.task-form-content {
+	margin-bottom: 10px;
+	padding:0px 16px;
+	color:#555557;
+	font-style: normal;
+} 
+
+.task-form-element {
+	border:1px solid #BED4DF;
+	border-radius:4px;
+}
+
+.task-form-element > label {
+	display: inline-block;
+	padding: 8px 0px 0px 12px;
+	white-space: nowrap;
+}
+
+.task-form-element > input {
+	width:74%;
+	border:0;
+}
+
+.task-form-element > img {
+	display: inline-block;
+	float: right;
+	padding: 8px 10px 0 0 ;
+	cursor: pointer;
+}
+
+.task-form-element > .task-desc-label {
+	float:left;
+}
+.task-form-element > #task-desc {
+	width:88%;
+	border:0;
+	padding-top:8px;
+}
+
+/*联调任务*/
+.task-form + .task-form {
+	margin-top: 30px;
+}
+
+.table-bordered > thead > tr > th {
+	text-align: center;
+}
+
+.task-test-province > div > button {
+	float:right;
+}
+.task-province-list {
+	margin-top: -16px;
+	display: none;
+}
+.task-province-list > .table-bordered > thead > tr > th {
+	background-color: #DDF0EE;
+}
+
+.task-form-content table{
+	text-align: center;
+}
+
+.task-case {
+	padding-bottom: 4px;
+	position:relative;
+	overflow: hidden;
+}
+
+.task-case > label {
+	position: absolute;
+	margin: 0;
+	top:10px;
+}
+
+.task-case > label > font {
+	color:#F35959;
+	font-size: 18px;
+	padding: 0 2px;
+}
+
+.task-case > div {
+	display:inline-block;
+	padding-right:8px;
+	float:right;
+}
+
+.task-case > div > button {
+	padding: 3px 10px;
+}
+
+.task-case > div > button + button {
+	margin: 0 6px;
+}
+
+.task-test-province {
+	display: none;
+	position:relative;
+}
+
+.task-test-province > div {
+	overflow: hidden;	
+}
+
+.task-test-province > div + div {
+	margin-top:4px;
+	display: none;
+}
+
+.task-test-province > div:FIRST-CHILD > label {
+	display: none;
+}
+
+.test-provinces-detail-div {
+	position:absolute;
+	display: block;
+	width:100%;
+	background-color: white;
+}
+
+.test-province-ul,
+.test-provinces-detail-ul {
+	padding-left: 10px;
+	padding-top: 2px;
+}
+
+.test-province-ul {
+	min-height: 60px;	
+}
+
+.test-province-ul > li {
+	padding: 8px 12px; 
+}
+
+.test-province-ul > li:HOVER {
+	color:#555557;	
+	cursor: pointer;
+	background-color: #F1F1F1;
+	border-radius: 5px;
+}
+
+.test-province-ul > li > span + span {
+	color:#FF0000;	
+}
+
+.test-provinces-detail-ul > li {
+	border:1px solid #F3F3F3;
+	background-color: #F3F3F3;
+	margin-right:12px;
+	border-radius:4px;
+	padding:4px 0px;
+	margin-top: 8px;
+	z-index:3;
+}
+
+.test-provinces-detail-ul > li > div {
+	position: relative;
+}
+.test-provinces-detail-ul > li > div > span {
+	padding: 0px 2px;	
+}
+
+.test-provinces-detail-ul > li > div > img {
+	position:relative;
+	top:-6px;
+	cursor:pointer;
+}
+
+.test-provinces-add {
+	border: 1px solid #ddd;
+	margin-top: -20px;
+	padding: 8px 0px;
+	cursor:pointer;
+}
+
+.test-provinces-add:HOVER {
+	background-color: #F1F1F1;
+}
+
+.test-provinces-add > img {
+	margin: 0 auto;
+	display: block;
+}

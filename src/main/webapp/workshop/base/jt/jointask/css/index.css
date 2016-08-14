@@ -1,0 +1,390 @@
+
+body{
+	background-color: #F1F1F1;
+	font-family: '微软雅黑 Bold', '微软雅黑';
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1210px;
+  }
+}
+
+.btn-default {
+	background-image: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus  {
+	outline-style: none;	
+}
+
+.panel {
+	margin-bottom: 10px;
+}
+
+/*头部标题栏*/
+.top-head {
+	width: 100%;
+	height: 62px;
+	background: url("../img/head-bg.png");
+	position: relative;
+	overflow: none;
+}
+
+.head-icon {
+	display: inline-block;
+	margin-top:8px;
+	float: left;
+}
+
+.top-head .back-home {
+	position: relative;
+	float: right;
+	text-align: center;
+	cursor: pointer;
+}
+
+.head-title {
+	font-size: 28px;
+	color:white;	
+	display: inline-block;
+	margin-top: 16px;
+	margin-left: 18px;
+	float:left;
+}
+
+.top-head .back-home  > img {
+	display: block;
+	padding-left: 14px;
+	vertical-align: middle;
+}
+
+.top-head .back-home  > a {
+	color: white;
+	vertical-align: middle;
+	padding: 0px 6px;
+}
+.top-head .back-home:HOVER ,
+.top-head .back-home  > a:hover{
+	text-decoration: none;
+	color:#6a8eb9 !important;
+}
+
+/*公告*/
+.bill-info {
+	background-color: #E0E0E0;
+	width: 100%;
+	height: 40px;
+	position: relative;
+	overflow: hidden;
+}
+
+.bill-info .col-md-4 {
+	padding-right: 0px;
+}
+
+.bill-info img {
+	position: relative;
+	top: 10px;
+}
+
+.bill-info ul {
+	position: relative;
+	margin-left: 8px;
+}
+.bill-info li {
+	position: relative;
+	top: -8px;
+	font-size: 12px;
+}
+
+.bill-info .bill-info-btn {
+	position: relative;
+	float: right;
+	line-height: 2.6;
+	cursor: pointer;
+	border-left: 1px solid #D9D9D9;
+	border-right: 1px solid #D9D9D9;
+	padding-left: 8px;
+	padding-right: -15px;
+}
+
+.bill-info .bill-info-btn > img {
+	margin-top: -22px;
+}
+
+.bill-info .bill-info-btn > span {
+	padding-right: 6px;
+	line-height: 3.6;
+}
+
+/*联调内容和展示分类*/
+.bill-content {
+	margin-top: 6px;
+	padding-left: 26px;
+}
+.bill-content .panel-title {
+	min-width: 182px;	
+}
+
+.bill-content .panel-body {
+	height: 204px;
+	overflow: hidden;
+}
+.bill-content .panel-default > .panel-heading {
+	background-color: rgb(251, 252, 255);
+	background-image: none;
+	padding: 12px 15px 4px;
+	font-size: 16px;
+	position: relative;
+	overflow: hidden;
+}
+
+
+.bill-content .panel-default > .panel-heading > .panel-title{
+	margin-right: 8px;
+}
+
+
+.bill-content .part-one {
+	width: 37.5%;
+	float: left;
+}
+
+.bill-content .part-two {
+	width: 62.5%;
+	float: right;
+	position: relative;
+}
+
+.bill-content .part-two > .panel-heading {
+	background-color: #E1EBF5;
+}
+
+
+.bill-content .part-two .title-one {
+	position: relative;
+	float: left;
+	height: 38px;
+	margin: -12px 0px -4px -14px;
+	padding: 0px 12px;
+	line-height: 2.9;
+	cursor: pointer;
+}
+ 
+ .bill-content .active {
+ 	background-color: #FBFCFF;
+ }
+ 
+ .bill-content .part-two .title-two {
+	position: relative;
+	float: left;
+	height: 38px;
+	margin: -12px 0px -4px -8px;
+	padding-left: 8px;
+	line-height: 2.9;
+	border-left: 1px solid #E1EBF5;
+	cursor: pointer;
+}
+
+.bill-content .part-two .title-three{
+	float: right;
+	font-size: 12px;
+	cursor: pointer;
+	min-width: 0px;
+}
+
+.part-two .title-three > img {
+	margin-top: -10px;
+	margin-bottom: -2px;
+}
+
+.part-two .panel-body {
+	padding: 0px;
+}
+/*爱联调样式*/
+.part-one ul {
+	padding-left: 20px;
+}
+
+.part-one ul > li {
+   padding-right: 10px;
+}
+
+.bill-content-task {
+	position: relative;
+	margin-left: 20px;
+	text-align: center;
+	display: block;
+	font-size: 14px;
+}
+
+.bill-content-task > span:HOVER {
+	color:blue;
+	cursor: pointer;	
+}
+
+.bill-content-task > div{
+	position: relative;
+	padding-top: 16px;
+}
+
+
+.bill-content-task img + img {
+	position: absolute;
+	top:36px;
+	left:24px;
+}
+
+.bill-content-task > span {
+	font-size: 16px;
+	display: block;
+	padding: 18px 0px 10px;
+	color: #ccc;
+}
+
+/*联调任务*/
+.task-list > .table {
+	color: #6A8EB9;
+	height: 100%;
+	max-height:212px;
+	margin-bottom: 0px;
+}
+
+.task-list ul, .task-list li {
+	margin: 0px;
+}
+
+.task-list ul > li{
+	padding: 4px;
+	padding-right:5px;
+	background: url('../img/task-oper-bg.png') no-repeat;
+}
+
+.task-list > table {
+	font-size: 14px;
+}
+.task-list > table > thead {
+   background-color: #FBFCFF;
+}
+
+.task-list > table > thead > tr > th{
+	text-align: center;
+}
+
+.task-list > table > thead > tr > th:nth-child(1),
+.task-list > table > tbody > tr > td:nth-child(1){
+	width:16%;
+}
+
+.task-list > table > thead > tr > th:nth-child(2),
+.task-list > table > tbody > tr > td:nth-child(2){
+	width:12%;
+}
+.task-list > table > thead > tr > th:nth-child(3),
+.task-list > table > tbody > tr > td:nth-child(3){
+	width:12%;
+}
+.task-list > table > thead > tr > th:nth-child(4),
+.task-list > table > tbody > tr > td:nth-child(4){
+	width:12%;
+}
+.task-list > table > thead > tr > th:nth-child(5),
+.task-list > table > tbody > tr > td:nth-child(5){
+	width:16%;
+}
+.task-list > table > thead > tr > th:nth-child(6),
+.task-list > table > tbody > tr > td:nth-child(6){
+	width:16%;
+}
+.task-list > table > thead > tr > th:nth-child(7),
+.task-list > table > tbody > tr > td:nth-child(7){
+	width:22%;
+}
+
+.task-list > table > thead > tr > th {
+	height: 18px;
+}
+
+.task-list > table > tbody > tr > td {
+	padding: 4px 4px 6px;;
+	text-align: center;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+}
+
+.task-list > table > tbody > tr:LAST-CHILD > td {
+	border-bottom: 0;
+}
+
+.task-list > table > tbody > tr > td> div {
+	width:6.2em; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+
+.task-list > table > tbody > tr > td > ul > li >img {
+	cursor:pointer;
+}
+
+.task-form-element {
+	display: inline-block;
+}
+
+.task-form-element > label {
+	display: inline-block;
+	padding: 8px 0px 0px 12px;
+	white-space: nowrap;
+}
+
+.task-form-element > input {
+	width:54%;
+	display: inline-block;
+}
+
+.task-form-element > img {
+	display: inline-block;
+	position:relative;
+	left:-30px;
+}
+
+.task-form-element .form-control[readonly] {
+  cursor: pointer;
+}
+.task-charts > .panel-heading {
+	background-color: blue;	
+}
+
+.task-charts > .panel-body {
+	height: 254px;
+}
+
+.task-charts .form-group:nth-child(1) {
+	margin-right: 18px;
+}
+
+.task-toolbar-tip .modal-dialog {
+	width: 720px;
+}
+
+.task-toolbar-tip .modal-header {
+	background-color: rgb(66, 139, 202);
+	border-top-left-radius:4px;
+	border-top-right-radius:4px;
+}

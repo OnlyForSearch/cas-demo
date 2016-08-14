@@ -1,0 +1,252 @@
+body{
+	background-color: #F1F1F1;
+	font-family: 'Arial Negreta', 'Arial';
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+    padding: 0 50px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1272px;
+    padding: 0 50px;
+  }
+}
+
+.btn-default {
+	background-image: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus  {
+	outline-style: none;	
+}
+
+.x-ie-shadow {
+	background-color: transparent;
+}
+
+/*头部标题栏*/
+.task-head {
+	width: 100%;
+	position: relative;
+	background-color: #5EACDA;
+}
+
+.task-head > .task-title {
+	display: inline-block;
+}
+
+.task-title > span {
+	display: inline-block;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	padding: 12px 30px;
+}
+
+.task-head > .task-menu {
+	position: relative;
+	float: right;
+	padding-right: 10%;
+}
+
+.task-menu > li {
+	width: 60px;
+	padding: 4px 2px;
+	font-size: 12px;
+	color: white;
+}
+
+.task-menu > li:HOVER {
+	color: #3276B1;
+}
+
+.task-menu > li > div {
+	text-align: center;	
+	cursor: pointer;
+}
+
+.task-menu > li > div > img {
+	display: block;
+	margin: 0 auto;
+	margin-top: 6px;
+	margin-bottom: 4px;
+}
+
+/* 联调基本内容  */
+.task-id > label:FIRST-CHILD {
+	font-size:12px;
+	color:#999999;
+}
+
+.task-id > label:LAST-CHILD {
+	font-size:12px;
+	color:#F35959;
+}
+
+.task-submit-info {
+	float:right;
+	font-size: 12px;
+	color:#999999;
+}
+
+.task-submit-info label:FIRST-CHILD > font {
+	color:#107BE8;
+}
+
+.task-submit-info label:LAST-CHILD {
+	color:#107BE8;
+}
+
+.task-content {
+	background-color: white;
+}
+
+.task-title > label:FIRST-CHILD{
+	color:#3076B1;
+	font-size:14px;
+	padding-top:8px;
+	font-weight: normal;
+}
+
+.task-title > h2 {
+	text-align: center;
+	color:#F35959;
+	font-weight: bold;
+}
+
+.task-title > .task-time {
+	border-bottom: 4px solid #F35959; 
+}
+
+.task-title > .task-time > label:FIRST-CHILD{
+	background: url("../img/u42.png") no-repeat;
+	padding-left: 20px;
+	font-weight: normal;
+	color:black;
+	margin-bottom: 0px;
+}
+
+.task-title > .task-time > label + label {
+	background: url("../img/u44.png") no-repeat;
+	padding-left: 20px;
+	font-weight: normal;
+	font-size:14px;
+	color:#EB8921;
+	float:right;
+	margin-bottom: 0px;
+}
+
+/*左侧详细信息展示*/
+.task-title > h5 {
+	background:url("../img/u27_line.png") no-repeat left center;
+	padding-left: 24px;
+	margin-top: 20px;
+	color:#3076B1;
+}
+
+.table-toolbar {
+	margin-bottom: 6px;
+}
+
+.table-toolbar > div {
+	float:left;
+}
+.table-toolbar > div + div {
+	float:right;
+}
+
+.table-tag > ul {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+.table-tag > ul > li {
+	cursor: pointer;
+	padding:0px 2px;	
+}
+
+.table-tag > ul > li:HOVER {
+	color:#EA8010;
+	border-bottom: 3px solid #EA8010;
+}
+
+.table-tag > ul > li > span {
+	padding:0px 2px;
+}
+
+.talbe-cur-tag-item {
+	color:#EA8010;
+	border-bottom: 3px solid #EA8010;
+}
+.table-tag-item {
+	color:#999999;
+	border-bottom: 3px solid #999999;
+}
+
+/*右侧列表展示*/
+.tag-list {
+	background-color: #F6F6F6;
+	overflow: hidden;
+	width: 16.66666667%;
+	min-height: 600px;
+	position: relative;
+	float:left;
+}
+
+.tag-list > ul {
+	padding-top: 36px;
+}
+
+.cur-menu-item {
+	background: url("../img/Ellipse-orange.png") no-repeat;
+	height:60px;
+	padding-left:24px;
+	margin-left: 22px;
+	display: inline-block;
+	color:#EB8921;
+}
+
+.menu-item {
+	background: url("../img/Ellipse-3.png") no-repeat;
+	height:60px;
+	padding-left:24px;
+	margin-left: 22px;
+	display: inline-block;
+	color:#333333;
+}
+
+.tag-list > ul > li > a:HOVER ,
+.tag-list > ul > li > a:ACTIVE,
+.tag-list > ul > li > a:FOCUS{
+	text-decoration: none;
+	cursor:pointer;
+	outline-style:none;
+}
+
+.table > tbody > tr > td > input {
+	margin-bottom: 8px;
+}
+
+.task-content-list {
+	 width: 83.33333333%;
+	 position: relative;
+	 float:left;
+}
+
+/*控制文本显示异常 */
+.popover-content {
+	word-wrap:break-word;
+}

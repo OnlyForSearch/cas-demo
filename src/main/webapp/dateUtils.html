@@ -1,0 +1,107 @@
+<html>
+<head>
+    <title></title>
+    <script src="../Script/jQuery/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script src="../Script/MTHCRMWidget/MTHCRMWidget.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            myClick();//点击事件触发
+        })
+
+        //专门包装点击事件；
+        function myClick() {
+            $(".tbBtn").click(function () {
+                var sid = $(this).attr("id");
+                var agoDate = "";
+                var Cdate = new Date();
+                if (sid == "CbtnNull") {
+                    $("#txtCallCycleBegin").val("");
+                    $("#txtCallCyclecurrend").val("");
+                } else if (sid == "CbtnMoon") {
+                    agoDate = ProcessDate(30);
+                    $("#txtCallCycleBegin").val("{0}-{1}-{2}".format(agoDate.Year, agoDate.Moon, agoDate.Day));
+                    $("#txtCallCyclecurrend").val("{0}-{1}-{2}".format(Cdate.getFullYear(), Cdate.getMonth() + 1, Cdate.getDate()));
+                } else {
+                    agoDate = ProcessDate(7);
+                    $("#txtCallCycleBegin").val("{0}-{1}-{2}".format(agoDate.Year, agoDate.Moon, agoDate.Day));
+                    $("#txtCallCyclecurrend").val("{0}-{1}-{2}".format(Cdate.getFullYear(), Cdate.getMonth() + 1, Cdate.getDate()));
+                }
+            })
+        }
+
+        //处理日期的函数，返回一个字面量；
+        function ProcessDate(type) {
+            //1.0获取现在时间的年月日：
+            var currentTime = new Date("2016-01-02"); //得到当前的时间
+            var currentYear = currentTime.getFullYear(); //得到当前的年份
+            var currentMoon = currentTime.getMonth() + 1; //得到当前的月份（系统默认为0-11，所以要加1才算是当前的月份）
+            var currentDay = currentTime.getDate(); //得到当前的天数
+
+            //2.0获取当前时间的一个月内的年月日：（一个月内的大众业务需求为：当前时间的月份-1，当前时间的天数+1）
+            var agoDay = "";
+            var agoMoon = currentMoon;
+            var agoYear = currentYear;
+            var max = "";
+            switch (type) {
+                case 30:
+                    agoDay = currentDay + 1;
+                    agoMoon = currentMoon - 1;
+                    max = new Date(agoYear, agoMoon, 0).getDate(); //获取上个月的总天数
+                    break;
+                case 7:
+                    agoDay = currentDay - 6;
+                    if (agoDay < 0) {
+                        agoMoon = currentMoon - 1;//月份减1
+                        max = new Date(agoYear, agoMoon, 0).getDate(); //获取上个月的总天数
+                        agoDay = max + agoDay;//天数在上个月的总天数的基础上减去负数
+                    }
+                    break;
+            }
+
+            //3.0对处理的年月日作逻辑判断
+
+
+            //如果beginDay > max（如果是当前时间的天数+1后的数值超过了上个月的总天数： 天数变为1，月份增加1）
+            if (agoDay > max) {
+                agoDay = 1;
+                agoMoon += 1;
+            }
+
+            //如果月份当月为1月的时候， 那么一个月内： 年：-1 月：12 日：依然不变
+            if (agoMoon == 0) {
+                agoMoon = 12;
+                agoYear = currentYear - 1;
+            }
+
+            //4.0对已经处理好的数据作格式处理（单位数则自动补零）
+            currentMoon = Appendzero(currentMoon);
+            currentDay = Appendzero(currentDay);
+            agoMoon = Appendzero(agoMoon);
+            agoDay = Appendzero(agoDay);
+
+            //5.0帮助代码
+            console.log("当前时间为：{0}-{1}-{2}".format(currentYear, currentMoon, currentDay));
+            console.log("一个月前的时间为{0}-{1}-{2}".format(agoYear, agoMoon, agoDay));
+
+            return { "Year": agoYear, "Moon": agoMoon, "Day": agoDay };
+        }
+
+        //处理各位数为零的数字（单位数则加0）
+        function Appendzero(obj) {
+            if (obj < 10) {
+                return "0" + obj;
+            } else {
+                return obj;
+            }
+        }
+
+    </script>
+</head>
+<body>
+<input type="button" class="tbBtn" id="CbtnNull" style="background-color:#e3e3e3" value="不限"/>
+<input type="button" class="tbBtn" id="CbtnMoon" style="width: 80px; margin-left: 5px; margin-right: 5px;" value="一个月内"/>
+<input type="button" class="tbBtn" id="CbtnWeek" style="width: 80px; margin-left: 5px; margin-right: 5px;" value="一周内"/>
+<input id = "txtCallCycleBegin" type="text"/>
+<input id = "txtCallCyclecurrend" type="text"/>
+</body>
+</html>
