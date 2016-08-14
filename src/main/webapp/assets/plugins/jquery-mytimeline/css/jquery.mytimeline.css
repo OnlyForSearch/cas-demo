@@ -1,0 +1,28 @@
+.my-timeline-wrap{position:relative; background:url(../images/line04.gif) repeat-y 187px 0;overflow:hidden;}
+.my-timeline-group{overflow:hidden;position:relative;}
+.my-timeline-group h2.date{position:relative;left:0;top:0;width:935px;height:59px;background:#fff url(../images/icon06.gif) no-repeat 158px 0;font-size:25px;font-family:Î¢ÈíÑÅºÚ;font-weight:normal;padding-left:45px;margin-bottom:60px; z-index:99;}
+.my-timeline-group h2.date a{color:#00bbff;display:inline-block;*display:inline;zoom:1;background:url(../images/icon08.gif) no-repeat right 50%;padding-right:17px;margin:21px 97px 0 0; cursor:hand;}
+.my-timeline-group h2.date a:hover{text-decoration:none;}
+.my-timeline-group h2.date02{background:none;}
+.my-timeline-item{background:url(../images/icon07.gif) no-repeat 180px 0;padding-bottom:50px;zoom:1;}
+.my-timeline-item:after{content:" ";display:block;height:0;clear:both;visibility:hidden;}
+
+.my-timeline-item h3.date{float:left;width:168px;text-align:right;padding-right:19px;color:#c3c3c3;font:normal 18px/16px Arial; cursor: pointer;}
+.my-timeline-item h3.date span{display:block;color:#d0d0d0;font-size:12px;}
+.my-timeline-item dl{float:left;padding-left:41px;margin-top:-5px;font-family:Î¢ÈíÑÅºÚ;}
+
+.my-timeline-item.green h3.date{color:#1db702;}
+.my-timeline-item.green h3.date span{color:#a8dda3;}
+.my-timeline-item.blue h3.date{color:#3a87ad;}
+.my-timeline-item.yellow h3.date{color:#f89406;}
+
+.my-timeline-ct{font:20px/22px "Microsoft Yahei";color:#737373; padding: 10px; border: 1px solid #fff;}
+.my-timeline-ct:hover{border:1px solid #ccc; border-radius: 5px; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);  cursor:pointer;}
+.my-timeline-ct img {max-width: 720px; max-height:600px;}
+.my-timeline-ct span.ct{display:block;color:#787878;font-size:13px;padding:8px 0; }
+.my-timeline-ct span.label{ display: inline-block;padding: 2px 4px;font-size: 15px;margin-right: 2px;font-weight: bold;line-height: 15px;color: #fff;vertical-align: baseline;white-space: nowrap; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); background-color: #999999;-webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;}
+.my-timeline-ct span.label-green{background-color: #468847;}
+.my-timeline-ct span.label-blue{background-color: #3a87ad;}
+.my-timeline-ct span.label-yellow{background-color: #f89406;}
+*body .my-timeline-ct{_font-size:12px!important;_font-weight:bold;}
+*body .my-timeline-ct span.ct{_font-weight:normal!important;}
