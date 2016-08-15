@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>服务器端务器端</title>
+    <!-- Bootstrap -->
+
+    <link rel="stylesheet" href="../js/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../js/bootstrap/3/dataTables.bootstrap.css">
+    <!--<link rel="stylesheet" href="../asset/lib/dataTables-1.10.7/media/css/jquery.dataTables.min.css">-->
+
+
+    <style type="text/css">
+        td.highlight {
+            color: blue;
+            font-weight: bold;
+        }
+
+        td.highlight {
+            background-color: whitesmoke !important;
+        }
+
+        table.dataTable tbody tr.selected {
+            background-color: #B0BED9;
+        }
+
+        td.details-control {
+            background: url('img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('img/details_close.png') no-repeat center center;
+        }
+    </style>
+
+</head>
+<body>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<hr>
+<h3>自定义HTTP变量</h3>
+<table id="example2" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+<hr>
+<h3>POST请求</h3>
+<table id="example3" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<hr>
+<h3>自动添加行ID属性</h3>
+<table id="example4" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<hr>
+<h3>对象数据源</h3>
+
+
+<table id="example5" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<hr>
+<h3>单行详细</h3>
+<table id="example6" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th></th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th></th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<hr>
+<h3>多行选定</h3>
+<table id="example7" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+
+<hr>
+<h3>远程域JSONP数据源</h3>
+
+<table id="example8" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+</table>
+<hr>
+<h3>多行选定</h3>
+
+<hr>
+<h3>多行选定</h3>
+
+<hr>
+<h3>多行选定</h3>
+
+<hr>
+<h3>多行选定</h3>
+
+
+</body>
+
+<script src="../asset/lib/jquery-1.11.3.min.js"></script>
+
+
+<script src="../asset/lib/dataTables-1.10.7/media/js/jquery.dataTables.js"></script>
+
+
+<script src="../js/bootstrap-3.3.7/dist/js/bootstrap.js"></script>
+<script src="../js/bootstrap/3/dataTables.bootstrap.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": "data/server_side1.txt"
+        } );
+
+
+
+        /*自定义HTTP变量*/
+        /*
+         它通常可以是有用的利用数据表“服务器端处理选项时，以额外的信息发送给服务器。这是通过使用可在两种不同的方法之一中使用的ajax.data选项完成：
+         object  - 一个对象的数据发送到服务器。这是用于将静态数据的请求是有用的。
+         function  - 它将操作数据对象发送到服务器，根据需要添加值的函数。使用数据参数作为功能允许附加数据来进行评价，并加入到在请求时的时间的请求。
+
+         下面的例子示出了正与一个额外的参数，通过使用ajax.data选项作为功能被发送到服务器使用服务器端处理。
+        *
+        * */
+        $('#example2').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "data/server_side2.txt",
+                "data": function ( d ) {
+                    d.myKey = "myValue";
+                    // d.custom = $('#myInput').val();
+                    // etc
+                }
+            }
+        } );
+
+
+
+        /*************POST请求*/
+        $('#example3').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "data/server_side3.txt",
+                "type": "POST"
+            },
+            "columns": [
+                { "data": "first_name" },
+                { "data": "last_name" },
+                { "data": "position" },
+                { "data": "office" },
+                { "data": "start_date" },
+                { "data": "salary" }
+            ]
+        } );
+
+
+        /**/
+        $('#example4').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": "data/server_side4.txt",
+            "columns": [
+                { "data": "first_name" },
+                { "data": "last_name" },
+                { "data": "position" },
+                { "data": "office" },
+                { "data": "start_date" },
+                { "data": "salary" }
+            ]
+        } );
+
+
+        /*************对象数据源*/
+        /**/
+        $('#example5').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": "data/server_side5.txt",
+            "columns": [
+                { "data": "first_name" },
+                { "data": "last_name" },
+                { "data": "position" },
+                { "data": "office" },
+                { "data": "start_date" },
+                { "data": "salary" }
+            ]
+        } );
+
+
+
+/*****************行详细*/
+
+        var dt = $('#example6').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": "data/server_side6.txt",
+            "columns": [
+                {
+                    "class":          "details-control",
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ""
+                },
+                { "data": "first_name" },
+                { "data": "last_name" },
+                { "data": "position" },
+                { "data": "office" }
+            ],
+            "order": [[1, 'asc']]
+        } );
+
+        // Array to track the ids of the details displayed rows
+        var detailRows = [];
+
+        $('#example6 tbody').on( 'click', 'tr td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = dt.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+
+                // Add to the 'open' array
+                if ( idx === -1 ) {
+                    detailRows.push( tr.attr('id') );
+                }
+            }
+        } );
+
+        // On each draw, loop over the `detailRows` array and show any child rows
+        dt.on( 'draw', function () {
+            $.each( detailRows, function ( i, id ) {
+                $('#'+id+' td.details-control').trigger( 'click' );
+            } );
+        } );
+
+
+
+        /*****************多行选定*/
+        var selected = [];
+
+        $("#example7").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": "data/server_side7.txt",
+            "rowCallback": function( row, data ) {
+                if ( $.inArray(data.DT_RowId, selected) !== -1 ) {
+                    $(row).addClass('selected');
+                }
+            }
+        });
+
+        $('#example7 tbody').on('click', 'tr', function () {
+            var id = this.id;
+            var index = $.inArray(id, selected);
+
+            if ( index === -1 ) {
+                selected.push( id );
+            } else {
+                selected.splice( index, 1 );
+            }
+
+            $(this).toggleClass('selected');
+        } );
+
+
+
+        /**/
+     /*   $('#example8').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "data/server_side8.txt",
+                "dataType": "jsonp"
+            }
+        } );
+*/
+
+
+
+
+    } );
+
+
+
+
+    function format ( d ) {
+        return 'Full name: '+d.first_name+' '+d.last_name+'<br>'+
+                'Salary: '+d.salary+'<br>'+
+                'The child row can contain any data you wish, including links, images, inner tables etc.';
+    }
+
+</script>
+</html>
