@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../js/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+
+    <script src="../asset/lib/jquery-1.11.3.min.js"></script>
+    <script src="../js/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+        <button class="btn btn-info">确定一次按钮</button>
+        <button class="btn btn-danger">确定按钮</button>
+        <script>
+         var x;   x.toString();
+        </script>
+</body>
+<script>
+
+    $(document).ready(function () {
+
+        function one() {
+
+            console.log("one");
+        }
+
+
+        $("button.btn-info").one("click",one);
+
+
+        $("button.btn-danger").one("click",function() {
+            $("button.btn-info").one("click",one);
+        });
+
+    });
+
+</script>
+</html>
