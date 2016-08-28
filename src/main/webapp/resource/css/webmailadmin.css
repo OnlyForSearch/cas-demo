@@ -1,0 +1,137 @@
+.blackb {
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+}
+.black {
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size: 12px;
+	color: #000000;
+}
+.hometext {
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size: 11px;
+	color: #000000;
+}
+
+a { 
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	text-decoration: underline; 
+	color: #000000;
+}
+a:hover { 
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	text-decoration: none;
+	color: #000000;
+}
+
+.blue {
+	font-size: 12px;
+	color: #0000FF;
+}
+.red {
+	font-size: 12px;
+	color: #FF0000;
+	text-decoration: none;
+}
+
+.pagetext {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #2161A0;
+}
+
+input {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt;
+}
+input.ButtonFlat {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 12px;
+	color: #000000;
+	background-color: #FFDD93;
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	padding-top: 2px;
+	line-height: 100%;
+}
+input.TextFlat {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 12px;
+	background-color: #FFFFFF; 
+	border-top: #4D4D4D 1px solid; 
+	border-left: #4D4D4D 1px solid; 
+	border-right: #4D4D4D 1px solid; 
+	border-bottom: #4D4D4D 1px solid; 
+	color: #000000; 
+	height:17PX;
+}
+
+td {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000;
+}
+
+.tabHead {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000; 
+	background-color: #FFDD93;
+}
+.tabState {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000; 
+	background-color: #FFFFEF;
+}
+.tabField {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000; 
+	background-color: #FFFFEF;
+}
+.tabValue {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000; 
+	background-color: #FFFFFF;
+}
+
+.msgTabHead	{  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #FFFFFF; 
+	background-color: #FFDD93;
+}
+.msgTabValue {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000; 
+	background-color: #FFFFFF;
+}
+
+.link {  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #3333FF;
+	text-decoration: none; 
+}
+
+.buttonlink	{  
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000;
+	text-decoration: none;
+}
+.buttonlink:hover {	
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; 
+	font-size: 9pt; 
+	color: #000000;
+	text-decoration: underline;
+}
+

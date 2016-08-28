@@ -1,0 +1,234 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<style>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@import url(../../css/DatePicker.css);
+@media all
+{
+  IE\:button{behavior:    url(../../htc/btn.htc);}
+  IE\:tree{behavior:    url(../../htc/tree.htc);}
+  IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+}
+.required{color:red;}
+.TreeDIV
+{
+	WIDTH:200px;HEIGHT:330px;OVERFLOW: scroll;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+}
+.TreeDIV SELECT{margin:-2px;}
+body{margin:10px 8px 0px 8px;}
+</style>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../stringUtil.js"></SCRIPT>
+<script src="../../../resource/js/ext/adapter/ext/ext-base.js"></script>
+<script src="../../../resource/js/ext/ext-all.js"></script>
+<SCRIPT src="../../../resource/js/XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../../../resource/js/XMLTree/XMLTreeAction.js"></SCRIPT>
+<title>组织多选配置</title>
+</head>
+<body onUnload="winClose()" onLoad="iniPage()" oncontextmenu = "return false;">
+ <table>
+	<tr>
+		<td>
+		<table border="0" cellpadding="0" cellspacing="0"
+			style="margin-top:6px">
+			<TR>
+				<TD background="../../image/dashed.gif"></TD>
+			</TR>
+
+			<TR>
+				<TD colspan=2>
+				<table border="0" cellpadding="0" cellspacing="0"
+					style="margin-top:16px">
+					<tr>
+						<td>可选组织：<br>&nbsp;<div id="orgTreeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;" onDblClick="addOneOrg.click()"></div></td>
+						<td>
+						<table>
+							<tr>
+								<td align="center"><div><IE:button value=">" width="30"
+									onclick="addSelectedTo(tree, orgTarget)"
+									id="addOneOrg" /></div></td>
+							</tr>
+							<tr>
+								<td align="center"><div><IE:button value="<" width="30" onclick="orgTarget.delSelectedOption()" id="delOneOrg"/></div></td>
+							</tr>
+						</table>
+						</td>
+						<td>已选组织：<br><br>&nbsp;<IE:XmlSelect id="orgTarget" size="20" width="180" onOptionDblClick="delOneOrg.click()" class='TreeDIV'/></td>
+					</tr>
+				</table>
+				</TD>
+			</TR>
+
+		</table>
+		</td>
+	</tr>
+	<TR>
+		<TD background="../../image/dashed.gif" colspan="2"></TD>
+	</TR>
+</table>
+<div style="margin-top:10px;text-align:right">
+    <IE:button value="确&nbsp;&nbsp;定" onclick="returnValues()" />&nbsp; 
+	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />&nbsp;&nbsp;</div>
+<script>
+var params=null;
+
+//页面初始化
+function iniPage(){
+	//父窗口传进参数
+    var dialogArgObj = window.dialogArguments;
+    if(dialogArgObj!=null)
+    {
+    	var params = new Object(); 
+    	params.orgIds=dialogArgObj.orgIds;
+    	params.orgNames=dialogArgObj.orgNames;
+		orgTarget.getObject().length = 0;
+		if(params.orgIds!=null && params.orgIds!="")
+			initSelectedOrgs(params.orgIds,params.orgNames);
+    }
+    initTree(); //初始化组织树
+}
+
+//初始化已选择组织配置项
+ function initSelectedOrgs(orgIds,orgNames)
+{
+	var orgIdArray=orgIds.split(",");
+	var orgNameArray=orgNames.split(",");
+	var object = orgTarget.getObject();
+	for(var i=0;i<orgIdArray.length;i++)
+	{
+		object.length++;
+		object.size++;
+		object.options[i].text = orgNameArray[i];
+		object.options[i].value = orgIdArray[i];
+	}
+} 
+
+//返回值
+function returnValues(){
+	var orgOptions = orgTarget.getObject().options;
+    var orgIds = "";
+    var orgNames = "";
+	for (var i = 0; i<orgOptions.length; i++){
+		orgIds += orgOptions[i].value + ",";
+		orgNames += orgOptions[i].text + ",";
+	}
+	orgIds=orgIds.substring(0,orgIds.length-1);
+	orgNames=orgNames.substring(0,orgNames.length-1);
+	params = new Object();
+	params.orgIds=orgIds;
+	params.orgNames=orgNames;
+	window.close();
+}
+//关闭窗口
+function winClose()
+{
+	window.returnValue = params;
+}
+
+//初始化组织树
+function initTree()
+{
+	var Choice = {};
+    Choice.params = Ext.applyIf({}, {
+        orgId: '0'
+    });
+    Choice.TreePanel = Ext.extend(Ext.Panel, {
+		initComponent: function() {
+			Choice.TreePanel.superclass.initComponent.call(this);
+			this.addEvents("load");
+			this.addEvents("dynamicLoad");
+			this.tree = tree = new XMLTree();
+			this.tree.isOpenChildAtferClick = true;
+			if (this.treeConfig) {
+				Ext.apply(this.tree, this.treeConfig);
+			}
+			this.initAction();
+		},
+		initAction: function() {
+			var self = this;
+			var LoadAction = function() {
+				this.parent = new XMLTree_onLoad_Action;
+				this.parent.load = function() {
+					self.fireEvent("load", self.tree);
+				}
+				return this.parent;
+			}
+			var DynamicLoadAction = function() {
+				this.parent = new XMLTree_onDynamicLoad_Action;
+				this.parent.dynamicLoad = function(oItem) {
+					self.fireEvent("dynamicLoad", oItem);
+					return oItem.dloadUrl;
+				}
+				return this.parent;
+			}
+			this.tree.setLoadAction(new LoadAction());
+			this.tree.setDynamicLoadAction(new DynamicLoadAction())
+		},
+		onRender: function(ct, position) {
+			Choice.TreePanel.superclass.onRender.call(this, ct, position);
+			this.body.addClass("choice-tree-panel-body");
+			if (this.tree.xmlUrl) {
+				this.tree.showAt(this.body.dom);
+			}
+		},
+		refresh: function() {
+			if (this.treeConfig) {
+				Ext.apply(this.tree, this.treeConfig);
+			}
+			if (this.tree.xmlUrl) {
+				this.tree.showAt(this.body.dom);
+			}
+		}
+	});
+	var panel = new Choice.TreePanel({
+		renderTo:'orgTreeDiv',
+		bodyStyle:'background:#FFFFFF;border:0',
+		treeConfig: {
+			xmlUrl: '../../../servlet/staffmenu?action=40&startOrg=' + Choice.params.orgId,
+			isDynamicLoad: true
+		},
+		listeners: {
+			"load": function(tree) {
+				var self = this;
+				if (Choice.params.orgId) {
+					tree.gotoItem(Choice.params.orgId, true);
+				}
+			},
+			"dynamicLoad": function(oItem) {
+				oItem.dloadUrl = "../../../servlet/staffmenu?action=41&id=" + oItem.id;
+			}
+		}
+	});
+}
+
+//通用函数
+function isSame(oOption1,oOption2)
+{
+    return (oOption1.text==oOption2.text && oOption1.value==oOption2.value);
+}
+
+
+//选择右移
+function addSelectedTo(source, target)
+{
+
+    var oOption = document.createElement("OPTION");
+    oOption.text = source.getSelectedItem().firstChild.nodeValue;
+    //oOption.value = source.getSelectedItem().getAttribute("moduleID");
+    oOption.value = source.getSelectedItem().getAttribute("id");
+    var oTarget = target.getObject();
+    oTarget.parentElement.fireMoveOptionIn(oOption);
+    var i = 0;
+    for(i=0;i<oTarget.options.length && !isSame(oOption,oTarget.options[i]);i++);
+    if(i==oTarget.options.length){oTarget.add(oOption);}
+}
+
+</script>
+</body>
+</html>

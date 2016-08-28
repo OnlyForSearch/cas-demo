@@ -1,0 +1,1348 @@
+body{
+    margin:0px 0px 0px 0px;
+    font-family:"Microsoft Yahei";
+    line-height:150%;
+    text-align: center;
+    padding-bottom:20px;
+}
+.must_fill{
+	color:red;
+}
+.box{
+    text-align: center;
+    width:1100px;
+}
+.top{
+    text-align: left;
+}
+.top_title{
+    font-size:14px;
+    color:#999999;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.center{
+    text-align: left;
+}
+.step_bar{
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 1080px;
+	display:none;
+}
+
+.type_bar{
+    margin-left: 10px;
+    width: 1100px;
+	text-align: center;
+	background-color:#e2e2e2;
+	display:none;
+}
+
+.CLIENT_AZ_INFO{
+	display:none;
+}
+.CLIENT_TWO_INFO{
+	display:none;
+}
+.CLIENT_THREE_INFO{
+	display:none;
+}
+.CLIENT_INFO_CLASS{
+	display:none;
+}
+
+.type_inner_bar{
+    margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 25px;
+	margin-bottom: 25px;
+    width: 1050px;
+	height:250px;
+	border:1px solid #D3D3D3;
+	background-color:#f5f5f5;
+	text-align:center;
+}
+.type_item{
+	background-color:#ffffff;
+	width:260px;
+	height:140px;
+	margin-left:60px;
+	margin-top:55px;
+	margin-buttom:30px;
+	float:left;
+	cursor:hand;
+}
+.type_item_selected{
+	background-color:#e2e2e2;
+	width:260px;
+	height:140px;
+	margin-left:60px;
+	margin-top:55px;
+	margin-buttom:30px;
+	float:left;
+	cursor:hand;
+}
+.type_item_image{
+	margin-top:35px;
+	margin-left:35px;
+	float:left;
+}
+.type_item_content{
+	margin-top:40px;
+	width:100px;
+}
+.step_blue_left{
+    float: left;
+    width: 10px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-blue-left.png);
+}
+.bar_title_fir{
+    font-size:16px;
+    color:#fff;
+    float: left;
+    padding-top: 8px;
+    padding-left: 12px;
+}
+.bar_title_sec{
+    font-size:20px;
+    color:#fff;
+    float: left;
+    padding-top: 8px;
+    padding-left: 12px;
+}
+.bar_title_blue_left{
+    width: 230px;
+    height: 36px;
+    float: left;
+    background-color: #63c3f1;
+}
+.step_line{
+    float: left;
+    width: 3px;
+    margin-top: 8px;
+    margin-left: 12px;
+    background-image: url(/resource/image/nxelectonicwork/step-line.png);
+}
+.step_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-mid.png);
+}
+.step_blue_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-blue-mid.png);
+}
+.bar_title_gray_left{
+    width: 240px;
+    height: 36px;
+    float: left;
+    background-color: #c6c6c6;
+}
+.step_gray_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-gray-mid.png);
+}
+.step-gray-right{
+    float: left;
+    width: 10px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-gray-right.png);
+}
+.basic_form_info{
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 1080px;
+    background-color: #f5f5f5;
+	display:none;
+}
+.basic_form_info1{
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 1080px;
+    background-color: #f5f5f5;
+}
+.execute_result_info{
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 1080px;
+    background-color: #f5f5f5;
+}
+.basic_title{
+    font-size:14px;
+    color:#008dd2;
+    float: left;
+    margin-left: 33px;
+    margin-top: 10px;
+}
+.basic_icons_right{
+    width: 20px;
+    height: 30px;
+    margin-top:14px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 220px 100px;
+}
+.basic_icons_down{
+    width: 20px;
+    height: 30px;
+    margin-top:14px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 240px 100px;
+}
+.basic_info{
+    text-align: right;
+    width: 1080px;
+}
+.basic_info_label{
+    float:left;
+    width: 100px;
+    text-align: right;
+	height: 42px;
+}
+.basic_info_title{
+    font-size:14px;
+    color:#666666;
+}
+.basic_td{
+    background-color: #e2e2e2;
+	width:2%;
+}
+.basic_info_value{
+    float:left;
+}
+.input_no_border{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:170px;
+}
+.select_no_border{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:174px;
+}
+.select_no_border_not_to_span{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:174px;
+}
+.select_org{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:68px;
+}
+.input_org{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:100px;
+}
+.input_one_line{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:880px;
+}
+.input_border{
+    font-family:"Microsoft Yahei";
+    background-color:transparent;
+    border:0px;
+    margin-top: -2px;
+    font-size:14px;
+    color:#333333;
+}
+.input_border_serial{
+    font-family:"Microsoft Yahei";
+    background-color:transparent;
+    border:0px;
+    margin-top: -2px;
+	width:265px;
+    font-size:14px;
+    color:#333333;
+}
+.input_title{
+    width:545px;
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+}
+.input_border_common{
+    width: 890px;border:0px;font-family:"Microsoft Yahei";
+}
+.org_input_border_common{
+    width: 170px;border:0px;font-family:"Microsoft Yahei";
+}
+.input_border_common_not_to_span{
+	width: 890px;border:0px;font-family:"Microsoft Yahei";
+}
+.input_border_common1{
+    width: 890px;border:0px;background-color:transparent;font-family:"Microsoft Yahei";
+}
+.basic_info_label_title{
+    width: 9%;
+}
+.basic_info_value_title{
+    width: 87%;
+    text-align: left;
+    float: left;
+    height: 30px;
+
+}
+.basic_info_value_title{
+    width: 87%;
+    text-align: left;
+    float: left;
+    height: 30px;
+
+}
+.basic_info_value_div{
+    border:1px solid #cfcfcf;
+    height: 33px;
+    width: 400px;
+    background-color: #ffffff;
+}
+.basic_info_value_div_none{
+    height: 33px;
+    width: 400px;
+}
+.input_border_title{
+    font-family:"Microsoft Yahei";
+    margin-top: 4px;
+    font-size:14px;
+    color:#333;
+    background-color:transparent;
+    border:0px;
+    width: 400px;
+}
+.oper_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 9%;
+    text-align: right;
+}
+.oper_info_check{
+    font-size:14px;
+    color:#666666;
+    width: 20%;
+    text-align: right;
+}
+.oper_info_org_deal{
+    font-size:14px;
+    color:#666666;
+    width: 20%;
+    text-align: right;
+}
+.org_info_deal_div{
+    border:1px solid #cfcfcf;
+    float: left;
+	width: 100px;
+    background-color: #ffffff;
+}
+	
+}
+.on_click_span{
+	font-size:14px;
+    color:#ff0000;
+    width: 20%;
+	text-decoration :underline;
+	cursor:hand;
+    text-align: left;
+}
+.top_info_title{
+    font-size:14px;
+    background-color:#e2e2e2;
+	color:#666666;
+    width: 7%;
+    text-align: right;
+}
+
+.top_info_value{
+    font-size:14px;
+	background-color:#e2e2e2;
+    width: 9%;
+    font-family:"Microsoft Yahei";
+	text-align: left;
+}
+
+.oper_info_value{
+    font-size:14px;
+    color:#333333;
+    width: 12%;
+    font-family:"Microsoft Yahei";
+	white-space: nowrap;
+}
+.topDiv{
+	width:200px;
+}
+.topDivOneLine{
+	width:910px;
+}
+.topDivTitle{
+	width:570px;
+}
+.leftDiv{
+	width:179px;
+	float:left;
+}
+.leftDivOneLine{
+	width:890px;
+	float:left;
+}
+.leftDivTitle{
+	width:555px;
+	float:left;
+}
+.rightDiv{
+	width:10px;
+	float:left;
+}
+.rightDivOneLine{
+	width:10px;
+	float:left;
+}
+.rightDivTitle{
+	width:10px;
+	float:left;
+}
+.org_info_value{
+    font-size:14px;
+    width: 20%;
+    font-family:"Microsoft Yahei";
+}
+.org_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 12%;
+    text-align: right;
+}
+.oper_info_value_div{
+    height: 66px;
+    width: 95%;
+    background-color: #ffffff;
+}
+.oper_info_value_div_block{
+    border:1px solid;
+    height: 30px;
+    width: 172px;
+    background-color: #ffffff;
+}
+.leader_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 11%;
+    text-align: left;
+}
+.leader_info_div{
+    border:1px solid #cfcfcf;
+    float: left;
+    background-color: #ffffff;
+}
+.leader_info_span{
+    float: left;
+    background-color: #f5f5f5;
+}
+.leader_info_div_desc{
+    font-size:14px;
+    color:#333333;
+    font-family:"Microsoft Yahei";
+    float: left;
+    margin-top: 5px;
+}
+.leader_info_input{
+    float: left;
+    width: 280px;
+    margin-top: 5px;
+}
+.org_info_input{
+    float: left;
+    width: 145px;
+    margin-top: 5px;
+}
+.org_group_info_div{
+	border:1px solid #cfcfcf;
+    float: left;
+    background-color: #ffffff;
+	width: 175px;
+}
+.org_info_image{
+    width: 30px;
+    height: 25px;
+    margin-top:3px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 90px 100px;
+}
+.leader_info_image{
+    width: 30px;
+    height: 25px;
+    margin-top:3px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 90px 100px;
+}
+.leader_info_image:hover{
+    background-position: 62px 100px;
+}
+.leader_info_msg{
+    float: left;
+    font-size:14px;
+    color:#008dd2;
+}
+.leader_info_msg_image{
+    float: left;
+    width: 30px;
+    height: 32px;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+}
+.leader_info_msg_image_Unselect{
+    background-position: 220px 200px;
+}
+.leader_info_msg_image_Unselect_gray{
+    background-position: 80px 160px;
+}
+.leader_info_msg_image_select{
+    background-position: 253px 200px;
+}
+.leader_info_msg_image_select_gray{
+    background-position: 187px 200px;
+}
+.leader_info_msg_title{
+    margin-top: 6px;
+    margin-left: 32px;
+}
+.bottom{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.flow_control_btn_div{
+    text-align: left;
+    margin-top: 10px;
+	display:none;
+}
+.flow_control_btn{
+	margin-left: 20px;
+    text-align: center;
+    width: 200px;
+}
+
+.bottom_btn{
+    text-align: center;
+    width: 380px;
+}
+.btn_before{
+    margin-top: 0px;
+    height: 36px;
+    width: 100px;
+    float: left;
+}
+.btn_blue_left{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-blue-left.png);
+}
+.btn_blue_left_hover{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-hover-left.png);
+}
+.btn_blue_mid{
+    width: 80px;
+    height: 32px;
+    float: left;
+    background-color: #63c3f1;
+}
+.btn_blue_mid_flow{
+    width: 100px;
+    height: 32px;
+    float: center;
+    background-color: #63c3f1;
+}
+.btn_blue_mid_hover{
+    width: 80px;
+    height: 32px;
+    float: left;
+    background-color: #00a9ff;
+}
+.btn_blue_right{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-blue-right.png);
+}
+.btn_blue_right_hover{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-hover-right.png);
+}
+.btn_blue_mid_title{
+    font-size:16px;
+    color:#fff;
+    padding-top: 4px;
+	cursor:hand;
+	width:auto;
+}
+.btn_two{
+    margin-top: 0px;
+    margin-left: 10px;
+    height: 36px;
+    width: 100px;
+    float: left;
+	display:none;
+}
+
+
+/**
+ * 
+ */
+.tableCss{
+	width:100%;
+	border:0px solid #99FFCC;
+	border-collapse:collapse;
+	padding:0px;
+	margin:0px;
+}
+
+.tableHeadCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	background-color:#e2e2e2;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	white-space: nowrap;
+}
+.tableTrCss{
+	cursor:pointer;
+	background-color:'#ffffff';
+}
+
+.tableTdCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: normal;
+	font-size: 12px;
+	font-family: ËÎÌå;
+	word-break:normal;
+}
+
+
+.norButCss{
+	border:2px solid #9acd32;
+	background-color : #eef9f0;
+	color : #71aa59;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+}
+.norButBoverCss{
+	border:2px solid #4f7c43;
+	background-color : #8ab76a;
+	color : #ffffff;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+	font-weight:bold;
+}
+
+
+.tableDescCss{
+	font-size:12px;
+	color:#996633;
+}
+=======
+body{
+    margin:0px 0px 0px 0px;
+    font-family:"Microsoft Yahei";
+    line-height:150%;
+    text-align: center;
+    padding-bottom:20px;
+}
+.must_fill{
+	color:red;
+}
+.box{
+    text-align: center;
+    width:1190px;
+}
+.top{
+    text-align: left;
+}
+.top_title{
+    font-size:14px;
+    color:#999999;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.center{
+    text-align: left;
+}
+.step_bar{
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 1150px;
+	display:none;
+}
+
+.type_bar{
+    margin-left: 20px;
+    width: 1147px;
+	text-align: center;
+	background-color:#e2e2e2;
+	display:none;
+}
+
+.CLIENT_AZ_INFO{
+	display:none;
+}
+.CLIENT_TWO_INFO{
+	display:none;
+}
+.CLIENT_THREE_INFO{
+	display:none;
+}
+.CLIENT_INFO_CLASS{
+	display:none;
+}
+
+.type_inner_bar{
+    margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 25px;
+	margin-bottom: 25px;
+    width: 1100px;
+	height:250px;
+	border:1px solid #D3D3D3;
+	background-color:#f5f5f5;
+	text-align:center;
+}
+.type_item{
+	background-color:#ffffff;
+	width:260px;
+	height:140px;
+	margin-left:82px;
+	margin-top:55px;
+	margin-buttom:30px;
+	float:left;
+	cursor:hand;
+}
+.type_item_selected{
+	background-color:#e2e2e2;
+	width:260px;
+	height:140px;
+	margin-left:82px;
+	margin-top:55px;
+	margin-buttom:30px;
+	float:left;
+	cursor:hand;
+}
+.type_item_image{
+	margin-top:35px;
+	margin-left:35px;
+	float:left;
+}
+.type_item_content{
+	margin-top:40px;
+	width:100px;
+}
+.step_blue_left{
+    float: left;
+    width: 10px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-blue-left.png);
+}
+.bar_title_fir{
+    font-size:16px;
+    color:#fff;
+    float: left;
+    padding-top: 8px;
+    padding-left: 12px;
+}
+.bar_title_sec{
+    font-size:20px;
+    color:#fff;
+    float: left;
+    padding-top: 8px;
+    padding-left: 12px;
+}
+.bar_title_blue_left{
+    width: 268px;
+    height: 36px;
+    float: left;
+    background-color: #63c3f1;
+}
+.step_line{
+    float: left;
+    width: 3px;
+    margin-top: 8px;
+    margin-left: 12px;
+    background-image: url(/resource/image/nxelectonicwork/step-line.png);
+}
+.step_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-mid.png);
+}
+.step_blue_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-blue-mid.png);
+}
+.bar_title_gray_left{
+    width: 264px;
+    height: 36px;
+    float: left;
+    background-color: #c6c6c6;
+}
+.step_gray_mid{
+    float: left;
+    width: 22px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-gray-mid.png);
+}
+.step-gray-right{
+    float: left;
+    width: 10px;
+    height: 36px;
+    background-image: url(/resource/image/nxelectonicwork/step-gray-right.png);
+}
+.basic_form_info{
+    margin-top: 5px;
+    margin-left: 20px;
+    width: 1148px;
+    background-color: #f5f5f5;
+	display:none;
+}
+.execute_result_info{
+    margin-top: 5px;
+    margin-left: 20px;
+    width: 1148px;
+    background-color: #f5f5f5;
+}
+.basic_title{
+    font-size:14px;
+    color:#008dd2;
+    float: left;
+    margin-left: 33px;
+    margin-top: 10px;
+}
+.basic_icons_right{
+    width: 20px;
+    height: 30px;
+    margin-top:14px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 220px 100px;
+}
+.basic_icons_down{
+    width: 20px;
+    height: 30px;
+    margin-top:14px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 240px 100px;
+}
+.basic_info{
+    text-align: right;
+    width: 1148px;
+}
+.basic_info_label{
+    float:left;
+    width: 100px;
+    text-align: right;
+	height: 42px;
+}
+.basic_info_title{
+    font-size:14px;
+    color:#666666;
+}
+.basic_td{
+    background-color: #e2e2e2;
+	width:2%;
+}
+.basic_info_value{
+    float:left;
+}
+.input_no_border{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:170px;
+}
+.select_no_border{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:174px;
+}
+.select_no_border_not_to_span{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:174px;
+}
+.select_org{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:68px;
+}
+.input_org{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:100px;
+}
+.input_one_line{
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+	width:890px;
+}
+.input_border{
+    font-family:"Microsoft Yahei";
+    background-color:transparent;
+    border:0px;
+    margin-top: -2px;
+    font-size:14px;
+    color:#333333;
+}
+.input_border_serial{
+    font-family:"Microsoft Yahei";
+    background-color:transparent;
+    border:0px;
+    margin-top: -2px;
+	width:265px;
+    font-size:14px;
+    color:#333333;
+}
+.input_title{
+    width:520px;
+    font-family:"Microsoft Yahei";
+    font-size:14px;
+}
+.input_border_common{
+    width: 890px;border:0px;font-family:"Microsoft Yahei";
+}
+.org_input_border_common{
+    width: 170px;border:0px;font-family:"Microsoft Yahei";
+}
+.input_border_common_not_to_span{
+	width: 890px;border:0px;font-family:"Microsoft Yahei";
+}
+.input_border_common1{
+    width: 890px;border:0px;background-color:transparent;font-family:"Microsoft Yahei";
+}
+.basic_info_label_title{
+    width: 9%;
+}
+.basic_info_value_title{
+    width: 87%;
+    text-align: left;
+    float: left;
+    height: 30px;
+
+}
+.basic_info_value_title{
+    width: 87%;
+    text-align: left;
+    float: left;
+    height: 30px;
+
+}
+.basic_info_value_div{
+    border:1px solid #cfcfcf;
+    height: 33px;
+    width: 400px;
+    background-color: #ffffff;
+}
+.basic_info_value_div_none{
+    height: 33px;
+    width: 400px;
+}
+.input_border_title{
+    font-family:"Microsoft Yahei";
+    margin-top: 4px;
+    font-size:14px;
+    color:#333;
+    background-color:transparent;
+    border:0px;
+    width: 400px;
+}
+.oper_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 9%;
+    text-align: right;
+}
+.oper_info_check{
+    font-size:14px;
+    color:#666666;
+    width: 20%;
+    text-align: right;
+}
+.oper_info_org_deal{
+    font-size:14px;
+    color:#666666;
+    width: 20%;
+    text-align: right;
+}
+.org_info_deal_div{
+    border:1px solid #cfcfcf;
+    float: left;
+	width: 100px;
+    background-color: #ffffff;
+}
+	
+}
+.on_click_span{
+	font-size:14px;
+    color:#ff0000;
+    width: 20%;
+	text-decoration :underline;
+	cursor:hand;
+    text-align: left;
+}
+.top_info_title{
+    font-size:14px;
+    background-color:#e2e2e2;
+	color:#666666;
+    width: 7%;
+    text-align: right;
+}
+
+.top_info_value{
+    font-size:14px;
+	background-color:#e2e2e2;
+    width: 9%;
+    font-family:"Microsoft Yahei";
+	text-align: left;
+}
+
+.oper_info_value{
+    font-size:14px;
+    color:#333333;
+    width: 12%;
+    font-family:"Microsoft Yahei";
+	white-space: nowrap;
+}
+.topDiv{
+	width:200px;
+}
+.topDivOneLine{
+	width:910px;
+}
+.topDivTitle{
+	width:560px;
+}
+.leftDiv{
+	width:179px;
+	float:left;
+}
+.leftDivOneLine{
+	width:900px;
+	float:left;
+}
+.leftDivTitle{
+	width:530px;
+	float:left;
+}
+.rightDiv{
+	width:10px;
+	float:left;
+}
+.rightDivOneLine{
+	width:10px;
+	float:left;
+}
+.rightDivTitle{
+	width:10px;
+	float:left;
+}
+.org_info_value{
+    font-size:14px;
+    width: 20%;
+    font-family:"Microsoft Yahei";
+}
+.org_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 12%;
+    text-align: right;
+}
+.oper_info_value_div{
+    height: 66px;
+    width: 95%;
+    background-color: #ffffff;
+}
+.oper_info_value_div_block{
+    border:1px solid;
+    height: 30px;
+    width: 172px;
+    background-color: #ffffff;
+}
+.leader_info_title{
+    font-size:14px;
+    color:#666666;
+    width: 9%;
+    text-align: left;
+}
+.leader_info_div{
+    border:1px solid #cfcfcf;
+    float: left;
+    background-color: #ffffff;
+}
+.leader_info_span{
+    float: left;
+    background-color: #f5f5f5;
+}
+.leader_info_div_desc{
+    font-size:14px;
+    color:#333333;
+    font-family:"Microsoft Yahei";
+    float: left;
+    margin-top: 5px;
+}
+.leader_info_input{
+    float: left;
+    width: 280px;
+    margin-top: 5px;
+}
+.org_info_input{
+    float: left;
+    width: 145px;
+    margin-top: 5px;
+}
+.org_group_info_div{
+	border:1px solid #cfcfcf;
+    float: left;
+    background-color: #ffffff;
+	width: 175px;
+}
+.org_info_image{
+    width: 30px;
+    height: 25px;
+    margin-top:3px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 90px 100px;
+}
+.leader_info_image{
+    width: 30px;
+    height: 25px;
+    margin-top:3px;
+    float: left;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+    background-position: 90px 100px;
+}
+.leader_info_image:hover{
+    background-position: 62px 100px;
+}
+.leader_info_msg{
+    float: left;
+    font-size:14px;
+    color:#008dd2;
+}
+.leader_info_msg_image{
+    float: left;
+    width: 30px;
+    height: 32px;
+    cursor: hand;
+    background-image: url(/resource/image/nxelectonicwork/icons.png);
+}
+.leader_info_msg_image_Unselect{
+    background-position: 220px 200px;
+}
+.leader_info_msg_image_Unselect_gray{
+    background-position: 80px 160px;
+}
+.leader_info_msg_image_select{
+    background-position: 253px 200px;
+}
+.leader_info_msg_image_select_gray{
+    background-position: 187px 200px;
+}
+.leader_info_msg_title{
+    margin-top: 6px;
+    margin-left: 32px;
+}
+.bottom{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.flow_control_btn_div{
+    text-align: left;
+    margin-top: 10px;
+	display:none;
+}
+.flow_control_btn{
+	margin-left: 20px;
+    text-align: center;
+    width: 200px;
+}
+
+.bottom_btn{
+    text-align: center;
+    width: 380px;
+}
+.btn_before{
+    margin-top: 0px;
+    height: 36px;
+    width: 100px;
+    float: left;
+}
+.btn_blue_left{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-blue-left.png);
+}
+.btn_blue_left_hover{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-hover-left.png);
+}
+.btn_blue_mid{
+    width: 80px;
+    height: 32px;
+    float: left;
+    background-color: #63c3f1;
+}
+.btn_blue_mid_flow{
+    width: 100px;
+    height: 32px;
+    float: center;
+    background-color: #63c3f1;
+}
+.btn_blue_mid_hover{
+    width: 80px;
+    height: 32px;
+    float: left;
+    background-color: #00a9ff;
+}
+.btn_blue_right{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-blue-right.png);
+}
+.btn_blue_right_hover{
+    float: left;
+    width: 10px;
+    height: 32px;
+    background-image: url(/resource/image/nxelectonicwork/btn-hover-right.png);
+}
+.btn_blue_mid_title{
+    font-size:16px;
+    color:#fff;
+    padding-top: 4px;
+	cursor:hand;
+	width:auto;
+}
+.btn_two{
+    margin-top: 0px;
+    margin-left: 10px;
+    height: 36px;
+    width: 100px;
+    float: left;
+	display:none;
+}
+
+
+/**
+ * 
+ */
+.tableCss{
+	width:100%;
+	border:0px solid #99FFCC;
+	border-collapse:collapse;
+	padding:0px;
+	margin:0px;
+}
+
+.tableHeadCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	background-color:#e2e2e2;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	white-space: nowrap;
+}
+.tableTrCss{
+	cursor:pointer;
+	background-color:'#ffffff';
+}
+
+.tableTdCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: normal;
+	font-size: 12px;
+	font-family: ËÎÌå;
+	word-break:normal;
+}
+
+
+.norButCss{
+	border:2px solid #9acd32;
+	background-color : #eef9f0;
+	color : #71aa59;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+}
+.norButBoverCss{
+	border:2px solid #4f7c43;
+	background-color : #8ab76a;
+	color : #ffffff;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+	font-weight:bold;
+}
+
+
+.tableDescCss{
+	font-size:12px;
+	color:#996633;
+}
+>>>>>>> .r120845

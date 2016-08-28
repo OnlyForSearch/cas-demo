@@ -1,0 +1,63 @@
+.jq-icon-blank{
+	background:url('icons/blank.gif') no-repeat;
+}
+.jq-icon-add{
+	background:url('icons/edit_add.png') no-repeat;
+}
+.jq-icon-edit{
+	background:url('icons/pencil.png') no-repeat;
+}
+.jq-icon-remove{
+	background:url('icons/edit_remove.png') no-repeat;
+}
+.jq-icon-save{
+	background:url('icons/filesave.png') no-repeat;
+}
+.jq-icon-cut{
+	background:url('icons/cut.png') no-repeat;
+}
+.jq-icon-ok{
+	background:url('icons/ok.png') no-repeat;
+}
+.jq-icon-no{
+	background:url('icons/no.png') no-repeat;
+}
+.jq-icon-cancel{
+	background:url('icons/cancel.png') no-repeat;
+}
+.jq-icon-reload{
+	background:url('icons/reload.png') no-repeat;
+}
+.jq-icon-search{
+	background:url('icons/search.png') no-repeat;
+}
+.jq-icon-print{
+	background:url('icons/print.png') no-repeat;
+}
+.jq-icon-help{
+	background:url('icons/help.png') no-repeat;
+}
+.jq-icon-undo{
+	background:url('icons/undo.png') no-repeat;
+}
+.jq-icon-redo{
+	background:url('icons/redo.png') no-repeat;
+}
+.jq-icon-back{
+	background:url('icons/back.png') no-repeat;
+}
+.jq-icon-sum{
+	background:url('icons/sum.png') no-repeat;
+}
+.jq-icon-tip{
+	background:url('icons/tip.png') no-repeat;
+}
+.jq-icon-mini-add{
+	background:url('icons/mini_add.png') no-repeat 2px 2px;
+}
+.jq-icon-mini-edit{
+	background:url('icons/mini_edit.png') no-repeat 2px 2px;
+}
+.jq-icon-mini-refresh{
+	background:url('icons/mini_refresh.png') no-repeat 3px 2px;
+}

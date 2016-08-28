@@ -1,0 +1,20 @@
+/*
+	MPC.htcÑùÊ½¼¯
+*/
+.mpc-dormant-tab-span-background,.mpc-dormant-content-background,.mpc-select-tab-span-background,.mpc-deselect-tab-span-background
+	{
+	border-color: #919B9C !important;
+}
+
+.mpc-dormant-tab-span-background,.mpc-dormant-tab-text-background,.mpc-deselect-tab-span-background,.mpc-deselect-tab-text-background
+	{
+	background: #ECE9D8 !important;
+}
+
+.mpc-dormant-content-background,.mpc-select-tab-text-background {
+	background: white !important;
+}
+
+.mpc-select-tab-span-background {
+	background: #E68B2C !important;
+}

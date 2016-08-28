@@ -1,0 +1,1590 @@
+<public:component>
+<!-- 
+    是否数据源方式
+    如果isDataSource=true,则需要在jsp中添加以下语句,可以调用setDataSource()方法设置自定义id值
+  <%=HtmlUtils.outHtmlData("getPageStyleData4Table", DatabaseUtil.getSysConfigVal("PAGE_STYLE"))%>
+  <%=HtmlUtils.outHtmlData("getTdAlignData4Table", DatabaseUtil.getSysConfigVal("TD_ALIGN"))%>
+  <%=HtmlUtils.outHtmlData("getTableTemplateData4Table",flowActionDao.readFromFile("../../resource/xml/tableTemplate.xml"))%>
+ -->
+<PROPERTY NAME="isDataSource" put="setIsDataSource"  get="getIsDataSource"/>
+<PROPERTY NAME="imgPath"                                  />
+<PROPERTY NAME="oDataHead" put="setHead"    get="getHead"  />
+<PROPERTY NAME="showSeq"   put="setShowSeq" get="getShowSeq"/>
+<PROPERTY NAME="xmlSrc"    put="setXmlSrc"  get="getXmlSrc"/>
+<PROPERTY NAME="xmlDoc"    put="setXmlDoc"  get="getXmlDoc"/>
+<PROPERTY NAME="sendXML"   put="setSendXML"        />
+<PROPERTY NAME="pageindex"                         />
+<PROPERTY NAME="cssUrl"                            />
+<PROPERTY NAME="isPage"                            />
+<PROPERTY NAME="isMultiply"      value="false"     />
+<PROPERTY NAME="dblAction"                         />
+<PROPERTY NAME="dblOpenAction"                     />
+<PROPERTY NAME="isShowWait"                        />
+<PROPERTY NAME="rightMenu"           put="setMenu" />
+<PROPERTY NAME="recordCount"         get="getRecordCount" />
+<PROPERTY NAME="dataType"            put="setDataType"    />
+<PROPERTY NAME="colorful"        value="false"     /> //表格td是否添加颜色相间
+<PROPERTY NAME="inTopHTML"                         />
+<PROPERTY NAME="inBottomHTML"                      />
+<PROPERTY NAME="pageStyle"  put="setPageStyle"	   /> //设置列表分页的显示模式设置，格式为：[{align:'left/right',show:'top/bottom/all'}]，说明：align:left/right--分页显示左边/右边，show:top/bottom/all--分页显示在列表的上面/下面/上下都显示.
+<METHOD   NAME="setDataSource"	                   />
+<METHOD   NAME="doPage"	                           />
+<METHOD   NAME="addRowAndXML"	                   />
+<METHOD   NAME="deleteSelectedRow"	               />
+<METHOD   NAME="updateSelectedRow"	               />
+<METHOD   NAME="doRefresh"	                       />
+<METHOD   NAME="unSelect"	                       />
+<METHOD   NAME="getPropertys"	                   />
+<METHOD   NAME="getTexts"	                       />
+<METHOD   NAME="doBoxClick"	                       />
+<METHOD   NAME="getSelectedRows"	               />
+<METHOD   NAME="getSelectedRowXML"	               />
+<METHOD   NAME="doAllSelect"	                   />
+<METHOD   NAME="getDataList"	                   />
+<METHOD   NAME="getTableXMLDoc"	                   />
+<METHOD   NAME="getDataTable"	                   />
+<METHOD   NAME="getTotalTable"	                   />
+<METHOD   NAME="getTableChangedXML"	               />
+<METHOD   NAME="getErrorCode"	                   />
+<METHOD   NAME="removeAllRows"	                   />
+<METHOD   NAME="buildData"	                       />
+<METHOD   NAME="getSelectedRow"	                   />
+<METHOD   NAME="selectRowByObj"	                   />
+<METHOD   NAME="exportExcel"	               />
+<METHOD   NAME="getAllDateXml"	               />
+<METHOD   NAME="onChangePageSize"	               />
+<METHOD   NAME="pageSizeInputCheck"	               />
+
+
+<PUBLIC:EVENT NAME="onRightClick" ID="oRightId"    />
+<PUBLIC:EVENT NAME="onRightMenu" ID="oRightMenuId"    />
+<PUBLIC:EVENT NAME="onTableReady" ID="oReady"      />
+<PUBLIC:EVENT NAME="onDataReady" ID="oDataReady"      />
+<PUBLIC:EVENT NAME="onAfterRowClick"   ID="oRowClick"      />
+<PUBLIC:EVENT NAME="onCheckBoxClick"   ID="oCheckClick"      />
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var tableHtcDefaultLang = {
+	pageSizePrefix : '每页', 
+	pageSizeSuffix : '条',
+	recordCount :  '条查询结果',
+	loading : '正在读取数据',
+	waitText : '请稍候......',
+	getTableDataErrorMsg : '获取表格所有数据出错!'
+};
+//获取语言资源
+function getTableHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('tableHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.tableHtc.' + code);
+	}
+}
+var oXMLDoc= new ActiveXObject("Microsoft.XMLDOM");    //接收的xml流
+var oXMLSend= new ActiveXObject("Microsoft.XMLDOM");   //发送的xml流
+var oXMLHTTP;                                          //发送的xmlhttp
+var recordCount=0;                                     //表格数据总数
+var pageCount;                                         //表格数据页数
+var page=1;                                            //表格数据当前页
+var bRefresh=false;                                    //是否刷新
+var overColor="#F1F1C6";                               //表格行鼠标移过的颜色
+var normalColor="#FFFFFF";                             //表格行正常颜色
+var selectColor="#F1F1A6";                             //表格行选中的颜色
+var iCurMultiplyIndex=-1;                              //按shift多选的时候前一个选的行index
+var rowHeight="28";
+var gTableTemplateSrc="/resource/xml/tableTemplate.xml";
+//选择框样式
+var clsChkStyle="color:red;font-weight:bold;border:solid 1px #EF891B;font-size:12px;text-align:center;width:10px;height:15px;line-height:10px;'";    
+var iErrorCode=0;   
+//默认数据源id,可使用setDataSource进行重定义
+var gPageStyleDSId = "getPageStyleData4Table";  
+var gTdAlignDSId = "getTdAlignData4Table";
+var gTableTemplateDSId = "getTableTemplateData4Table";
+var gPageStyle;
+var gPageStyleConfig;
+var gPageStyleDef	 = eval("[{align:'left',show:'all'}]");
+var oHead=null;
+var gXmlSrc;
+var gSendXML;
+var gIsDataSource = false;
+var oRightMenu;
+var gRightMenu;
+var gShowSeq;
+//var aSelectType={cell:"1",column:"2",row:"3",table:"4"};
+var aRowState={add:"A",update:"M",remove:"D"};         //定义数据集状态
+var i=0;
+var oTime;
+var iHeadRowNum=0;
+var gTableDataType="html";                             //默认数据类型(text,html)
+var oCurOrder={};
+var oArrow=document.createElement("span");
+var hasBuildMultiplyHead = true;
+var selectedRow;
+var getAllDate_MaxPage = '10000000'; //获取表格所有数据,页最大数据数配置
+var attrAlign="left";
+//加载默认CSS
+{
+	if(cssUrl && !getCssPath(cssUrl)) {
+		window.document.createStyleSheet(cssUrl);
+	}
+}
+// **********************************************************************
+//                      事件处理函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//  函数:    doInit
+//  说明:    初始化表头和表格数据
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+ 
+function setIsDataSource(pIsDataSource){
+   gIsDataSource = pIsDataSource;
+}
+
+function getIsDataSource(){
+   return gIsDataSource;
+}
+function setXmlSrc(pXMlSrc)
+{
+   bRefresh=false;
+   page=1;
+   oCurOrder={};
+   oArrow.style.display="none";
+   gXmlSrc=pXMlSrc;
+   if(gIsDataSource){ //如果是数据源方式,需要在jsp页面上添加 <%=HtmlUtils.outHtmlData("getPageStyleData4Table", DatabaseUtil.getSysConfigVal("PAGE_STYLE"))%>
+   	  gPageStyleConfig = getHtmlData(gPageStyleDSId);
+   }else{
+      gPageStyleConfig = (function() {
+    // 加载并缓存页面风格 Add By KingDomPan 2015-05-13
+    if (typeof(getCssPath.prototype.gPageStyleConfig) === 'undefined') {
+        getCssPath.prototype.gPageStyleConfig = eval('(' + $getPropertyCfgVar('PAGE_STYLE') + ')');
+    }
+    return getCssPath.prototype.gPageStyleConfig;
+})();
+   }
+   if(gXmlSrc!="" && gXmlSrc!=null)
+      getData();
+}
+
+function getXmlSrc()
+{
+   return gXmlSrc;
+}
+
+function setSendXML(pSendXML)
+{
+    page=1;
+    bRefresh=false;
+    gSendXML=pSendXML;
+}
+
+function setPageStyle(pPageStyle)
+{	
+	gPageStyle = eval('('+pPageStyle+')');
+}
+
+function getTableXMLDoc()
+{
+    return oXMLDoc;
+}
+
+function setXmlDoc(oDoc)
+{
+	oXMLDoc.async = false;
+	oXMLDoc.load(oDoc);
+	buildData();
+}
+
+function getXmlDoc()
+{
+	return getTableXMLDoc();
+}
+
+function getDataTable()
+{
+   return window.document.getElementById("oDataTable_"+uniqueID);
+}
+function getTotalTable()
+{
+   return window.document.getElementById("oTotalTable_"+uniqueID);
+}
+function getTableChangedXML()
+{
+    var oXMLDoc=getTableXMLDoc();
+    if(oXMLDoc!=null)
+    {
+        oXMLDoc=oXMLDoc.selectNodes("//rowSet[@rowState]");
+    }
+    return oXMLDoc;
+}
+function setShowSeq(pShowSeq)
+{
+     gShowSeq=pShowSeq;
+}
+function getShowSeq()
+{
+     return gShowSeq;
+}
+function getRecordCount()
+{
+     return recordCount;
+}
+function setDataType(pDataType)
+{
+   gTableDataType=pDataType;
+}
+function getSelectedRow(){
+	return selectedRow;
+}
+function setSelectedRow(pSelectedRow){
+	selectedRow = pSelectedRow;
+}
+function setHead(sHead)
+{
+    var sTableHead="";
+    if(sHead!="" && sHead!=null)
+    {
+        oHead=eval("window.document.getElementById('"+sHead+"')");
+        if(oHead!=null)
+            sTableHead=oHead.innerHTML;
+    }
+    var sTable=getTabelTemplate(sTableHead,uniqueID);
+	element.innerHTML=sTable;	  
+	var oTable=eval("window.document.getElementById('oDataTable_"+uniqueID+"')");
+	iHeadRowNum=oTable.rows.length;
+	attachHeadEvent(oTable);
+
+	// 2011.07.07 修正页面含选择框且重新获取数据时，数据只能显示一行的 bug(如：即时通讯-->消息列表页面)
+	if (element.isMultiply == "true" && hasBuildMultiplyHead == false)
+		hasBuildMultiplyHead = true;
+}
+
+function attachHeadEvent(oTable)
+{
+   var iLen=oTable.rows.length;
+   if(iLen>0)
+   {
+       var oOrderRow=oTable.rows[iLen-1];
+       var iCellNum=oOrderRow.cells.length;
+       for(var i=0;i<iCellNum;i++)
+       {           
+           oOrderRow.cells[i].onclick=function(){orderClick(this);};
+       }
+   }
+}
+
+function orderClick(oCell)
+{	
+    var field=oCell.orderColumn;
+    if(!field) return;    
+    oCurOrder.orderby=(field==oCurOrder.field)?((oCurOrder.orderby=="desc")?"asc":"desc"):"desc";
+    oArrow.style.background = (oCurOrder.orderby=="desc")?"url(/resource/image/down_table.gif) no-repeat":"url(/resource/image/up_table.gif) no-repeat";
+    oArrow.style.height = 8;
+    oArrow.style.width = 7;
+    oArrow.className = (oCurOrder.orderby=="desc")?"table-span-desc-background":"table-span-asc-background";
+    if(field!=oCurOrder.field)
+    {
+       oCell.appendChild(oArrow);
+    }
+    oArrow.style.display="";
+    oCurOrder.field=field;
+    doRefresh(true);
+} 
+
+function getTabelTemplate(sTableHead,sUniqueID)
+{
+    var aMacro=["%UNIQUE_ID%","%TABLE_HEAD%"];
+    var aReplace=[sUniqueID,sTableHead];
+    var tableDoc,templateText;
+    if(gIsDataSource){ //如果是数据源方式,需要在jsp页面上添加 <%=HtmlUtils.outHtmlData("getTableTemplateData4Table",flowActionDao.readFromFile("../../resource/xml/tableTemplate.xml"))%>
+       tableDoc= getXmlFromHtmlData(gTableTemplateDSId);
+       templateText = tableDoc.selectSingleNode("/root/TEMPLATE").text;
+    }else{
+       templateText = getTableTemplate();
+    }
+	var iLen=aMacro.length;
+	for (var i=0;i<iLen;i++)
+	{
+	   var reg=new RegExp(aMacro[i],"g");
+	   templateText=templateText.replace(reg,aReplace[i]);
+	}
+	return templateText;
+}
+function getHead()
+{
+    return oHead.innerHTML;
+}
+function setMenu(pRightMenu)
+{
+    gRightMenu=pRightMenu;
+    oRightMenu=window.document.getElementById(pRightMenu);
+}
+// **********************************************************************
+//                      对外接口函数
+// **********************************************************************
+//--------------------------------------------------------------------------------------
+
+//  函数:   setDataSource
+//  说明:   重定义数据源ID,前置必须设置isDataSource为true
+//  参数:   {
+//              PAGE_STYLE: xxxxx,  // 默认值: 'getPageStyleData4Table'
+//              TD_ALIGN: xxxxx,   // 默认值: 'getTdAlignData4Table'
+//              TABLE_TEMPLATE: xxxxx   //默认值: 'getTableTemplateData4Table'
+//         }
+//
+//---------------------------------------------------------------------------------------
+
+function setDataSource(obj){
+    if(obj.PAGE_STYLE)
+       gPageStyleDSId = obj.PAGE_STYLE;
+    if(obj.TD_ALIGN)
+       gTdAlignDSId = obj.TD_ALIGN;
+    if(obj.TABLE_TEMPLATE)
+       gTableTemplateDSId = obj.TABLE_TEMPLATE;
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    doPage
+//  说明:    分页显示
+//  参数:    iPage 分页的当前页
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doPage(iPage)
+{
+    var oSearch=oXMLSend.selectSingleNode("/root/search");
+	oSearch.setAttribute("pagesize",element.pagesize);
+	oSearch.setAttribute("page",iPage);
+	if(oCurOrder.field)
+	{
+	   oSearch.setAttribute("orderby",oCurOrder.field+" "+oCurOrder.orderby);
+	}
+	bRefresh=true;
+	page=iPage;
+    getData();
+}
+
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doRefresh
+//  说明:    刷新表格
+//  参数:    bPageStateless 是否保持当前状态，即保持当前页否
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doRefresh(bPageStateless)
+{
+	var isPage=element.isPage;
+	bRefresh=true;
+    if(gSendXML!="" && gSendXML!=null)
+	    oXMLSend.loadXML(gSendXML);
+	if(isPage=="true")
+	{
+        if(bPageStateless)
+		  doPage(1);
+		else
+		  doPage(page);
+	}
+	else
+       getData();
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getPropertys
+//  说明:    获得选中行的属性值
+//  参数:    sProperty 属性名
+//  返回:    属性值数组
+//----------------------------------------------------------------------------------------
+
+function getPropertys(sProperty)
+{
+	var returnArray = new Array();
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var curSelRowArray=getSelectRowIndexs();	
+	for(var i=0;i<curSelRowArray.length;i++)
+	{
+       returnArray[i]=(oDataTable.rows(curSelRowArray[i]).getAttribute(sProperty));
+    }
+    return returnArray;
+}
+
+function getTexts(iCellIndex)
+{
+	var returnArray = new Array();
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var curSelRowArray=getSelectRowIndexs();	
+	for(var i=0;i<curSelRowArray.length;i++)
+	{
+        returnArray[i]=(oDataTable.rows(curSelRowArray[i]).cells(iCellIndex).innerText);
+    }
+    return returnArray;
+}
+
+function getSelectedRows()
+{
+    var curSelRowArray=new Array();
+	var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var iLen=oDataTable.rows.length;
+	for(var i=0;i<iLen;i++)
+	{
+		//var sBgColor=oDataTable.rows[i].bgColor.toUpperCase();
+		var sBgColor=oDataTable.rows[i].className.toUpperCase();
+	    //if(sBgColor==selectColor.toUpperCase())
+	    if(sBgColor=="TABLE-TR-SELECT-COLOR")
+		{
+            curSelRowArray[curSelRowArray.length]=oDataTable.rows[i];
+		}
+	}
+	return curSelRowArray;
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    doBoxClick
+//  说明:    单击选择框时触发
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doBoxClick(oChkBox)
+{
+	 window.event.cancelBubble=true;
+     var bChecked = oChkBox.checked;
+	 var oTR=oChkBox.parentElement.parentElement;
+	 ctrlBoxStyle(oChkBox,bChecked);
+	 var _checked = oChkBox.checked;
+     oTR.className = _checked=='true'?"table-tr-select-color":"table-tr-normal-color";
+     oTR.style.backgroundColor=_checked=='true'?selectColor:normalColor;
+	 var oEvent = createEventObject();
+	 var oSrcE = event.srcElement;
+	 var oTR= getElement(oSrcE,"TR", 0);
+	 oEvent.setAttribute("srcRow", oTR);	 
+	 oEvent.setAttribute("checked",  _checked);
+	 oCheckClick.fire(oEvent);
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doAllSelect
+//  说明:    全选或全不选
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doAllSelect(oChkBox)
+{
+    if(!oChkBox)  oChkBox = window.document.getElementById('oSelectAll'+uniqueID);
+    var bChecked = oChkBox.checked;
+	var oChkAllBox=getElementsByTagName("span");
+	var iLen=oChkAllBox.length;
+	var oBox;
+	ctrlBoxStyle(oChkBox,bChecked);
+    if(bChecked=="false")
+	{
+		 for(var i=0;i<iLen;i++)
+		 {
+			 oBox=oChkAllBox[i];
+		     if(oBox.type=="chkBox")
+			 {
+                 ctrlBoxStyle(oBox,"false");
+				 oBox.parentElement.parentElement.className = "table-tr-select-color";
+				 oBox.parentElement.parentElement.style.backgroundColor=selectColor;
+			 }
+		 }
+		 oChkBox.checked="true";
+	}
+	else
+	{
+		 for(var i=0;i<iLen;i++)
+		 {
+			 oBox=oChkAllBox[i];
+		     if(oBox.type=="chkBox")
+			 {
+                 ctrlBoxStyle(oBox,"true");
+				 oBox.parentElement.parentElement.className = "table-tr-normal-color";
+				 oBox.parentElement.parentElement.style.backgroundColor=normalColor;
+			 }
+		 }
+		oChkBox.checked="false";
+	}
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    unSelect
+//  说明:    取消当前的选中行
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function unSelect()
+{
+	var curSelRowArray=getSelectRowIndexs();
+	if(curSelRowArray!="" && curSelRowArray!=null)
+	{
+	    var oDataTable=eval("window.oDataTable_"+uniqueID);
+		for(var i=0;i<curSelRowArray.length;i++)
+		    oDataTable.rows(curSelRowArray[i]).className = "table-tr-normal-color";
+		    oDataTable.rows(curSelRowArray[i]).style.backgroundColor=normalColor;
+	}
+	iCurMultiplyIndex=-1;
+}
+
+function getErrorCode()
+{
+   return iErrorCode;
+}
+function doDblClick(oRow)
+{
+    if(oRow.rowIndex<iHeadRowNum) return;
+    if(element.dblOpenAction !="" && dblOpenAction != null){
+		eval(dblOpenAction);
+    }   
+    else if(element.dblAction!="" && dblAction!=null)
+    {
+          doSelectCurEvent(oRow,'dblClick');
+          //dblRow = oRow;
+          eval(dblAction);	
+    }
+   
+}
+// **********************************************************************
+//                      内部函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//  函数:    getDataList
+//  说明:    发送xml到servlet并异步加载数据
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function getDataList()
+{
+	var isPage=element.isPage;
+	if(gIsDataSource){ //如果是数据源方式,需要在jsp页面上添加<%=HtmlUtils.outHtmlData("getTdAlignData4Table", DatabaseUtil.getSysConfigVal("TD_ALIGN"))%>
+	    attrAlign = getHtmlData(gTdAlignDSId);
+	}else{
+	    attrAlign = (function() {
+	    if (typeof($getSysVar.prototype.TD_ALIGN) === 'undefined') {
+	        $getSysVar.prototype.TD_ALIGN = $getSysVar('TD_ALIGN');
+	    }
+	    return $getSysVar.prototype.TD_ALIGN;
+    	})();
+	}
+	
+	
+    if(gSendXML!="" && null!=gSendXML && !bRefresh)
+	{
+        oXMLSend.loadXML(gSendXML);
+        if(isPage=="true")
+        {
+            var oSearch=oXMLSend.selectSingleNode("/root/search");
+	        oSearch.setAttribute("pagesize",element.pagesize);
+	        oSearch.setAttribute("page",page);
+	    }
+	}
+    else
+    {
+	    var sSendXML='<?xml version="1.0" encoding="gbk"?>'
+	             +  '<root>'
+				 +     '<search pagesize="'+element.pagesize+'" page="'+page+'" />'
+				 +  '</root>'
+		if(!bRefresh && isPage=="true")
+		{
+		   oXMLSend.loadXML(sSendXML);
+		}
+	    else if(isPage=="false" && (gSendXML==null || gSendXML==""))
+           oXMLSend=null;
+	}
+    oXMLHTTP= new ActiveXObject("Microsoft.XMLHTTP");
+    if(""!=gXmlSrc && null!=gXmlSrc)
+    {
+        oXMLHTTP.onreadystatechange= handleStateChange;
+        oXMLHTTP.open("POST",gXmlSrc, true);
+		oXMLHTTP.send(oXMLSend);
+    }
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getData
+//  说明:    判断是否加载等待页面，然后加载数据
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function getData()
+{
+	var bShowWait=element.isShowWait;
+	if("true"==bShowWait)
+	{
+		var oWait=window.document.getElementById("oWait"+uniqueID);
+		if(oWait==null)
+		{
+			insertShowWait();
+			oWait=window.document.getElementById("oWait"+uniqueID);
+		}
+		oWait.style.pixelLeft=(window.document.body.clientWidth-parseInt(oWait.currentStyle.width))/2;
+		oWait.style.pixelTop=(window.document.body.clientHeight-parseInt(oWait.currentStyle.height))/2;
+		oWait.style.display="block";
+		window.setTimeout("window."+uniqueID+".getDataList()",100);
+	}
+	else
+        getDataList();
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    handleStateChange
+//  说明:    异步调用XMLHTTP
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+function handleStateChange()
+{
+	try
+	{
+		var state = oXMLHTTP.readyState;
+		if(state==4)
+		{
+			if(isSuccess(oXMLHTTP))
+			{		
+				oXMLDoc=oXMLHTTP.responseXML;
+				if(element.isPage=="true")
+				{
+				    recordCount=parseInt(oXMLDoc.selectSingleNode("/root/recordCount").text,10);
+				}
+				else
+				{
+				    recordCount=oXMLDoc.selectNodes("//rowSet").length; 
+				}
+				doDataReady();
+				buildData();
+				if(element.isPage=="true")
+				{				  
+				    buildPageTable();
+				}
+				else
+				{
+					var oTotalTable=eval("window.oTotalTable_"+uniqueID);
+					
+					var inTopHTMLStr = (element.inTopHTML==null)?"":element.inTopHTML;
+					var inBottomHTMLStr = (element.inBottomHTML==null)?"":element.inBottomHTML;
+
+					if(gPageStyle==undefined){
+						if(gPageStyleConfig!=null){
+							gPageStyle = gPageStyleConfig;
+						}else{
+							gPageStyle = gPageStyleDef;
+						}
+					}
+				    if(gPageStyle[0].align=="right"){
+				    	if(inTopHTMLStr !=""){
+							oTotalTable.rows[0].cells[0].innerHTML="<span id='"+element.id+"_inTopHTML' style='float:left;'>"+inTopHTMLStr+"</span>";
+						}else{
+							oTotalTable.rows[0].cells[0].innerHTML="";
+						}
+				    	if(inBottomHTMLStr !=""){
+							oTotalTable.rows[2].cells[0].innerHTML="<span id='"+element.id+"_inBottomHTML' style='float:left;'>"+inBottomHTMLStr+"</span>";
+						}else{
+							oTotalTable.rows[2].cells[0].innerHTML="";
+						}
+						oTotalTable.rows[2].cells[0].innerHTML="<span id='"+element.id+"_inBottomHTML' style='float:left;'>"+inBottomHTMLStr+"</span>";
+					    oTotalTable.rows[0].cells[1].innerHTML="";
+					    oTotalTable.rows[2].cells[1].innerHTML="";
+				    }else{
+					    oTotalTable.rows[0].cells[0].innerHTML="";
+					    oTotalTable.rows[2].cells[0].innerHTML="";
+				    	if(inTopHTMLStr !=""){
+							oTotalTable.rows[0].cells[1].innerHTML="<span id='"+element.id+"_inTopHTML' style='float:right;'>"+inTopHTMLStr+"</span>";
+				    	}else{
+							oTotalTable.rows[0].cells[1].innerHTML="";
+				    	}
+				    	if(inBottomHTMLStr !=""){
+							oTotalTable.rows[2].cells[1].innerHTML="<span id='"+element.id+"_inBottomHTML' style='float:right;'>"+inBottomHTMLStr+"</span>";
+				    	}else{
+							oTotalTable.rows[2].cells[1].innerHTML="";
+				    	}
+				    }
+				    
+				}
+			}
+			else
+			{			   
+			   iErrorCode=1;
+			}
+			oXMLHTTP=null;
+			if("true"==element.isShowWait)
+			{
+				var oWait=window.document.getElementById("oWait"+uniqueID);
+				if(oWait!=null) 
+					oWait.style.display="none";
+				
+			}
+		}
+	}
+	catch(e){}	
+}
+
+function doContentReady()
+{
+	var oEvent = createEventObject();
+	oReady.fire(oEvent);
+}
+
+function doDataReady()
+{
+    var oEvent = createEventObject();
+	oDataReady.fire(oEvent);
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    buildData
+//  说明:    调用xml数据建立表格
+//  参数:    oXMLDoc  xml文档流
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function buildData()
+{
+    var oRows=oXMLDoc.selectNodes("//rowSet")
+	var iLen=oRows.length;
+	var oDataTable=eval("window.oDataTable_"+uniqueID);	
+	if((oHead=="" || oHead==null)&&i==0)
+	    bulidHead(oXMLDoc);
+	if(i==0) delTableRow(oDataTable);
+	if(hasBuildMultiplyHead)
+	{
+		if(element.isMultiply=="true")
+	    {
+			var oSelectAll=window.document.getElementById("oSelectAll"+uniqueID);
+			if(oSelectAll==null)
+			{
+				var oHeadCell=oDataTable.rows[0].insertCell(0);
+				oHeadCell.width="40";
+				oHeadCell.className="table-multiply-head-td";
+				oHeadCell.innerHTML="<span style='"+clsChkStyle+"' class='table-cls-check-height' checked='false' UNSELECTABLE='on'"
+									+" onclick='window."+uniqueID+".doAllSelect(this)' id='oSelectAll"+uniqueID+"'>"
+									+"&nbsp;&nbsp;</span>";
+			}
+	   }
+		hasBuildMultiplyHead = false;
+	}
+    if(i<iLen)
+    {
+	    for(var j=i;j<i+10 && j<iLen;j++)
+		{
+		    addRow(oRows[j],oDataTable);
+		}
+        oTime=setTimeout("window."+uniqueID+".buildData()", 1); 
+        i+=10;       
+    }
+    if(i>=iLen) 
+    {
+    	/*if(element.isMultiply=="true")
+	    {
+			var oSelectAll=window.document.getElementById("oSelectAll"+uniqueID);
+			if(oSelectAll==null)
+			{
+				var oHeadCell=oDataTable.rows[0].insertCell(0);
+				oHeadCell.width="40";
+				oHeadCell.innerHTML="<span style='"+clsChkStyle+"' class='table-cls-check-height' checked='false' UNSELECTABLE='on'"
+									+" onclick='window."+uniqueID+".doAllSelect(this)' id='oSelectAll"+uniqueID+"'>"
+									+"&nbsp;&nbsp;</span>";
+			}
+	   }*/
+       clearTimeout(oTime);
+       i=0;
+       doContentReady();
+    }
+}
+function bulidHead(oXMLDoc)
+{
+   var oFields=oXMLDoc.selectSingleNode("/root/Fields");
+   var oFieldChild=oFields.childNodes;
+   var iLen=oFieldChild.length;   
+   var oDataTable=eval("window.oDataTable_"+uniqueID);
+   var oTR=oDataTable.insertRow();
+   oTR.bgColor="#F3F3F3";
+   oTR.height="30";
+   for(var i=0;i<iLen;i++)
+   {
+       var sField=oFieldChild[i].text;
+       var oTd=oTR.insertCell();
+       oTd.align="center";
+       oTd.innerText=sField;
+   }
+   iHeadRowNum=1;
+}
+function addRow(oRow,oDataTable)
+{
+    var isMultiply=element.isMultiply;
+    var oTR=window.document.createElement("TR");
+	//var oTR=oDataTable.insertRow();
+	oDataTable.childNodes[0].appendChild(oTR);	
+	var attributes=oRow.attributes;
+	var iAttiLen=attributes.length;
+	for(var j=0;j<iAttiLen;j++)
+	{
+	    oTR.setAttribute(attributes[j].name,attributes[j].value);
+	}
+	attrAlign = attrAlign.toLowerCase();
+	if(attrAlign != "null" && (attrAlign == "center" || attrAlign == "right" || attrAlign == "left")){
+		oTR.align = attrAlign;
+	}else{
+		oTR.align = "center";
+	}
+	oTR.className = "table-tr-normal-color";
+	oTR.style.backgroundColor=normalColor;
+	oTR.height=rowHeight;
+	oTR.onmouseover=function(){doRowMouseOver(this);};
+	oTR.onmouseout=function(){doRowMouseOut(this);};
+	oTR.onclick=function(){doRowClick(this);};
+	oTR.oncontextmenu=function(){doRowRightClick(this);};
+	oTR.ondblclick=function(){doDblClick(this);};
+	oChildRows=oRow.childNodes;
+	iChildLen=oChildRows.length;
+	var sReg=/\n/gi;
+	if(isMultiply=="true")
+	{
+		var oCheckCell=document.createElement("TD");
+		oTR.appendChild(oCheckCell);
+		oCheckCell.innerHTML="<span style='"+clsChkStyle+"' class='table-cls-check-height' checked='false' type='chkBox'"
+		                     +" onclick='window."+uniqueID+".doBoxClick(this)' UNSELECTABLE='on'>"
+		                     +"&nbsp;&nbsp;</span>";
+		          
+	}
+	if(gShowSeq=="series")
+	{
+		var oSeries=document.createElement("TD");
+		var iIndex=oTR.rowIndex;
+		var iPageSize=(element.isPage=="true")?element.pagesize:0;
+		oTR.appendChild(oSeries);
+		oSeries.innerHTML=(page-1)*iPageSize+iIndex;
+	}
+	for(var j=0;j<iChildLen;j++)
+	{
+	    var oTD=document.createElement("TD");
+	    oTR.appendChild(oTD);
+	    var iCellIndex=oTD.cellIndex;
+	    var oHeadCell=oDataTable.rows(iHeadRowNum-1).cells(iCellIndex); 
+	    var sHTML=(oChildRows[j].hasChildNodes() && oChildRows[j].firstChild.nodeType==1)?oChildRows[j].firstChild.xml:oChildRows[j].text;
+	    var dataType=(typeof(oHeadCell.dataType)!="undefined")?oHeadCell.dataType:gTableDataType;
+	    if(dataType=="text") sHTML=EncodeSpecialStrs(sHTML,["<",">"],["&lt;","&gt;"]);
+	    sHTML=sHTML.replace(sReg,"<br>");
+	    var sStyle=(typeof(oHeadCell.cellStyle)!="undefined")?oHeadCell.cellStyle:"font-size:12px";
+	    var event=(typeof(oHeadCell.event)!="undefined")?oHeadCell.event:"";
+	    if(element.colorful == "true"){
+		    if (j%2==0){
+			oTD.style.backgroundColor="#99FFCC";
+		    }else{
+			oTD.style.backgroundColor="#FFCCFF";
+		    }
+	    }
+		oTD.innerHTML="<div "+event+">"+sHTML+"</div>";		
+ 	    oTD.children(0).style.cssText=sStyle;
+	}
+	return oTR;
+}
+
+function addRowAndXML(oRow)
+{
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+    addRow(oRow,oDataTable);
+    doAddRowToXML(oRow);
+}
+
+function doAddRowToXML(oRow)
+{
+    if(oXMLDoc.hasChildNodes()==false)
+    {
+       oXMLDoc.loadXML("<root/>")  
+    }
+    var oRoot=oXMLDoc.documentElement;
+    oRow.setAttribute("rowState",aRowState.add);
+    oRoot.appendChild(oRow);
+}
+
+function deleteSelectedRow()
+{
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var curSelRowArray=getSelectRowIndexs();
+	if(curSelRowArray==null) return;
+	var iLen=curSelRowArray.length;
+	var xmlRowNodes=getValidXMLRows();
+	for(var i=iLen-1;i>=0;i--)
+	{
+	    var xmlNode=xmlRowNodes[curSelRowArray[i]-1];//因为表头为0,此处减去1
+	    var sRowState=xmlNode.getAttribute("rowState");
+	    switch (sRowState)
+	    {
+	        case aRowState.add:
+	           oXMLDoc.documentElement.removeChild(xmlNode);
+	           break;
+	        case aRowState.update:
+	        case null:
+	           xmlNode.setAttribute("rowState",aRowState.remove);	          
+	    }
+	    oDataTable.deleteRow(curSelRowArray[i]);
+	}
+}
+
+function updateSelectedRow(oRow)
+{
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var curSelRowArray=getSelectRowIndexs();
+	if(curSelRowArray==null) return;
+	var oRoot=oXMLDoc.documentElement;
+	var xmlRowNodes=getValidXMLRows();
+	var oOldXMLNode=xmlRowNodes[curSelRowArray[0]-1];//因为表头为0,此处减去1
+	var oOldRow=oDataTable.rows[curSelRowArray[0]];
+	var sRowState=oOldXMLNode.getAttribute("rowState");
+	var oNewRow=addRow(oRow,oDataTable);
+    switch (sRowState)
+    {
+        case aRowState.add:
+           oRow.setAttribute("rowState",aRowState.add);
+           break;
+        default:
+           oRow.setAttribute("rowState",aRowState.update);
+           break;
+    }
+	oDataTable.childNodes(0).replaceChild(oNewRow,oOldRow);
+	oNewRow.className = "table-tr-select-color";
+	oNewRow.style.backgroundColor=selectColor;
+	oRoot.replaceChild(oRow,oOldXMLNode);
+}
+
+function getSelectedRowXML()
+{
+ 	var curSelRowArray=getSelectRowIndexs();
+	if(curSelRowArray==null || curSelRowArray.length==0) return null;
+	var xmlRowNodes=getValidXMLRows();
+	return xmlRowNodes[curSelRowArray[0]-1];
+}
+
+function getValidXMLRows()
+{
+    var xmlRowNodes=oXMLDoc.selectNodes("//rowSet[@rowState!='"+aRowState.remove+"' or not (@rowState)]");
+    return xmlRowNodes;
+}
+
+function removeAllRows()
+{
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+    delTableRow(oDataTable);
+    oXMLDoc=null;
+    oXMLDoc= new ActiveXObject("Microsoft.XMLDOM");
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    delTableRow
+//  说明:    删除表格行
+//  参数:    oTable  表格对象
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function delTableRow(oTable)
+{
+    var iLen=oTable.rows.length;
+    for(var i=iLen-1;i>iHeadRowNum-1;i--)
+    {
+        oTable.deleteRow(i);
+    }
+
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    buildPageTable
+//  说明:    建立分页显示的表格
+//  参数:
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function buildPageTable()
+{
+    if(element.isPage=="true" && recordCount>=0)
+	{
+		var oTotalTable=eval("window.oTotalTable_"+uniqueID);
+		
+		var inTopHTMLStr = (element.inTopHTML==null)?"":element.inTopHTML;
+		var inBottomHTMLStr = (element.inBottomHTML==null)?"":element.inBottomHTML;
+
+		if(gPageStyle==undefined){
+			if(gPageStyleConfig!=null){
+				gPageStyle = gPageStyleConfig;
+			}else{
+				gPageStyle = gPageStyleDef;
+			}
+		}
+		if(gPageStyle[0].align=="right"){
+		    	if(inTopHTMLStr !=""){
+					oTotalTable.rows[0].cells[0].innerHTML="<span id='"+element.id+"_inTopHTML' style='float:left;'>"+inTopHTMLStr+"</span>";
+				}else{
+					oTotalTable.rows[0].cells[0].innerHTML="";
+				}
+		    	if(inBottomHTMLStr !=""){
+					oTotalTable.rows[2].cells[0].innerHTML="<span id='"+element.id+"_inBottomHTML' style='float:left;'>"+inBottomHTMLStr+"</span>";
+				}else{
+					oTotalTable.rows[2].cells[0].innerHTML="";
+				}
+		}else{
+		    	if(inTopHTMLStr !=""){
+					oTotalTable.rows[0].cells[1].innerHTML="<span id='"+element.id+"_inTopHTML' style='float:right;'>"+inTopHTMLStr+"</span>";
+		    	}else{
+					oTotalTable.rows[0].cells[1].innerHTML="";
+		    	}
+		    	if(inBottomHTMLStr !=""){
+					oTotalTable.rows[2].cells[1].innerHTML="<span id='"+element.id+"_inBottomHTML' style='float:right;'>"+inBottomHTMLStr+"</span>";
+		    	}else{
+					oTotalTable.rows[2].cells[1].innerHTML="";
+		    	}
+		}
+				
+		if(recordCount==0)
+		{
+		    if(gPageStyle[0].align=="right"){
+			    oTotalTable.rows[0].cells[1].innerHTML="";
+			    oTotalTable.rows[2].cells[1].innerHTML="";
+			}else{
+			    oTotalTable.rows[0].cells[0].innerHTML="";
+			    oTotalTable.rows[2].cells[0].innerHTML="";
+			}
+			return;
+		}
+		
+		var sTable='<table cellspacing="0" cellpadding="0" align="left" style="float:'+ gPageStyle[0].align +';margin:0;">'
+		           +  '<tr>'
+				   +    '<td class="multi" width="100%">'
+				   +       ''
+				   +       '<span class="pagenum"><a href="#" onclick="window.'+uniqueID+'.doPage(1)">|<<</a></span> '
+	    var pagesize=parseInt(element.pagesize,10);
+	    var pageindex=element.pageindex;
+		//var pageindex=(pageindex==null||pageindex=="")?1:parseInt(element.pageindex,10);
+		var pagecount=Math.ceil(recordCount/pagesize);
+		var i,sClassStyle;
+		if(pageindex==null ||pageindex>=pagecount)
+		{
+			for(i=1;i<=pagecount;i++)
+			{
+	            sClassStyle=(i==page)?"pagenumstatic":"pagenum";
+				sTable+='<span class="'+sClassStyle+'"><a href="#" onclick="window.'+uniqueID+'.doPage('+i+')">'+i+'</a></span>&nbsp;' 
+			}
+		}
+		else
+		{
+			var avgPage=Math.floor(pageindex/2);
+			var j=((page+avgPage)<pagecount)?page+avgPage:pagecount;
+			i=((page-avgPage)>0)?(page-avgPage):1;
+			for(;i<=j;i++)
+			{
+	            sClassStyle=(i==page)?"pagenumstatic":"pagenum";
+				sTable+='<span class="'+sClassStyle+'"><a href="#" onclick="window.'+uniqueID+'.doPage('+i+')">'+i+'</a></span>&nbsp;' 
+			}
+		    sTable+=' ... <span class="pagenum"><a href="#" onclick="window.'+uniqueID+'.doPage('+pagecount+')">'+pagecount+'</a></span>&nbsp;'
+		}
+	    sTable+='<span class="pagenum"><a href="#" onclick="window.'+uniqueID+'.doPage('+pagecount+')">>>|</a></span>'
+		sTable+='</tr></table>';
+		
+		var sPageSize = "";
+		sPageSize += '<span style="float:'+ gPageStyle[0].align +';font-size:12px;width:65px;height:18px;line-height:18px;overflow:hidden;margin:0 10px;padding:0;border:0px solid #ff0000;">';
+		sPageSize += getTableHtcLan('pageSizePrefix') + '<input type="text" value="'+element.pagesize+'" onblur="window.'+uniqueID+'.onChangePageSize(this.value)" onkeyup="window.'+uniqueID+'.pageSizeInputCheck(this)" onafterpaste="window.'+uniqueID+'.pageSizeInputCheck(this)" style="width:25px;height:18px;font-size:12px;line-height:12px;margin:-1 0 0 0;line-height:18px;text-align:center;border:1px solid #D3D3D3;" maxlength="5" />' + getTableHtcLan('pageSizeSuffix');
+		sPageSize += '</span>';
+		
+		var pageHtmlInts = "";
+	    if(gPageStyle[0].align=="right"){
+	    	pageHtmlInts = sTable + sPageSize + "<span style='float:right;font-size:12px;line-height:20px;white-space:noWrap;margin:0;'><font style='color:red'>"+recordCount+"</font>" + getTableHtcLan('recordCount') + "</span>";
+	    	if(gPageStyle[0].show=="bottom"){
+				oTotalTable.rows(2).cells[1].innerHTML = pageHtmlInts;
+	    	}else if(gPageStyle[0].show=="all"){
+				oTotalTable.rows(0).cells[1].innerHTML = pageHtmlInts;
+				oTotalTable.rows(2).cells[1].innerHTML = pageHtmlInts;
+	    	}else{ //right,top
+				oTotalTable.rows(0).cells[1].innerHTML = pageHtmlInts;
+	    	}
+		}else{	    	
+			pageHtmlInts = sTable + sPageSize + "<span style='float:left;font-size:12px;line-height:20px;white-space:noWrap;margin:0;'><font style='color:red'>"+recordCount+"</font>" + getTableHtcLan('recordCount') + "</span>";
+	    	if(gPageStyle[0].show=="bottom"){
+				oTotalTable.rows(2).cells[0].innerHTML = pageHtmlInts;
+	    	}else if(gPageStyle[0].show=="all"){
+				oTotalTable.rows(0).cells[0].innerHTML = pageHtmlInts;
+				oTotalTable.rows(2).cells[0].innerHTML = pageHtmlInts;
+	    	}else{ //left,top
+				oTotalTable.rows(0).cells[0].innerHTML = pageHtmlInts;
+	    	}
+		}
+	}
+}
+
+//修改分页条数后刷新列表 laixh 四川NOC 2012-12-27：
+function onChangePageSize(newPageSize){
+	newPageSize = newPageSize.replace(/[^\d]/g,'');
+	if(newPageSize=="" || newPageSize==element.pagesize) return;
+	element.pagesize = newPageSize;
+	doPage(1);
+}
+
+//每页条数只允许输入数字 laixh 四川NOC 2012-12-27：
+function pageSizeInputCheck(iObj){
+	iObj.value = iObj.value.replace(/[^\d]/g,'');
+	if(event.keyCode == 13)	{
+		onChangePageSize(iObj.value);
+	}
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doRowMouseOver
+//  说明:    当鼠标移动到行时触发
+//  参数:    oTR表格行
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+
+function doRowMouseOver(oTR)
+{
+    if(checkRowSelected(oTR)) return;
+    oTR.className = "table-tr-over-color";
+    oTR.style.backgroundColor=overColor;
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doRowMouseOut
+//  说明:    当鼠标移出行时触发
+//  参数:    oTR   表格行
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doRowMouseOut(oTR)
+{
+    if(checkRowSelected(oTR)) return;
+    oTR.className = "table-tr-normal-color";
+    oTR.style.backgroundColor=normalColor;
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doRowClick
+//  说明:    当鼠标单击行时触发
+//  参数:    oTR表格行
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doRowClick(oTR)
+{
+	var isMultiply=element.isMultiply;
+	var curSelRowArray;
+	var oDataTable=eval("window.oDataTable_"+uniqueID);
+	if(isMultiply!="true")
+	{
+	    if(isMultiply=="false")
+	    {
+			curSelRowArray=getSelectRowIndexs();
+			if(curSelRowArray!="" && curSelRowArray!=null)
+			{
+				oDataTable.rows(curSelRowArray[0]).className = "table-tr-normal-color";
+				oDataTable.rows(curSelRowArray[0]).style.backgroundColor=normalColor;
+			}
+	        oTR.className = "table-tr-select-color";
+	        oTR.style.backgroundColor=selectColor;
+	    }
+	    if(isMultiply=="auto")
+	    {
+	        var iCurRowIndex=oTR.rowIndex;
+	        var oRows=oDataTable.rows;
+			if(event.shiftKey || event.ctrlKey)
+			{
+			    if(event.shiftKey)
+			    {
+				    if(iCurMultiplyIndex==-1) 
+				    {
+				       oTR.className = "table-tr-select-color";
+				       oTR.style.backgroundColor=selectColor;
+				       iCurMultiplyIndex=iCurRowIndex;
+				       return;
+				    }
+					var iMinIndex=(iCurRowIndex>=iCurMultiplyIndex)?iCurMultiplyIndex:iCurRowIndex;
+		            var iMaxIndex=(iCurRowIndex>=iCurMultiplyIndex)?iCurRowIndex:iCurMultiplyIndex;
+				    for(var j=1;j<iMinIndex;j++)
+				    {
+				        oRows[j].className = "table-tr-normal-color";
+				        oRows[j].style.backgroundColor=normalColor;
+				    }
+				    for(var m=iMaxIndex;m<oRows.length;m++)
+				    {
+				        oRows[m].className = "table-tr-normal-color";
+				        oRows[m].style.backgroundColor=normalColor;
+				    }
+				    for(var k=iMinIndex;k<=iMaxIndex;k++)
+				    {
+				        oRows[k].className = "table-tr-select-color";
+				        oRows[k].style.backgroundColor=selectColor;
+				    }
+				}
+				if(event.ctrlKey)
+				{
+					var bSelected=checkRowSelected(oTR);
+					oTR.className=(bSelected)?"table-tr-normal-color":"table-tr-select-color";
+					oTR.style.backgroundColor=(bSelected)?normalColor:selectColor;
+					iCurMultiplyIndex=oTR.rowIndex;
+				}
+				window.document.execCommand("unSelect");				
+			}
+			else
+			{
+			   var curSelRowArray=getSelectRowIndexs();
+		       for (var i=0;i<curSelRowArray.length;i++)
+		       {
+		          oRows[curSelRowArray[i]].className = "table-tr-normal-color";
+		          oRows[curSelRowArray[i]].style.backgroundColor=normalColor;
+		       }
+		       oTR.className = "table-tr-select-color";
+		       oTR.style.backgroundColor=selectColor;
+		       iCurMultiplyIndex=oTR.rowIndex;
+			}
+	    }
+	}
+	else
+	{
+		var bSelected=checkRowSelected(oTR);
+		oTR.className = (bSelected)?"table-tr-normal-color":"table-tr-select-color";
+		oTR.style.backgroundColor=(bSelected)?normalColor:selectColor;
+		oTR.cells[0].children[0].click();
+	}
+	doAfterRowClick("srcRow",oTR);
+}
+function selectRowByObj(obj)
+{
+	var oTR=getElement(obj,"TR",0);
+	doRowClick(oTR);
+}
+function doAfterRowClick(name,value)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute(name,value)
+	oRowClick.fire(oEvent);
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    doRowRightClick
+//  说明:    当鼠标右击行时触发
+//  参数:    oTR表格行
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doRowRightClick(oTR)
+{
+    doBeforeRightClick();
+    event.cancelBubble=true;
+    event.returnValue=false;
+    if(oRightMenu==null) oRightMenu=window.document.getElementById(gRightMenu);
+    if(oRightMenu!=null)
+    {
+    	doSelectCurEvent(oTR,'right');
+	    doBeforeRightMenuShow();
+        oRightMenu.show();
+    }
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doSelectCurEvent
+//  说明:    当双击或右击时取消其它选择项,并选中当前选择项
+//  参数:    oTR表格行
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doSelectCurEvent(oTR,eventType){
+	var isMultiply=element.isMultiply;
+	var curSelRowArray=getSelectRowIndexs();
+    var oDataTable=eval("window.oDataTable_"+uniqueID);	
+	if(isMultiply=="false")
+    {
+		if(curSelRowArray!="" && curSelRowArray!=null)
+		{
+			oDataTable.rows(curSelRowArray[0]).className = "table-tr-normal-color";
+			oDataTable.rows(curSelRowArray[0]).style.backgroundColor=normalColor;
+		}
+        oTR.className = "table-tr-select-color";
+        oTR.style.backgroundColor=selectColor;
+    }
+    else
+    {
+		var bSelected=checkRowSelected(oTR);
+		if(!bSelected||eventType=='dblClick')
+		{
+			for (var i=0;i<curSelRowArray.length;i++)
+			{
+			    var oRow=oDataTable.rows(curSelRowArray[i]);
+			    oRow.className = "table-tr-normal-color";
+			    oRow.style.backgroundColor=normalColor;
+			    if(isMultiply=="true")
+			       oRow.cells[0].children[0].click();
+			}
+			
+			oTR.className = "table-tr-select-color";
+			oTR.style.backgroundColor=selectColor;
+			if(isMultiply=="true")
+			   oTR.cells[0].children[0].click();
+		}
+		if(isMultiply=="auto")
+		   iCurMultiplyIndex=oTR.rowIndex;
+    }
+}
+
+function doBeforeRightClick()
+{
+	var oEvent = createEventObject();
+	var oSrcE=event.srcElement;
+	var oTR=getElement(oSrcE,"TR",0);
+	oEvent.setAttribute("srcRow",oTR);
+	oRightId.fire(oEvent);
+}
+function doBeforeRightMenuShow()
+{
+	var oEvent = createEventObject();
+	oRightMenuId.fire(oEvent);
+}
+
+function getElement(oElement,tagName,count)
+{
+  var index = 0;
+	if(typeof(count)=="undefined")
+	{
+		count = index;
+	}
+	do
+	{
+		if(!oElement) return null;
+		tagName = tagName.toLowerCase();
+		if(oElement.tagName.toLowerCase() == tagName)
+		{
+			if(index == count)
+				return oElement;
+			else
+				index++;
+		}
+	}
+  while(oElement = oElement.parentElement);
+  return null;
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getSelectRowIndexs
+//  说明:    得到当前选中行的数组
+//  参数:    
+//  返回:    数组
+//----------------------------------------------------------------------------------------
+
+function getSelectRowIndexs()
+{
+    var curSelRowArray=new Array();
+	var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var iLen=oDataTable.rows.length;
+	for(var i=0;i<iLen;i++)
+	{
+		//var sBgColor=oDataTable.rows[i].bgColor.toUpperCase();
+		var sBgColor=oDataTable.rows[i].className.toUpperCase();
+	    //if(sBgColor==selectColor.toUpperCase())
+	    if(sBgColor=="TABLE-TR-SELECT-COLOR")
+		{
+            curSelRowArray[curSelRowArray.length]=oDataTable.rows[i].rowIndex;
+		}
+	}
+	return curSelRowArray;
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    checkRowSelected
+//  说明:    判断行是否选中
+//  参数:    
+//  返回:    bool值
+//----------------------------------------------------------------------------------------
+
+function checkRowSelected(oRow)
+{
+	var bSelected=false;
+	var curSelRowArray=getSelectRowIndexs();
+	if(curSelRowArray!="" && curSelRowArray!=null)
+	{
+	    for(var i=0;i<curSelRowArray.length;i++)
+		{
+		    if(curSelRowArray[i]==oRow.rowIndex)
+			{
+			    bSelected=true;
+			    break;
+			}
+		}
+	}
+    return bSelected;
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    ctrlBoxStyle
+//  说明:    控制选择框样式
+//  参数:    oCheckBox  选择框对象
+//           bChecked   当前的选中状态 "false"(未选中) "true"(选中)
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function ctrlBoxStyle(oChkBox,bChecked)
+{
+	 if(bChecked=="false")
+	 {
+		 oChkBox.checked="true";
+	     oChkBox.style.width="16px";
+	     oChkBox.style.color="darkgreen";
+	     oChkBox.innerHTML="√";
+	 }
+	 else
+	 {
+		 oChkBox.checked="false";
+	     oChkBox.style.width="10px";
+	     oChkBox.innerHTML="&nbsp;&nbsp;";
+	 }
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    insertShowWait
+//  说明:    插入等待的层
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function insertShowWait()
+{
+    var sDivHTML="<div class='table-wait-div' style='width:250px;height:110px;border:1px solid black;background-color:white;z-index:1000;display:block;position:absolute' id='oWait"+uniqueID+"'>"
+    			 + "<div class='table-wait-background'>"
+    			 + "<div class='table-wait-img-div-background' style='background : url(/resource/image/ani_wait.gif) no-repeat;height:110px;width:110px;'>&nbsp;</div>"
+                 +   "<div class='table-wait-text-div-font' style='font-family:宋体;font-size:9pt;font-weight:bold;margin:-70px 0 0 110px;'>"
+				 +       getTableHtcLan('loading') + "<br><font class='table-wait-text-font-color'>" + getTableHtcLan('waitText') + "</font>"
+				 +   "</div>"
+				 + "</div>"
+				 +"</div>";
+    window.document.body.insertAdjacentHTML("afterBegin",sDivHTML);
+}
+
+//----------------------------------------------------------------------------------------
+//  Author:  linjl 2012-2-17
+//  函数:    exportExcel
+//  说明:    表格导出EXCEL
+//  参数:    fileName:文件默认保存名称
+//  返回:    
+//----------------------------------------------------------------------------------------
+function exportExcel(fileName){
+    var exportDate = getAllDateXml();
+    if(exportDate.selectSingleNode("/root/recordCount").text=='0'){
+    	alert("无数据,无法导出EXCEL!");
+    	return;
+    }
+	var nodeList = exportDate.selectNodes("/root/rowSet");
+	var createXml = new ActiveXObject("Microsoft.XMLDOM");
+	var root = createXml.createElement("root");
+	var rows = createXml.createElement("rows");
+		
+	var rowFirst = exportDate.selectSingleNode("/root/rowSet");//首行数据
+	var nodesFirst = rowFirst.childNodes;
+	for(var i=0,row;i<nodesFirst.length;i++){
+		row = createXml.createElement("row");
+		row.setAttribute("name",nodesFirst[i].nodeName);
+		row.text = nodesFirst[i].nodeName;
+		rows.appendChild(row);
+	}		
+	root.appendChild(rows);			
+	var datas = createXml.createElement("datas");	
+	var text,columnData;				
+	for (var i = 0;i<nodeList.length;i++) {	
+		var row = createXml.createElement("dataRow");		
+		var nodesRow = nodeList[i].childNodes;
+		for(var j=0,data;j<nodesRow.length;j++){				
+			text = '';
+			data = createXml.createElement("data");
+			data.setAttribute("name",nodesRow[j].nodeName);			
+			text = nodesRow[j].text;
+			//text = text.replace(/(<span)(.*?)(>)/,"");
+			//text = text.replace("</span>","");
+			text=text.replace(/<\/?span[^>]*>/ig,"");//替换多个span upd by zhangye 14-11-21
+			
+			data.text = text;
+			row.appendChild(data);
+		}
+		datas.appendChild(row);
+	}		
+	root.appendChild(datas);		
+	
+	//创建Excel请求form
+	var formObj = document.createElement("form");
+	formObj.id = 'exportExcelForm';
+	formObj.action = '/servlet/excelExport.do';
+	formObj.method = 'post';
+	formObj.TARGET = 'downloadFrame';
+	var input = document.createElement('<input type="hidden" name="param"/>');
+	formObj.appendChild(input);
+    input = document.createElement('<input type="hidden" name="filename"/>');
+	formObj.appendChild(input);
+	window.document.body.appendChild(formObj);
+	
+	var exportform = window.document.getElementById("exportExcelForm");
+	exportform.param.value = root.xml;
+	exportform.filename.value = fileName;
+	exportform.submit();
+}
+
+
+//----------------------------------------------------------------------------------------
+//  Author:  linjl 2012-2-17
+//  函数:    getAllDateXml
+//  说明:    取得表格所有数据(不分页所有数据)
+//  参数:    
+//  返回:    XML
+//----------------------------------------------------------------------------------------
+function getAllDateXml(){
+	var sendDoc= new ActiveXObject("Microsoft.XMLDOM");  
+	var xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
+	sendDoc.loadXML(gSendXML);
+	var search = sendDoc.selectSingleNode("/root/search");
+	search.setAttribute("pagesize",getAllDate_MaxPage);
+	search.setAttribute("page",'1');
+	xmlHttp.open("POST",gXmlSrc,false);
+	xmlHttp.send(sendDoc);
+	if(xmlHttp.readyState==4){
+    	return xmlHttp.responseXML;
+    }else{
+    	alert(getTableHtcLan('getTableDataErrorMsg'));
+    }
+}
+
+//----------------------------------------------------------------------------------------
+//  Author:  KingDomPan 2015-05-13
+//  函数:    getTableTemplate
+//  说明:    获得table.htc在后台配置的表头模板, 多个实例具有缓存功能
+//  返回:    模板字符串
+//----------------------------------------------------------------------------------------
+function getTableTemplate() {
+	// PS: 以下三种方式测试过, 均无效果
+	// Object.prototype.tableTemplateText
+	// this.constructor.prototype
+	// window.constructor.prototype
+	// 因为该htc依赖getCssPath, 因此使用getCssPath的原型对象来保存模板串
+	if(typeof(getCssPath.prototype.tableTemplateText) === 'undefined') {
+		var tableDoc = new ActiveXObject("Microsoft.XMLDOM");
+		tableDoc.async = false;
+		tableDoc.load(gTableTemplateSrc);
+		var templateText = tableDoc.selectSingleNode("/root/TEMPLATE").text;
+		getCssPath.prototype.tableTemplateText = templateText;
+	}
+	return getCssPath.prototype.tableTemplateText;
+}
+</SCRIPT>
+</component>

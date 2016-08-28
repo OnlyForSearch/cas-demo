@@ -1,0 +1,119 @@
+#tdMenu,#tdLeftPanel,#tdLeftBar,#tdRightBar,#tdRightPanel{
+	display:none;
+}
+#tdInsertbarTop{
+	background:url(../images/insertbarBgTop.gif);
+}
+#tdInsertbarBottom{
+	background:url(../images/insertbarBgBottom.gif);
+}
+#taLine{
+	width:40px;
+	height:100%;
+	overflow:hidden;
+	border:none;
+	border-top:1px solid #000000;
+	background:#B2B4BF;
+	text-align:right;
+	line-height:14px;
+	cursor:default;
+}
+#taCode{
+	width:100%;
+	height:100%;
+	overflow:auto;
+	padding-left:3px;
+	border:none;
+	border-top:1px solid #000000;
+	line-height:14px
+}
+#tdViewSeparator{
+	background:url(../images/separatorView.gif);
+	cursor:n-resize;
+}
+#divViewSeparator{
+	position:absolute;
+	width:100%;
+	cursor:n-resize; 
+	display:none;
+	height:15px; 
+	z-index:1;
+	background:#ffffff url(../images/check.gif);
+}
+#ifrmDesign{
+	width:100%;
+	height:100%;
+	border:none;
+	border-bottom:1px inset;
+}
+#divPropertiesBody{
+	position:absolute;
+	width:100%;
+	height:100%;
+	overflow: auto;
+	visibility: hidden;
+}
+#tdTagPath{
+	background:url(../images/tagPathBg.gif);
+	width:100%;
+	height:17px;
+	vertical-align: top;
+}
+#divTagPath{	
+	width:100%;
+	height:17px;
+	position:absolute;
+	overflow:hidden;
+}
+#tdStatusbar{
+	padding-top:1px;
+	background:#BCC0C0 url(../images/statusbarBg.gif);
+	height:20px;
+}
+.toolbar{
+	background:url(../images/toolbarBg.gif);
+}
+.tdBottomBorder{
+	background:url(../images/bottomBg.gif) top;
+	height:5px;
+}
+.tdTopBorder{
+	background:url(../images/topBg.gif) bottom;
+	height:5px;
+}
+.tdLeftBorder{
+	background:url(../images/leftBg.gif) right;
+	width:5px;
+}
+.tdRightBorder{
+	background:url(../images/rightBg.gif) left;
+	width:5px;
+}
+.tdPanelTitle{
+	background-image:url(../images/panelTitleBg.gif);
+	height:20px;
+}
+.tdLeftTop{
+	background:#ffffff url(../images/leftTopBg.gif) right bottom;
+}
+.tdRightTop{
+	background:#ffffff url(../images/rightTopBg.gif) left bottom;
+}
+.tdRightBottom,.tdLeftBottom{
+	background-color:#899191;
+}
+.btTag{
+	border:1px solid #E0DFE3;
+	height:15px;
+	font-size:10px;
+	cursor:default;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.btTagOn{
+	border:1px inset;
+	height:15px;
+	font-size:10px;
+	cursor:default;
+	background:#E5E4DD;
+	font-family: Arial, Helvetica, sans-serif;
+}

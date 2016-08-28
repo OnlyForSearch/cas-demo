@@ -1,0 +1,225 @@
+.body_bg {
+    background: #eef3f9;
+    font-size: 12px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.top_bar_bg_left {
+    background: #136FA5;
+}
+
+.top_bar_bg_right {
+    background: #2FBEDA;
+}
+
+.top_title_bg {
+    background: #B5DEF4;
+}
+
+.database_select {
+    width: 300px;
+    height: 23px;
+}
+
+.btn_confirm {
+    width: 112px;
+    height: 29px;
+    background-image: url(../../image/databaseDias/btn_confirm.png);
+    color: #FFFFFF;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+}
+
+.btn_confirm:hover {
+    color: #B5DEF4;
+    cursor: pointer;
+}
+
+.top_link_menu_h3 a {
+    color: #CA6811;
+}
+
+.important_text {
+    color: red;
+}
+
+.process .blue_cur {
+    background-image: url(../../image/databaseDias/process_bar_blue.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    width: 16px;
+    height: 16px;
+}
+
+.process .grey_cur {
+    background-image: url(../../image/databaseDias/process_bar_grey.png);
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.process .blue_bg {
+    background-image: url(../../image/databaseDias/process_bg_begin.png);
+    width: 140px;
+}
+
+.process .grey_bg {
+    background-image: url(../../image/databaseDias/process_bg_end.png);
+    width: 140px;
+}
+
+.process_menu {
+    padding-left: 5px;
+    list-style: none;
+}
+
+.process_menu li {
+    padding-top:5px;
+    padding-left: 98px;
+    float: left;
+    font-size: 14px;
+}
+
+.top_link_menu_back {
+    line-height: 25px;
+    font-size: 12px;
+    margin: 0;
+    color: #CA6811;
+    background-image: url(../../image/databaseDias/right_point.png);
+    background-repeat: no-repeat;
+    background-position: 160px 11px;
+}
+
+.top_link_menu_back a {
+    color: #CA6811;
+}
+
+.tool_menu {
+    text-decoration: none;
+    color: #000099;
+}
+
+.tool_menu visited {
+    text-decoration: none;
+    color: #000099;
+}
+
+.oracle_dias_title {
+    font-family: "黑体";
+    padding-top: 6px;
+    padding-left: 10px;
+}
+
+.popupTable{
+
+}
+
+.titleBold{
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+.rightTitleMenu a{
+	padding-right: 10px;
+	color:#1570a5;
+}
+
+/*********************/
+.top_bar {
+    width: 100%;
+    height: 10px;
+    background: #136FA5;
+}
+.top_bar_bg_right_n {
+    width: 30%;
+    height: 100%;
+    background: #2FBEDA;
+    float: right;
+}
+
+.toolbar {
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    background: url('../../image/databaseDias/oracle_dias_title.png') 23px no-repeat #B5DEF4;
+}
+.oracle_dias_title_n {
+    font-family: "黑体";
+    margin-left: 140px;
+    float: left;
+}
+.oracle_dias_tb_btn {
+    float: right;
+    margin-right: 10px;
+    padding-left: 10px;
+}
+.oracle_dias_showhide_flow {
+    float: right;
+    margin-right: 15px;
+    padding-left: 18px;
+    background: url('../../image/databaseDias/ico_flow.png') left no-repeat;
+}
+.oracle_dias_back {
+    float: right;
+    margin-right: 15px;
+    padding-left: 18px;
+    background: url('../../image/databaseDias/ico_back.png') left no-repeat;
+}
+
+.flow_process {
+    height: 50px;
+    padding-left: 120px;
+    margin-top: 15px;
+}
+.flow_process div {
+    float: left;
+}
+.line_exec {
+    width: 140px;
+    height: 16px;
+    background: url('../../image/databaseDias/process_bg_begin.png') repeat-x;
+}
+.line_wait {
+    width: 140px;
+    height: 16px;
+    background: url('../../image/databaseDias/process_bg_end.png') repeat-x;
+}
+.item_exec {
+    background: url('../../image/databaseDias/process_bar_blue.png') no-repeat;
+    width: 16px;
+    height: 16px;
+}
+.item_wait {
+    background: url('../../image/databaseDias/process_bar_grey.png') no-repeat;
+    width: 16px;
+    height: 16px;
+}
+.item_name {
+    position: absolute;
+    color: #737373;
+}
+.exec_name {
+    color: #1570a5;
+}
+
+.top_bg_line {
+    clear: both;
+    height: 12px;
+    background: url('../../image/databaseDias/top_bg_line.png') center no-repeat;
+}
+
+.main_div {
+    clear: both;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.button_div {
+    clear: both;
+    text-align: center;
+    margin-top: 15px;
+}
+

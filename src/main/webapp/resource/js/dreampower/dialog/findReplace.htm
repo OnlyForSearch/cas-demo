@@ -1,0 +1,242 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>查找/替换</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+var foundCount,replacedCount,rng,txtFind,txtReplace,matchType,isEndText,tmpCount,bookmark
+function init(){
+	initDialog()
+	initDocument('taTextFind',false,'taTextReplace')
+	if(myEditor.designer){
+		if(myEditor.activateWin=='Code'){
+			myEditor.formElements('sltView').selectedIndex=0
+		}
+		initFind()
+	}
+}
+function initFind(){
+	foundCount=0
+	replacedCount=0
+	isEndText=false
+	tmpCount=-1
+	txtFind=myEditor.formElements('taTextFind').value
+	txtReplace=myEditor.formElements('taTextReplace').value
+	matchType=getMatchType()
+	checkView()	
+	rng=getRange()
+	rng.collapse();
+	rng.select();
+}
+function findText(){
+	if(checkInput()){
+		txtFind=myEditor.formElements('taTextFind').value
+		matchType=getMatchType()
+		//预先查找到总数,为自动从头开始查找做准备
+		if(tmpCount==-1){
+			var tmpBookmark=rng.getBookmark()
+			rng.expand("textedit");
+			rng.collapse();
+			rng.select();
+			for(tmpCount=0;rng.findText(txtFind,1000000000,matchType);tmpCount++){
+				rng.collapse(false)
+			}
+			rng.moveToBookmark(tmpBookmark)
+			if(tmpCount==0)bookmark=tmpBookmark;
+		}
+		if(foundCount==tmpCount){
+			showResult()
+		}else{
+			document.all('tdResult').innerText=''
+			rng.collapse(false);
+			if (rng.findText(txtFind, 1000000000, matchType)) {
+				rng.select();
+				bookmark=rng.getBookmark()
+				foundCount++
+			}else{				
+				if(foundCount==tmpCount){
+					showResult()
+				}else{
+					rng.expand("textedit");
+					rng.collapse();
+					rng.select();
+					findText()
+				}
+			}
+		}
+	}
+}
+function showResult(){
+		if (foundCount == 0){
+			document.all('tdResult').innerText='完成。找不到要查找的内容。'
+		}else{
+			document.all('tdResult').innerText='完成。找到 '+foundCount+' 项，替换 '+replacedCount+' 项。'
+		}
+		initFind()
+		rng=getRange()
+		if(bookmark){
+			rng.moveToBookmark(bookmark)
+			rng.select()
+		}
+		bookmark=null
+}
+function replaceText(){
+	if(checkInput()){
+		txtFind=myEditor.formElements('taTextFind').value
+		txtReplace=myEditor.formElements('taTextReplace').value
+		var repl=false
+        if (myEditor.formElements('chkMatchCase').checked){
+            if (rng.text == txtFind){
+			 	repl=true
+			 }
+        } else {
+            if (rng.text.toLowerCase() == txtFind.toLowerCase()){
+				repl=true
+			}
+        }
+		if(repl){
+			rng.text = txtReplace
+			replacedCount++
+		}
+        findText();
+	}
+}
+function replaceAllText(){
+    if (checkInput()) {
+		checkView()	
+		foundCount=0
+		replacedCount=0
+		txtFind=myEditor.formElements('taTextFind').value
+		txtReplace=myEditor.formElements('taTextReplace').value
+		matchType=getMatchType()
+		rng=getRange()
+        rng.expand("textedit");
+        rng.collapse();
+        rng.select();
+        while (rng.findText(txtFind, 1000000000, matchType)){
+            rng.select();
+            rng.text = txtReplace;
+            replacedCount++;
+        }
+        if (replacedCount == 0){
+			document.all('tdResult').innerText='完成。找不到要查找的内容。'
+		}else{
+			document.all('tdResult').innerText='完成。找到 '+replacedCount+' 项，替换 '+replacedCount+' 项。'
+		}
+		rng.collapse(false);
+		rng.select()
+		rng=getRange()
+    }			
+}
+function checkInput(){
+	var ta=myEditor.formElements('taTextFind')
+	if(empty(ta.value)){
+		inputError('请输入查找的文本',ta)
+		return false
+	}
+	return true
+}
+function checkView(){
+	var view=myEditor.formElements('sltView').value
+	if((myEditor.currentView=='Code'&&view=='Design')
+		||(myEditor.currentView=='Design'&&view=='Code')
+	){
+		myEditor.window.changeView(view)
+	}
+}
+function getMatchType(){
+	var isCaseSensitive,isWholeWord
+	isCaseSensitive=myEditor.formElements('chkMatchCase').checked?4:0;
+	isWholeWord=myEditor.formElements('chkMatchWord').checked?2:0;
+	return isCaseSensitive^isWholeWord
+}
+function getRange(){
+	if(myEditor.formElements('sltView').value=='Code'){
+		if(myEditor.activateWin!='Code')myEditor.window.taCode.focus();
+		return myEditor.window.taCode.document.selection.createRange()
+	}else{
+		if(myEditor.activateWin!='Design')myEditor.window.ifrmDesign.focus();
+		return myEditor.window.ifrmDesign.document.selection.createRange()
+	}
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td width="40" height="22" align="right">搜索:</td>
+    <td><select name="sltView" onChange="initFind();document.all('tdResult').innerText=''">
+      <option value="Code">代码</option>
+      <option value="Design" selected>文本</option>
+    </select></td>
+  </tr>
+  <tr>
+   <td height="22" align="right" valign="top">查找:</td>
+    <td><textarea name="taTextFind" rows="4" style="width:280px" onChange="initFind()"></textarea></td>
+  </tr>
+   <tr>
+   <td height="22" align="right" valign="top">替换:</td>
+    <td><textarea name="taTextReplace" rows="4" style="width:280px"></textarea></td>
+  </tr>
+     <td height="22" align="right">选项:</td>
+       <td><table width="100%" height="22"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="1"><input type="checkbox" name="chkMatchCase" value="4"></td>
+    <td width="90"  class="paddingTop">区分大小写
+           </td>
+    <td width="1"><input type="checkbox" name="chkMatchWord" value="2">          </td>
+    <td  class="paddingTop">全字匹配</td>
+  </tr>
+</table>
+</td>
+   </tr>
+  <tr valign="bottom">
+   <td height="16" colspan="2" id="tdResult" style="font-size:12px; font-weight:bold"></td>
+    </tr>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <table width="100%"  border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="28" align="center"><input id=btFind type="button" class="dialogRightButton" value="查找下一个" onClick="findText()">          </td>
+      </tr>
+      <tr>
+        <td height="6" align="center"><img src="../images/horizontal.gif" width="100%" style="height:6px" class="dialogRightButton"></td>
+      </tr>
+      <tr>
+        <td height="28" align="center"><input type="button" class="dialogRightButton" value="替换" onClick="replaceText()"></td>
+      </tr>
+      <tr>
+        <td height="28" align="center"><input type="button" class="dialogRightButton" value="全部替换" onClick="replaceAllText()"></td>
+      </tr>
+      <tr>
+        <td height="6" align="center"><img src="../images/horizontal.gif" width="100%" style="height:6px" class="dialogRightButton"></td>
+      </tr>
+      <tr>
+        <td height="28" align="center"><input type="button" class="dialogRightButton" value="关闭" onClick="closeDialog()"></td>
+      </tr>
+    </table>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

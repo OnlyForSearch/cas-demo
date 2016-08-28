@@ -1,0 +1,92 @@
+span.left {
+	height: 23px;
+	width: 6px;
+	background: url(/resource/image/btnLinit.gif) no-repeat;
+	border: 0px;
+	cursor: default;
+	cursor: hand;
+}
+
+span.right {
+	height: 23px;
+	width: 6px;
+	background: url(/resource/image/btnRinit.gif) no-repeat;
+	border: 0px;
+	cursor: default;
+	cursor: hand;
+}
+
+span.center {
+	height: 23px;
+	border: 0px;
+	cursor: hand;
+	text-align: center;
+	font-family: ËÎÌו;
+	font-size: 9pt;
+	font-weight: normal;
+	color: #0B333C;
+	padding: 5px 10px 0px 10px;
+	white-space: nowrap;
+}
+
+.btn-element-height,span.btn-normal-left,span.btn-normal-right,span.btn-over-left,span.btn-over-right,span.btn-click-left,span.btn-click-right,span.btn-normal-center,span.btn-over-center,span.btn-click-center
+	{
+	height: 21px !important;
+}
+
+span.btn-normal-left,span.btn-normal-right,span.btn-over-left,span.btn-over-right,span.btn-click-left,span.btn-click-right
+	{
+	width: 2px !important;
+}
+
+span.btn-normal-left {
+	background-image: url(/resource/image/jtitsmImages/btnLinit.gif) !important;
+}
+
+span.btn-normal-right {
+	background-image: url(/resource/image/jtitsmImages/btnRinit.gif) !important;
+}
+
+span.btn-over-left {
+	background-image: url(/resource/image/jtitsmImages/btnLover.gif) !important;
+}
+
+span.btn-over-right {
+	background-image: url(/resource/image/jtitsmImages/btnRover.gif) !important;
+}
+
+span.btn-click-left {
+	background-image: url(/resource/image/jtitsmImages/btnLclick.gif) !important;
+}
+
+span.btn-click-right {
+	background-image: url(/resource/image/jtitsmImages/btnRclick.gif) !important;
+}
+
+span.btn-normal-center,span.btn-over-center,span.btn-click-center {
+	cursor: default !important;
+}
+
+span.btn-normal-center {
+	color: #0B333C !important;
+}
+
+span.btn-over-center {
+	color: #FF7800 !important;
+}
+
+span.btn-click-center {
+	color: #FF4E00 !important;
+}
+
+span.btn-normal-center {
+	background-image: url(/resource/image/jtitsmImages/btnCinit.gif) !important;
+}
+
+span.btn-over-center {
+	background-image: url(/resource/image/jtitsmImages/btnCover.gif) !important;
+}
+
+span.btn-click-center {
+	background-image: url(/resource/image/jtitsmImages/btnCclick.gif) !important;
+}

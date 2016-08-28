@@ -1,0 +1,31 @@
+BODY {
+	MARGIN: 0px;
+}
+
+.MenuDIV{
+	OVERFLOW: auto;
+	PADDING: 3px 0px 0px 2px;
+	BACKGROUND-COLOR: #FFFFFF;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #000000;
+}
+
+.MenuItem{
+	HEIGHT: 100%;
+	margin-top: 1px;
+	PADDING: 4px 2px 0px 2px;
+	CURSOR: default;
+	COLOR: #000000;
+	font-size: 9pt;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	font-family: ËÎÌו;
+}
+
+.icoItem{
+	HEIGHT: 100%;
+	PADDING: 2px 0px 0px 1px;
+}
+

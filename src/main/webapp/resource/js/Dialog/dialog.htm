@@ -1,0 +1,251 @@
+<HTML XMLNS:IE>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>网管</title>
+<STYLE>
+@import url(../../css/btn.css);
+@media all
+{
+	IE\:button{behavior: url(../../htc/btn.htc);}
+}
+body {
+margin:5px 0px 0px 0px; background-color:#ECECEC;
+}
+.cell{
+font-family:"宋体"; font-size:9pt; font-weight:normal; color:black;
+}
+</STYLE>
+</HEAD>
+<BODY onLoad="iniPage()" onUnload="pageClose()">
+<TABLE width="100%"  border="0" cellspacing="0" cellpadding="0" id="msgTable">
+	<TR>
+		<TD width="60" height="60" align="center"><div style="width:60px;"><IMG src="information.gif" width="32" height="32" id="dialogIco"></div></TD>
+		<TD style="padding-right:14px;"><div id="dialogMsgDiv"><span class="cell" id="dialogMsg"></span></div></TD>
+	</TR>
+	<TR>
+		<TD height="43" colspan="2" align="center"><TABLE border="0" cellspacing="0" cellpadding="0" width="94%">
+    	<TR align="center">
+    		<TD style="display:none" id="btnOKTd"></TD>
+    		<TD style="display:none" id="btnYesTd"></TD>
+    		<TD style="display:none" id="btnNoTd"></TD>
+    		<TD style="display:none" id="btnAbortTd"></TD>
+    		<TD style="display:none" id="btnRetryTd"></TD>
+    		<TD style="display:none" id="btnIgnoreTd"></TD>
+    		<TD style="display:none" id="btnCancelTd"></TD>
+    		</TR>
+    	</TABLE></TD>
+	</TR>
+</TABLE>
+<script language="javascript">
+var parentWin = window.dialogArguments;
+var returnVal;
+var showBtns 	= new Array();
+var $1 = navigator.userAgent.toLowerCase();
+var isOpera = (/opera/).test($1);
+var isIE9 = !isOpera && (/msie 9/).test($1);
+var btnOK = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="1" value="确&nbsp;定">') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnOK.setAttribute("onclick", "btnClick(this)");
+   btnOK.setAttribute("width", "55");
+   btnOK.setAttribute("tabindex", "1");
+   btnOK.setAttribute("value", "确  定");
+}
+var btnYes = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="2" value="是"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnYes.setAttribute("onclick", "btnClick(this)");
+   btnYes.setAttribute("width", "55");
+   btnYes.setAttribute("tabindex", "2");
+   btnYes.setAttribute("value", "是");
+}
+var btnNo = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="3" value="否"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnNo.setAttribute("onclick", "btnClick(this)");
+   btnNo.setAttribute("width", "55");
+   btnNo.setAttribute("tabindex", "3");
+   btnNo.setAttribute("value", "否");
+}
+var btnAbort = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="4" value="放&nbsp;&nbsp;弃"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnAbort.setAttribute("onclick", "btnClick(this)");
+   btnAbort.setAttribute("width", "55");
+   btnAbort.setAttribute("tabindex", "4");
+   btnAbort.setAttribute("value", "放  弃");
+}
+var btnRetry = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="5" value="重&nbsp;&nbsp;试"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnRetry.setAttribute("onclick", "btnClick(this)");
+   btnRetry.setAttribute("width", "55");
+   btnRetry.setAttribute("tabindex", "5");
+   btnRetry.setAttribute("value", "重  试");
+}
+var btnIgnore = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="6" value="忽&nbsp;&nbsp;略"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnIgnore.setAttribute("onclick", "btnClick(this)");
+   btnIgnore.setAttribute("width", "55");
+   btnIgnore.setAttribute("tabindex", "6");
+   btnIgnore.setAttribute("value", "忽  略");
+}
+var btnCancel = !isIE9 || document.compatMode=="BackCompat" ? document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="7" value="取&nbsp;&nbsp;消"/>') : document.createElement("IE:button");
+if(isIE9 && document.compatMode=="CSS1Compat") {
+   btnCancel.setAttribute("onclick", "btnClick(this)");
+   btnCancel.setAttribute("width", "55");
+   btnCancel.setAttribute("tabindex", "7");
+   btnCancel.setAttribute("value", "取  消");
+}
+/*
+var btnOK 		= document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="1" value="确&nbsp;定">');
+var btnYes 		= document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="2" value="是"/>');
+var btnNo 		= document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="3" value="否"/>');
+var btnAbort 	= document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="4" value="放&nbsp;&nbsp;弃"/>');
+var btnRetry 	= document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="5" value="重&nbsp;&nbsp;试"/>');
+var btnIgnore = document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="6" value="忽&nbsp;&nbsp;略"/>');
+var btnCancel = document.createElement('<IE:button onclick="btnClick(this)" width="55" tabindex="7" value="取&nbsp;&nbsp;消"/>');
+*/
+//初始化页面,设置对话框的高度和宽度
+function iniPage()
+{
+	setDialogBtn();
+	setDialogType();
+	setDefaultBtn();
+	dialogMsg.innerHTML = parentWin.dialogMsg;
+	var height = msgTable.offsetHeight+30;
+	var width = msgTable.offsetWidth+6;	
+	/*		
+	//modify by syj 2011-08-26  为满足有些提示信息内容比较多的情况。原来内容多的时候，会使弹出窗口的高为屏幕的高，下面的按钮都看不见。
+	if(height+"px"!=window.dialogHeight)
+	{	
+		if(height>300){
+			width = width*2;
+			window.dialogWidth = width+"px";
+			height = 300;
+			dialogMsgDiv.style.height = height-60;
+			dialogMsgDiv.style.overflowY="scroll";
+		}
+		window.dialogHeight = height+"px";
+		//window.dialogTop = (parentWin.document.body.clientHeight - height)/2+"px";
+		window.dialogTop = (window.document.body.clientHeight - height)/2+"px";
+	}
+	window.dialogLeft = (window.document.body.clientWidth - width)/2+"px";
+	//window.dialogLeft = (parentWin.document.body.clientWidth - width)/2+"px";
+	if(height+"px"!=window.dialogHeight)
+	{
+		window.dialogHeight = height+"px";
+		window.dialogTop = (parentWin.document.body.clientHeight - height)/2+"px";
+	}
+	if(width+"px"!=window.dialogWidth)
+	{
+		window.dialogWidth = width+"px";
+		window.dialogLeft = (parentWin.document.body.clientWidth - width)/2+"px";
+	}
+	*/
+}
+
+function setDialogBtn()
+{
+	switch (parentWin.dialogBtn)
+	{
+		case 0:
+			btnOKTd.appendChild(btnOK);
+			showBtns.push(btnOK);
+			btnOKTd.style.display = "";
+			break;
+		case 1:
+			btnOKTd.appendChild(btnOK);
+			btnCancelTd.appendChild(btnCancel);
+			showBtns.push(btnOK);
+			showBtns.push(btnCancel);
+			btnOKTd.style.display = "";
+			btnCancelTd.style.display = "";
+			break;
+		case 2:
+			btnYesTd.appendChild(btnYes);
+			btnNoTd.appendChild(btnNo);
+			showBtns.push(btnYes);
+			showBtns.push(btnNo);
+			btnYesTd.style.display = "";
+			btnNoTd.style.display = "";
+			break;
+		case 3:
+			btnYesTd.appendChild(btnYes);
+			btnNoTd.appendChild(btnNo);
+			btnCancelTd.appendChild(btnCancel);
+			showBtns.push(btnYes);
+			showBtns.push(btnNo);
+			showBtns.push(btnCancel);
+			btnYesTd.style.display = "";
+			btnNoTd.style.display = "";
+			btnCancelTd.style.display = "";
+			break;
+		case 4:
+			btnAbortTd.appendChild(btnAbort);
+			btnRetryTd.appendChild(btnRetry);
+			btnIgnoreTd.appendChild(btnIgnore);
+			showBtns.push(btnAbort);
+			showBtns.push(btnRetry);
+			showBtns.push(btnIgnore);
+			btnAbortTd.style.display = "";
+			btnRetryTd.style.display = "";
+			btnIgnoreTd.style.display = "";
+			break;
+		case 5:
+			btnRetryTd.appendChild(btnRetry);
+			btnCancelTd.appendChild(btnCancel);
+			showBtns.push(btnRetry);
+			showBtns.push(btnCancel);
+			btnRetryTd.style.display = "";
+			btnCancelTd.style.display = "";
+			break;
+		default:
+			btnOKTd.appendChild(btnOK);
+			showBtns.push(btnOK);
+			btnOKTd.style.display = "";
+	}
+}
+function setDialogType()
+{
+	switch(parentWin.dialogType)
+	{
+		case 16:
+			//dialogIco.src = "information.gif";
+			break;
+		case 32:
+			dialogIco.src = "question.gif";
+			break;
+		case 48:
+			dialogIco.src = "error.gif";
+			break;
+	}
+}
+function setDefaultBtn()
+{
+	switch(parentWin.dialogDefaultBtn)
+	{
+		case 0:
+			//returnVal = showBtns[0].tabIndex;
+			showBtns[0].focus();
+			break;
+		case 256:
+			//returnVal = showBtns[1].tabIndex;
+			showBtns[1].focus();
+			break;
+		case 512:
+			//returnVal = showBtns[2].tabIndex;
+			showBtns[2].focus();
+			break;
+		default:
+			//returnVal = showBtns[0].tabIndex;
+			showBtns[0].focus();
+	}
+}
+function btnClick(oBtn)
+{
+	returnVal = oBtn.tabIndex;
+	window.close();
+}
+function pageClose()
+{
+	window.returnValue = returnVal;
+}
+</script>
+</BODY>
+</HTML>

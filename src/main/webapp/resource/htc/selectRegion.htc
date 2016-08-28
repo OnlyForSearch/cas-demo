@@ -1,0 +1,76 @@
+<public:component tagName=SELECT_REGION>
+<public:attach   EVENT="oncontentready"   HANDLER="doInit"                                    />
+<public:property name="width"              get="getWidth"         put="setWidth"               />
+<public:property name="value"              get="getValue"         put="setValue"               />
+<public:METHOD   NAME="setValue"   />
+</public:component>
+<body>
+ <div style='display:inline;cursor:hand;width:240px;'
+      XMLSrc='/servlet/util?OperType=1' 
+	  table='manage_region'
+	  keyColumn='region_id' 
+	  valueColumn='region_name'
+	  id='oRegion'>
+</div>
+<img src="/resource/image/search.gif" style="display:inline;cursor:hand;" 
+onclick="selectRegion()" id="oImage" align="top"/>
+</body>
+<SCRIPT LANGUAGE="jscript">
+var gWidth="240px";
+var gValue="";
+function doInit()
+{
+   defaults.viewLink = document;
+   oRegion.addBehavior("/resource/htc/keyValues.htc");
+   oImage.addBehavior("/resource/htc/imgButton.htc");
+   oRegion.style.width=gWidth;   
+}
+
+function getWidth()
+{
+   return gWidth;   
+}
+
+function setWidth(pWidth)
+{
+   return gWidth=pWidth;   
+}
+
+function getValue()
+{
+   return gValue;   
+}
+
+var setValue=function(pValue)
+{  
+    gValue=pValue;
+    if(oRegion.readyState=="complete")
+    {
+       setRegion();
+    }
+    else
+    {
+	    oRegion.onreadystatechange=function()
+	    {
+	       if(oRegion.readyState=="complete")
+	       {
+	           setRegion();
+	       }
+	    }
+	}
+}
+
+var setRegion=function(pRegionIds)
+{
+   oRegion.value=gValue;
+   oRegion.setReturnText();
+}
+function selectRegion()
+{
+   sHref="/resource/js/Dialog/selectRegion.html?regionIds="+gValue;
+   sPara='dialogwidth:35;dialogheight:30;status:no;help:no;resizable:yes';
+   window.showModalDialog(sHref,{obj:element,func:setValue},sPara); 
+}
+</SCRIPT>
+
+

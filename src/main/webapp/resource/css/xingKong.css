@@ -1,0 +1,459 @@
+body{
+	margin:0;
+	font:12px verdana,geneva,arial,helvetica,sans-serif,ËÎÌו;
+	overflow: hidden;
+}
+
+.banner{
+	height:63px;
+	overflow: hidden;
+	padding-left:10px;
+	background:url(/resource/image/u2_bg.png) repeat-x 0 0 ;	
+}
+
+.logo{
+	float:left;
+	height:63px;
+	line-height:63px;	
+	background:url(/resource/image/u1.png) no-repeat 0 0 ;
+	padding-left:70px;
+	color:#6EA1FF;
+	font-size:18px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+}
+
+.assetlogo{
+	float:left;
+	height:63px;
+	line-height:63px;	
+	background:url(/resource/image/u11.png) no-repeat 0 0 ;
+	padding-left:70px;
+	color:#6EA1FF;
+	font-size:18px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+}
+
+.logobar{
+	height:63px;
+	width:310px;
+	float:right;
+	background:url(/resource/image/u2.png) no-repeat 0 0;
+}
+
+.clear{
+	clear:both;
+}
+
+.main{
+	padding:2px;
+}
+
+#mainLeft{
+	width:220px;
+	padding:0 3px;
+	float:left;
+}
+
+#mainRight{
+	float:left;
+}
+
+#serachBarHead{
+	float:left;
+	height:30px;
+	width:195px;
+	line-height:30px;
+	padding-left:20px;
+	font-size:13px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+	background:url(/resource/image/u3.png) repeat-x 0 0;
+}
+
+.serachBarHeadSlippage{
+	display:block;
+	float:left;
+	height:30px;
+	width:19px;
+	cursor:hand;
+	background:url(/resource/image/u77.png) no-repeat 0 0;
+}
+
+.serachBarHeadSlippageSel{
+	display:block;
+	float:left;
+	height:30px;
+	width:19px;
+	cursor:hand;
+	background:url(/resource/image/u79.png) no-repeat 0 0;
+}
+
+#searchBar{
+	background-color:#FBFBFB;
+	border:1px solid #EEEEEE;
+	overflow:scroll;
+}
+
+.searchArea{
+	padding:5px;
+}
+
+.searchAeaHeadTitle{
+	float:left;
+	font-size:12px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+}
+
+.searchAeaHead a{
+	display:block;
+	float:right;
+	color:#005EA7;
+	font-size:12px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+}
+
+.searchToolbar{
+	overflow:hidden;
+	height:30px;
+	padding-left:20px;
+	font-size:13px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+	background:url(/resource/image/u3_bg.png) repeat-x 0 0;
+	border-left:1px solid #D2D2D2;
+	border-right:1px solid #D2D2D2;
+}
+
+.searchLine{
+	height:1px;
+	border:none;
+	border-top:1px solid #EEEEEE;
+}
+
+.toolbarVline{
+	height:30px;
+	width:1px;
+	float:left;
+	padding:0 3px;
+	background:url(/resource/image/u105_line.png) no-repeat 0 7;
+}
+
+.cycleArea{
+	float:left;
+	padding:3px 0;
+}
+
+.unitPrice{
+	float:left;	
+	height:30px;
+	line-height:30px;
+	padding-right:5px;
+}
+
+.unitPrice span{
+	font-size:13px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+	color:#0000FF;
+}
+
+.toolbarBtnArea{
+	float:left;
+	padding:4px 0 2px 3px;
+}
+
+#cycleTime{
+	border:1px solid #cccccc;
+	height:20px;
+	line-height:20px;
+	background-color:#ffffff;
+	text-align:center;
+	padding:0 5px;
+	letter-spacing: 2px;
+}
+
+.cycleArea a:hover{
+	color:#FFFFFF;
+	background:url(/resource/image/u30_bg.png) repeat-x 0 0;
+}
+
+.cycleBtn{
+	padding:0 5px;
+}
+
+.cycleArea span{
+	font-size:13px;
+	font-family:"Microsoft YaHei";
+}
+
+.cycleArea input{
+	font-size:13px;
+	font-family:"Microsoft YaHei";
+}
+
+.searchBtn{
+	border:1px solid #cccccc;
+	height:22px;
+	line-height:22px;
+	padding-left:12px;
+	background:url(/resource/image/u110.png) no-repeat 3 3;
+}
+
+.refreshBtn{
+	border:1px solid #cccccc;
+	height:22px;
+	line-height:22px;
+	padding-left:12px;
+	background:url(/resource/image/u93.png) no-repeat 3 1;
+}
+
+.sortBtn{
+	border:1px solid #cccccc;
+	height:22px;
+	line-height:22px;
+	padding-left:12px;
+	background:url(/resource/image/u119.png) no-repeat 3 3;
+}
+
+#sortDiv{
+	position:absolute;
+	border:1px solid #EAEAEA;
+	background-color:#FFFFEC;
+	width:100px;
+	padding:5px;
+}
+
+#sortDiv a{
+	display:block;
+	height:20px;
+	line-height:20px;
+	padding:1px 7px;
+	width:160px;
+}
+
+#sortDiv a:hover{
+	display:block;
+	height:20px;
+	line-height:20px;
+	padding:1px 7px;
+	width:160px;
+	background-color:#CAE8EA;
+}
+
+.exportBtn{
+	border:1px solid #cccccc;
+	height:22px;
+	line-height:22px;
+	padding-left:12px;
+	background:url(/resource/image/u128.png) no-repeat 3 1;
+}
+
+.filterArea{
+	padding-top:3px;
+}
+
+.filterArea a:hover{
+	color:#FFFFFF;
+	background:url(/resource/image/u30_bg.png) repeat-x 0 0;
+}
+
+.filterRegion{
+	display:block;
+	float:left;
+	color:#005EA7;
+	text-align:center;
+	margin:0 2px;
+	width:50px;
+	font-family:"Microsoft YaHei";
+}
+
+.filterRegionSel{
+	display:block;
+	float:left;
+	color:#FFFFFF;
+	margin:0 2px;
+	text-align:center;
+	width:50px;
+	font-family:"Microsoft YaHei";
+	background:url(/resource/image/u30_bg.png) repeat-x 0 0;
+}
+
+.filterState{
+	display:block;
+	float:left;
+	color:#005EA7;
+	margin:0 2px;
+	width:50px;
+	text-align:center;
+	font-family:"Microsoft YaHei";
+}
+
+.filterStateSel{
+	display:block;
+	float:left;
+	color:#FFFFFF;
+	margin:0 2px;
+	width:50px;
+	text-align:center;
+	font-family:"Microsoft YaHei";
+	background:url(/resource/image/u30_bg.png) repeat-x 0 0;
+}
+
+.filterFlow{
+	display:block;
+	float:left;
+	color:#005EA7;
+	text-align:center;
+	margin:0 1px;
+	width:50px;
+	font-family:"Microsoft YaHei";
+}
+
+.filterFlowSel{
+	display:block;
+	float:left;
+	color:#FFFFFF;
+	margin:0 1px;
+	text-align:center;
+	width:50px;
+	font-family:"Microsoft YaHei";
+	background:url(/resource/image/u30_bg.png) repeat-x 0 0;
+}
+
+#mainGrid{
+	overflow-y: scroll;
+}
+
+.mainTable{
+	padding:0;
+	margin:0;
+	/*border-left: 1px solid #C1DAD7;*/
+	table-layout:fixed;
+	overflow-y: scroll;
+}
+
+.mainTable td{
+	white-space:nowrap;
+	word-break:break-all;
+}
+
+.mainTableTdLeftBorder{
+	border-left: 1px solid #C1DAD7;
+}
+
+.mainTableCol{
+	color: #4f6b72;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 5px;
+	background: #CAE8EA no-repeat;
+}
+
+.mainTableColLink{
+	color: #0000FF;
+	text-decoration: underline;	
+	cursor:hand;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 5px;
+	background: #CAE8EA no-repeat;
+}
+
+.mainTableTD{
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #fff;
+	font-size:11px;
+	padding: 5px;
+	text-align: center;
+	color: #4f6b72;
+}
+
+.platformResourceTable td{
+	background: #fff;
+	font-size:11px;
+	color: #4f6b72;
+}
+
+.analysisTime{
+	float:left;	
+	height:30px;
+	line-height:30px;
+	padding-left:5px;
+}
+
+#analysisTimeSpan{
+	font-size:12px;
+	font-family:"Microsoft YaHei";
+	color:#0000FF;
+}
+
+#detailWin{
+	position:absolute;
+	top:0;
+	left:0;
+	border:3px solid #c9dad7;
+	text-align:center;
+}
+#detailIframe{
+	width:100%;
+	height:500px;
+}
+
+.FixedTitleRow
+{
+    position: relative; 
+    top: expression(this.offsetParent.scrollTop); 
+    z-index: 10;
+}
+
+.FixedTitleColumn
+{
+    position: relative; 
+    left: expression(this.parentElement.offsetParent.scrollLeft);
+}
+
+.FixedDataColumn
+{
+    position: relative;
+    left: expression(this.parentElement.offsetParent.parentElement.scrollLeft);
+}
+
+.normalCountSpan
+{
+	padding:0px 8px 0px 16px;
+}
+
+.abnormalCountSpan
+{
+	color : #FF0000;
+	padding:0px 16px 0px 8px;
+}
+
+.align-left {
+	text-align:left;
+}
+
+.align-right {
+	text-align:right;
+}
+
+.align-center {
+	text-align:center;
+}
+
+.collect_time{
+	color:#64A600;
+}

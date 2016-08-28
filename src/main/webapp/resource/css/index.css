@@ -1,0 +1,66 @@
+select {font-size:12px;}
+.C01 {color:#ffffff}
+.L13 {line-height:130%}
+.L15 {line-height:150%}
+.L17 {line-height:170%}
+.F7 {font-size:12px;; color: #555555}
+.F16 {font-size:16px;; color: #CC6600}
+.bt {
+	BACKGROUND-COLOR: #CBE1F5; BORDER-BOTTOM: buttonshadow 2px solid; BORDER-LEFT: buttonhighlight 2px solid; BORDER-RIGHT: buttonshadow 2px solid; BORDER-TOP: buttonhighlight 2px solid; FONT-SIZE: 12px
+}
+.s01 {border-top:1;border-left:1;border-right:1;border-bottom:1;border-style:inset;background-color:#ffffff;vertical-align:text-bottom}
+.s02 {border-left:1 ridge #ffffff;border-top:1 ridge #ffffff;border-bottom:1;border-right:1;border-style:ridge;background-color:#cccccc}
+A:link {line-height:150%;; color:#000000;; font-size: 12px; text-decoration: none}
+A:visited {color:#000000;; font-size: 12px;; line-height:150%; text-decoration: none}
+A:active {color:#ff0000;; font-size: 12px;; line-height:150%; text-decoration: none}
+A:hover {color:#ff0000;; font-size: 12px;; line-height:150%; text-decoration: none}
+A.a01:link {text-decoration:none;color:#ffffff;; font-size: 12px}
+A.a01:visited {text-decoration:none;color:#ffffff;; font-size: 12px}
+A.a01:active {text-decoration:none;color:#ff0000;; font-size: 12px}
+A.a01:hover {text-decoration:underline;color:#ff0000;; font-size: 12px}
+A.a05:link {text-decoration:none;color:#006699;; font-size: 12px}
+A.a05:visited {text-decoration:none;color:#006699;; font-size: 12px}
+A.a05:active {text-decoration:none;color:#ff0000;; font-size: 12px}
+A.a05:hover {text-decoration:underline;color:#ff0000;; font-size: 12px}
+A.a06:link {text-decoration:none;color:#00007f;; font-size: 12px}
+A.a06:visited {text-decoration:none;color:#00007f;; font-size: 12px}
+A.a06:active {text-decoration:none;color:#ff0000;; font-size: 12px}
+A.a06:hover {text-decoration:underline;color:#ff0000;; font-size: 12px}
+A.a07:link {text-decoration:none;color:#ffffff;; font-size: 12px}
+A.a07:visited {text-decoration:none;color:#ffffff;; font-size: 12px}
+A.a07:active {text-decoration:none;color:#E1DFDF;; font-size: 12px}
+A.a07:hover {text-decoration:underline;color:#E1DFDF;; font-size: 12px}
+.menu
+{
+	color:#ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align:center;
+	padding:3px,0px,3px,0px;
+	cursor:hand;
+	HEIGHT: 27px;
+	display:inline;
+}
+#mydown{position:relative;z-index:0;top:0;left:0;}
+#mydown1{position:absolute;z-index:0;top:0;left:0;width:100;height:240;visibility:hidden;}
+.18pxmore {  font-size: 18px}
+.14pxmore {  font-size: 14px}
+.8pxmore {  font-size: 8px}
+.5pxmore {  font-size: 6px}
+.11black {  font-size: 12px; color: #000000}
+td { font-size:12px; ; color: #000000}  li { font-size:12px; } p { font-size:12px; } 
+select { font-size:12px; ; color: red}  li { font-size:12px; } p { font-size:12px; } 
+input {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.input {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 9pt; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.input2 {
+	BORDER-RIGHT: #ffffff 2px solid; BORDER-TOP: #ffffff 2px solid; BORDER-LEFT: #ffffff 2px solid; COLOR: #000000; BORDER-BOTTOM: #000000 2px solid; size: 15 onFocus=this.select() onMouseOver=this.focus() 
+    BACKGROUND-COLOR: #ffffff
+}
+.input3 {
+	BORDER-RIGHT: #EFF7FF 1px solid; BORDER-TOP: #EFF7FF 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #EFF7FF 1px solid; BORDER-BOTTOM: #EFF7FF 1px solid; BACKGROUND-COLOR: #EFF7FF
+}

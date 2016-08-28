@@ -1,0 +1,240 @@
+.icon-search {
+	background-image: url(../image/ico/search2.gif) !important;
+}
+
+.icon-exit {
+	background-image: url(../image/ico/exit.gif) !important;
+}
+
+.icon-refresh {
+	background-image: url(../image/ico/view-refresh.png) !important;
+}
+
+.icon-reload {
+	background-image: url(../image/ico/reload.gif) !important;
+}
+
+.icon-param {
+	background-image: url(../image/ico/filter_param.gif) !important;
+}
+
+.icon-grid {
+	background-image: url(../image/ico/grid.gif) !important;
+}
+
+.icon-add-new {
+	background-image: url(../image/ico/add.gif) !important;
+}
+
+.icon-tabs {
+	background-image: url(../image/ico/tabs.gif) !important;
+}
+
+.icon-accordian {
+	background-image: url(../image/ico/accordian.gif) !important;
+}
+
+.icon-chart {
+	background-image: url(../image/ico/barChart.gif) !important;
+}
+
+.icon-view {
+	background-image: url(../image/ico/study.gif) !important;
+}
+
+.icon-prev1 {
+	background-image: url(../image/ico/arrow_right.gif) !important;
+}
+
+.icon-prev2 {
+	background-image: url(../image/ico/prev.gif) !important;
+}
+
+.icon-prev3 {
+	background-image: url(../image/ico/right.png) !important;
+}
+
+.icon-next1 {
+	background-image: url(../image/ico/arrow_left.gif) !important;
+}
+
+.icon-next2 {
+	background-image: url(../image/ico/next.gif) !important;
+}
+
+.icon-next3 {
+	background-image: url(../image/ico/left.png) !important;
+}
+
+.icon-chart2 {
+	background-image: url(../image/ico/generalItem.gif) !important;
+}
+
+.icon-chart-pie {
+	background-image: url(../image/ico/pie.gif) !important;
+}
+
+.icon-chart-line {
+	background-image: url(../image/ico/line.gif) !important;
+}
+
+.icon-calc {
+	background-image: url(../image/ico/calc.gif) !important;
+}
+
+.icon-text {
+	background-image: url(../image/ico/045631593.gif) !important;
+}
+
+.icon-save {
+	background-image: url(../image/ico/save2.gif) !important;
+}
+
+.icon-del {
+	background-image: url(../image/ico/del2.gif) !important;
+}
+
+.icon-delete {
+	background-image: url(../image/ico/del3.gif) !important;
+}
+
+.icon-excel {
+	background-image: url(../image/ico/excel.gif) !important;
+}
+
+.icon-edit {
+	background-image: url(../image/ico/edit2.gif) !important;
+}
+
+.icon-properties {
+	background-image: url(../image/ico/properties.gif) !important;
+}
+
+.icon-add {
+	background-image: url(../image/ico/add2.gif) !important;
+}
+
+.icon-recover {
+	background-image: url(../image/ico/file_del.gif) !important;
+}
+
+.icon-cancel {
+	background-image: url(../image/ico/sendWork.gif) !important;
+}
+
+.icon-undo {
+	background-image: url(../image/ico/undo.gif) !important;
+}
+
+.icon-cache {
+	background-image: url(../image/ico/cache.gif) !important;
+}
+
+.icon-list {
+	background-image: url(../image/ico/list-items.gif) !important;
+}
+
+.icon-copy {
+	background-image: url(../image/ico/copy.gif) !important;
+}
+
+.icon-paste {
+	background-image: url(../image/ico/paste.gif) !important;
+}
+
+.icon-delAll {
+	background-image: url(../image/ico/delAll.gif) !important;
+}
+
+.icon-apply {
+	background-image: url(../image/ico/apply.gif) !important;
+}
+
+.icon-preferences {
+	background-image: url(../../resource/twaver/images/toolbar/preferences.png) !important;
+}
+
+.icon-refresh {
+	background-image: url(../../resource/twaver/images/toolbar/refresh.png) !important;
+}
+
+.icon-up {
+	background-image: url(../../resource/twaver/images/toolbar/up.png) !important;
+}
+
+.icon-down {
+	background-image: url(../../resource/twaver/images/toolbar/down.png) !important;
+}
+
+.icon-zoomIn {
+	background-image: url(../../resource/twaver/images/toolbar/zoomIn.png) !important;
+}
+
+.icon-zoomOut {
+	background-image: url(../../resource/twaver/images/toolbar/zoomOut.png) !important;
+}
+
+.icon-zoomToOverview {
+	background-image: url(../../resource/twaver/images/toolbar/zoomToOverview.png) !important;
+}
+
+.icon-impact-tree-node {
+	width: 16px !important;
+    height: 16px !important;
+}
+
+.icon-start-large {
+	background: url(../image/ico/start_stop.png) no-repeat 0px 0px !important;
+}
+
+.icon-stop-large {
+	background: url(../image/ico/start_stop.png) no-repeat -32px 0px !important;
+}
+
+.icon-restart-large {
+	background: url(../image/ico/restart.png) no-repeat 0px 0px !important;
+}
+
+.icon-fullscreen {
+	width:17px;
+	height:15px;
+	filter:alpha(opacity=80);
+	background-image: url('/resource/image/fullscreen.png') !important;
+}
+
+.icon-fullscreen-over {
+	width:17px;
+	height:15px;
+	background-image: url('/resource/image/fullscreen_over.png') !important;
+}
+
+.icon-check {
+	background: url(/resource/js/ext/resources/images/access/menu/checked.gif) no-repeat 0px 0px !important;
+}
+.icon-uncheck {
+	background: url(/resource/js/ext/resources/images/access/menu/unchecked.gif) no-repeat 0px 0px !important;
+}
+
+.icon-select-all {
+	background: url(/resource/image/ico/select-all.png) no-repeat 0px 0px !important;
+}
+
+.icon-invert-select {
+	background: url(/resource/image/ico/invert-select.png) no-repeat 0px 0px !important;
+}
+
+.icon-startup {
+	background: url(/resource/image/startup.gif) no-repeat 0px 0px !important;
+}
+
+.icon-timer {
+	background: url(/resource/image/ico/time.gif) no-repeat 0px 0px !important;
+}
+
+.icon-verify {
+	background-image: url(../image/ico/sendWork.gif) !important;
+}
+
+.icon-moveto {
+	background: url(/resource/image/ico/moveto.gif) no-repeat 0px 0px !important;
+}

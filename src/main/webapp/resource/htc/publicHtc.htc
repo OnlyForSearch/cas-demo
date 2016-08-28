@@ -1,0 +1,1011 @@
+<PUBLIC:COMPONENT>
+<PUBLIC:ATTACH EVENT="oncontentready" ONEVENT="contentInitial()" />
+<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="documentInitial()" />
+<PUBLIC:ATTACH EVENT="onmouseover" ONEVENT="DoMouseOver()" />
+<PUBLIC:ATTACH EVENT="onmouseout" ONEVENT="DoMouseOut()" />
+<PUBLIC:ATTACH EVENT="onmousedown" ONEVENT="DoMouseDown()" />
+<PUBLIC:ATTACH EVENT="onmouseup" ONEVENT="DoMouseUp()" />
+
+<!--form.htc, windowPanel.htc, divSplitter.htc, searchPanel.htc, searchPanel2.htc
+<PUBLIC:PROPERTY NAME="styleText" VALUE="" />
+-->
+
+<!--button.htc
+<public:property name="imgIndex" value="" />
+<public:property name="params" value="" />
+<public:property name="queryTable" value="" />
+<public:property name="condition" value="" />
+-->
+
+<!--select.htc
+<PUBLIC:PROPERTY NAME="result" VALUE="" />
+<PUBLIC:PROPERTY NAME="call" VALUE="dataService.getData" />
+<PUBLIC:PROPERTY NAME="method" VALUE="" />
+<PUBLIC:PROPERTY NAME="allowVoid" VALUE="" />
+<PUBLIC:PROPERTY NAME="voidDesc" VALUE="" />
+<PUBLIC:PROPERTY NAME="disCall" VALUE="false" />
+<PUBLIC:PROPERTY NAME="defaultValue" VALUE="" />
+<PUBLIC:PROPERTY NAME="asyn" VALUE="true" />
+-->
+
+//select.htc
+<PUBLIC:METHOD NAME="init" />
+<PUBLIC:METHOD NAME="addVoid" />
+<PUBLIC:METHOD NAME="select_contentInitial" />
+
+//tabpane.htc
+<PUBLIC:METHOD NAME="query" />
+<PUBLIC:METHOD NAME="getTable" />
+<PUBLIC:METHOD NAME="getTables" />
+<PUBLIC:METHOD NAME="setQueryFlag" />
+<PUBLIC:METHOD NAME="getQueryFlag" />
+<PUBLIC:METHOD NAME="setCancelBubble" />
+
+<!--visualPanels.htc
+<public:property name="desc" value="" />
+-->
+
+//divSplitter.htc
+<public:event name="onsplit" id=split />
+
+//myInput
+<public:property name="inputId" value="" />
+<public:property name="inputValue" value="1" />
+
+<script>
+
+var styleParams = new Object();
+
+function contentInitial(){	
+  if (element.tagName == "FORM") {
+    form_contentInitial();
+  }
+  else if (element.tagName == "BUTTON") {
+    button_contentInitial();
+  }
+  else if (element.tagName == "SELECT") {
+    select_contentInitial();
+  }    
+  else if (element.tagName == "DIV") {
+    if (element.className == "windowPanel") {
+      windowPanel_contentInitial();
+    }
+    if (element.className == "searchPanel") {
+      searchPanel_contentInitial();
+    }
+    if (element.className == "searchPanel2") {
+      searchPanel2_contentInitial();
+    }
+    if (element.className == "searchPanelDiv2") {
+      searchPanelDiv2_contentInitial();
+    }
+    else if (element.className == "tab-pane") {
+      tabpane_contentInitial();
+    }
+    else if (element.className == "visualPanels") {
+      visualPanels_contentInitial();
+    }
+    else if (element.className == "divSplitter") {
+      divSplitter_contentInitial();
+    }
+  }  
+}
+function documentInitial()
+{
+  if (element.tagName == "FORM") {
+    form_documentInitial();
+  } 
+  else if (element.tagName == "DIV") {
+   
+    if (element.className == "permission" ) {
+      permission_documentInitial();
+    }
+    else if (element.className == "settime") {
+	  settime_documentInitial(); 
+    }
+	else if (element.className=="myInput"){
+      myInputInitial();
+	}
+  }
+}
+
+/**************************************************************************
+*  form.htc
+**************************************************************************/
+   
+function seperateStyleText(_styletext)
+{
+  var str = "";
+  var args = _styletext.split(";");
+  for (var i = 0; i < args.length; i++)
+  {
+    str = args[i];
+    var arg = str.split(":");
+    if (arg.length <= 1)
+      continue;
+    if(arg[0] != "")
+      eval("styleParams['" + arg[0] + "'] = arg[1];");
+  }
+}
+function form_contentInitial()
+{  
+  if(!element.styleText)
+    element.styleText = "";
+		styleParams["labelLayout"] = "38%";
+		styleParams["labelAlign"] = "center";
+		styleParams["labelMargin"] = "0";
+		styleParams["inputLayout"] = "56%";
+		
+		styleParams["shortLayout"] = "20px";
+		styleParams["shortMargin"] = "36%";
+		styleParams["selectLayout"] = "57%";
+		styleParams["radioLayout"] = "10%";  
+		
+		styleParams["textareaLayout"] ="57%";
+		
+		styleParams["query"] = "";
+		styleParams["submit"] = "";
+		styleParams["readOnly"] = "";
+		
+  element.styleText = element.styleText.replace(/\s*/g,"");
+  seperateStyleText(element.styleText);		  
+
+  var all = element.getElementsByTagName("*");  
+  for (var i = 0; i < all.length; i++)
+  {
+    if (all[i].tagName == "LABEL"  && all[i].className != "myStyle" && all[i].tmpflag != "myStyle")
+    {
+      all[i].style.width = styleParams["labelLayout"];
+      all[i].style.styleFloat = "left";
+      all[i].style.textAlign = styleParams["labelAlign"];
+      all[i].style.marginLeft = styleParams["labelMargin"];
+      if (all[i].childNodes && all[i].childNodes.length > 0 && all[i].childNodes[0].tagName == "BUTTON")
+      {
+        var nextSibling = all[i].nextSibling;
+        while (nextSibling && nextSibling.nodeType == 3)
+          nextSibling = nextSibling.nextSibling;
+        if (nextSibling)
+        {
+          nextSibling.readOnly = true;
+        }
+      }
+    }
+    else if ((all[i].tagName == "INPUT") && (all[i].type == "text") || (all[i].type == "password") || (all[i].type == "file")||(all[i].tagName == "TEXTAREA") )
+    {
+      if(all[i].tagName == "TEXTAREA" && all[i].prestyle && all[i].className == "myStyle"){
+	    continue;
+      }else if(all[i].tagName == "TEXTAREA" && all[i].remstyle){
+	all[i].onfocus=function(){
+		window.document.body.onselectstart=function(){return true;};
+	}
+	all[i].onblur=function(){
+		window.document.body.onselectstart=function(){return false;};
+	}    
+	all[i].style.width =styleParams["textareaLayout"];
+	all[i].style.styleFloat ="left";
+	if(styleParams["readOnly"]=="true"){
+		all[i].readOnly = true;
+		all[i].disabled = "true";
+	} 
+	continue;
+      }
+
+      /*all[i].onfocus=function(){
+        window.document.body.onselectstart=function(){return true;};
+      }
+      all[i].onblur=function(){
+        window.document.body.onselectstart=function(){return false;};
+      }*/
+       
+		if(all[i].className == "long")
+		{
+      all[i].style.width = styleParams["longLayout"];		
+		} 
+		else if(all[i].className == "myStyle")
+		{
+      all[i].style.width = styleParams["customerLayout"];		
+		} 
+		/*if(all[i].className == "short")
+		{
+      all[i].style.width = styleParams["shortLayout"];		
+		}*/
+		else
+		{
+      all[i].style.width = styleParams["inputLayout"];
+		}
+      all[i].style.styleFloat = "left";
+      if(styleParams["readOnly"]=="true")
+        all[i].readOnly = true;
+						if(all[i].readOnly ==true)
+						{
+							all[i].style.backgroundColor="#F9F9F9";
+							all[i].style.borderBottom="1px solid #ccc";
+							all[i].style.marginBottom="4px";
+							all[i].style.borderTop="2px solid #F9F9F9";
+							all[i].style.borderRight="1px solid #ccc";
+							all[i].style.borderLeft="2px solid #F9F9F9";
+
+       all[i].onclick = function(){
+							  var previousSibling = this.previousSibling;
+			      while (previousSibling && (previousSibling.nodeType == 3 || previousSibling.tagName!="LABEL"))
+			       	previousSibling = previousSibling.previousSibling;
+			      if(previousSibling && previousSibling.childNodes && previousSibling.childNodes.length > 0 && previousSibling.childNodes[0].tagName == "BUTTON" && previousSibling.childNodes[0].disabled != true){					        
+			        previousSibling.childNodes[0].onclick();
+			      }
+			    }
+			    if(all[i].disabled!=true && all[i].getAttribute("keyField") && !all[i].getAttribute("dataType")){
+									var previousSibling = all[i].previousSibling;
+					    while (previousSibling && (previousSibling.nodeType == 3 || previousSibling.tagName!="LABEL")){
+					     	previousSibling = previousSibling.previousSibling;
+					    }
+					    if(previousSibling && previousSibling.childNodes && previousSibling.childNodes.length > 0 && previousSibling.childNodes[0].tagName == "BUTTON"){					  					    
+					      previousSibling.childNodes[0].insertAdjacentHTML("afterEnd", '<img src="'+path_prefix+'public/common/images/back.gif" style="cursor:hand;" alt="清空" />');
+					      i++;
+					      previousSibling.childNodes[1].setAttribute("keyField", all[i].getAttribute("keyField"));
+					      previousSibling.childNodes[1].setAttribute("keyValue", all[i].id);
+					      previousSibling.childNodes[1].onclick = function(){
+					      	if(this.getAttribute("keyField")=="areaSuperId" && window.document.getElementById("areaNumber") && window.document.getElementById("areaSpecCode")){					      		
+					      	  if(window.document.getElementById("areaSpecCode").options[window.document.getElementById("areaSpecCode").selectedIndex].value!="C2"){
+					      	    window.document.getElementById("areaNumber").disabled = false;
+					      	    window.document.getElementById("areaNumber").value = "";
+					      	  }					      	   
+					      	}
+					        window.document.getElementById(this.getAttribute("keyField")).value = "";
+					        window.document.getElementById(this.getAttribute("keyValue")).value = "";
+					      };							      
+					    }			
+			    }		    
+			   }
+    }
+    else if ((all[i].tagName == "INPUT") && (all[i].type == "radio") || (all[i].type == "checkbox"))
+    {
+      all[i].style.width = styleParams["radioLayout"];
+      all[i].style.styleFloat = "left";
+    }
+    else if (all[i].tagName == "SELECT")
+    {
+      all[i].style.width = styleParams["selectLayout"];
+	  
+      all[i].style.styleFloat = "left";
+      if(styleParams["readOnly"]=="true"){
+				    all[i].readOnly = true;
+				    all[i].disabled = "true";
+				     }
+	  else if(all[i].className == "short")
+		{
+                    all[i].style.width = styleParams["shortLayout"];		
+		}
+    }
+    else if (all[i].tagName == "TEXTAREA")
+    {
+      all[i].onfocus=function(){
+        window.document.body.onselectstart=function(){return true;};
+      }
+      all[i].onblur=function(){
+        window.document.body.onselectstart=function(){return false;};
+      }    
+      all[i].style.width =styleParams["textareaLayout"];
+      all[i].style.styleFloat ="left";
+      if(styleParams["readOnly"]=="true"){
+				    all[i].readOnly = true;
+				    all[i].disabled = "true";
+				     }      
+    }
+  }
+}
+
+function form_documentInitial()
+{
+  element.onsubmit = function(){return false;}
+  Validator.Validate(element, 4);
+  if(styleParams["submit"]=="")return;
+  var objButton = window.document.getElementById(styleParams["submit"]);
+  if (objButton)
+  {
+    if (objButton.id != "btn_confirm")
+      objButton.insertAdjacentHTML("beforeBegin", '<button id="btn_reset" onclick="document.getElementById(\'' + element.id + '\').reset();" imgIndex="90"> 重 置</button>');
+    
+    var preButtonFunction = objButton.onclick;
+    objButton.onclick = function()
+    {    	
+      if (Validator.Validate(element, 2) == false)
+        return ;
+      if(preButtonFunction){
+        preButtonFunction();
+      }
+    }
+    element.onkeydown = function()
+    {
+      if (event.keyCode == 13)
+        objButton.click();
+    }    
+    
+    /*if (objButton.id == "btn_query" || styleParams["immediatelyQuery"]=="true"){
+	    var selectControls = element.all.tags("SELECT");
+	    for(var i=0; i<selectControls.length; i++){
+	      selectControls[i].attachEvent("onchange", objButton.onclick);
+	    }
+    }*/
+  } 
+
+}
+
+/**************************************************************************
+*  button.htc
+**************************************************************************/
+
+function getButtonSize(index){
+  var size = 75;
+  switch(index){
+    case 1 : size = 25; break;
+    case 2 : size = 34; break;
+    case 3 : size = 61; break;
+    case 4 : size = 75; break;
+    case 5 : size = 88; break;
+    case 6 : size = 104; break;
+    case 7 : size = 120; break;
+    case 8 : size = 130; break;
+    case 9 : size = 142; break;
+    case 10 : size = 152; break;
+    case 11 : size = 160; break;
+    case 12 : size = 160; break;    
+  }
+  return size;
+}
+
+function button_contentInitial()
+{
+
+   if(element.Simple){
+    element.style.paddingTop="3px";
+    element.style.border=""; 
+    if(!element.params)
+    element.params = "";  
+    if(name != "")
+    {
+       element.onclick = function()
+      {
+       eval(name + '(' + getStrParams(params) + ')');
+      };
+    }
+    return;
+  }
+  if(!element.ImgIndex)
+    element.ImgIndex = "";
+  if(!element.imgIndex)
+    element.imgIndex = "";
+    
+  if(element.ImgIndex != "" && element.imgIndex == "")
+    element.imgIndex = element.ImgIndex;
+    
+  if(!element.params)
+    element.params = "";    
+  if(!element.queryTable)
+    element.queryTable = "";  
+  if(!element.condition)
+    element.condition = "";  
+  if(!element.clickFunc)
+    element.clickFunc = "";                 
+    
+  attachFunctionButton();
+  var descLength = Math.round(getLenByAscii(element.innerText) / 2);
+	var text=element.innerText;
+	if(descLength==2){
+    descLength = 3;
+	 	text="&nbsp;"+element.innerText.substring(0,2)+"&nbsp;"+element.innerText.substring(2,4);
+	}
+	if(element.imgFlag=="false"){//无需图标
+	  descLength = descLength-2;
+	}
+  if (descLength >= 1)
+  {
+	var vsize=getButtonSize(descLength);
+	if(element.imgFlag=="false"){//无需图标
+	  vsize=vsize+1;
+	}
+    element.style.width = vsize+"px";
+    element.style.backgroundImage = "url(" + path_prefix + "public/common/images/button"+descLength+"_n.gif)";
+    element.className = element.className + " buttonX";    
+  }
+
+  var tmpStr = '<div class="icon" style="background-image:url(' + path_prefix + 'public/common/images/icon' + element.imgIndex + '.gif);">' + text + '</div>';
+  element.innerHTML = tmpStr;
+   if (name != "")
+  {
+    element.onclick = function()
+    {
+      eval(name + '(' + getStrParams(params) + ')');
+    };
+  }
+  
+}
+
+function attachFunctionButton()
+{
+  if (element.className == "functionButton")
+    element.onclick = showFunctionPage;
+  if (element.className == "exitButton")
+    element.onclick = closePopup;
+  if (element.queryTable != "")
+  {
+    var bean = element.queryTable.replace(/table$|Table$/g,"");
+    var conditionForm = bean + "Form";
+    element.onclick = function()
+    {
+      eval('condition = new ' + bean + '()');
+      fillBeanFromContainer(window.document.getElementById(conditionForm), condition);
+      if(window.document.getElementById("target").value=="post"){
+      	condition.postAreaIDList=window.document.getElementById("areaId").value.replace(/,$/g,"").split(',');
+        condition.postAreaIDList._BUFFALO_OBJECT_CLASS_="Array";
+      }
+      if(window.document.getElementById("target").value=="district"){
+      	condition.districtAreaIdList=window.document.getElementById("areaId").value.replace(/,$/g,"").split(',');
+      	condition.areaIdList=window.document.getElementById("applyAreaId").value.replace(/,$/g,"").split(',');
+        condition.districtAreaIdList._BUFFALO_OBJECT_CLASS_="Array";
+        condition.areaIdList._BUFFALO_OBJECT_CLASS_="Array";
+      }
+      if(window.document.getElementById("target").value=="teamspec") condition.teamSpecAreaID=Number(window.document.getElementById("teamSpecAreaID").value);
+      if(window.document.getElementById("target").value=="role"){
+      	condition.roleInAreaList=window.document.getElementById("areaId").value.replace(/,$/g,"").split(',');
+      	condition.roleInAreaList._BUFFALO_OBJECT_CLASS_="Array";
+      }
+      if(typeof(currentId) != "undefined") condition.currentId = currentId;
+      if(element.parentOne && element.parentOne != ""){
+      	var parentOneValue = "";
+      	eval("parentOneValue = window.document.getElementById(\""+element.parentOne+"\").value;");      	
+      	if(parentOneValue != ""){      	      
+          eval("condition."+element.parentOne+"List = parentOneValue.split(',');");
+        }
+        else if(condition.target=="employee"||condition.target=="organ"){
+          condition.currentId = "1";
+          eval("condition."+element.parentOne+"List = orgIdList");
+        }
+        eval("condition."+element.parentOne+"List._BUFFALO_OBJECT_CLASS_='Array'");
+      }
+      if(element.parentTwo && element.parentTwo != ""){
+      	var parentTwoValue = "";
+      	eval("parentTwoValue = window.document.getElementById(\""+element.parentTwo+"\").value;");
+      	if(parentTwoValue != ""){ 
+          eval("condition."+element.parentTwo+"List = parentTwoValue.split(',')");
+        }
+        eval("condition."+element.parentTwo+"List._BUFFALO_OBJECT_CLASS_='Array'");
+      }           
+      window.document.getElementById(element.queryTable).query(condition);
+    }
+  }
+}
+
+/**************************************************************************
+*  select.htc
+**************************************************************************/
+
+function init()
+{										
+    select_contentInitial();	     
+}
+function select_contentInitial()
+{
+  if(!element.result)
+    element.result = "";
+  if(!element.call)
+    element.call = "dataService.getData";    
+  if(!element.method)
+    element.method = "";  
+  if(!element.allowVoid)
+    element.allowVoid = "";  
+  if(!element.voidDesc)
+    element.voidDesc = "";
+  									  
+  if (element.options.length==0&&element.disCall!="true")
+  { 
+    if (element.method == "")
+      element.method = element.id;
+    if (element.method != undefined && element.method != null && element.method != "")
+    {
+      var buffaloPoint = null;
+      if (element.asyn=="false")
+        buffaloPoint = getBuffaloSynchronizedInstance();
+      else
+        buffaloPoint = getBuffaloAsynchronizedInstance();
+      buffaloPoint.remoteCall(element.call, [element.method], function(reply)
+      {
+		
+        element.result = reply.getResult();
+        if(element.initVal){
+        	var tempObj = element.result.nodeList[0];
+        	var site = 0;
+          for(var i=0;i < element.result.nodeList.length;i++){
+            if(element.result.nodeList[i].id == element.initVal){
+            	tempObj = element.result.nodeList[i];
+            	site = i;
+            	break;
+            }
+          }
+          element.result.nodeList[site] = element.result.nodeList[0];
+          element.result.nodeList[0] = tempObj;
+          element.dataset=element.result.nodeList;
+        }
+        fillContainerFromBean(element.result, element);
+        
+						  //设置空选项
+						  if (element.allowVoid!="")
+						  {
+						    addVoid()
+						  } 
+	    if (element.defaultValue!=undefined&&element.defaultValue!="") {
+		  element.value = element.defaultValue;
+	    }
+      });
+    }
+  }
+}
+function addVoid(){
+  var oOption = window.document.createElement("OPTION");
+  element.options.add(oOption, 0);
+  oOption.innerText = element.voidDesc;
+  oOption.value = "";
+  oOption.selected = "true";
+}
+
+/**************************************************************************
+*  tabpane.htc
+**************************************************************************/
+
+var elem;
+
+function query()
+{
+  return elem.query();
+}
+
+function tabpane_contentInitial()
+{
+  elem = new TabPane(element);
+}
+
+function getTable()
+{
+  return elem.getTable();
+}
+
+function getTables()
+{
+  return elem.getTables();
+}
+
+function setQueryFlag(flag, n)
+{
+  return elem.setQueryFlag(flag, n);
+}
+function setCancelBubble(flag)
+{
+  return elem.setCancelBubble(flag);
+}
+
+function getQueryFlag(n)
+{
+  return elem.getQueryFlag(n);
+}
+
+
+/**************************************************************************
+*  windowPanel.htc
+**************************************************************************/
+function windowPanel_contentInitial() {  
+		styleParams["desc"] = "";
+		styleParams["canFold"] = "true";
+		styleParams["open"] = "";
+		styleParams["objId"] = "";
+		styleParams["minHeight"] = "50";	
+  
+  element.styleText = element.styleText.replace(/\s*/g, "");  
+  seperateStyleText(element.styleText);
+
+  var titleHTML = "";
+  if (styleParams["canFold"] == "true")
+  {
+    titleHTML = '<div class="title_market" style="height:32">' 
+              + ' <div class="title_left_market"></div>'
+              + ' <h1 id = "windowPanel_desc">' + styleParams["desc"] + '</h1>';
+    titleHTML +=' <div class="title_right_market"><div class="arrowdown_market" id="arrowdown_' + element.id  + '"></div></div>';
+    titleHTML +='</div>';
+ 
+    
+    if (element.childNodes.length > 0)
+    {
+      element.childNodes[0].style.display = "block";
+    }
+    element.insertAdjacentHTML("afterBegin", titleHTML); 
+    
+    var node = element.childNodes[1];    
+    node.style.borderLeft = "1px solid #D0D0D2";
+    node.style.borderBottom = "1px solid #D0D0D2";
+    node.style.borderRight = "1px solid #D0D0D2";
+    node.className = "windowpanel-list-border"
+    var elementAll = element.getElementsByTagName("*");
+    for (var i = 0; i < elementAll.length; i++)
+    {
+      if (elementAll[i].className == "arrowdown_market")
+      {
+        elementAll[i].onclick = function()
+        {
+          this.className = (this.className == "arrowdown_market" ? "arrowup_market" : "arrowdown_market");
+          this.parentNode.parentNode.parentNode.childNodes[1].style.display = (this.parentNode.parentNode.parentNode.childNodes[1].style.display == "none" ? "block" : "none");
+        };
+        if (styleParams["open"] == "false")
+          elementAll[i].onclick();
+      }
+      if (elementAll[i].tagName == "H1")
+      {        
+        elementAll[i].onmouseover = function()
+        {
+          this.style.textDecoration = "underline";
+        };
+        elementAll[i].onmouseout = function()
+        {
+          this.style.textDecoration = "none";
+        }
+        elementAll[i].onclick = function()
+        {
+          this.parentNode.childNodes[2].childNodes[0].onclick();
+          //this.parentNode.parentNode.childNodes[1].style.display = (this.parentNode.parentNode.childNodes[1].style.display == "none" ? "block" : "none");
+        };
+      }
+    }
+  }
+  else
+  {
+    titleHTML = '<div class="maintitle_m"><div class="maintitle_l"></div><h1>' + styleParams["desc"] + '</h1><div class="maintitle_r"></div></div>';
+    if (element.childNodes.length > 0)
+    {
+      var node = element.childNodes[0];
+      node.style.borderLeft = "#9CA5AD 1px solid";
+      node.style.borderRight = "#9CA5AD 1px solid";
+      node.style.backgroundColor = "#EFF3FE";
+    }
+    element.insertAdjacentHTML("afterBegin", titleHTML);
+    element.insertAdjacentHTML("beforeEnd", '<div class="mainbottom_m"><div class="mainbottom_l"></div><div class="mainbottom_r"></div></div>');
+  }
+}
+
+
+/**************************************************************************
+*  searchPanel.htc
+**************************************************************************/
+function searchPanel_contentInitial() {
+  styleParams["desc"] = "";
+  styleParams["canFold"] = "true";
+  styleParams["open"] = "";
+  styleParams["objId"] = "";
+  styleParams["minHeight"] = "50";
+  element.styleText = element.styleText.replace(/\s*/g, "");  
+  seperateStyleText(element.styleText);
+  
+  if (styleParams["canFold"] == "true")
+  {
+  	var titleHTML = "";
+    titleHTML = '<div style="float:left; width:22px; height:81">'
+    titleHTML +=' <div class="partner_search" onclick="javascript:expand()" id="arrowdown_' + element.id  + '"></div>';
+    titleHTML +='</div>';
+
+    element.insertAdjacentHTML("beforeEnd", titleHTML);
+
+    var elementAll = element.getElementsByTagName("*");
+    for (var i = 0; i < elementAll.length; i++)
+    {
+      if (elementAll[i].className == "partner_search")
+      {
+        elementAll[i].onclick = function()
+        { 
+          this.className = (this.className == "partner_search" ? "kingsoft_hide" : "partner_search");
+          expand();
+        };
+      }
+    }
+    
+  }
+
+}
+
+
+/**************************************************************************
+*  searchPanel2.htc
+**************************************************************************/
+function searchPanel2_contentInitial() {
+  styleParams["desc"] = "";
+  styleParams["top"] = "";
+  styleParams["left"] = "";
+  styleParams["canFold"] = "true";
+  styleParams["open"] = "";
+  styleParams["objId"] = "";
+  styleParams["minHeight"] = "50";
+  element.styleText = element.styleText.replace(/\s*/g, "");  
+  seperateStyleText(element.styleText);
+  
+  if (styleParams["canFold"] == "true") {
+  
+    element.style.top = styleParams["top"];
+    element.style.left = styleParams["left"];
+    
+  	var titleHTML = "";
+    titleHTML = '<div style="float:left; width:22px; height:81">'
+    titleHTML +=' <div class="partner_search" onclick="javascript:expand2()" id="arrowdown_' + element.id  + '"></div>';
+    titleHTML +='</div>';
+    
+    element.insertAdjacentHTML("beforeEnd", titleHTML);
+
+    var elementAll = element.getElementsByTagName("*");
+    for (var i = 0; i < elementAll.length; i++)
+    {
+      if (elementAll[i].className == "partner_search")
+      {
+        elementAll[i].onclick = function()
+        { 
+          this.className = (this.className == "partner_search" ? "kingsoft_hide" : "partner_search");
+          window.document.getElementById("searchPanelDiv2").style.display = (window.document.getElementById("searchPanelDiv2").style.display == "block" ? "none" : "block") ;
+        };
+      }
+    }
+    
+  }
+
+}
+
+function searchPanelDiv2_contentInitial() {
+  element.id = "searchPanelDiv2";
+  element.style.display = "none";
+}
+
+
+/**************************************************************************
+*  visualPanels.htc
+**************************************************************************/
+
+function visualPanels_contentInitial()
+{ 
+  element.insertAdjacentHTML("afterBegin", '<div id="title"><div class="' + element.id + '_icon"></div>' + '<h3>' + element.desc + '</h3>' + '<div class="' + element.id + '_control"></div></div>');
+}
+
+/**************************************************************************
+*  permission.htc
+**************************************************************************/
+
+function permission_documentInitial()
+{
+  var securities = element.getElementsByTagName("DIV");
+  var count = securities.length;
+  for (var i = 0; i < count; i++)
+  {
+    var security = securities[i]
+    if (security.className == "security")
+    {
+      var styleType = security.styleType.toLowerCase();
+      if (styleType == "enable")
+      {
+        setEnable(security.securityId, security.styleValue);
+      }
+    }
+  }
+}
+
+function setEnable(id, value)
+{
+  var obj = window.document.getElementById(id);
+  if (obj){
+    obj.disabled = (value == "false");
+  }
+}
+
+/**************************************************************************
+*  divSplitter.htc
+**************************************************************************/
+
+function divSplitter_contentInitial()
+{      
+  if(!element.styleText)
+    element.styleText = "";
+    
+		styleParams["objId"] = "";
+		styleParams["objfId"] = "";
+		styleParams["minHeight"] = "0"; 		
+		styleParams["footMaxHeight"] = "9999";
+		
+		styleParams["giY"] = 0;
+		
+  element.styleText = element.styleText.replace(/\s*/g, "");
+  seperateStyleText(element.styleText);
+  
+  var oDragWindow = window.document.createElement("<div style='DISPLAY: none; FILTER: alpha( opacity=20 );POSITION: absolute;BACKGROUND-COLOR: black;overflow:hidden;'>");
+  element.dragwindow = oDragWindow;
+  element.insertAdjacentElement("beforeEnd", oDragWindow);
+  element.style.marginTop = "0px";
+  element.style.paddingTop = "0px";
+  element.style.width = "100%";
+
+  element.attachEvent("onmousedown", fnGrab);
+}
+
+function fnGrab()
+{
+  fnShowDragWindow();
+  window.document.attachEvent("onmousemove", fnMove);
+  window.document.attachEvent("onscroll", fnMove);
+  window.document.attachEvent("onmousemove", fnCheckState);
+  window.document.attachEvent("onmouseup", fnRelease);
+  window.document.attachEvent("onselectstart", fnSelect);
+}
+
+function fnCheckState()
+{
+  if (event.button != 1)
+    fnRelease();
+}
+
+function fnSelect()
+{
+  return false;
+}
+
+function fnMove()
+{
+  if (event.button != 1)
+  {
+    fnRelease();
+    return ;
+  }
+  element.dragwindow.style.top = event.clientY + window.document.documentElement.scrollTop;
+  if (event.clientY > window.document.body.clientHeight - 10)
+    window.scrollBy(0, 10);
+  else if (event.clientY < 10)
+    window.scrollBy(event.clientX,  - 10);
+}
+
+function fnRelease() 
+{
+  var aY = 0;
+  var obj = null;
+  var objf = null;
+  obj = window.document.getElementById(styleParams["objId"]);
+  if (styleParams["objfId"] != "")
+    objf = window.document.getElementById(styleParams["objfId"]);
+  fnHideDragWindow();
+  var oEvent = createEventObject();
+  aY = event.clientY - styleParams["giY"];
+  window.document.detachEvent("onmousemove", fnMove);
+  window.document.detachEvent("onscroll", fnMove);
+  window.document.detachEvent("onmousemove", fnCheckState);
+  window.document.detachEvent("onmouseup", fnRelease);
+  window.document.detachEvent("onselectstart", fnSelect);
+  split.fire(oEvent);
+  obj.style.pixelHeight = obj.currentStyle.height.substring(0, obj.currentStyle.height.length - 2);
+  if (aY < 0)
+  if (Math.abs(aY) > obj.style.pixelHeight - styleParams["minHeight"])
+  {
+    aY = styleParams["minHeight"] - obj.style.pixelHeight;
+  }
+  if (objf)
+  {
+    objf.style.pixelHeight = objf.currentStyle.height.substring(0, objf.currentStyle.height.length - 2);
+    if (aY > 0 && styleParams["footMaxHeight"] !=  - 1)
+    {
+      if (aY > styleParams["footMaxHeight"] - objf.style.pixelHeight)
+      {
+        aY = styleParams["footMaxHeight"] - objf.style.pixelHeight;
+      }
+    }
+    objf.style.pixelHeight -= aY;
+  }
+  obj.style.pixelHeight += aY;
+}
+
+function fnShowDragWindow()
+{
+  var iLeft = element.offsetLeft;
+  var o = element;
+  while (o.offsetParent)
+  {
+    o = o.offsetParent;
+    iLeft += o.offsetLeft;
+  }
+  element.dragwindow.style.height = element.offsetHeight;
+  element.dragwindow.style.top = event.clientY;
+  element.dragwindow.style.left = iLeft;
+  element.dragwindow.style.width = element.offsetWidth;
+  element.dragwindow.zIndex = 1000;
+  element.dragwindow.style.display = "block";
+  styleParams["giY"] = event.clientY;
+}
+
+function fnHideDragWindow()
+{
+  element.dragwindow.style.display = "none";
+  element.dragwindow.style.height = "";
+  element.dragwindow.style.top = "";
+  element.dragwindow.style.left = "";
+  element.dragwindow.style.width = "";
+  element.dragwindow.zIndex = "";
+}
+
+/**************************************************************************
+*  settime.htc
+**************************************************************************/
+function settime_documentInitial()
+{
+  var settime="";
+  settime+="<input name='time1' type='text' value='' size='2' maxlength='2' onkeyup='mask(this)' onbeforepaste='mask_c()'/><p>:</p>";
+		settime+="<input name='time2' type='text' value='' size='2' maxlength='2' onkeyup='mask(this)' onbeforepaste='mask_c()'/><p>:</p>";
+		settime+="<input name='time3' type='text' value='' size='2' maxlength='2' onkeyup='mask(this)' onbeforepaste='mask_c()'/>";
+		
+		element.innerHTML = settime;
+		element.onkeydown = function(){
+		  if(event.keyCode=='67') 
+		    cleartime();
+    if(event.keyCode=='78')
+		  		showtime ();
+		}
+} 
+
+/**************************************************************************
+*  myInput.htc
+**************************************************************************/
+var scrollTime = true;
+var oldScrollTop = 10; 
+function myInputInitial(){
+  var readonly=(element.getAttribute("disabled"))?"readonly='true'":"";
+  var inner = '<input id="'+inputId+'" type="text" class="myInputSelf"  value="'+inputValue+'" '+readonly+' />';
+  inner += '<div class="myInputOutter">';
+  inner += '<div class="myInputInner"></div></div>';
+  element.innerHTML = inner;
+  element.childNodes[1].childNodes[0].style.pixelHeight = oldScrollTop*5;
+  if (element.childNodes[1]){
+    element.childNodes[1].scrollTop = oldScrollTop;
+	try{
+        var hiddenInput = element.parentNode.childNodes[0].all.tags("INPUT")[0];
+        element.childNodes[0].value = hiddenInput.value;
+	}catch(e){}	 	
+  }
+  element.childNodes[0].onchange = function(){
+	var oldValue = element.childNodes[0].value.replace(/^[0]+/,"");
+	if (!(/^[1-9]\d*$/.test(oldValue))){
+		oldValue = "0";
+	}
+	element.childNodes[0].value = oldValue;		  
+	try{
+		var hiddenInput = element.parentNode.childNodes[0].all.tags("INPUT")[0];
+		hiddenInput.value = oldValue;
+	}catch(e){}
+  }
+  element.childNodes[1].onmouseenter = function(){
+    element.childNodes[1].scrollTop = oldScrollTop;//消除组合商品中出错!!!
+  } 
+  element.childNodes[1].onscroll = function(){
+	if (element.getAttribute("disabled")) return;
+	var oldValue = element.childNodes[0].value.replace(/^[0]+/,"");
+	if (!(/^[1-9]\d*$/.test(oldValue))){
+		oldValue = "0";
+	}
+	scrollTime = !scrollTime;
+	if (scrollTime){
+		if (element.childNodes[1].scrollTop<oldScrollTop){
+			oldValue = parseInt(oldValue)+1;
+			element.childNodes[0].value = oldValue;		
+		}else if(element.childNodes[1].scrollTop>oldScrollTop){
+			oldValue = parseInt(oldValue)-1;
+			if (oldValue<0) oldValue=0;
+			element.childNodes[0].value = oldValue;
+		}
+		element.childNodes[1].scrollTop = oldScrollTop;
+		try{
+			var hiddenInput = element.parentNode.childNodes[0].all.tags("INPUT")[0];
+			hiddenInput.value = oldValue;
+		}catch(e){}
+	} 
+  } 
+}
+
+function DoMouseOver(){}
+function DoMouseOut(){}
+function DoMouseDown(){}
+function DoMouseUp(){}
+</script>
+</PUBLIC:COMPONENT>

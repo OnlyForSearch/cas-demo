@@ -1,0 +1,142 @@
+@import url(../../resource/css/default.css);
+body
+{
+	margin:0;
+}
+.title
+{
+	width:100%;
+	overflow:hidden;
+	padding:5 0 0 5;
+}
+.titleDiv
+{
+	width:100%;
+	height:48;
+	overflow:hidden;
+	padding-left:3;
+}
+.titleText
+{
+	font:bold 15px;
+	letter-spacing:2px;
+	padding-left:5;
+	vertical-align:bottom;
+}
+.hr
+{	
+	margin-top:3;
+	height:1px;
+	width:360;
+	overflow:hidden;
+	filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#848684,endcolorstr=white,gradientType=1);
+}
+.line
+{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:26;
+	overflow:hidden;
+	padding:0 0 0 180;
+}
+.status
+{
+	background:#CFD8E8;
+	height:29;
+	border-top:1px solid #848684;
+	border-bottom:1px solid #C8C9CA;
+	padding-left:5;
+	cursor:default;
+}
+
+.statusText
+{
+	height:100%;
+	vertical-align:top;
+	padding:8 0 0 5;
+}
+
+.caption
+{
+	height:100%;
+	vertical-align:top;
+	padding:6 0 0 5;
+}
+.item
+{
+	white-space:nowrap;
+	height:23;
+	cursor:default;
+	padding-left:3;
+}
+.itemText
+{
+	height:100%;
+	vertical-align:top;
+	padding:5 0 0 5;
+}
+.panel
+{
+	border:1px solid #58CB64;
+	width:100%;
+	overflow:hidden;
+}
+.panelTitle
+{
+	width:100%;
+	height:25;
+	overflow:hidden;
+	background:#DDF1D8;
+	padding:6 0 0 5;
+}
+
+/********************************************************/
+/* CSS Document */
+.bigtitle {
+	font-family: "»ªÎÄÐÐ¿¬";
+	font-size: 24pt;
+	color: #0153A7;
+	font-weight: bold;
+}
+  
+  .bai{width:100%}
+  .t3{padding-left:10px;height:24px;line-height:24px;border-width:1px 1px 0px 1px;border-style:solid;font-size:14px;font-weight:bold;}
+  .t3Font{font-size:14px;font-weight:bold;}
+  .t4{padding-left:10px;height:24px;line-height:24px;border-width:1px 1px 1px 1px;border-style:solid;font-size:14px;font-weight:bold;}
+  .b3{padding:5px 5px 5px 8px;border-width:0px 1px 1px;border-style:solid;}
+  .bcg{border-color:#58CB64}.bcy{border-color:#F4BF20}.bcb{border-color:#64B7D7}
+  .bgg{background-color:#DDF1D8;}.bgb{background-color:#DEEEF4}.bgy{background-color:#FBF5C6;}
+  .bgw{background-color:#ffffff;}.bgz{background-color:#CCCCFF;}
+  .mb12{margin-bottom:12px}
+  .SummCellBg {background-color: #FBFDFD;background-image: url(../../resource/image/serviceDesk/summary_item_bg.gif);background-repeat: repeat-x;background-position: left top;}
+
+TD.bottomThin {
+  border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#FF9900; padding-top:10px; padding-bottom:10px;
+}
+TD.bottomThin2 {
+  border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#993300; padding-top:6px; padding-bottom:6px;
+}
+TD.bottomThin3 {
+  border-bottom-width:1px; border-bottom-style:dashed; border-bottom-color:#99CC66; padding-top:6px; padding-bottom:6px;
+}
+.STYLE1 {
+	color: #FF0000;
+	font-weight: bold;
+}
+TABLE.tableframe {
+	BORDER-RIGHT: #7c9ccf 1px solid; BORDER-TOP: #7c9ccf 1px solid; MARGIN-TOP: 5px; BORDER-LEFT: #7c9ccf 1px solid; BORDER-BOTTOM: #7c9ccf 1px solid; BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: #ffffff
+}
+
+TR.trTitle {
+	FONT-SIZE: 11pt;  TEXT-ALIGN: center; BACKGROUND: #ebf1fa; FONT-FAMILY: Arial
+}
+
+TR.trCell {
+	FONT-SIZE: 11pt;  TEXT-ALIGN: center;  FONT-FAMILY: Arial
+}
+
+TD.fontBold{
+  FONT-WEIGHT: bold;
+}

@@ -1,0 +1,203 @@
+.titleText
+{
+    font: 12px;
+    letter-spacing:2px;
+    padding-left:3;
+}
+.normalDiv
+{
+    
+    padding:2 2 2 2;
+    margin:10 5 10 5;
+}
+.noBorderDiv
+{
+    border:0px;
+    padding:2 2 2 2;
+    margin:2 5 2 5; 
+}
+.x-bon-head
+{
+    font:bold 12px;
+    padding-left:5;
+    padding-top:5;
+    vertical-align:middle;
+    background-color: #F6F7F7;
+}
+
+.x-grid-back-orange {   
+           background: orange;   
+}
+.x-grid-back-red {   
+     background: red;   
+} 
+.x-grid-back-green {   
+     background: green;   
+}
+.x-grid-back-yellow {   
+     background: yellow;   
+}        
+ 
+.a{
+     background-color:#F4F4F4;
+     width:332px;
+
+ }
+ .b{
+     height:1px;
+     overflow:hidden;
+     border-left:1px #333 solid;
+     border-right:1px #333 solid;
+ }
+ 
+ .menuCss_3{
+    float:left;
+    margin-left:5px;
+    width:62px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    background-image:url(../../../workshop/bon/proviceSubnet/resource/image/menu.png);
+ }
+ 
+
+.searchWin{
+    border-left:1px solid #4068AA;
+    border-right:1px solid #4068AA;
+    background-color:#DBE5FA;
+}
+.menuCss_2{
+    float:left;
+    margin-left:5px;
+    width:78px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    background-image:url(../../../workshop/bon/proviceSubnet/resource/image/menu2.png);
+ }
+ 
+ 
+ .flatBut{
+    float:left;
+    margin-left:0px;
+    margin-top:5px;
+    width:70px;
+    height:24px; 
+    line-height:24px;
+    vertical-align:center;
+    cursor: hand; 
+    color:#1582bc;
+    font-family:Microsoft Yahei;
+    font-size:12px;
+    text-align:center;
+    border:1px solid #D1DEE7;
+    background-color:#ffffff;
+ }
+ 
+ .flatButOver{
+    float:left;
+    margin-left:0px;
+    margin-top:5px;
+    width:70px;
+    height:24px; 
+    line-height:24px;
+    color:red;
+    font-family:Microsoft Yahei;
+    font-size:12px;
+    cursor: hand;
+    text-decoration:underline; 
+    text-align:center;
+    border:1px solid #D1DEE7;
+    background-color:#ffffff;
+ }
+ 
+ .flatButDown{
+    float:left;
+    margin-left:0px;
+    margin-top:5px;
+    width:70px;
+    height:24px; 
+    line-height:24px;
+    cursor: hand; 
+    color:red;
+    font-family:Microsoft Yahei;
+    font-size:12px;
+    text-decoration:underline; 
+    text-align:center;
+    border:1px solid #D1DEE7;
+    background-color:#ffffff;
+}
+
+ .flatButS{
+    float:left;
+    margin-left:5px;
+    margin-top:5px;
+    width:70px;
+    height:26px; 
+    line-height:26px;
+    vertical-align:center;
+    cursor: hand; 
+    color:#1582bc;
+    font-family:Microsoft Yahei;
+    font-size:12px;
+    text-align:center;
+    border:1px solid #D1DEE7;
+    background-color:#ffffff;
+ }
+ 
+ .flatButOverS{
+    float:left;
+    margin-left:5px;
+    margin-top:5px;
+    width:70px;
+    height:26px; 
+    font-family:Microsoft Yahei;
+    font-size:12px;
+    line-height:26px;
+    color:red;
+    cursor: hand;
+    text-decoration:underline; 
+    text-align:center;
+    border:1px solid #D1DEE7;
+    background-color:#ffffff;
+ }
+ 
+.searchWin{
+    border-left:1px solid #CFDEED;
+    border-right:1px solid #CFDEED;
+    background-color:#E7ECEE;
+}
+
+
+.timeColor{
+    color:#abacac;
+}
+
+.b1{
+     margin-left:3px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#CFDEED;border-right:1px #CFDEED solid;width:269px;
+}
+.b2{
+    margin-left:2px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#E7ECEE;border-right:1px #CFDEED solid;width:271px;
+}
+
+.b3{
+    margin-left:1px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#E7ECEE;border-right:1px #CFDEED solid;width:273px;
+}
+
+.b4{
+    margin-left:1px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#E7ECEE;border-right:1px #CFDEED solid;width:273px;
+}
+
+.b5{
+    margin-left:2px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#E7ECEE;border-right:1px #CFDEED solid;width:271px;
+}
+
+.b6{
+    margin-left:3px;height:1px;overflow:hidden;border-left:1px #CFDEED solid ;background-color:#CFDEED;border-right:1px #CFDEED solid;width:269px;  
+}
+
+.searchWinColor{
+    color:#1582bc;
+    font-size:12px;
+    font-family:Microsoft Yahei;
+}

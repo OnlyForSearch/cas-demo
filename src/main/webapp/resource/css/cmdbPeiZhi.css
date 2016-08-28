@@ -1,0 +1,7 @@
+
+/* 引入cmdbPeiZhi.css后 ，界面中的table 配置class="pztable" 的第一行 tr中的td都要配置width（可px、百分比） */
+.pztable
+{
+	table-layout : fixed;
+	/*table-layout : auto;*/
+}

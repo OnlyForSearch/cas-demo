@@ -1,0 +1,95 @@
+/*
+	table.htc样式集
+*/
+.table-template-background {
+	background-color:#E1E1E1 !important;
+}
+
+.table-bgcolor {
+	background-color:#A4CDEF !important;
+}
+
+.table-tr-over-color {
+	background: #DFEBFE !important;
+}
+
+.table-tr-select-color {
+	background: #CCDAF1 !important;
+}
+
+.table-tr-normal-color{
+	background: #FFFFFF !important;
+}
+
+.table-tr-normal-color,.table-tr-over-color,.table-tr-select-color {
+	height:23px !important;
+}
+
+.table-span-desc-background {
+	background: url(../image/jtitsmImages/down_table.gif) no-repeat !important;
+	height: 11px !important;
+	width: 6px !important;
+}
+
+.table-span-asc-background {
+	background: url(../image/jtitsmImages/up_table.gif) no-repeat !important;
+	height: 11px !important;
+	width: 6px !important;
+}
+
+.table-multiply-head-td {
+	width : 50px !important;
+	align : center !important;
+	font-size: 12px !important;
+	color: #023157 !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	word-break:normal !important;
+	white-space:nowrap !important;
+	height:25px !important;
+	line-height:16px !important;
+	text-align:center !important;
+	padding:3px 2px !important;
+	background-color:#D0EBFF !important;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#FFFFFF, endcolorstr=#D0EBFF) !important;
+}
+
+.table-cls-check-height {
+	height:15px !important;
+	line-height:10px !important;	
+}
+
+.table-wait-div {
+	width:165px !important;
+	height:60px !important;
+	border:4px solid #FBFBFB !important;
+}
+
+.table-wait-background {
+	width:160px !important;
+	height:55px !important;
+	border:2px solid #ADD4EC !important;
+	background-color:#FAFDFF !important;
+}
+
+.table-wait-img-div-background {
+	background : url(../../image/ani_wait1.gif) no-repeat !important;
+	width:35px !important;
+	float:left !important;
+	height:24px !important;
+	float:left !important; 
+	margin:13px 0 0 8px !important;
+	border:0px solid #eee !important;
+}
+
+.table-wait-text-div-font {
+	width:90px !important;
+	float:left !important;
+	color:#0B4696 !important;
+	font:12px/18px 宋体 !important; 
+	margin:8px 0 0 5px !important;
+	border:0px solid #eee !important;
+}
+
+.table-wait-text-font-color {
+	color:#FF0000 !important;
+}

@@ -1,0 +1,657 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>配置树权限</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../XML.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialog.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:5px 16px 5px 16px;
+	background:white;
+}
+.TreeDIV
+{
+	WIDTH:200px;HEIGHT:98%;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+}
+.cfgItemNobr
+{
+	height:100%;
+	margin-left:2px;
+	padding:4px 2px 0px 2px;
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onbeforeunload="winClose()" onunload="winUnLoad()">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<TR height="30">
+		<TD COLSPAN="4">
+			<IMG src="../../image/form_cell_item.gif" width="6" height="6" align="absmiddle"><span class="form_title" style="padding-left:5px">节点名称:</span>
+			<span id="nameSpan"></span>
+		</TD>
+	</TR>
+	<TR height="1">
+		<TD colspan="4" background="../../image/dashed.gif"></TD>
+	</TR>
+	<TR height="30">
+		<TD COLSPAN="4">
+			<IMG src="../../image/form_cell_item.gif" width="6" height="6" align="absmiddle"><span class="form_title" style="padding-left:5px">创&nbsp;建&nbsp;者:</span>
+			<span id="createrSpan"></span>
+		</TD>
+	</TR>
+	<TR height="1">
+		<TD colspan="4" background="../../image/dashed.gif"></TD>
+	</TR>
+	<TR height="26" valign="bottom" style="padding-bottom:3px">
+		<TD align="center">待选信息</TD>
+		<TD>&nbsp;</TD>
+		<TD align="center">已选信息</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+	<TR height="260">
+		<TD width="200" valign="top"><div id="treeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;"></div></TD>
+		<TD width="60" align="center">
+			<div><IE:button value=">" width="33" id="addBtn" onclick="addCfgItemFromChoice(oTree.getSelectedItem())"/></div>
+			<div style="height:30px"></div>
+			<div><IE:button value="<" width="33" id="delBtn" onclick="delCfgItemFromChoice()"/></div>
+		</TD>
+		<TD width="200" valign="top"><div id="cfgDiv" class='TreeDIV'></div></TD>
+		<TD valign="top">
+			<div id="priGroupDiv" style="HEIGHT:98%;OVERFLOW: auto;width:100%;padding:0px 0px 0px 5px"></div>
+		</TD>
+	</TR>
+	<TR height="1">
+		<TD colspan="4" background="../../image/dashed.gif"></TD>
+	</TR>
+	<TR height="26">
+		<TD colspan="4">
+			<IMG src="../../image/ico/organ.gif" width="16" height="16" align="absmiddle"><span>:表示部门</span>
+			<IMG src="../../image/ico/project.gif" width="16" height="16" align="absmiddle"><span>:表示虚拟团队</span>
+			<IMG src="../../image/ico/staff.gif" width="16" height="16" align="absmiddle"><span>:表示员工</span>
+			<IMG src="../../image/ico/station.gif" width="16" height="16" align="absmiddle"><span>:表示任务</span>
+		</TD>
+	</TR>
+	<TR>
+		<TD align="right" COLSPAN="4">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="enter()"/>&nbsp;
+		  	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()"/>&nbsp;
+		  	<IE:button value="应&nbsp;&nbsp;用" onclick="apply()"/>
+		</TD>
+	</TR>
+</table>
+<SCRIPT language="javascript">
+var cfgName;
+var primaryId;
+var childCfgName;
+var childPrimaryId;
+var treeUrl= '../../../servlet/staffmenu?';
+var actionUrl = '../../../servlet/PermissionAction?';
+var icoUrl = '../../image/ico/';
+var oTree;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var cfgItemDom = new ActiveXObject("Microsoft.XMLDOM");
+var initDom = new ActiveXObject("Microsoft.XMLDOM");
+var sendDom;
+var cfgItemDomRoot;
+var sendRoot;
+var addSendRoot;
+var delSendRoot;
+var changeSendRoot;
+var oClickedCfgItem;
+var params;
+var priCheckArray;
+var treePriPrefix = 'TREE_PRI_';
+var isChangePri = false;
+var isReturn = false;
+var isEnter = false;
+
+function iniPage()
+{	
+	var args = window.dialogArguments;
+	cfgName = args[0];
+	primaryId = args[1];
+	childCfgName = args[2];
+	childPrimaryId = args[3];
+	
+	oTree = new XMLTree();
+	oTree.hasChildAttName = 'child_count'
+	oTree.xmlUrl = treeUrl+"action=3";
+	oTree.isOpenChildAtferClick = true;
+	oTree.isDynamicLoad = true;
+	oTree.isDragOnTree = true;
+	oTree.isDragOnTreeBySelf = false;
+	oTree.setDynamicLoadAction(new DynamicLoadAction());
+	oTree.setDblClickAction(new DblClickAction());
+	oTree.setStartDragAction(new DragStartAction());
+	oTree.setEndDragAction(new DragEndAction());
+	oTree.showAt(treeDiv);
+	
+	cfgItemDomRoot = cfgItemDom.createElement("CFG_ROOT");
+	cfgItemDom.appendChild(cfgItemDomRoot);
+	
+	initSendDom();
+	loadPrivilegeGroup();
+	loadCfgPrimaryMsg();
+	loadPrimaryName();
+	loadCreateName();
+}
+
+function loadPrimaryName()
+{
+	params = new Array();
+	params.push("action=4");
+	params.push("cfgName="+cfgName);
+	params.push("primaryId="+primaryId);
+	xmlhttp.open("post",actionUrl+params.join("&"),false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var oItem = xmlhttp.responseXML.selectSingleNode("/root/name");
+		if(oItem)
+		{
+			nameSpan.innerText = oItem.text;
+		}
+	}
+}
+
+function loadCreateName()
+{
+	params = new Array();
+	params.push("action=5");
+	params.push("cfgName="+cfgName);
+	params.push("primaryId="+primaryId);
+	xmlhttp.open("post",actionUrl+params.join("&"),false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		oItem = xmlhttp.responseXML.selectSingleNode("/root/rowSet/STAFF_NAME");
+		if(oItem)
+		{
+			createrSpan.innerText = oItem.text;
+		}
+	}
+}
+
+function initSendDom()
+{
+	sendDom = new ActiveXObject("Microsoft.XMLDOM");
+	sendRoot = sendDom.createElement("SUBMIT_ROOT");
+	sendRoot.setAttribute("cfgName",cfgName);
+	sendRoot.setAttribute("primaryId",primaryId);
+	sendRoot.setAttribute("childCfgName",childCfgName);
+	sendRoot.setAttribute("childPrimaryId",childPrimaryId);
+	sendDom.appendChild(sendRoot);
+	addSendRoot = createNode(sendRoot,'ADD_ROOT');
+	changeSendRoot = createNode(sendRoot,'CHANGE_ROOT');
+	delSendRoot = createNode(sendRoot,'DEL_ROOT');
+	initDom.load(sendDom);
+}
+
+function loadCfgPrimaryMsg()
+{
+	params = new Array();
+	params.push("action=2");
+	params.push("cfgName="+cfgName);
+	params.push("primaryId="+primaryId);
+	xmlhttp.open("post",actionUrl+params.join("&"),false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var primaryItems = xmlhttp.responseXML.selectNodes("/root/rowSet");
+		for(var i=0;i<primaryItems.length;i++)
+		{
+			addCfgItem(getNodeValue(primaryItems[i],'ICO_NAME'),
+					   getNodeValue(primaryItems[i],'ASSIGN_ID'),
+					   getNodeValue(primaryItems[i],'ASSIGN_NAME'),
+					   getNodeValue(primaryItems[i],'ASSIGN_TYPE'),
+					   false
+					   );
+		}
+	}
+	if(cfgDiv.firstChild)
+	{
+		cfgDiv.firstChild.click();
+	}
+}
+
+function loadPrivilegeGroup()
+{
+	params = new Array();
+	params.push("action=0");
+	params.push("cfgName="+cfgName);
+	params.push("primaryId="+primaryId);
+	xmlhttp.open("post",actionUrl+params.join("&"),false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var outHTML = '<table border="0" cellpadding="0" cellspacing="0">';
+		var priItems = xmlhttp.responseXML.selectNodes("/root/rowSet");
+		for(var i=0;i<priItems.length;i++)
+		{
+			outHTML += '<tr valign="top" ';
+			if (priItems[i].childNodes[3].text != 1)
+			{
+				outHTML += 'disabled=true ';
+			}
+			outHTML += 	'><td>';
+			outHTML +=		'<input type="checkbox" HIDEFOCUS="true" name="priCheck" ';
+			outHTML +=			'id="'+treePriPrefix+priItems[i].childNodes[1].text+'" ';
+			outHTML +=			'priId="'+priItems[i].childNodes[1].text+'" ';
+			outHTML +=			'onclick="changePri()">';
+			outHTML +=	'</td>';
+			outHTML += 	'<td style="padding:4px 0px 0px 3px;">'+priItems[i].childNodes[0].text+'</td>';
+			outHTML += '<tr>';
+		}
+		outHTML += '</table>';
+		priGroupDiv.innerHTML = outHTML;
+	}
+	priCheckArray = document.getElementsByName("priCheck");
+}
+
+function DynamicLoadAction()
+{
+	this.parent = new XMLTree_onDynamicLoad_Action;
+	this.parent.dynamicLoad = function(oItem)
+	{
+		var xmlUrl;
+		switch (oItem.tag)
+		{
+			case 'ORG':
+				xmlUrl = Org_DynamicLoad(oItem);
+				break;			
+			case 'LINE':
+				xmlUrl = Line_DynamicLoad(oItem);
+				break;
+		}
+		return xmlUrl;
+	}
+	
+	function Org_DynamicLoad(oItem)
+	{
+		return treeUrl+"action=4&id="+oItem.id;
+	}
+	
+	function Line_DynamicLoad(oItem)
+	{
+		return treeUrl+"action=5&id="+oItem.id;
+	}
+	
+	return this.parent;
+}
+
+function DblClickAction()
+{
+	this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		addCfgItemFromChoice(oItem);
+	}
+	return this.parent;
+}
+
+function DragStartAction()
+{
+	this.parent = new XMLTree_onDragStart_Action;
+	this.parent.isStartDrag = function(oItem)
+	{
+		return isAddCfgDiv(oItem.tag);
+	}
+	return this.parent;
+}
+
+function DragEndAction()
+{
+	this.parent = new XMLTree_onDragEnd_Action;
+	this.parent.endDrag = function(oDragItem,oOverItem)
+	{
+		var endDragItem = document.elementFromPoint(this.iX,this.iY);
+		if(cfgDiv.contains(endDragItem))
+		{
+			addCfgItemFromChoice(oDragItem);
+		}
+	}
+	return this.parent;
+}
+
+function addCfgItemFromChoice(oItem)
+{
+	if(oItem && isAddCfgDiv(oItem.tag))
+	{
+		var assignId = oItem.id;
+		var assignTag = oItem.tag;
+		var isAddAssign = true;
+		var oAssignItem = delSendRoot.selectSingleNode("ASSIGN[@id='"+assignId+"' and @tag='"+assignTag+"']");
+		if(oAssignItem)
+		{
+			delSendRoot.removeChild(oAssignItem);
+			isAddAssign = false;
+		}
+		if(addCfgItem(oItem.ico,assignId,oItem.innerText,assignTag,true) && isAddAssign)
+		{
+			oAssignItem = createNode(addSendRoot,'ASSIGN');
+			oAssignItem.setAttribute("id",assignId);
+			oAssignItem.setAttribute("tag",assignTag);
+			addPriToItem(oAssignItem);
+		}
+	}
+}
+
+function addCfgItem(ico,id,name,tag,isClick)
+{
+	var isFind = false;
+	var addItem = isCfgItemExist(id,tag);
+	if(!addItem)
+	{
+		var cfgDivId = document.uniqueID;
+		var outHTML = '<div id="'+cfgDivId+'" cfgId="'+id+'" tag="'+tag+'" style="height:20px;PADDING-left:3px;white-space:nowrap" '
+					+		'onclick="cfgItemClick()" '
+					+		'ondblclick="delCfgItemFromChoice()">'
+					+   '<img width="16" height="16" src="../../image/ico/'+ico+'" align="absmiddle">'
+					+	'<nobr class="cfgItemNobr">'+name+'</nobr>'
+					+ '</div>'
+		cfgDiv.insertAdjacentHTML("beforeEnd",outHTML);
+		addItem = cfgDiv.lastChild;
+		addCfgDOM(cfgDivId,id,tag);
+		isFind = true;
+	}
+	if(isClick)
+	{
+		addItem.click();
+		addItem.scrollIntoView();
+	}
+	return isFind;
+}
+
+function addCfgDOM(cfgDivId,id,tag)
+{
+	var cfgItem = createNode(cfgItemDomRoot,'ITEM');
+	cfgItem.setAttribute("cfgDivId",cfgDivId);
+	cfgItem.setAttribute("id",id);
+	cfgItem.setAttribute("tag",tag);
+}
+
+function isAddCfgDiv(tag)
+{
+	var isAdd = true;
+	if(tag=='ORG_TOP' || tag=='LINE_TOP' || tag=='LINE')
+	{
+		isAdd = false;
+	}
+	return isAdd;
+}
+
+function isCfgItemExist(id,tag)
+{
+	var oFindItem = cfgItemDom.selectSingleNode("/CFG_ROOT/ITEM[@id='"+id+"' and @tag='"+tag+"']");
+	if(oFindItem)
+	{
+		oFindItem = document.getElementById(oFindItem.getAttribute("cfgDivId"));
+	}
+	return oFindItem;
+}
+
+function delCfgItemFromChoice()
+{
+	if(oClickedCfgItem)
+	{
+		delCfgDOM(oClickedCfgItem.cfgId,oClickedCfgItem.tag);
+		var oNextCfgItem = oClickedCfgItem.nextSibling;
+		oClickedCfgItem.removeNode(true);
+		var assignId = oClickedCfgItem.cfgId;
+		var assignTag = oClickedCfgItem.tag;
+		oClickedCfgItem = null;
+		if(!oNextCfgItem)
+		{
+			oNextCfgItem = cfgDiv.firstChild;
+		}
+		if(oNextCfgItem)
+		{
+			oNextCfgItem.click();
+			oNextCfgItem.scrollIntoView();
+		}
+		else
+		{
+			clearCheck();
+		}
+		
+		isChangePri = false;
+		var xPath = "ASSIGN[@id='"+assignId+"' and @tag='"+assignTag+"']";
+		var oAssignItem = addSendRoot.selectSingleNode(xPath);
+		if(oAssignItem)
+		{
+			addSendRoot.removeChild(oAssignItem);
+		}
+		else
+		{
+			oAssignItem = changeSendRoot.selectSingleNode(xPath);
+			if(oAssignItem)
+			{
+				changeSendRoot.removeChild(oAssignItem);
+			}
+			oAssignItem = createNode(delSendRoot,'ASSIGN');
+			oAssignItem.setAttribute("id",assignId);
+			oAssignItem.setAttribute("tag",assignTag);
+		}
+	}
+}
+
+function delCfgDOM(id,tag)
+{
+	var oFindItem = cfgItemDom.selectSingleNode("/CFG_ROOT/ITEM[@id='"+id+"' and @tag='"+tag+"']");
+	if(oFindItem)
+	{
+		cfgItemDomRoot.removeChild(oFindItem);
+	}
+}
+
+function cfgItemClick()
+{
+	var i;
+	if(oClickedCfgItem)
+	{
+		oClickedCfgItem.runtimeStyle.backgroundColor = '';
+		oClickedCfgItem.runtimeStyle.color = '';
+		saveChangePri(oClickedCfgItem);
+	}
+	oClickedCfgItem = getElement(event.srcElement,'div');
+	oClickedCfgItem.runtimeStyle.backgroundColor = '#808080';
+	oClickedCfgItem.runtimeStyle.color = 'white';
+	
+	clearCheck();
+	
+	var assignId = oClickedCfgItem.cfgId;
+	var assignTag = oClickedCfgItem.tag;
+	var oAssignItem = sendRoot.selectSingleNode("//ASSIGN[@id='"+assignId+"' and @tag='"+assignTag+"']");
+	if(oAssignItem)
+	{
+		var choicePris = oAssignItem.selectNodes("PRI");
+		for(i=0;i<choicePris.length;i++)
+		{
+			document.getElementById(treePriPrefix+choicePris[i].text).checked = true;
+		}
+	}
+	else
+	{
+		params = new Array();
+		params.push("action=1");
+		params.push("cfgName="+cfgName);
+		params.push("primaryId="+primaryId);
+		params.push("assignId="+oClickedCfgItem.cfgId);
+		params.push("assignType="+oClickedCfgItem.tag);
+		
+		xmlhttp.open("post",actionUrl+params.join("&"),false);
+		xmlhttp.send();
+		if(isSuccess(xmlhttp))
+		{
+			var choicePris = xmlhttp.responseXML.selectNodes("/root/rowSet");
+			for(i=0;i<choicePris.length;i++)
+			{
+				document.getElementById(treePriPrefix+choicePris[i].firstChild.text).checked = true;
+			}
+		}
+	}
+}
+
+function clearCheck()
+{
+	for(i=0;i<priCheckArray.length;i++)
+	{
+		priCheckArray[i].checked = false;
+	}
+}
+
+function changePri()
+{
+	isChangePri = true;
+}
+
+function saveChangePri(oItem)
+{
+	if(isChangePri && oItem)
+	{
+		var assignId = oItem.cfgId;
+		var assignTag = oItem.tag;
+		var oAssignItem = sendRoot.selectSingleNode("//ASSIGN[@id='"+assignId+"' and @tag='"+assignTag+"']");
+		if(oAssignItem)
+		{
+			oAssignItem.selectNodes("PRI").removeAll();
+		}
+		else
+		{
+			oAssignItem = createNode(changeSendRoot,'ASSIGN');
+			oAssignItem.setAttribute("id",assignId);
+			oAssignItem.setAttribute("tag",assignTag);
+		}
+		addPriToItem(oAssignItem);
+		isChangePri = false;
+	}
+}
+
+function addPriToItem(oAssignItem)
+{
+	var priItem;
+	for(i=0;i<priCheckArray.length;i++)
+	{
+		if(priCheckArray[i].checked)
+		{
+			priItem = createNode(oAssignItem,"PRI");
+			priItem.text = priCheckArray[i].priId;
+		}
+	}
+}
+
+function isCfgInherit()
+{
+	params = new Array();
+	params.push("action=8");
+	params.push("cfgName="+cfgName);
+	xmlhttp.open("post",actionUrl+params.join("&"),false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var parentColumnName = xmlhttp.responseXML.selectSingleNode('/root/Msg/PARENT_COLUMN_NAME').text;
+		var rootParentId = xmlhttp.responseXML.selectSingleNode('/root/Msg/ROOT_PARENT_ID').text;
+		return (parentColumnName!="" && rootParentId!="[ALL_TOP]");
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function apply()
+{
+	var isCloseWin = true;
+	saveChangePri(oClickedCfgItem);
+	if(isChange())
+	{
+		if(isCfgInherit())
+		{
+			params = window.showModalDialog('ConfirmCfgTreePrivilege.html',window,'dialogWidth=360px;dialogHeight=190px;help=0;scroll=0;status=0');
+		}
+		else
+		{
+			params = new Array(false,0);
+		}
+		isCloseWin = false;
+		if(params)
+		{
+			showOverlay();
+			showWait("正在配置权限");
+			sendRoot.setAttribute("isInherit",(params[0])?1:-1);
+			sendRoot.setAttribute("clearType",params[1]);
+			params = new Array();
+			params.push("action=3");
+			xmlhttp.open("post",actionUrl+params.join("&"),true);
+			xmlhttp.send(sendDom);
+			xmlhttp.onreadystatechange = checkResult;
+		}
+	}
+	return isCloseWin;
+}
+
+function checkResult()
+{
+	if(xmlhttp.readyState == 4)
+	{
+		hideWait();
+		hideOverlay();
+		if(isSuccess(xmlhttp))
+		{
+			initSendDom();
+			MMsg("设置成功!");
+			isReturn = true;
+			if(isEnter)
+			{
+				window.close();
+			}
+		}
+		else
+		{
+			isEnter = false;
+		}
+	}
+}
+
+function isChange()
+{
+	return (initDom.xml != sendDom.xml);
+}
+
+function winClose()
+{
+	if(isChange())
+	{
+		event.returnValue = "您的修改还未保存!";
+	}
+}
+
+function winUnLoad()
+{
+	window.returnValue = isReturn;
+}
+
+function enter()
+{
+	isEnter = true;
+	if(apply())
+	{
+		window.close();
+	}
+}
+</SCRIPT>
+</body>
+</html>

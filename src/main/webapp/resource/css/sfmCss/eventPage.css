@@ -1,0 +1,14 @@
+.tr_bg {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	background-color: expression(this.sectionRowIndex==0?"#EDEDEF":((this.sectionRowIndex%2==0) ? "#EDEDEF" : "#F4F4F4"));
+}
+
+.td_left {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.td_right {
+	padding-right: 15px;
+}

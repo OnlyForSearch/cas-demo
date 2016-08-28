@@ -1,0 +1,61 @@
+.attach_add_button,.attach_item,.fl_egn_upload_attach_add_button
+{
+    color:#066AD9 !important;
+    font-family:"arial", "·ÂËÎ" !important;
+    text-decoration:underline !important;
+}
+.attach_size
+{
+	padding-top:2px !important;
+}
+.attach_add_button_hover,.attach_item_hover,
+{
+    color: #FF0000 !important;
+	text-decoration:underline !important;
+	font-family:"arial", "·ÂËÎ" !important;
+}
+.attach_del_button,.attach_upload_fail,.attach_retry_button,.attach_update_button,.attach_his_button
+{
+    font-family:"arial", "·ÂËÎ" !important;
+    padding-top:1px !important;
+}
+.attach_del_button_hover,.attach_retry_button_hover,.attach_update_button_hover,.attach_his_button_hover
+{
+    color: #FF0000 !important;
+    font-family:"arial", "·ÂËÎ" !important;
+}
+.fl_egn_exec_desc_tag,.fl_egn_flow_name_tag,.fl_egn_opinion_tag,.fl_egn_often_opinion_tag,.fl_egn_tchs_tag,.fl_egn_user_tag
+{
+    font-size:14px !important;
+    color: #125899 !important;
+    font-family: "arial", "·ÂËÎ"  !important;;
+}
+.fl_egn_flow_name_value,.fl_egn_tch_name,.fl_egn_select_staff,.key_value_text,.fl_egn_select_nty_staff,.fl_egn_mail_span,.fl_egn_sms_span,.fl_egn_dispense
+{
+	font-family:ËÎÌå !important;
+}
+.fl_egn_select_staff,.fl_egn_select_nty_staff,.fl_egn_often_opinion_set_button,.fl_egn_opinion_edit_button
+{
+    color:#066AD9 !important;
+    font-family:"arial", "·ÂËÎ" !important;
+    text-decoration:underline !important;
+}
+.fl_egn_select_staff_hover,.fl_egn_select_nty_staff_hover,.fl_egn_often_opinion_set_button_hover,.fl_egn_opinion_edit_button_hover
+{
+    color:#FF0000 !important;
+    font-family:"arial", "·ÂËÎ" !important;
+    text-decoration:underline !important;
+}
+.fl_egn_tch_name,.key_value_text,.fl_egn_mail_span,.fl_egn_sms_span,.fl_egn_dispense,.fl_egn_often_opinion_item
+{
+	font-family:ËÎÌå !important;
+}
+.fl_egn_opinion_tag_cell,.fl_egn_opinion_input_cell,.fl_egn_staff_cell,fl_egn_staff_label_row
+{
+	width:68% !important;
+}
+
+.fl_egn_often_opinion_tag_cell,.fl_egn_often_opinion_cell,.fl_egn_notify_staff_cell,fl_egn_n_staff_label_row
+{
+	width:28% !important;
+}

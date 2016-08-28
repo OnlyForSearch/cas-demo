@@ -1,0 +1,1399 @@
+body{
+	margin:0;
+	font:12px verdana,geneva,arial,helvetica,sans-serif,宋体;
+	/**/font-family:"Microsoft YaHei";
+	background:#FFFFFF;
+}
+span{font-size:13px;}
+*{ margin:0; padding:0;}
+img,iframe{border:0px;}
+li{list-style:none;}
+
+/* a 链接下划线去除*/
+a:link{
+	text-decoration:none;
+}
+
+a:visited{
+   text-decoration:none;
+}
+
+/*logo的一些样式*/
+.logomenu {
+	background-image:url(/resource/image/indexNX2/ewf/header-bg.png);
+	/*background-position: 0px 0px;
+	background-repeat:no-repeat;*/
+}
+
+.banner{
+	height:63px;
+	/*background-image:url(/resource/local/gs/image/index/nx_logo.png);
+	background-position:20px 0;
+	background-repeat:no-repeat;*/
+	overflow: hidden;
+	white-space: noWrap;
+	width:100%;
+	margin:0;
+	padding:0;
+}
+/*
+.logoInner{
+	float:left;
+	width:100%;
+	height:63px;
+	background-image:url(/resource/local/gs/image/index/title.png);
+	background-position:center;
+	background-repeat:no-repeat;
+	border:1px solid red;
+}
+.logoTitle{
+	float:right;
+	width:255px;
+	height:80px;
+	margin-right:1%;
+}
+.knowledge{
+	float:right;
+	padding-top:10px;
+	position: relative;
+	padding-right:5px;
+}*/
+
+.topLogo{
+	float:left;
+	width:430px;
+	position: relative;
+}
+.topLogo li{
+	float:left;
+	padding:0px 3px;
+}
+.logoimg1{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:40px;
+    width:40px;
+    float:left;
+    margin:10px 0px 0px 5px;
+}
+.logoimg2{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-50px -10px;
+    height:22px;
+    width:15px;
+    float:left;
+    margin:20px 0px 0px 2px;
+}
+.logotext1{
+	font-family:"Microsoft YaHei";
+	font-size:26px;
+	color:white;
+	line-height:26px;
+	float:left;
+    margin-top:15px;
+    font-weight:bold;
+}
+.logotext2{
+	font-family:"Microsoft YaHei";
+	font-size:22px;
+	color:white;
+	line-height:22px;
+	float:left;
+    margin-top:18px;
+    font-weight:bold;
+}
+
+.topLink{
+	float:right;
+	width:170px;
+	padding-top:15px;
+	position: relative;
+	/*border:1px solid red;*/
+}
+
+.topLink li{
+	float:left;
+	padding:5px 3px;
+}
+.popup{
+	font-family:"Microsoft YaHei";
+	font-size:14px;
+	color:white;
+	line-height:15px;
+}
+
+.popupimg1{
+    background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-75px -10px;
+    height:15px;
+    width:20px;
+}
+
+.popupimg2{
+    background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-50px -10px;
+    height:15px;
+    width:5px;
+}
+
+.popupimg3{
+    background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-114px -10px;
+    height:15px;
+    width:20px;
+}
+
+.popup_center{
+	float:left;
+	height:31px;
+	line-height:19px;
+	padding:3px 4px;
+	background:url(/resource/image/indexHb2/index/popup_bg.gif) repeat-x center top;
+}
+
+/*宁夏电子工单系统左侧链接 开始*/
+.zhuantiTitle{
+	float:left; 
+	width:54%; /* 65% */
+	margin:0px 3px;
+	line-height:50px;
+	/*color:#20679e;*/
+	font-size:15px;
+	font-weight:bold;
+	font-family:"Microsoft YaHei";
+	border: 0px solid red;
+}
+.zhuantiImg{
+	float:left; 
+	/*width:30%;  25%*/
+	margin:12px 0px 0px 16px; /*dhh 5px -10px 5px 20px;*/
+	
+}
+.zhuantiDaibanNum{
+	float:right; 
+	/*width:30%;  25%*/
+	margin:15px 3px 0px 0px; /*dhh 5px -10px 5px 20px;*/
+}
+
+/*a.zhuantiACSS、a.zhuantiACSS:hover和a.zhuantiACSSsel对应的work_link表的link_img字段配置的class name  */
+a.zhuantiACSS  .ewfLeftImg1 {
+	background:url(/resource/image/indexNX2/ewf/leftnav01.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg1 {
+    background:url(/resource/image/indexNX2/ewf/leftnav01.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg1 {
+    background:url(/resource/image/indexNX2/ewf/leftnav01.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg2 {
+	background:url(/resource/image/indexNX2/ewf/leftnav02.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg2 {
+    background:url(/resource/image/indexNX2/ewf/leftnav02.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg2 {
+    background:url(/resource/image/indexNX2/ewf/leftnav02.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg3 {
+	background:url(/resource/image/indexNX2/ewf/leftnav03.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg3 {
+    background:url(/resource/image/indexNX2/ewf/leftnav03.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg3 {
+    background:url(/resource/image/indexNX2/ewf/leftnav03.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg4 {
+	background:url(/resource/image/indexNX2/ewf/leftnav04.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg4 {
+    background:url(/resource/image/indexNX2/ewf/leftnav04.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg4 {
+    background:url(/resource/image/indexNX2/ewf/leftnav04.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg5 {
+	background:url(/resource/image/indexNX2/ewf/leftnav05.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg5 {
+    background:url(/resource/image/indexNX2/ewf/leftnav05.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg5 {
+    background:url(/resource/image/indexNX2/ewf/leftnav05.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg6 {
+	background:url(/resource/image/indexNX2/ewf/leftnav06.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg6 {
+    background:url(/resource/image/indexNX2/ewf/leftnav06.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg6 {
+    background:url(/resource/image/indexNX2/ewf/leftnav06.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg7 {
+	background:url(/resource/image/indexNX2/ewf/leftnav07.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg7 {
+    background:url(/resource/image/indexNX2/ewf/leftnav07.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg7 {
+    background:url(/resource/image/indexNX2/ewf/leftnav07.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS  .ewfLeftImg8 {
+	background:url(/resource/image/indexNX2/ewf/leftnav08.png);
+	background-position:0px -32px;
+	background-repeat:no-repeat; 
+	height:25px; width:25px;
+	float:left; 
+	}
+a.zhuantiACSS:hover  .ewfLeftImg8 {
+    background:url(/resource/image/indexNX2/ewf/leftnav08.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+a.zhuantiACSSsel  .ewfLeftImg8 {
+    background:url(/resource/image/indexNX2/ewf/leftnav08.png);
+	background-repeat:no-repeat;
+    background-position:0px 0px;
+    height:25px; width:25px;
+    float:left; 
+}
+
+a.zhuantiACSS {border:0px solid #64A4D2;cursor:hand;} /*dhh background-color:#f5f9fd; */
+a.zhuantiACSS .zhuantiTitle {color:#7B7B7B;}
+a.zhuantiACSS:hover {background-color:#FFFFFF; border:0px solid #FBE2B9;cursor:hand;}
+a.zhuantiACSS:hover  .zhuantiTitle {color:#0072E3;}
+
+a.zhuantiACSSsel {background-color:#FFFFFF; border:0px solid #FBE2B9;cursor:hand;}
+a.zhuantiACSSsel .zhuantiTitle {color:#0072E3;}
+
+/*宁夏电子工单系统左侧链接 结束*/
+
+/*宁夏电子工单系统 待办事宜 开始 */
+
+.daibanMain{
+	margin:25px 30px 0px 30px;
+	height:275;
+	width:100%;
+	/*border:1px solid yellow;*/
+}
+
+daibanEvent{
+	height:35px;
+    width:100%;
+}
+
+.daibanEventTitle{
+	float:left;
+	height:20px;
+    width:400px;
+    margin:0px 3px;
+	line-height:20px;
+	color:#000000;
+	font-size:18px;
+	font-weight:bold;
+	font-family:"Microsoft YaHei";
+}
+
+.daibanEventImg{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-144px -10px;
+    height:19px;
+    width:15px;
+    float:left;
+    margin:1px 0px 0px 0px;
+}
+
+.daibanDesc{
+	width:100%;
+	height:230px;
+	margin:5px 10px 0px 10px;
+	/*border:1px solid blue;*/
+}
+
+.userWelcome{
+	float:left;
+	width:50%;
+	height:35px;
+}
+
+.userName{
+	float:left;
+	/*width:200px;
+	padding-top:10px;*/
+	position: relative;
+	color:red;
+	font-family:"Microsoft YaHei";
+	font-size:15px;
+	font-weight:bold;
+	line-height:22px;
+	text-align:right;
+	margin:5px 1px 0px 2px;
+}
+
+.userWelcomeDesc{
+	float:left;
+	/*width:200px;
+	padding-top:10px;*/
+	position: relative;
+	color:#7B7B7B;
+	font-family:"Microsoft YaHei";
+	font-size:15px;
+	font-weight:bold;
+	line-height:22px;
+	text-align:right;
+	margin:5px 1px 0px 2px;
+}
+
+.userImg{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-167px -9px;
+    height:20px;
+    width:18px;
+    float:left;
+    margin:8px 1px 0px 2px;
+}
+
+.daibanDetai{
+	/*background-color:#FAFAFA;*/
+	width:100%;
+	/*height:190px;*/
+	margin:0px 0px 0px 0px;
+	/*border:1px solid brack;*/
+}
+
+.pt1{
+	float:left;
+	margin:0; padding:0;
+	background:url(/resource/image/indexNX2/ewf/gray-bg.png); /* leftnav06.png gray-bg.png*/
+	background-position:0px 0px;
+	background-repeat:no-repeat;
+	width:11px;
+	height:15px;
+	/*border:1px solid red;*/
+}
+.pt2{
+	float:right;
+	margin:0; padding:0;
+	background:url(/resource/image/indexNX2/ewf/gray-bg.png);
+	background-position:-8px 0px;
+	background-repeat:no-repeat;
+	width:12px;
+	height:15px;
+	/*border:1px solid red;*/
+}
+.pt11{
+	float:right;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	
+	height:15px;
+	/*border:1px solid red;*/
+}
+.pt12{
+	float:left;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	width:22px;
+	height:157px;
+	/*border:1px solid red;*/
+}
+.pt3{
+	float:right;
+	height:157px;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	/*width:100%; 设置会把整个撑大，width让其下的子div来控制*/
+	margin:0px 0px 0px 0px;
+	/*border:1px solid red;*/
+}
+.pt13{
+	float:right;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	width:22px;
+	height:157px;
+	border:1px solid red;
+}
+.pt4{
+	float:left;
+	margin:0; padding:0;
+	background:url(/resource/image/indexNX2/ewf/gray-bg.png);
+	background-position:0px -1px;
+	background-repeat:no-repeat;
+	width:11px;
+	height:20px;
+	/*border:1px solid red;*/
+}
+.pt5{
+	float:right;
+	margin:0; padding:0;
+	background:url(/resource/image/indexNX2/ewf/gray-bg.png);
+	background-position:-9px -1px;
+	background-repeat:no-repeat;
+	width:11px;
+	height:20px;
+	/*border:1px solid red;*/
+}
+.pt14{
+	float:right;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	
+	height:19px;
+	/*border:1px solid red;*/
+}
+
+.daibanPrompt{
+	float:left;
+	width:400px;
+	height:22px;
+	margin:2px 0px 0px 0px;
+	   /*border:1px solid red;*/
+}
+
+.daibanPromptText{
+	float:left;
+	/*width:200px;
+	padding-top:10px;*/
+	position: relative;
+	color:#000000;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:22px;
+	text-align:right;
+	margin:0px 1px 0px 1px;
+}
+
+.daibanNumCss{
+	float:left;
+	height:22px;
+	/*width:200px;
+	padding-top:10px;*/
+	position: relative;
+	color:#009EBD;
+	font-family:"Microsoft YaHei";
+	font-size:20px;
+	line-height:22px;
+	text-align:right;
+	cursor:hand;
+	margin:0px 5px 0px 5px;
+}
+
+.daibanNumCss a{
+	color:#009EBD;
+	/*TEXT-DECORATION: "";*/
+}
+
+.daibanNumCss a:hover{
+	TEXT-DECORATION: underline;
+}
+
+.daibanNumCss a:active{
+	/*color:#000000;*/
+}
+.daibanNumCss a:visited{
+	/*color:#000000;*/
+}
+
+.workForm{
+	width:100%;
+	height:30px;
+	margin:10px 0px 0px 0px;
+}
+
+.workFormTitle{
+	float:left;
+	background-color:#80CFF0;
+	width:70px;
+	height:30px;
+	font-size:15px;
+	text-align:center;
+	line-height:30px;
+	color:#FFFFFF;
+	border:1px solid #80CFF0;
+}
+
+.workFormNum{
+	float:left;
+	background-color:#FFFFFF;
+	width:90px;
+	height:30px;
+	font-size:16px;
+	text-align:center;
+	line-height:30px;
+	color:#80CFF0;
+	border:1px solid #80CFF0;
+}
+
+.workFormBlank{
+	float:left;
+	width:22px;
+	height:30px;
+}
+
+a.workFormItem .workFormTitle{
+	cursor:hand;
+}
+
+a.workFormItem:hover .workFormTitle{
+	background-color:#00A6EB;
+	border:1px solid #00A6EB;
+	cursor:hand;
+}
+a.workFormItem:hover .workFormNum{
+	color:#00A6EB;
+	border:1px solid #00A6EB;
+	cursor:hand;
+}
+
+.workFormTimeOut{
+	float:left;
+	width:400px;
+	height:25px;
+	margin:10px 0px 0px 0px;
+}
+
+.TimeOutImg{
+	float:left;
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-197px -9px;
+    height:25px;
+    width:18px;
+    float:left;
+    margin:3px 0px 0px 2px;
+}
+
+.TimeOutText{
+	float:left;
+	/*width:70px;*/
+	height:25px;
+	font-family:"Microsoft YaHei";
+	font-size:13px;
+	line-height:25px;
+	color:red;
+	text-align:right;
+	margin:0px 2px 0px 1px;
+}
+
+.TimeOutNum{
+	float:left;
+	height:25px;
+	font-size:14px;
+	line-height:25px;
+	font-family:"Microsoft YaHei";
+	color:red;
+	text-align:right;
+	cursor:hand;
+	margin:0px 5px 0px 2px;
+}
+
+.TimeOutNum a{
+	color:red;
+	/*TEXT-DECORATION: "";*/
+}
+.TimeOutNum a:hover{
+	TEXT-DECORATION: underline;
+}
+
+.dashedLine{
+	width:100%;
+	height:10px;
+	margin:10px 20px 0px 0px;
+}
+
+.daibanSummary{
+	float:left;
+	width:850px;
+	height:20px;
+	margin:10px 0px 0px 0px;
+}
+.daibanSummaryText{
+	float:left;
+	height:20px;
+	font-size:15px;
+	line-height:20px;
+	font-family:"Microsoft YaHei";
+	color:#979797;
+	text-align:right;
+	margin:0px 5px 0px 2px;
+}
+.daibanSummaryNumCss{
+	float:left;
+	height:20px;
+	font-size:16px;
+	line-height:20px;
+	font-family:"Microsoft YaHei";
+	color:#009EBD;
+	text-align:right;
+	cursor:hand;
+	margin:0px 5px 0px 2px;
+}
+.daibanSummaryNumCss a{
+	color:#009EBD;
+	/*TEXT-DECORATION: "";*/
+}
+.daibanSummaryNumCss a:hover{
+	TEXT-DECORATION: underline;
+}
+
+.daibanSummaryBlank1{
+	float:left;
+	width:30px;
+}
+.daibanSummaryBlank2{
+	float:left;
+	width:70px;
+}
+
+/*宁夏电子工单系统 待办事宜 结束 */
+
+
+/*宁夏电子工单系统 电子工单模版 开始 */
+.ewfModMain{
+	margin:25px 30px 0px 30px;
+	height:300;
+	width:100%;
+	/*border:1px solid yellow;*/
+}
+
+.ewfModDesc{
+    width:100%;
+	height:255px;
+	margin:5px 10px 0px 10px;
+	/*border:1px solid blue;*/
+}
+
+.ewfModDetai{
+	/*background-color:#FAFAFA;*/
+	width:100%;
+	/*height:115px;*/
+	margin:0px 0px 0px 0px;
+	/*border:1px solid red;*/
+}
+
+.pt15{
+	float:left;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	width:20px;
+	height:84px;
+	/*border:1px solid red;*/
+}
+.pt6{
+	float:right;
+	height:84px;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	/*width:100%; 设置会把整个撑大，width让其下的子div来控制*/
+	/*border:1px solid blue;*/
+}
+
+.ewfModTitle{
+	float:left;
+	width:100%;
+	height:20px;
+	font-size:16px;
+	line-height:16px;
+	font-family:"Microsoft YaHei";
+	color:#979797;
+	text-align:left;
+	margin:0px 0px 0px 0px;
+}
+
+.ewfModFlow{
+	float:left;
+	width:100%;
+	margin:2px 0px 0px 0px;
+}
+
+.ewfModFlowLi{
+	float:left;
+	margin:0; padding:0;
+	width:140px;
+	height:60px;
+	/*cursor:hand;*/
+	/*border:1px solid red;*/
+}
+
+.ewfModFlowLiBrank{
+	float:left;
+	margin:0; padding:0;
+	width:10px;
+	height:60px;
+	/*border:1px solid red;*/
+}
+
+.ewfModFlowLiImg{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:0px -50px;
+    height:40px;
+    width:55px;
+    float:left;
+    margin:9px 0px 0px 1px;
+    /*border:1px solid red;*/
+}
+
+.ewfModFlowLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/lc-bg.png) 0px 0px no-repeat;
+	width:5px;
+	height:60px;
+}
+.ewfModFlowText{
+	float:left;
+	margin:0; padding:0px;
+	background-color:#95D8F3;
+	width:128px;
+	height:60px;
+}
+.ewfModFlowText1{
+	width:100%;
+	height:25px;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:24px;
+	text-align:center;
+	color:#FFFFFF;
+	padding:5px 0 0 2px;
+}
+.ewfModFlowText2{
+	width:100%;
+	height:25px;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:24px;
+	text-align:center;
+	color:#FFFFFF;
+	padding:1px 0 0 2px;
+}
+.ewfModFlowRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/lc-bg.png) -95px -61px no-repeat;
+	width:5px;
+	height:60px;
+}
+
+
+.notes{
+	/*background-color:#FAFAFA;*/
+	width:100%;
+	/*height:115px;*/
+	margin:10px 0px 0px 0px;
+	/*border:1px solid yellow;*/
+}
+
+.pt16{
+	float:left;
+	margin:0; padding:0;
+	background-color:#FAFAFA;
+	width:20px;
+	height:90px;
+	/*border:1px solid red;*/
+}
+.pt7{
+	float:left;
+	height:90px;
+	background-color:#FAFAFA;
+	/*width:100%; 设置会把整个撑大，width让其下的子div来控制*/
+	margin:0; padding:0;
+	/*border:1px solid blue;*/
+}
+
+.noteTitle{
+	float:left;
+	width:100%;
+	height:20px;
+	font-size:16px;
+	line-height:16px;
+	font-family:"Microsoft YaHei";
+	color:red;
+	text-align:left;
+	margin:0px 0px 0px 0px;
+}
+.noteDesc{
+	float:left;
+	width:100%;
+	height:25px;
+	margin:4px 0px 0px 0px;
+	/*border:1px solid red;*/
+}
+.noteItem{
+	float:left;
+	width:46%;
+	height:25;
+	/*border:1px solid red;*/
+}
+.noteItemImg{
+	float:left;
+	margin:2px 0px 0px 0px; 
+	padding:0;
+	width:20px;
+	height:20px;
+	/*cursor:hand;*/
+}
+.noteItemImgText{
+	float:left;
+	background-color:#FF8D47;
+    height:20px;
+    width:14px;
+    font-size:12px;
+    font-family:"Microsoft YaHei";
+    text-align:center;
+    color:#FFFFFF;
+    margin:0px 0px 0px 0px;
+}
+.noteItemText{
+	float:left;
+	/*width:70px;*/
+	height:25px;
+	font-family:"Microsoft YaHei";
+	font-size:14px;
+	line-height:25px;
+	color:#979797;
+	text-align:right;
+	margin:0px 2px 0px 1px;
+}
+.noteItemText a{
+	color:#979797;
+	cursor:default;
+	/*TEXT-DECORATION: ""; TEXT-DECORATION: underline;*/
+}
+.noteItemText a:hover{
+	color:#FF8D47;
+	cursor:default;
+}
+
+
+
+/*宁夏电子工单系统 电子工单模版 结束 */
+
+
+/*宁夏电子工单系统 待办列表 开始*/
+
+.searchCondition{
+	margin:10px 30px 0px 30px;
+	height:40px;
+	width:100%;
+	background-color:#f7f4f6;
+	font-family:"Microsoft YaHei";
+	/*border:1px solid red;*/
+}
+
+.searchTitle{
+	float:left;
+	font-family:"Microsoft YaHei";
+	font-size:14px;
+	line-height:40px;
+	color:#083687;
+	text-align:center;
+	font-weight:bold;
+	margin-left:30px;
+}
+
+.searchTable{
+	float:right;
+	height:40px;
+}
+
+.daibanTable{
+	margin:10px 30px 0px 30px;
+	/*height:540px;*/
+	width:100%;
+	/*border:1px solid red;*/
+}
+
+.daibanTableDesc{
+	float:left;
+	margin:0px 0px 30px 0px;
+	/*margin:0px 10px 30px 15px;
+	height:40px;*/
+	/*width:100%;*/
+	/*border:1px solid red;*/
+}
+
+.sortImgA{
+	float:left;
+	height:35px;
+	cursor:default;
+	/*border:1px solid blue;*/
+}
+.thText{
+	float:right;
+	align:center;
+	width:80%;
+	margin:0px 0px 0px 0px;
+	padding:9px 0px 0px 0px;
+	font-size:14px;
+	color:#677A91;
+	cursor:default;
+	/*border:1px solid red;*/
+}
+
+.sortImgDiv{
+	float:right;
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-182px -102px;
+    height:22px;
+    width:18px;
+    margin:6px 2px 0px 0px;
+    cursor:hand;
+    /*border:1px solid red;*/
+}
+
+
+a.sortImgA:hover .sortImgDiv{
+    background-position:-206px -102px;
+    height:22px;
+    width:18px;
+}
+
+.yestimeout{
+	float:left;
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-52px -100px;
+    height:23px;
+    width:23px;
+    margin:2px 2px 0px 13px;
+    /*border:1px solid red;*/
+}
+
+.notimeout{
+	float:left;
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-repeat:no-repeat;
+    background-position:-75px -100px;
+    height:23px;
+    width:23px;
+    margin:2px 2px 0px 13px;
+    /*border:1px solid red;*/
+}
+
+
+/*宁夏电子工单系统 待办列表 结束*/
+
+
+/*宁夏电子工单系统 工单列表 开始*/
+
+
+.ewfSearchCondition{
+	margin:10px 10px 0px 20px;
+	/*height:40px;*/
+	width:100%;
+	/*border:1px solid yellow;*/
+}
+
+.searchItem{
+	width:100%;
+	height:275px;
+	margin:0px 0px 0px 0px;
+	background-color:#F2F2F2;
+	border:0px solid red;
+}
+
+.haveChose{
+	width:100%;
+	height:50px;
+	margin:2px 0px 0px 0px;
+	background-color:#F2F2F2;
+	border:0px solid red;
+}
+.sItemTitle{
+	float:left;
+	margin:0px;
+	padding:0px;
+	font-size:14px;
+	font-weight:bold;
+	line-height:35px;
+	text-align:center;
+	color:#676767;
+	cursor:default;
+	border:0px solid yellow;
+}
+.sItemDes{
+	float:left;
+	margin:0px;
+}
+
+
+.sItemACSSsel .choiceBlueLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/choice-blue-left.png) 0px 0px no-repeat;
+	width:10px;
+	height:26px;
+	cursor:hand;
+}
+.sItemACSSsel .choiceBlueRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/choice-blue-right.png) -1px -0px no-repeat;
+	width:10px;
+	height:26px;
+	cursor:hand;
+}
+.sItemACSSsel .choiceBlueText{
+	float:left;
+	margin:0; padding:0px;
+	background-color:#63C3F1;
+	width:45px;
+	height:26px;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:24px;
+	text-align:center;
+	color:#FFFFFF;
+	padding:0px 0 0 0px;
+	cursor:hand;
+}
+.sItemACSS .choiceBlueLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/choice-gray-left.png) 0px 0px no-repeat;
+	width:10px;
+	height:26px;
+	cursor:hand;
+}
+.sItemACSS .choiceBlueRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/choice-gray-right.png) -1px -0px no-repeat;
+	width:10px;
+	height:26px;
+	cursor:hand;
+}
+.sItemACSS .choiceBlueText{
+	float:left;
+	margin:0; padding:0px;
+	border:solid #DEDEDE; /*设置边框属性；样式(solid=实线)、颜色(#999=灰) */
+	border-width:1px 0 1px 0; /* 设置边框状粗细：上 右 下 左 = 对应：1px 0 0 1px */
+	/*background-color:#63C3F1;*/
+	width:45px;
+	height:26px;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:24px;
+	text-align:center;
+	color:#939393;
+	padding:0px 0 0 0px;
+	cursor:hand;
+}
+.sItemACSSsel{
+	float:left;
+	margin:5px 8px 0px 2px;
+	/*border:1px solid red;*/
+}
+.sItemACSS{
+	float:left;
+	margin:5px 8px 0px 2px;
+}
+.haveChoseBtn{
+	float:right;
+	margin:0px;
+	padding:0px;
+}
+.hideChoseBtn{
+	float:right;
+	height:31px;
+	margin:4px 4px 0 0;
+	/*border:1px solid red;*/
+}
+.ExportChoseBtn{
+	float:right;
+	height:31px;
+	width:107px;
+	margin:4px 2px 0 0;
+}
+
+.hideChoseBtn .choiceHideLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/o-left.png) 0px 0px no-repeat;
+	width:10px;
+	height:30px;
+	cursor:hand;
+}
+.hideChoseBtn .choiceHideRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/o-right.png) -1px -0px no-repeat;
+	width:10px;
+	height:30px;
+	cursor:hand;
+}
+.hideChoseBtn .choiceHideText{
+	float:left;
+	margin:0; padding:0px;
+	background-color:#FF8E47;
+	width:85px;
+	height:30px;
+	font-family:"Microsoft YaHei";
+	/*font-size:22px;
+	line-height:28px;
+	text-align:center;*/
+	color:#FFFFFF;
+	padding:0px 0 0 0px;
+	cursor:hand;
+}
+
+.exportChoseBtn .choiceExportLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/b-left.png) 0px 0px no-repeat;
+	width:10px;
+	height:30px;
+	cursor:hand;
+}
+.exportChoseBtn .choiceExportRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/b-right.png) -1px -0px no-repeat;
+	width:10px;
+	height:30px;
+	cursor:hand;
+}
+.exportChoseBtn .choiceExportText{
+	float:left;
+	margin:0; padding:0px;
+	background-color:#63C3F1;
+	width:85px;
+	height:30px;
+	font-family:"Microsoft YaHei";
+	/*font-size:22px;
+	line-height:28px;
+	text-align:center;*/
+	color:#FFFFFF;
+	padding:0px 0 0 0px;
+	cursor:hand;
+}
+
+.haveChoseItem{
+	float:left;
+	margin:0px;
+	padding:0px;
+}
+.choseItemACSS{
+	float:left;
+	margin:3px 1px 0 2px;
+}
+.choseItemACSS .checkBlueLeft{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/check-blue-left.png) 0px 0px no-repeat;
+	width:5px;
+	height:30px;
+	cursor:default;
+}
+.choseItemACSS .checkBlueRight{
+	float:left;
+	margin:0; padding:0px;
+	background:url(/resource/image/indexNX2/ewf/check-blue-right.png) -6px -0px no-repeat;
+	width:5px;
+	height:30px;
+	cursor:default;
+}
+.choseItemACSS .checkBlueText{
+	float:left;
+	margin:0; padding:0px;
+	background-color:#FFFFFF;
+	/*width:45px;*/
+	height:30px;
+	font-family:"Microsoft YaHei";
+	font-size:16px;
+	line-height:28px;
+	text-align:center;
+	color:#29A8E8; /*#28A7E7*/
+	font-weight:bold;
+	border-collapse:collapse; 
+	border:solid #63C3F1; 
+	border-width:1px 0 1px 0;
+	cursor:default;
+}
+a.checkItemImgACSS{
+	float:right;
+	width:23px;
+	height:23px;
+}
+a.checkItemImgACSS .checkItemImg{
+	background:url(/resource/image/indexNX2/ewf/icons.png);
+	background-position:-228px -99px;
+	background-repeat: no-repeat;
+	float:right;
+	width:23px;
+	height:23px;
+	cursor:hand;
+}
+a.checkItemImgACSS:hover  .checkItemImg{
+	/*background:url(/resource/image/indexNX2/ewf/icons.png);*/
+	background-position: -257px -99px;
+	/*background-repeat: no-repeat;*/
+}
+
+
+.ewfListTable{
+	margin:12px 10px 20px 20px;
+	/*height:240px;*/
+	/*height:auto;*/
+	width:100%;
+	border:0px solid yellow;
+}
+.ewfListTableDesc{
+	float:left;
+	margin:0px 0px 0px 0px;
+	/*height:740px;*/
+	/*width:100%;*/
+	/*border:1px solid red;*/
+}
+
+
+
+/*宁夏电子工单系统 工单列表 结束*/
+
+
+/*宁夏电子工单系统 工单列表 分页样式 开始*/
+
+.pageLeftText{
+	color:#677179; 
+	float:left;
+	height:35px;
+	padding:8px 2px 3px 3px;
+	border:0px solid red;
+}
+
+.pageIndexSpan{
+	/*heigth:45px;*/
+	width:100%;
+	text-align:right;
+	padding:6px 10px 3px 3px;
+	border:0px solid red;
+}
+
+/*上下页*/
+.pagePer{float:inherit;color:#677179; text-align:center;;margin-top:10px;cursor:hand;}
+a.pagePer:hover{color:#64C4F2; !important;}
+
+.pageNext{float:inherit;color:#677179; text-align:center;margin-top:10px;cursor:hand;margin-left:20px;}
+a.pageNext:hover{color:#64C4F2; !important;}
+
+.okButton{color:#FFFFFF; text-align:center; line-height:20px; border:1px solid #64C4F2;width:50px;height:20px;background-color:#64C4F2;margin-left:20px;cursor:hand;}
+
+.pagesIndexA{float:inherit;color:#677179; text-align:center;margin-top:10px;margin-left:20px;cursor:hand;}
+
+.pagesIndexCur{float:inherit;color:#64C4F2; text-align:center;margin-top:10px;margin-left:20px;cursor:hand;}
+
+a.pagesIndexA:hover{color:#64C4F2; !important;}
+
+
+/*宁夏电子工单系统 工单列表 分页样式 结束*/
+
+
+
+
+
+

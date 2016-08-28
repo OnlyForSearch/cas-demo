@@ -1,0 +1,378 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择类型</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto;
+	min-height: 100%;
+}
+
+</STYLE>
+<style type="text/css">
+div#searchDiv {
+	position: relative;
+}
+
+div#listDiv ul {
+	border: 1px solid #d9d6c3;
+	text-align: left;
+	background-color: #FFFFFF;
+}
+
+div#listDiv li {
+	position: relative;
+	width: 100%;
+	cursor: default;
+	line-height: 18px;
+	text-indent: 2px;
+}
+
+div#listDiv li.hov {
+	background-color: #6666FF;
+	color: #FFFFFF;
+}
+
+div#listDiv li.hov span {
+	color: #99FFFF;
+}
+
+div#listDiv li span {
+	color: #009900;
+}
+
+UL {
+	list-style-type: none;
+}
+
+.ellipsis_row {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.TreeDIV {
+	WIDTH: 200px;
+	HEIGHT: 300px;
+	OVERFLOW: auto;
+	BORDER: 1PX SOLID #ABACA9;
+	background: white;
+}
+</style>
+
+</head>
+<body onload="iniPage();">
+<fieldset style="margin-top:5px">
+<legend>原因类型选择</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr height="20">
+     <td ALIGN="center">一&nbsp;级&nbsp;原&nbsp;因</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">二&nbsp;级&nbsp;原&nbsp;因</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">三&nbsp;级&nbsp;原&nbsp;因</td>
+  	<td>&nbsp;</td> 
+  	<td ALIGN="center">四&nbsp;级&nbsp;原&nbsp;因</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;原&nbsp;因</td>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+    <IE:XmlSelect id="levelOne" size="20" width="165" xmlsrc = "" onchange="showLevelTwo()"/>
+    </td>
+    <td align="center">&nbsp;&nbsp;</td>
+    <td>
+    <IE:XmlSelect id="levelTwo" size="20" width="165" onchange="showLevelThree()"/>
+    </td>
+    <td align="center">&nbsp;&nbsp;</td>
+    <td>
+    <IE:XmlSelect id="levelThree" size="20" width="165"  onchange="showLevelFour()"/>
+    </td>
+ 	<td align="center">&nbsp;&nbsp;</td>
+    <td>
+    <IE:XmlSelect id="levelFour" size="20" width="165"  onOptionDblClick="addBtn.click()"/>
+    </td>
+    <td width="33">
+    	<table border="0" cellspacing="2" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="addSelect()" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="delSelect();" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn" style="display:none">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="addAllSelect();"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn" style="display:none">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="delAllSelect();"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedReasonList" size="20" width="165" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:5px">
+<legend>类型描述</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr>
+  	<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  		<tr>
+		    <TD colspan="10" width="855">
+				<TEXTAREA id="oReamrk" style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid;WIDTH: 100%; height: 100;" readonly="readonly"></TEXTAREA>
+			</TD>
+		  </tr>
+  	</table>
+  </tr>
+  
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+	var dataUrl = "/servlet/DataOperServlet?";
+ 	var resultArray = new Array();
+ 	var isMultiple = false;
+ 	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	var element = {
+		levelOneId : "",
+		levelOneName : "",
+		levelTwoId : "",
+		levelTwoName : "",
+		levelThreeId : "",
+		levelThreeName : "",
+		levelFourId : "",
+		levelFourName : ""
+	}
+	
+	function initElement(level,id,value){
+		switch(level){
+		case 1:
+			element.levelOneId = id; 
+			element.levelOneName = value; 
+			element.levelTwoId =  "" ; 
+			element.levelTwoName = "" ; 
+			element.levelThreeId  = "";
+			element.levelThreeName = "";
+			element.levelFourId = "";
+			element.levelFourName ="";
+			break;
+		case 2:
+			element.levelTwoId = id; 
+			element.levelTwoName = value; 
+			element.levelThreeId  = "";
+			element.levelThreeName = "";
+			element.levelFourId = "";
+			element.levelFourName ="";
+			break;
+		case 3:
+			element.levelThreeId = id;
+			element.levelThreeName = value;
+			element.levelFourId = "";
+			element.levelFourName ="";
+			break;
+		}
+	}
+
+	function iniPage() {
+		var params = window.dialogArguments;
+		isMultiple = params.isMultiple;
+		selectedReasonList.multiple = true;
+		multipleAddBtn.style.display = "inline";
+		multipleDelBtn.style.display = "inline";
+		levelOne.xmlsrc = dataUrl
+				+ "tag=18&parentValue=-1&domainType=ZJ_REASON_TYPE";
+		levelOne.getObject().options[0].selected = true;
+		showLevelTwo();
+	}
+
+	//显示二级原因分类
+	function showLevelTwo() {
+		var levelOneObj = levelOne.getObject();
+		var levelOneSelectId = "";
+		levelTwo.delAllOption(); 
+		levelThree.delAllOption(); 
+		levelFour.delAllOption();
+		for (i = 0; i < levelOneObj.options.length; i++) {
+			if (levelOneObj.options[i].selected) {
+				levelOneSelectId = levelOneObj.options[i].value;
+				initElement(1,levelOneSelectId,levelOneObj.options[i].innerText);
+				var str = setRemark(levelOneSelectId, 'ZJ_REASON_TYPE');
+				if (str) {
+					oReamrk.value = str;
+				}
+				break;
+			}
+		}
+		levelTwo.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="
+				+ levelOneSelectId + "&domainType=ZJ_REASON_TYPE";
+		levelTwo.getObject().options[0].selected = true;
+		showLevelThree();
+	}
+
+	function setRemark(typeCode, domainType) {
+		var str = "";
+		xmlhttp.Open("POST",
+				"/servlet/flowActionZJ.do?method=getTpTreeDescription&domainType="
+						+ domainType + "&typeCode=" + typeCode, false);
+		xmlhttp.send();
+		var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+		dataXML.load(xmlhttp.responseXML);
+		var oMsgList = dataXML.selectNodes("/root/rowSet");
+		if (oMsgList.length > 0) {
+			str = oMsgList[0].selectSingleNode('DESCRIPTION').text;
+		}
+		return str;
+	}
+
+	function showLevelThree() {
+		var levelTwoObj = levelTwo.getObject();
+		var levelTwoSelectId = "";
+		levelThree.delAllOption(); 
+		levelFour.delAllOption();
+		for (i = 0; i < levelTwoObj.options.length; i++) {
+			if (levelTwoObj.options[i].selected) {
+				levelTwoSelectId = levelTwoObj.options[i].value;
+				initElement(2,levelTwoSelectId,levelTwoObj.options[i].text);
+				var str = setRemark(levelTwoSelectId, 'ZJ_REASON_TYPE');
+				if (str) {
+					oReamrk.value = str;
+				}
+				break;
+			}
+		}
+		levelThree.xmlsrc = "/servlet/DataOperServlet?tag=18&parentValue="
+				+ levelTwoSelectId + "&domainType=ZJ_REASON_TYPE";
+		levelThree.getObject().options[0].selected = true;
+		showLevelFour();
+	}
+
+	function showLevelFour() {
+		var levelThreeObj = levelThree.getObject();
+		var levelThreeSelectId = "";
+		levelFour.delAllOption();
+		for (i = 0; i < levelThreeObj.options.length; i++) {
+			if (levelThreeObj.options[i].selected) {
+				levelThreeSelectId = levelThreeObj.options[i].value;
+				initElement(3,levelThreeSelectId,levelThreeObj.options[i].text);
+				var str = setRemark(levelThreeSelectId, 'ZJ_REASON_TYPE');
+				if (str) {
+					oReamrk.value = str;
+				}
+				break;
+			}
+		}
+
+		levelFour.xmlsrc = "/servlet/DataOperServlet?tag=18&parentValue="
+				+ levelThreeSelectId + "&domainType=ZJ_REASON_TYPE";
+	}
+
+	
+	function addSelect() {
+		var obj = levelFour.getObject();
+		for (i = 0; i < obj.options.length; i++) {
+			if (obj.options[i].selected) {
+				resultArray[element.levelOneId + "@@" + element.levelTwoId
+						+ "@@" + element.levelThreeId + "@@"
+						+ obj.options[i].value] = element.levelOneId + "@@"
+						+ element.levelOneName + "@@" + element.levelTwoId
+						+ "@@" + element.levelTwoName + "@@"
+						+ element.levelThreeId + "@@" + element.levelThreeName
+						+ "@@" + obj.options[i].value + "@@"
+						+ obj.options[i].text;
+			}
+		}
+		levelFour.addSelectedTo(selectedReasonList, true);
+	}
+
+	function addAllSelect() {
+		var obj = levelFour.getObject();
+		for (i = 0; i < obj.options.length; i++) {
+			if (obj.options[i]) {
+				resultArray[element.levelOneId + "@@" + element.levelTwoId
+						+ "@@" + element.levelThreeId + "@@"
+						+ obj.options[i].value] = element.levelOneId + "@@"
+						+ element.levelOneName + "@@" + element.levelTwoId
+						+ "@@" + element.levelTwoName + "@@"
+						+ element.levelThreeId + "@@" + element.levelThreeName
+						+ "@@" + obj.options[i].value + "@@"
+						+ obj.options[i].text;
+
+			}
+		}
+		levelFour.addAllTo(selectedReasonList, true);
+	}
+
+	function delSelect() {
+		selectedReasonList.delSelectedOption();
+		for ( var props in resultArray) {
+			if (props != 'indexOf' && props != 'remove') {
+				if (resultArray[props]) {
+					var levelFourId = resultArray[props].split('@@')[6];
+					var obj = selectedReasonList.getObject();
+					//var flag = true;
+					for (i = 0; i < obj.options.length; i++) {
+						if (obj.options[i].value == levelFourId) {
+							delete resultArray[props];
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (selectedReasonList.getObject().options.length == 0) {
+			resultArray = new Array();
+		}
+	}
+
+	function delAllSelect() {
+		resultArray = new Array();
+		selectedReasonList.delAllOption();
+	}
+
+	function moveIn() {
+		if (!isMultiple) {
+			event.srcElement.setLength(0);
+		}
+	}
+	
+
+	function setElement() {
+		var staffObj = new Object();
+		var oSelect = selectedReasonList.getObject();
+		if (selectedReasonList.getLength() == 0) {
+			EMsg("请选择指定的数据！");
+			return false;
+		}
+		return true;
+	}
+
+	function enter() {
+		if (setElement()) {
+			window.returnValue = resultArray;
+			window.close();
+		}
+	}
+</SCRIPT>
+
+</body>
+</html>

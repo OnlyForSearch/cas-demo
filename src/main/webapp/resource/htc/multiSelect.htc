@@ -1,0 +1,495 @@
+<public:component tagName=multiSelect >
+<public:PROPERTY NAME="value"        GET="getValue"      PUT="setValue"         />
+<public:PROPERTY NAME="width"        GET="getWidth"      PUT="setWidth"         />
+<public:PROPERTY NAME="height"       GET="getHeight"     PUT="setHeight"        />
+<public:PROPERTY NAME="readOnly"     GET="isReadOnly"    PUT="setReadOnly"      />
+<public:PROPERTY NAME="disabled"     GET="isReadOnly"    PUT="setReadOnly"      />
+<public:PROPERTY NAME="text"         GET="getText"                              />
+<public:PROPERTY NAME="xmlSrc"       GET="getXmlSrc"     PUT="setXmlSrc"        />
+<!--新增dataSource数据源方式,在页面上调用HtmlUtils.outHtmlData()方法写入数据-->
+<public:PROPERTY NAME="dataSource"   GET="getDataSource" PUT="setDataSource"    />
+<public:PROPERTY NAME="reload"       GET="doInit"                               />
+<PUBLIC:METHOD NAME="doShowContainer"											/>
+<public:method   name="doItemOver"	                                            />
+<public:method   name="doItemOut"	                                            />
+<public:method   name="doItemClick"	                                            />
+<public:method   name="doRefresh"	                                            />
+<public:event    name="onResutChange"  ID="rcEvent"                             />
+<public:ATTACH   EVENT="oncontentready" HANDLER="doInit"     					/>
+<METHOD   NAME="setReturnText"	                   />
+<METHOD   NAME = "doRefreshSelectAll" />
+</public:component>
+<style>
+.dText
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font-size:9pt;
+	color:blue;
+	display:inline;
+}
+</style>
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var multiSelectHtcDefaultLang = {
+	oClearBtnInnerHTML : '[&nbsp;清空&nbsp;]',
+	oAllSelectBtnInnerHTML : '[&nbsp;全选&nbsp;]'
+};
+//获取语言资源
+function getMultiSelectHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('multiSelectHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.multiSelectHtc.' + code);
+	}
+}
+
+var oXMLDoc=new ActiveXObject("Microsoft.XMLDOM");    //接收的xml流
+var oXMLHTTP=new ActiveXObject("Microsoft.XMLHTTP");  //发送的xmlhttp
+var gXmlSrc;
+var gDataSource;
+var gHashData = new Object();
+var gWidth = 200;
+var gHeight = 100;
+var gImgSrc="/resource/image/arrowDown.gif";
+var gCallback="parent."+uniqueID; 
+var gContainHeight = 230;
+var gText;
+var gValue;
+var gHtml;
+var allValue;
+var oPopup;
+var gSelectData = new Object();
+var clearHtml;
+var gReadOnly = false;
+var oPopup;
+var num = 1;
+function doInit(){
+	gHtml = getDataList();
+	var outHTML = getOutHtmlTemplate(); 
+	outHTML = outHTML.replace('&OUT_HTML',gHtml);
+	element.innerHTML = outHTML;
+	var oBtn = window.document.getElementById('oBtn_'+uniqueID);
+	var oInput = window.document.getElementById('oInput_'+uniqueID);
+	oInput.attachEvent("onclick",doShowContainer);
+	oBtn.attachEvent("onclick",doShowContainer);
+}
+
+function doRefresh(){
+    oPopup=null;
+    gHtml = getDataList();
+    var outHTML = getOutHtmlTemplate(); 
+    outHTML = outHTML.replace('&OUT_HTML',gHtml);
+    element.innerHTML = outHTML;
+    var oBtn = window.document.getElementById('oBtn_'+uniqueID);
+    var oInput = window.document.getElementById('oInput_'+uniqueID);
+    oInput.attachEvent("onclick",doShowContainer);
+    oBtn.attachEvent("onclick",doShowContainer);
+}
+
+function doRefreshSelectAll(){
+    oPopup=null;
+    gHtml = getDataListAllSelect();
+    var outHTML = getOutHtmlTemplate(); 
+    outHTML = outHTML.replace('&OUT_HTML',gHtml);
+    element.innerHTML = outHTML;
+    var oBtn = window.document.getElementById('oBtn_'+uniqueID);
+    var oInput = window.document.getElementById('oInput_'+uniqueID);
+    oInput.attachEvent("onclick",doShowContainer);
+    oBtn.attachEvent("onclick",doShowContainer);
+    reloadValue();
+}
+
+function getOutHtmlTemplate(){
+	var gTextWidth=parseInt(gWidth)-15;
+	var outHTML = '<div style="width:'+gWidth+';">'
+				+	'<table border="0" cellPadding="0" CELLSPACING="0" height="100% width="'+gTextWidth+'">'
+				+	'<tr>'
+				+		'<td width="100%" style="border-right:0px;border-top:1px solid #ABABAB;border-left:1px solid #ABABAB;border-bottom:1px solid #ABABAB; ">'
+				+	        '<input type="text" id="oInput_'+uniqueID+'" readonly="true" '
+                +               ' style="width:'+gTextWidth+';cursor:hand;border-right:0px;border-top:0px;border-left:0px;border-bottom:0px;"/></td>'
+				+		'<td style="vertical-align: middle;border-top:1px solid #ABABAB;border-right:1px solid #ABABAB;border-bottom:1px solid #ABABAB;">'
+				//+		    '<img style="cursor:hand;margin-top:0px" id="oBtn_'+uniqueID+'" src="/resource/js/ext/resources/images/default/grid/pick-button.gif"/>'
+				+		    '<input id="oBtn_'+uniqueID+'" type="image" onclick="return false;" src="/resource/js/ext/resources/images/default/grid/pick-button.gif" />'
+				+		'</td>'
+				+	'</tr>'
+				+	'</table>'  
+				+ '</div>' 
+				+ '<table id="oContainer_'+uniqueID+'" cellpadding="0" CELLSPACING="0" value="" selectedIndex="0"  style="display:none;">'
+				+	'&OUT_HTML'
+		        + '</table>'; 
+	return outHTML;	       
+}
+
+function setWidth(pWidth){
+	gWidth = pWidth;
+}
+
+function getWidth(){
+	return gWidth;
+}
+
+function setHeight(pHeight){
+	gHeight = pHeight;
+}
+
+function getHeight(){
+	return gHeight;
+}
+
+function setValue(pValue){
+	var sText = "";
+	gSelectData = new Object();
+	for(var o in gHashData){
+		if((','+pValue+',').indexOf(','+gHashData[o].value+',')>-1){
+			sText = sText + gHashData[o].text + ","
+			gSelectData[gHashData[o].value] = {value:gHashData[o].value,text:gHashData[o].text};
+		}
+	}
+	gText = sText.substr(0,sText.length);
+	gValue = pValue;
+	reloadValue();
+}
+
+function getValue(){
+	return gValue;
+}
+
+function getText(){
+	return gText;
+}
+
+function setReadOnly(pReadOnly){
+	var oInput = window.document.getElementById('oInput_'+uniqueID);
+	var oBtn = window.document.getElementById('oBtn_'+uniqueID);
+	oInput.disabled = pReadOnly;
+	oBtn.disabled = pReadOnly;
+	//oBtn.
+	gReadOnly = pReadOnly;
+}
+function isReadOnly(){
+	return gReadOnly;
+}
+
+function clearValue(){
+	for(var o in gSelectData){
+		var oChk = oPopup.document.getElementById("chk_"+gSelectData[o].value);
+		if(oChk){
+			oChk.checked = false;
+		}
+		gSelectData[o] = null;
+		
+	}
+	element.value = "";
+    doRefresh();
+}
+
+function doShowContainer(){
+	var oContainer=window.document.getElementById("oContainer_"+uniqueID);
+	if(oContainer.rows.length==0) return;
+	var iContainerHeight;
+	if(oPopup==null)
+	{
+		var aReturn = createPop(oContainer);
+		giPopupWidth=aReturn.width;
+		giPopupHeight=aReturn.height;
+		oPopup=aReturn.popup;
+	}
+	var iLeft = element.getBoundingClientRect().left + getWinScreenLeft(window);
+	var iTop = element.getBoundingClientRect().top +element.offsetHeight+getWinScreenTop(window)-2;
+	oPopup.show(iLeft, iTop, giPopupWidth, giPopupHeight);
+	var oPopupTable=oPopup.document.getElementById("oContainer_"+uniqueID);
+	num = 1;
+}
+
+function setXmlSrc(pXmlSrc){
+	num = 0;
+	gXmlSrc = pXmlSrc;
+	//getDataList();
+}
+
+function getXmlSrc(){
+	return gXmlSrc;
+}
+
+function setDataSource(pDataSource){
+    num = 0;
+	gDataSource = pDataSource;
+}
+
+function getDataSource(){
+    return gDataSource;
+}
+
+function getDataList(){
+    var oRows = null;
+	if(""!=gXmlSrc && null!=gXmlSrc){
+	    oXMLHTTP.open("POST",gXmlSrc, false);
+		oXMLHTTP.send();
+		if(isSuccess(oXMLHTTP)){
+			oXMLDoc = oXMLHTTP.responseXML;
+			oRows=oXMLDoc.selectNodes("//root/rowSet");
+		}
+    }else if(""!=gDataSource && null!=gDataSource){ //数据源方式
+        oRows = getXmlFromHtmlData(gDataSource).selectNodes(
+				"/root/rowSet");
+    }
+
+    return getDataListHtml(oRows);
+}
+
+function getDataListHtml(oRows){
+    if(oRows!=null){
+	    var ihtml = "";
+		for(var i=0;i<oRows.length;i++){
+			var value = oRows[i].childNodes[0].text;
+			var text = oRows[i].childNodes[1].text;
+			var selectText = "";
+			if((','+gValue+',').indexOf(','+value+',')>-1){
+				gSelectData[value] = {value:value,text:text};
+				selectText = "checked=true";
+			}
+			ihtml = ihtml+'<tr onmouseover="'+gCallback+'.doItemOver(this)" '
+				       +'onmouseout="'+gCallback+'.doItemOut(this)" height='+gHeight
+					   +'  value="'+value+'" text="'+text+'">'
+				       +'<td style="width:'+gWidth+';height:100%;font:9pt" class="dText">'
+					   +'<label for="chk_'+uniqueID+value+'" style="width:100%;height:100%">'
+					   +'<input type="checkbox" id="chk_'+uniqueID+value+'" '+selectText+' onclick="'+gCallback+'.doItemClick(this)" value="'+value+'" text="'+text+'"/> '
+					   +text+'</label>'
+					   +"</td></tr>";	 
+			gHashData[value] = {value:value,text:text};
+			
+		}
+		return ihtml;
+    }
+}
+
+
+function getDataListAllSelect(){
+	var oRows = null;
+	if(""!=gXmlSrc && null!=gXmlSrc){
+	    oXMLHTTP.open("POST",gXmlSrc, false);
+		oXMLHTTP.send();
+		if(isSuccess(oXMLHTTP)){
+			oXMLDoc = oXMLHTTP.responseXML;
+			oRows=oXMLDoc.selectNodes("//root/rowSet");
+		}
+    }else if(""!=gDataSource && null!=gDataSource){ //数据源方式
+        oRows = getXmlFromHtmlData(gDataSource).selectNodes(
+				"/root/rowSet");
+    }
+    return getDataListAllSelectHtml(oRows);
+}
+
+function getDataListAllSelectHtml(oRows){
+	if(oRows!=null){
+	    var ihtml = "";
+	    for(var i=0;i<oRows.length;i++){
+	        var value = oRows[i].childNodes[0].text;
+	        var text = oRows[i].childNodes[1].text;
+	        var selectText = "";                
+	        gSelectData[value] = {value:value,text:text};
+	        selectText = "checked=true";
+	        ihtml = ihtml+'<tr onmouseover="'+gCallback+'.doItemOver(this)" '
+	                   +'onmouseout="'+gCallback+'.doItemOut(this)" height='+gHeight
+	                   +'  value="'+value+'" text="'+text+'">'
+	                   +'<td style="width:'+gWidth+';height:100%;font:9pt" class="dText">'
+	                   +'<label for="chk_'+uniqueID+value+'" style="width:100%;height:100%">'
+	                   +'<input type="checkbox" id="chk_'+uniqueID+value+'" '+selectText+' onclick="'+gCallback+'.doItemClick(this)" value="'+value+'" text="'+text+'"/> '
+	                   +text+'</label>'
+	                   +"</td></tr>";    
+	        gHashData[value] = {value:value,text:text}; 
+	    }
+	    return ihtml;
+    }
+}
+
+//得到window真正的ScreenTop值(解决框架中的引用)
+function getWinScreenTop(win)
+{
+    var winScreenTop = 0;
+    var topWin = win.top;
+    while(win.frameElement!=null && topWin != win)
+    {
+        winScreenTop += win.frameElement.getBoundingClientRect().top;
+        win = win.parent;
+    }
+    winScreenTop += win.screenTop;
+    return winScreenTop;
+}
+
+//得到window真正的ScreenLeft值(解决框架中的引用)
+function getWinScreenLeft(win)
+{
+    var winScreenLeft = 0;
+    var topWin = win.top;
+    while(win.frameElement!=null && topWin != win)
+    {
+        winScreenLeft += win.frameElement.getBoundingClientRect().left;
+        win = win.parent;
+    }
+    winScreenLeft += win.screenLeft;
+    return winScreenLeft;
+}
+
+function createPop(oContainer)
+{
+	oPopup = window.createPopup();	
+	var oPopBody = oPopup.document.body;
+	var iContainerWidth=parseInt(gWidth);
+	oPopBody.style.border="1px solid black";
+	oPopBody.style.width=iContainerWidth;
+	//oPopBody.style.overflow="auto";
+	var oShowDiv = oPopup.document.createElement("div");
+	
+	//oPopBody.scroll="yes";
+	oShowDiv.style.width	= '100%';
+	
+	oShowDiv.style.overflow="auto";
+	oShowDiv.style.padding = '3px 2px 2px 3px';
+	//oShowDiv.style.overflowX="hidden";
+	//oPopBody.style.scrollbarArrowColor="#ABABAB"
+	oShowDiv.style.scrollbar3dLightColor="#ABABAB"
+	//oPopBody.style.scrollbarBaseColor="#ABABAB"
+	oShowDiv.style.scrollbarHighlightColor = '#FFFFFF';
+	oShowDiv.style.scrollbarDarkShadowColor="#ABABAB";
+	oShowDiv.style.scrollbarShadowColor = '#FFFFFF';
+	oShowDiv.style.scrollbarFaceColor="#E6E4DF";
+	oShowDiv.style.scrollbarTrackColor = '#F1F1F6';
+	oShowDiv.innerHTML=oContainer.outerHTML;    
+	oShowDiv.children(0).style.display="block";
+	oPopBody.appendChild(oShowDiv);
+	
+	var oClearDiv = oPopup.document.createElement("div"); 
+	var oClearBtn = oPopup.document.createElement("span"); 
+	with(oClearDiv.style)
+	{
+		position = 'absolute';
+		left = 0;
+		bottom = 0;
+		height = 19;
+		width = '100%';
+		textAlign = 'right';
+		padding = '4 5 0 0';
+		overflow = 'hidden';
+		fontSize = '9 pt';
+		color = '#284997';
+		background = '#D5EAFF';
+		zIndex = 99;
+	}
+	//oClearDiv.innerHTML=clearHtml;    
+	
+	oClearBtn.innerHTML = getMultiSelectHtcLan('oClearBtnInnerHTML');
+	oClearBtn.style.cursor = 'hand';
+	oClearBtn.onclick = function ()
+    {       
+        try{
+            oPopup.hide();
+        }catch(e){
+        
+        }
+        clearValue();
+    }
+    
+    var oAllSelectBtn = oPopup.document.createElement("span"); 
+    oAllSelectBtn.innerHTML = getMultiSelectHtcLan('oAllSelectBtnInnerHTML');
+    oAllSelectBtn.style.cursor = 'hand';
+    oAllSelectBtn.onclick = function ()
+    {       
+        try{
+            oPopup.hide();
+        }catch(e){
+        
+        }
+        doRefreshSelectAll();
+    }
+    
+    oClearDiv.appendChild(oAllSelectBtn);
+    oClearDiv.appendChild(oClearBtn);
+    oPopBody.appendChild(oClearDiv);
+    
+    var iRealHeight=oShowDiv.children(0).rows.length*23+2;
+    var iHeight=(iRealHeight>parseInt(gContainHeight))?gContainHeight:iRealHeight;  
+    oShowDiv.style.height   = iHeight;  
+    var iWidth=gWidth;
+    var aReturn={height:iHeight+20,width:iWidth,popup:oPopup};
+    return aReturn;
+}
+
+function doItemOver(oItem){
+    try{
+	    var oContainer=oPopup.document.getElementById("oContainer_"+uniqueID);
+	    oItem.style.backgroundColor="#808080";
+	    oItem.runtimeStyle.color = "white";
+	    oItem.runtimeStyle.border = "1px solid #3F3F3F";
+	    oItem.title=oItem.innerText;
+    }catch(e){
+    
+    }
+}
+
+function doItemOut(oItem){
+    oItem.style.backgroundColor="";
+    oItem.runtimeStyle.color = '';
+	oItem.runtimeStyle.border = '';
+}
+
+function doItemClick(oItem){
+    var oContainer=window.document.getElementById("oContainer_"+uniqueID);
+	var text = oItem.text;
+	var value = oItem.value;
+	//var chk = window.document.getElementById("chk_"+value);
+	if(oItem.checked){
+		addSelectData(value,text);
+	}else{
+		delSelectData(value,text);
+	}
+	reloadValue();
+}
+
+function addSelectData(value,text,oBox){
+	gSelectData[value] = {value:value,text:text};
+}
+
+function delSelectData(value,text,oBox){
+	var igSelectData = new Object();
+	delete gSelectData[value];
+	var sText = "";
+	var sValue = "";
+	for(var o in gSelectData){
+		sValue = sValue + gSelectData[o].value + ",";
+		sText = sText + gSelectData[o].text + ",";
+	}
+}
+
+function reloadValue(){
+	var sText = "";
+	var sValue = "";
+	var oInput=window.document.getElementById("oInput_"+uniqueID);
+	for(var o in gSelectData){
+		sValue = sValue + gSelectData[o].value + ",";
+		sText = sText + gSelectData[o].text + ",";
+		var oChk = window.document.getElementById("chk_"+uniqueID+gSelectData[o].value);
+		if(oChk){
+			oChk.checked = true;
+		}
+	}
+	gValue = sValue.substr(0,sValue.length-1);
+	gText  = sText.substr(0,sText.length-1);
+	oInput.value = gText;
+	oEvent = createEventObject();
+	oEvent.selectedValue = gValue;
+	oEvent.selectedText = gText;
+	rcEvent.fire(oEvent);
+}
+function setReturnText(){
+}
+</SCRIPT>
+<body>
+
+</body>

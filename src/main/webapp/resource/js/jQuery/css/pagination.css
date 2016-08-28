@@ -1,0 +1,54 @@
+.pagination {
+            font-size: 80%; 
+        }
+        
+.pagination a {
+    text-decoration: none;
+	border: solid 1px #AAE;
+	color: #15B;
+}
+
+.pagination a, .pagination span {
+    display: block;
+    float: left;
+    padding: 0.3em 0.5em;
+    margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+.pagination .current {
+    background: #26B;
+    color: #fff;
+	border: solid 1px #AAE;
+}
+
+.pagination .current.prev, .pagination .current.next{
+	color:#999;
+	border-color:#999;
+	background:#fff;
+}
+.pagination .prev, .pagination .next{
+	color:#444444;
+	border-color:#d2eaf6;
+	background:#fff;
+}
+/*��ҳ*/
+DIV.pagination {
+	PADDING-RIGHT: 6px; PADDING-LEFT: 0px; FONT-SIZE: 13px; PADDING-BOTTOM: 4px; COLOR: #313031; PADDING-TOP: 4px; FONT-FAMILY: Verdana,Tahoma,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #fff; TEXT-ALIGN: right
+}
+DIV.pagination A {
+	BORDER: #ccc 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 5px; PADDING-BOTTOM: 4px; MARGIN: 0px 3px; COLOR: #0030ce; PADDING-TOP: 5px; TEXT-DECORATION: none
+}
+DIV.pagination A:hover {
+	BORDER: #ccc 1px solid; COLOR: #000; BACKGROUND-COLOR: #f2f2f2
+}
+DIV.pagination A:active {
+	BORDER: #ccc 1px solid;  COLOR: #0066a7; BACKGROUND-COLOR: #f2f2f2
+}
+DIV.pagination SPAN.current {
+	BORDER: #ccc 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 4px; MARGIN: 0px 3px;  COLOR: #444444; PADDING-TOP: 5px; BACKGROUND-COLOR: #f2f2f2
+}
+DIV.pagination SPAN.disabled {
+	DISPLAY: none
+}
+/*��ҳ����

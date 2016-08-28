@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>group Button sample</title>
+
+<script src="../jquery-1.10.1.min.js"></script>
+<script src="jquery.groupButton.js"></script>
+<link href="jquery.groupButton.css" type="text/css" rel="stylesheet">
+
+<script type="text/javascript">
+$(function() {
+	$('#openType').groupButton({
+		data: {
+			按模板开通: 'v1',
+			按规格创建祼机: 'v2',
+			手动开通: 'v3'
+		},
+		value: 'v2',
+		change: function(val) {
+			console.log(val);
+			//alert('变更后的值:' + val);
+		}
+	});
+});
+</script>
+
+</head>
+	<input type="hidden" name="openType" id="openType"/>
+<body>
+</body>

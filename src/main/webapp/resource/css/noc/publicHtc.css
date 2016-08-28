@@ -1,0 +1,57 @@
+.windowPanel h1{
+  font:"ËÎÌו";
+  font-size:14px;
+  font-weight:normal;
+  line-height:28px;
+  margin:4px;
+  float:left;
+  cursor:hand;
+  color:#000;
+  font-family:"ËÎÌו", Arial, Helvetica, sans-serif;
+}
+
+.windowPanel .windowPanelList{
+	padding:2px 6px 6px 6px;
+	width:100%;
+	height:100px;
+	overflow-X:auto;
+	margin:0 0 10px 0;
+}
+
+.title_market{
+  height:32px;
+  background-image:url(/resource/image/itsmImages/kzTopBg.gif);
+  background-repeat:repeat-x;
+}
+.title_left_market{
+  float:left;
+  width:40px;
+  height:32px;
+  background-image:url(/resource/image/itsmImages/kzTopLeft.gif);
+}
+.title_right_market{
+  float:right;
+  width:78px;
+  height:32px;
+  background-image:url(/resource/image/itsmImages/kzTopRight.gif);
+  background-repeat:no-repeat;
+  text-align:center;
+}
+.arrowdown_market{
+  background-image:url(/resource/image/itsmImages/kzTopRightImg.gif);
+  background-repeat:no-repeat;
+  background-position:center;
+  width:13px;
+  height:13px;
+  margin:9px 0 9px 15px;
+  cursor:hand;
+}
+.arrowup_market{
+  background-image:url(/resource/image/itsmImages/kzTopRightImgUP.gif);
+  background-repeat:no-repeat;
+  background-position:center;
+  width:13px;
+  height:13px;
+  margin:9px 0 9px 15px;
+  cursor:hand;
+}

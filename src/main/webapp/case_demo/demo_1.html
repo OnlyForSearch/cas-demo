@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="01" style="width:400px; border:1px solid #ccc; background:#f5f5f5; float:left; height:300px;">
+    <p>节点01</p>
+    <p>节点02</p>
+    <p>节点03</p>
+</div>
+<div style="float:left; margin:0 20px; width:100px; text-align:center;">
+    <button class="qx">全部选择</button>
+    <button class="qc" style="margin-top:20px;">全部清除</button>
+</div>
+<div class="f01" style="width:400px; border:1px solid #000; background:#ccc; float:left; height:300px;">
+
+</div>
+<script>
+    $(function(){
+        $("div p").click(function(){
+            $(this).clone().appendTo(".f01");  //clone(true):复制节点; appendTo:追加到
+        })
+        $(".qc").click(function(){
+            $(".f01").children().remove();
+        })
+        $(".qx").click(function(){
+            $(".01 p").clone().appendTo(".f01");
+        })
+    })
+</script>
+
+
+</body>
+</html>

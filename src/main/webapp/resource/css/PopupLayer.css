@@ -1,0 +1,47 @@
+/* CSS Document */
+div.RoundedCorner{
+ width: 500px;
+}
+div.RoundedCorner2{
+ width: 499px;
+ background-color: #FFEFD6;
+ border-right-width: 1px;
+ border-left-width: 1px;
+ border-right-style: solid;
+ border-left-style: solid;
+ border-right-color: #FFC876;
+ border-left-color: #FFC876;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ padding-left:5px;
+ padding-right:5px;
+}
+b.rtop, b.rbottom{display:block;}
+b.rtop b, b.rbottom b{
+ display:block;
+ height: 1px;
+ overflow: hidden;
+ background: #FFEFD6;
+ border-right-width: 1px;
+ border-left-width: 1px;
+ border-right-style: solid;
+ border-left-style: solid;
+ border-right-color: #FFC876;
+ border-left-color: #FFC876;
+}
+b.r10{
+ margin: 0 5px;
+ border-top-width: 1px;
+ border-top-style: solid;
+ border-top-color: #FFC876;
+}
+b.r11{
+ margin: 0 5px;
+ border-bottom-width: 1px;
+ border-bottom-style: solid;
+ border-bottom-color: #FFC876;
+}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+.cPopText { padding-top: 2px; padding-bottom: 2px; filter: Alpha(Opacity=0)}

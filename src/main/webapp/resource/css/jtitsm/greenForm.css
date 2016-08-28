@@ -1,0 +1,150 @@
+.tableCss{
+	width:100%;
+	border:0px solid #99FFCC;
+	border-collapse:collapse;
+	padding:0px;
+	margin:0px;
+}
+
+.tableHeadCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	background-color:#8ab76a;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: bold;
+	font-size: 16px;
+	font-family: Î¢ÈíÑÅºÚ;
+	white-space: nowrap;
+	color:ffffff;
+}
+.tableTrCss{
+	cursor:pointer;
+	background-color:'#ffffff';
+}
+
+.tableTdCss{
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+	padding:5px 0px;
+	margin:0px;	
+	height:auto;
+	text-align:center;
+	font-weight: normal;
+	font-size: 12px;
+	font-family: ËÎÌå;
+	word-break:normal;
+}
+
+.divBlockCss{
+	border:1px solid #d7d9d4;
+	background-color:#f2f1f6;
+	text-align:center;
+	align:center;
+}
+
+.norButCss{
+	border:2px solid #9acd32;
+	background-color : #eef9f0;
+	color : #71aa59;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+}
+.norButBoverCss{
+	border:2px solid #4f7c43;
+	background-color : #8ab76a;
+	color : #ffffff;
+	padding:2 10;
+	margin:15 0 15 5;
+	font-size:14px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+	font-weight:bold;
+}
+
+.label{
+	font-size:16px;
+	color:#8ab76a;
+	font-weight:bold;
+}
+
+.input{
+	border:1px solid #CCCCCC;
+	background-color: #ffffff;
+	height:25px;
+	padding:3px;
+}
+
+.tableDescCss{
+	font-size:12px;
+	color:#996633;
+}
+.pageButNormalCss{
+	color : #009933;
+	padding:1 2;
+	margin:2;
+	font-size:12px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+	font-weight : bold;
+}
+.pageButOverCss{
+	border:2px solid #9acd32;
+	background-color : #eef9f0;
+	color : #71aa59;
+	padding:1 2;
+	margin:2;
+	font-size:12px;
+	font-family: Î¢ÈíÑÅºÚ;
+	cursor : pointer;
+	font-weight : bold;
+}
+.pageInputCss{
+	border:1px solid #CCCCCC;
+	width:30px;
+	text-align:center;
+}
+.pageTdCss{
+	border:0px;
+	color:#999999;
+	height:auto;
+	text-align:right;
+	align:right;
+}
+.requiredLCss{
+	width:auto;
+	color:#FFAE00;
+	font-size:12px;
+	font-family:'ËÎÌå';
+	margin:0 3px 0 0;
+	vertical-align:middle;
+}
+.requiredDCss{
+	width:auto;
+	color:#FF0000;
+	font-size:12px;
+	font-family:'ËÎÌå';
+	margin:0 3px;
+	vertical-align:middle;
+}
+
+.formTableCss{
+	margin:30px;
+	width:94%;
+	border:0px solid #99FFCC;
+	border-collapse:collapse;
+	padding:0px;
+	margin:auto;	
+	background-color:#f2f1f6;
+}
+
+.formTableCss input{
+	border:1px solid #CCCCCC;
+	background-color: #ffffff;
+	height:20px;
+}

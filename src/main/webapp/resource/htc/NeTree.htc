@@ -1,0 +1,1298 @@
+<PUBLIC:COMPONENT tagname="neTree" literalcontent="true">
+	<PUBLIC:PROPERTY NAME="width" put="setWidth" get="getWidth"/>
+	<PUBLIC:PROPERTY NAME="isReParentText" put="setIsReParentText" get="getIsReParentText"/>
+	<PUBLIC:PROPERTY NAME="isCheckBox" put="setIsCheckBox" get="getIsCheckBox"/>
+	<PUBLIC:PROPERTY NAME="cfg"/>
+	<PUBLIC:PROPERTY NAME="readOnly" put="setReadOnly" get="getReadOnly"/>
+	<PUBLIC:PROPERTY NAME="value" put="setValue" get="getValue"/>
+	<PUBLIC:PROPERTY NAME="text" put="setText" get="getText"/>
+	<PUBLIC:PROPERTY NAME="view" put="setView" get="getView"/>
+	<PUBLIC:PROPERTY NAME="sortAtt" put="setSortAtt" get="getSortAtt"/>
+	<PUBLIC:PROPERTY NAME="defaultIco" put="setDefaultIco" get="getDefaultIco"/>
+	<PUBLIC:PROPERTY NAME="defaultParentIco" put="setDefaultParentIco" get="getDefaultParentIco"/>
+	<PUBLIC:PROPERTY NAME="showDepth" put="setShowDepth" get="getShowDepth"/>
+	<PUBLIC:PROPERTY NAME="showRoot" put="setShowRoot" get="getShowRoot"/>
+	<PUBLIC:PROPERTY NAME="treeHeight" VALUE="280"/>
+	<PUBLIC:PROPERTY NAME="isSelectedItem" get="isSelectedItem"/>
+	<PUBLIC:PROPERTY NAME="allowClear" put="setAllowClear" get="getAllowClear"/>
+	<PUBLIC:METHOD NAME="itemClick"/>
+    <PUBLIC:METHOD NAME="itemOver"/>
+    <PUBLIC:METHOD NAME="itemOut"/>
+    <PUBLIC:METHOD NAME="parentNodeClick"/>
+    <PUBLIC:METHOD NAME="showTree"/>
+    <PUBLIC:METHOD NAME="checkBoxClickEvent"/>
+    <PUBLIC:METHOD NAME="getAttribute"/>
+    <PUBLIC:METHOD NAME="setAttribute"/>
+    <PUBLIC:EVENT NAME="onProcess" ID="pcID"/>
+    <PUBLIC:EVENT NAME="onResultChange" ID="rcID"/>
+	<PUBLIC:ATTACH EVENT="oncontentready" ONEVENT="init()" />
+</PUBLIC:COMPONENT>
+<STYLE>    
+    .tree
+    {
+    	height:20px;
+    	whiteSpace:'nowrap';
+		border:'1px solid #ABABAB';
+		cursor:'default';
+		background:'white';
+		overflow:hidden;
+    }
+    .ipt
+    {
+    	border:0px;
+    	font-size:9pt;
+    	height:100%;
+    	width:100%
+    }
+    .btn
+    {
+    	width:16px;
+		background:#E6E4DF;
+		font-family:webdings;
+		font-size:9pt;
+		height:100%;
+		border:0px;
+    }
+</STYLE>
+<BODY>
+	<span id="id_tree" class="tree">
+		<table border="0" cellPadding="0" CELLSPACING="0" height="100% width="100%">
+			<tr>
+				<td width="100%" style="border-right:1px solid #ABABAB">
+					<input type="text" id="id_ipt" autocomplete="off" class="ipt">
+				</td>
+				<td>
+					<button class="btn" id="id_btn" HIDEFOCUS="true">6</button>
+				</td>
+			</tr>
+		</table>
+	</span>
+</BODY>
+<SCRIPT LANGUAGE="JScript">
+//定义默认语言资源
+var neTreeHtcDefaultLang = {
+	WAIT_TEXT : '数据载入中...',
+	oClearBtnInnerHTML : '[&nbsp;清空&nbsp;]',
+	titleDivInnerHTML : '视图:'
+};
+//获取语言资源
+function getNeTreeHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('neTreeHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.neTreeHtc.' + code);
+	}
+}
+
+// 静态变量
+var SELECTED_BACKGROUND = '#808080';
+var SELECTED_BORDER = '1px solid #3F3F3F';
+var SELECTED_COLOR = 'white';
+var MAX_DEPTH = 100;
+var ACTION_URL = "../../servlet/DBTreeAction?";
+var URL = {
+		action	: "../../servlet/DBTreeAction?",
+		view	: "../../servlet/NECustomViewAction?",
+		ne		: "../../servlet/ne_tree?",
+		xsl		: "../xsl/XMLTree.xsl",
+		ico		: "../image/ico/",
+		line	: "../image/line/"
+	}
+var TOP_LINE = {topLine0:'rminus.gif',topLine1:'rplus.gif',topLine2:'r.gif'};
+var BOTTOM_LINE = {bottomLine0:'lminus.gif',bottomLine1:'lplus.gif',bottomLine2:'l.gif'};
+var OTHER_LINE = {otherLine0:'tminus.gif',otherLine1:'tplus.gif',otherLine2:'t.gif'};
+var BACKGROUND_LINE = 'i.gif';
+var WAIT_ICO = 'spinner.gif';
+var WAIT_TEXT = '数据载入中...';
+// 属性变量
+var iWidth = 160;
+var isReParentText = false;
+var isCheckBox = false;
+var isReadOnly = false;
+var sValue = "";
+var sText = "";
+var sSortAtt;
+var sDefaultIco = 'treeItem.gif';
+var sDefaultParentIco = 'treeItem.gif';
+var iShowDepth = 2;
+var isShowRoot = true;
+var isAllowClear = true;
+// 内部变量
+var oParamXml;
+var oPopup;
+var oTreeDiv;
+var oClearBtn;
+var isReload = true;
+var transXslDoc;
+var oInput;
+var oBtn;
+var oSelectedItem;
+var oOverItem;
+var isInit = false;
+var viewSelect;
+var selectedView;
+var result = new Array();
+
+
+function getSendXml()
+{
+	var sendXml = new ActiveXObject("Microsoft.XMLDOM");
+	var root = sendXml.createElement("send");
+	root.setAttribute("cfg", element.cfg || "ne_by_pri");
+	sendXml.appendChild(root);
+	return sendXml;
+}
+
+var netTreeAction = function()
+{
+	return {
+		init	: function()
+		{
+			var sendXml = getSendXml();
+			var root = sendXml.documentElement;
+			root.setAttribute("showRoot", element.showRoot);
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendParams = ["action=0"];
+			var sendUrl = getSendUrl(URL.action, sendParams);
+			xmlhttp.Open("POST", sendUrl, false);
+			xmlhttp.send(sendXml);
+			if (isSuccess(xmlhttp))
+			{
+				var oReturn = new ActiveXObject("Microsoft.XMLDOM");
+				oReturn.async = false;
+				oReturn.load(xmlhttp.responseXML);
+				return oReturn;
+			}
+		},
+		getChildXml:function(node)
+		{
+			var sendXml = getSendXml();
+			var root = sendXml.documentElement;
+			var paramParent = sendXml.createElement("param");
+			paramParent.setAttribute("name","_sys_db_tree_parent_id");
+			paramParent.setAttribute("type","string");
+			paramParent.setAttribute("isMultiple","0");
+			paramParent.text = node.id;
+			root.appendChild(paramParent);
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendParams = ["action=1"];
+			var sendUrl = getSendUrl(URL.action,sendParams);
+			xmlhttp.Open("POST",sendUrl,false);
+			xmlhttp.send(sendXml);
+			if(isSuccess(xmlhttp))
+			{
+				var oReturn = new ActiveXObject("Microsoft.XMLDOM");
+				oReturn.async = false;
+				oReturn.load(xmlhttp.responseXML);
+				oEvent = createEventObject();
+				oEvent.xmlDom = oReturn;
+				pcID.fire(oEvent);
+				oReturn = oEvent.xmlDom;
+				return oReturn;
+			}
+		},
+		getLabel:function(id)
+		{
+			var sendXml = getSendXml();
+			var root = sendXml.documentElement;
+			var paramId = sendXml.createElement("param");
+			paramId.setAttribute("name","_sys_db_tree_id");
+			paramId.setAttribute("type","string");
+			paramId.setAttribute("isMultiple","0");
+			paramId.text = id;
+			root.appendChild(paramId);
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendParams = ["action=2"];
+			var sendUrl = getSendUrl(URL.action,sendParams);
+			xmlhttp.Open("POST",sendUrl,false);
+			xmlhttp.send(sendXml);
+			if(isSuccess(xmlhttp))
+			{
+				return xmlhttp.responseXML.selectSingleNode('/root/rowSet/*[0]').text;
+			}
+		}
+	}
+}();
+
+var netViewAction = function()
+{
+	var viewId, viewType;
+	
+	var SendUrl = {
+			getSysInit			: function()
+			{
+				return getSendUrl(URL.view, ["action=20", "id=" + viewId]);
+			},
+			getCustomInit		: function()
+			{
+				return getSendUrl(URL.view, ["action=14", "id=" + viewId]);
+			},
+			getChildFromView	: function(oItem)
+			{
+				return getSendUrl(URL.view, ["action=5", "viewId=" + viewId,
+								"itemId=" + oItem.id]);
+			},
+			getChildFromNode	: function(oItem)
+			{
+				return getSendUrl(URL.view, ["action=22", "viewId=" + viewId,
+								"itemId=" + oItem.id, "regionId=" + oItem.REGION_ID]);
+			},
+			getChildFromNe		: function(oItem)
+			{
+				var neId = (oItem.ITEM_TYPE == "NE") ? oItem.id : oItem.RELATION_ID;
+				return getSendUrl(URL.ne, ["action=1", "id=" + neId]);
+			}
+		}
+	return {
+		create	: function(id)
+		{
+			viewId = id;
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendUrl = getSendUrl(URL.view,["action=21","id="+viewId]);
+			xmlhttp.Open("POST", sendUrl, false);
+			xmlhttp.send();
+			viewType = xmlhttp.responseXML.selectSingleNode('/root/Msg/VIEW_TYPE').text;
+			return this;
+		},
+		init		: function()
+		{
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendUrl = (viewType==1)?SendUrl.getSysInit():SendUrl.getCustomInit();
+			xmlhttp.Open("POST", sendUrl, false);
+			xmlhttp.send();
+			if (isSuccess(xmlhttp))
+			{
+				var oReturn = new ActiveXObject("Microsoft.XMLDOM");
+				oReturn.async = false;
+				oReturn.load(xmlhttp.responseXML);
+				return oReturn;
+			}
+		},
+		getChildXml:function(node)
+		{
+			var sendUrl;
+			/*if(node.ITEM_TYPE == "INPUT" || node.ITEM_TYPE == "FROM_DUMMY_NE")
+			{
+				if (viewType==1)
+					sendUrl = SendUrl.getChildFromNode(node);
+				else
+					sendUrl = SendUrl.getChildFromView(node);
+			}
+			// 如果是选择区域、网元类型、业务系统，展开的子节点查询的是根据自定义视图配置表配置的节点
+			else if(node.ITEM_TYPE == "FROM_REGION" || node.ITEM_TYPE == "FROM_NE_TYPE" || node.ITEM_TYPE == "FROM_BUSI")
+			{
+				sendUrl = SendUrl.getChildFromNode(node);
+			}
+			else
+			{
+				sendUrl = SendUrl.getChildFromNe(node);
+			}*/
+			sendUrl = SendUrl.getChildFromNode(node);
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			xmlhttp.Open("POST", sendUrl, false);
+			xmlhttp.send();
+			if (isSuccess(xmlhttp))
+			{
+				var oReturn = new ActiveXObject("Microsoft.XMLDOM");
+				oReturn.async = false;
+				oReturn.load(xmlhttp.responseXML);
+				return oReturn;
+			}
+		},
+		getLabel:function(id)
+		{
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var sendParams = ["action=23","id="+id];
+			var sendUrl = getSendUrl(URL.view,sendParams);
+			xmlhttp.Open("POST",sendUrl,false);
+			xmlhttp.send();
+			if(isSuccess(xmlhttp))
+			{
+				return xmlhttp.responseXML.selectSingleNode('/root/Msg/ITEM_LABEL').text;
+			}
+		}
+	}
+}();
+
+var action;
+
+function init()
+{
+	// iniXml();
+	iniUrl();
+	iniSelectedView();
+	iniXslDoc();
+	id_tree.style.width = iWidth;
+	id_ipt.value = text;
+	id_ipt.readOnly = true;
+	id_btn.attachEvent("onclick",showTree);
+	id_btn.disabled = isReadOnly;
+	defaults.viewLink = document;
+	isInit = true;
+}
+
+function showTree()
+{
+	// 创建下拉窗口对象,只创建一次
+	if(oPopup==null)
+	{
+		oPopup = window.createPopup();
+		var oPopupBody = oPopup.document.body;
+		oPopupBody.attachEvent("oncontextmenu",cancel);
+		oPopupBody.attachEvent("onselectstart",cancel);
+		oPopupBody.attachEvent("ondrag",cancel);
+		oPopupBody.style.border = '1px solid black';
+		var oDoc = oPopup.document;
+		var oFrag = oDoc.createDocumentFragment();		
+		
+		var oDiv =oDoc.createElement("div");
+		with(oDiv.style)
+		{
+			width = '100%';
+			height= '100%';
+			padding = '24 0 19 0';
+			overflow = 'hidden';
+		}
+		oFrag.appendChild(oDiv);
+		createViewDiv(oDoc,oDiv);
+		oTreeDiv =oDoc.createElement("div");
+		with(oTreeDiv.style)
+		{
+			width	= '100%';
+			height	= '100%';
+			padding = '3px 2px 2px 3px';
+			overflow= 'auto';
+			scrollbar3dLightColor = '#ABABAB';
+			scrollbarHighlightColor = '#FFFFFF';
+			scrollbarFaceColor =  '#E6E4DF';
+			scrollbarShadowColor = '#FFFFFF';
+			scrollbarDarkShadowColor = '#ABABAB';
+			scrollbarTrackColor = '#F1F1F6';
+			background = '#F7FAFD';
+		}
+		oDiv.appendChild(oTreeDiv);
+		
+		var oClearDiv =oDoc.createElement("div");
+		oClearBtn =oDoc.createElement("span");
+		oClearDiv.appendChild(oClearBtn);
+		with(oClearDiv.style)
+		{
+			position = 'absolute';
+			left = 0;
+			bottom = 0;
+			height = 19;
+			width = '100%';
+			textAlign = 'right';
+			padding = '4 5 0 0';
+			overflow = 'hidden';
+			fontSize = '9 pt';
+			color = '#284997';
+			background = '#D5EAFF';
+			zIndex = 99;
+		}
+		oClearBtn.innerHTML = getNeTreeHtcLan('oClearBtnInnerHTML');
+		oClearBtn.style.cursor = 'hand';
+		oClearBtn.onclick = function ()
+		{
+			if(element.allowClear)
+			{
+				element.value = '';
+				oPopup.hide();
+			}
+		}
+		oClearBtn.disabled = !isAllowClear;
+		oDiv.appendChild(oClearDiv);
+		oPopupBody.appendChild(oFrag);
+	}
+	if(isReload)
+	{
+		for(var i=0,o;o=viewSelect.options[i];i++)
+		{
+			if (o.value == element.view)
+			{
+				o.selected = true;
+			}
+		}
+		loadNeViewTree()
+		isReload = false;
+	}
+
+	
+	oPopup.show(0,element.offsetHeight,element.offsetWidth,treeHeight,element);
+    changeoPopupWidth(element);
+}
+
+
+function loadNeViewTree()
+{
+	var oXml = action.init();
+	if(oXml)
+	{
+		var oEvent = createEventObject();
+		oEvent.xmlDom = oXml;
+		pcID.fire(oEvent);
+		oXml = oEvent.xmlDom;
+		setXslAttribute('transformType',1,transXslDoc);
+		setXslAttribute('isShowLineInOnlyNode',false,transXslDoc);
+		setXslAttribute('showDepth',iShowDepth,transXslDoc);
+		oTreeDiv.innerHTML = oXml.transformNode(transXslDoc);
+//		debugger;
+		changeoPopupWidth(element);
+	}
+}
+
+function createViewDiv(oDoc,oDiv)
+{
+	var oViewDiv = oDoc.createElement("div");
+	with(oViewDiv.style)
+	{
+		position = 'absolute';
+		background = '#D5EAFF';
+		left = 0;
+		top = 0;
+		padding = "1 1 1 35";
+		width = '100%';
+		height = "24"
+		overflow = 'hidden';
+		zIndex = 99;
+	}
+	var titleDiv = oDoc.createElement("div");
+	with(titleDiv.style)
+	{
+		position = 'absolute';
+		zIndex = 99;
+		left = 0;
+		top = 0;
+		padding = "5 0 0 4";
+		width = '35';
+		overflow = 'hidden';
+		color= '#284997';
+		fontSize = '9pt';
+	}
+	titleDiv.innerHTML = getNeTreeHtcLan('titleDivInnerHTML');
+	oViewDiv.appendChild(titleDiv);
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	xmlhttp.Open("POST",URL.view+"action=7",false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		viewSelect = oDoc.createElement('select');
+		viewSelect.style.width = '100%';
+		var list = xmlhttp.responseXML.selectNodes('/root/ITEM');
+		for(var i=0,n,oOption,viewId;n=list[i];i++)
+		{
+			viewId = n.getAttribute("view_id");
+			oOption = oDoc.createElement("OPTION");
+			oOption.value=viewId;
+			oOption.text=n.getAttribute('label');
+			viewSelect.add(oOption);
+		}
+		var fn = function()
+		{
+			var o = viewSelect.options[viewSelect.selectedIndex];
+			element.view = o.value;
+			loadNeViewTree();
+		}
+		viewSelect.attachEvent('onchange',fn)
+		oViewDiv.appendChild(viewSelect);
+	}
+	xmlhttp.abort();
+	xmlhttp = null;
+	oDiv.appendChild(oViewDiv);
+	return viewSelect;
+}
+
+function getAttXml(id,attName)
+{
+	var sendXml = getSendXml();
+	var root = sendXml.documentElement;
+	var paramId = sendXml.createElement("param");
+	paramId.setAttribute("name","_sys_db_tree_id");
+	paramId.setAttribute("type","string");
+	paramId.setAttribute("isMultiple","0");
+	paramId.text = id;
+	root.appendChild(paramId);
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	var sendParams = ["action=3","attName="+attName];
+	var sendUrl = getSendUrl(ACTION_URL,sendParams);
+	xmlhttp.Open("POST",sendUrl,false);
+	xmlhttp.send(sendXml);
+	if(isSuccess(xmlhttp))
+	{
+		var oReturn = new ActiveXObject("Microsoft.XMLDOM");
+		oReturn.async = false;
+		oReturn.load(xmlhttp.responseXML);
+		return oReturn;
+	}
+	xmlhttp.abort();
+	xmlhttp = null;
+}
+
+function itemClick(oEvent)
+{
+    if(!getIsCheckBox())
+    {
+        var isChange = true;
+	    var tmpSelectedItem = oSelectedItem;
+	    oSelectedItem = oEvent.srcElement;
+	    if(sValue!=oSelectedItem.id)
+	    {
+		    oEvent = createEventObject();
+		    sValue = oSelectedItem.id;
+		    element.text = oSelectedItem.innerText;
+		    oEvent.selectedText = element.text;
+		    oEvent.selectedValue = element.value;
+		    oEvent.isChange = true;
+		    oEvent.type = 1;
+		    rcID.fire(oEvent);
+		    isChange = oEvent.isChange;
+	    }
+	    if(!isChange)
+	    {
+		    oSelectedItem = tmpSelectedItem;
+		    if(oSelectedItem)
+		    {
+			    sValue = oSelectedItem.id;
+			    element.text = oSelectedItem.innerText;
+		    }
+		    else
+		    {
+			    sValue = "";
+			    element.text = "";
+		    }
+	    }
+	    if(element.text != "" && getIsReParentText())
+	    {
+            element.text = getParentNeText(oSelectedItem);
+	    }
+	    oPopup.hide();
+    }
+    else
+    {
+        checkBoxLabelClick(oEvent);
+    }
+
+}
+
+//------边框大小自动改变、复选框、返回父节点名称功能------begin------------------
+
+function checkBoxClickEvent(oEvent)
+{
+    checkBoxReturn(oEvent);
+}
+
+function checkBoxLabelClick(oEvent)
+{
+    try
+    {
+        var chk = getObj(oEvent.srcElement,0);
+        if(chk.checked)
+        {
+            chk.checked = false; 
+        }
+        else
+        {
+            chk.checked = true; 
+        }
+    }
+    catch(e){}
+    checkBoxReturn(oEvent);
+}
+
+function checkBoxReturn(oEvent)
+{
+    if(oTreeDiv != null && oTreeDiv!= undefined)
+    {
+        var txtarray = new Array();
+        var valuearray = new Array();
+        var txttmp  = "";
+        var valuetmp = "";
+        var allchk = oTreeDiv.document.getElementsByName('MYCHK');
+        for (var i = 0; i < allchk.length; i++) 
+        {
+            if (allchk[i].type == "checkbox" && allchk[i].checked) 
+            {
+                txtarray.push(getObj(allchk[i],1).outerText);
+                valuearray.push(getObj(allchk[i],1).id);
+            }
+        }
+        txttmp = txtarray.join(',');
+        valuetmp = valuearray.join(',');
+        
+       	var isChange = true;
+	    var tmpSelectedItem = oSelectedItem;
+	    oSelectedItem = oEvent.srcElement;
+	     if(sValue!=valuetmp)
+	    {
+		    oEvent = createEventObject();
+		    oEvent.selectedValue = valuetmp;
+		    oEvent.selectedText = txttmp;
+            element.text = txttmp;
+            sValue = valuetmp;
+		    oEvent.type = 1;
+		    oEvent.isChange = true;
+		    rcID.fire(oEvent);
+		    isChange = oEvent.isChange;
+	    }
+	    if(!isChange)
+	    {
+		    oSelectedItem = tmpSelectedItem;
+		    if(oSelectedItem)
+		    {
+			    element.text = txttmp;
+                sValue = valuetmp;
+		    }
+		    else
+		    {
+			    sValue = "";
+			    element.text = "";
+		    }
+	    }
+	    
+    }
+
+}
+
+function initCheckBox()
+{
+    try
+    {
+        var valuetmp  = getValue();
+        if(oTreeDiv != null && oTreeDiv!= undefined)
+        {
+            for(var i= 0 ; i < valuetmp.split(',').length; i ++)
+            {
+                for(var j = 0; j < oTreeDiv.document.getElementsByTagName('NOBR').length; j ++)
+                { 
+                     if((oTreeDiv.document.getElementsByTagName('NOBR')[j].id  == valuetmp.split(',')[i]) && (oTreeDiv.document.getElementsByTagName('NOBR')[j].name == 'MYNOBR'))
+                     {
+                         getObj(oTreeDiv.document.getElementsByTagName('NOBR')[j],0).checked  = true;
+                     }
+                }
+            }
+        }
+    }
+    catch(e)
+    {}
+}
+
+//(根据XSL解析出来的树结构)
+//tag:0 MYCHK  1 MYNOBR
+function getObj(obj,tag)
+{
+    var result = null; 
+    var tmp  = "MYCHK";
+    try
+    {
+        var parentObj = obj.parentElement;
+        if(tag == 1)
+        {
+           tmp  = "MYNOBR";
+        }
+        for(var i = 0 ; i < parentObj.children.length; i ++)
+        {
+            if(parentObj.children[i].name == tmp)
+            {
+              result = parentObj.children[i];
+            }
+        }
+    }
+    catch(e){}
+    return result; 
+}
+
+
+function getParentNeText(obj)
+{
+    getItemParentValue(oSelectedItem,0);
+    result.reverse();
+    return result.join("/");
+}
+
+function getItemParentValue(obj,tag)
+{
+    if(tag ==0)
+    {
+        result = new Array();
+        result.push(obj.innerText);
+    }
+    var tmp  = "";
+    if(obj != null && obj !=undefined)
+    {
+        if(obj.parentElement != null && obj.parentElement !=undefined  )
+        {
+            if(obj.parentElement.tagName == "DIV" && obj.parentElement.type=="childNodes")
+            {
+                tmp = obj.parentElement.parentElement.children[0].innerText;
+                result.push(tmp);
+                if((obj.parentElement.parentElement.children[0].PARENT_NE_ID != "-1") && obj.PARENT_NE_ID != "-1")
+                {
+                  getItemParentValue(obj.parentElement.parentElement,1);    
+                }
+            }
+            else
+            {
+                getItemParentValue(obj.parentElement,1);
+            }
+        }
+    }
+}
+
+function changeoPopupWidth(showElement)
+{
+    var treeWidth = "";
+    var tmp = "";
+ 
+    for(var j = 0; j < oTreeDiv.getElementsByTagName('NOBR').length; j ++)
+    {
+        if(oTreeDiv.getElementsByTagName('NOBR')[j].style.display != "none")
+        {
+            if(j == 0)
+            {
+                tmp =  oTreeDiv.getElementsByTagName('NOBR')[j].offsetWidth;
+                cLevel = 0; 
+                getNodeSize(oTreeDiv.getElementsByTagName('NOBR')[j]);
+            }
+            else
+            {
+                if(tmp<oTreeDiv.getElementsByTagName('NOBR')[j].offsetWidth)
+                {
+                    tmp =   oTreeDiv.getElementsByTagName('NOBR')[j].offsetWidth;
+                    cLevel = 0; 
+                    getNodeSize(oTreeDiv.getElementsByTagName('NOBR')[j]);
+                }
+            }
+        }
+        
+    }
+    
+    //var maxWidth =450;//最大距离
+    var maxWidth=showElement.document.body.clientWidth-showElement.getBoundingClientRect().left;
+    var minWidth=showElement.offsetWidth;
+    if((tmp > minWidth) && (cLevel == 0))
+    {
+        treeWidth = tmp+70;
+    }
+    else
+    {
+        treeWidth = tmp+30*(cLevel)+70;
+    }
+    if(treeWidth <= minWidth)
+    {
+         treeWidth = minWidth;
+    }
+    if(treeWidth >= maxWidth)
+    {
+        treeWidth = maxWidth;
+    }	  
+    oPopup.show(0,showElement.offsetHeight,treeWidth,treeHeight,showElement);
+
+	if(getIsCheckBox())
+	{
+        initCheckBox();
+	}
+}
+
+
+var cLevel = 0; 
+function getNodeSize(obj)
+{
+    try
+    {
+        if(obj.parentElement != null && obj.parentElement != undefined)
+        {
+             if(obj.parentElement.tagName == "TABLE")
+            {
+                cLevel ++;
+                getNodeSize(obj.parentElement);
+            }
+            else
+            {
+                getNodeSize(obj.parentElement);
+            }
+        }
+
+    }
+    catch(e)
+    {}
+}
+
+
+//------边框大小自动改变、复选框、返回父节点名称功能------end------------------
+
+function parentNodeClick(oEvent)
+{
+	var oImg = oEvent.srcElement;
+    var oItemDiv = getElement(oImg,"div");
+    if(oItemDiv.type == 'parentNode')
+    {
+	    var oChildrenDiv = oItemDiv.nextSibling;
+        if(oChildrenDiv.style.display == "none")
+        {
+            oChildrenDiv.style.display = "";
+            changeImgSrc(oImg,0);
+        }
+        else
+        {
+            oChildrenDiv.style.display = "none";
+            changeImgSrc(oImg,1);
+        }
+	}
+	else if(oItemDiv.type == 'dynamicLoadNode')
+	{
+		var isLoad = false;
+		var oXml = action.getChildXml(oImg.nextSibling.nextSibling);
+		if(oXml)
+		{
+			setXslAttribute('transformType',2,transXslDoc);
+			setXslAttribute('isShowLineInOnlyNode',true,transXslDoc);
+			setXslAttribute('showDepth',1,transXslDoc);
+			setXslAttribute('isParentLast',(oItemDiv.isLast=='true'),transXslDoc);
+			setXslAttribute('isParentOnlyNode',(oItemDiv.isOnlyNode=='true'),transXslDoc);
+			var outHTML = oXml.transformNode(transXslDoc);
+			if(outHTML!="")
+	        {
+	        	oItemDiv.insertAdjacentHTML('afterEnd',outHTML);
+	        	isLoad = true;
+	        }
+        }
+        if(isLoad)
+	    {
+	        oItemDiv.type = 'parentNode';
+	        changeImgSrc(oImg,0);
+	    }
+	    // 无结果载入
+	    else
+	    {
+	        oItemDiv.type = 'singleNode';
+	        changeImgSrc(oImg,2);
+	    }
+	}
+	changeoPopupWidth(element);
+}
+
+function changeImgSrc(oItemImg,state)
+{
+    oItemImg.src = eval('oItemImg.src'+state);
+    oItemImg.imgType = state;
+}
+
+
+function itemOver(oEvent)
+{
+	if(oOverItem != oEvent.srcElement)
+	{
+		itemOut(oOverItem);
+		oOverItem = oEvent.srcElement;
+		oOverItem.runtimeStyle.backgroundColor = SELECTED_BACKGROUND;
+	    oOverItem.runtimeStyle.color = SELECTED_COLOR;
+	    oOverItem.runtimeStyle.border = SELECTED_BORDER;
+    }
+}
+
+function itemOut(oItem)
+{
+	if(oItem)
+	{
+		oItem.runtimeStyle.backgroundColor = '';
+	    oItem.runtimeStyle.color = '';
+	    oItem.runtimeStyle.border = '';
+	    oItem = null;
+    }
+}
+
+function cancel()
+{
+	return false;
+}
+
+function getRealPath(fileName)
+{
+	var re = /<\?IMPORT.*?IMPLEMENTATION.*?"(.*?)"/i;
+	re.exec(element.outerHTML);
+	return RegExp.$1+"/../"+fileName;
+}
+
+function iniXml()
+{
+	oParamXml = new ActiveXObject("Microsoft.XMLDOM");
+	oParamXml.async = false;
+	oParamXml.loadXML('<params>'+element.innerHTML+'</params>');
+}
+
+function iniUrl()
+{
+	for(c in URL)
+	{
+		URL[c] = getRealPath(URL[c]);
+	}
+}
+
+function iniSelectedView()
+{
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	var sendParams = ["action=17"];
+	var sendUrl = getSendUrl(URL.view,sendParams);
+	xmlhttp.Open("POST",sendUrl,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		element.view = xmlhttp.responseXML.selectSingleNode('/root/Msg/VIEW_ID').text;
+	}
+	else
+	{
+		element.view = -1;
+	}
+	xmlhttp.abort();
+	xmlhttp = null;
+}
+
+function setXslAttribute(name,value,oXslDoc)
+{
+    if(value!=null)
+    {
+        switch(value.constructor)
+        {
+            case String:
+                value = "'"+value+"'";
+                break;
+            case Boolean:
+                value = value+"()";
+                break;
+        }
+        name = '/xsl:stylesheet/xsl:variable[@name="'+name+'"]';
+        oXslDoc.selectSingleNode(name).setAttribute("select",value);
+    }
+}
+
+function setXslAttributeArray(obj,oXslDoc)
+{
+    var key
+    for(key in obj)
+    {
+    	setXslAttribute(key,obj[key],oXslDoc);
+    }
+}
+
+function iniXslDoc()
+{
+	transXslDoc = new ActiveXObject("Microsoft.XMLDOM");
+	transXslDoc.async = false;
+    transXslDoc.load(URL.xsl);
+	var handle = 'parent.'+uniqueID+'.';
+	setXslAttribute('IcoUrl',URL.ico,transXslDoc);
+    setXslAttribute('LineUrl',URL.line,transXslDoc);
+    setXslAttributeArray(TOP_LINE,transXslDoc);
+    setXslAttributeArray(BOTTOM_LINE,transXslDoc);
+    setXslAttributeArray(OTHER_LINE,transXslDoc);
+    setXslAttribute('backgroundLine',BACKGROUND_LINE,transXslDoc);
+    setXslAttribute('isShowUnDisplay',false,transXslDoc);
+    setXslAttribute('isDynamicLoad',true,transXslDoc);
+    setXslAttribute('defaultIco',defaultIco,transXslDoc);
+    setXslAttribute('defaultParentIco',defaultParentIco,transXslDoc);
+    setXslAttribute('sortAtt',sortAtt,transXslDoc);
+    setXslAttribute('parentNodeClickEvent',handle+"parentNodeClick(event)",transXslDoc);
+    setXslAttribute('itemOverEvent',handle+"itemOver(event)",transXslDoc);
+    setXslAttribute('itemOutEvent',"",transXslDoc);
+    setXslAttribute('itemClickEvent',handle+"itemClick(event)",transXslDoc);
+    setXslAttribute('itemDblClickEvent',"",transXslDoc);
+    setXslAttribute('startDragEvent',"",transXslDoc);
+    setXslAttribute('dragEvent',"",transXslDoc);
+    setXslAttribute('endDragEvent',"",transXslDoc);
+    setXslAttribute('rightClickEvent',"",transXslDoc);
+    
+    if(getIsCheckBox())
+    {
+      setXslAttribute('checkBoxClickEvent',handle+"checkBoxClickEvent(event)",transXslDoc);
+      setXslAttribute('showType',"checkbox",transXslDoc);
+    }
+    else
+    {
+        setXslAttribute('checkBoxClickEvent',"",transXslDoc);
+    }
+
+}
+
+function getBooleanAtt(value)
+{
+	return (typeof(value)=="boolean")?value:(value=="true");
+}
+
+function setWidth(_width)
+{
+	iWidth = _width;
+	id_tree.style.width = _width;
+}
+
+function getWidth()
+{
+	return iWidth;
+}
+
+function setIsReParentText(_isReParentText)
+{
+    isReParentText = getBooleanAtt(_isReParentText);
+}
+
+function getIsReParentText()
+{
+    return isReParentText;
+}
+
+
+function setIsCheckBox(_isCheckBox)
+{
+    isCheckBox = getBooleanAtt(_isCheckBox);
+}
+
+function getIsCheckBox()
+{
+    return isCheckBox;
+}
+
+function setReadOnly(_readOnly)
+{
+	isReadOnly = getBooleanAtt(_readOnly);
+	if(id_btn!=null)
+	{
+		id_btn.disabled = isReadOnly;
+	}
+}
+
+function getReadOnly()
+{
+	return isReadOnly;
+}
+
+function setValue(_value)
+{
+	var tmpValue = sValue;
+	isReload = true;
+	sValue = _value;
+	sText = "";
+    var tmp = "";
+    var texttmp = "";
+    if(sValue != null && typeof(sValue) != "undefined")
+    {
+        sValue = sValue.toString();
+        for(var i=0; i < sValue.split(',').length ; i ++)
+        { 
+            tmp  = sValue.split(',')[i];
+        	if(tmp)
+            {
+	            var t = action.getLabel(tmp);
+		        if(t)
+		        {
+			        texttmp += t+",";
+		        }
+            }
+        }
+        if(texttmp.split(',').length>1)
+	    {
+	        sText = texttmp.substring(0,texttmp.length-1);
+	    }
+
+    }
+    
+//	if(sValue)
+//	{
+//		var t = action.getLabel(sValue);
+//		if(t)
+//		{
+//			sText = t;
+//		}
+//	}
+	element.text = sText;
+	oSelectedItem = null;
+	
+	if(isInit && tmpValue != sValue)
+	{
+		oEvent = createEventObject();
+		oEvent.selectedValue = sValue;
+		oEvent.selectedText = sText;
+		oEvent.isChange = true;
+		oEvent.type = 0;
+		rcID.fire(oEvent);
+	}
+}
+
+function getView()
+{
+	return selectedView;
+}
+
+function setView(viewId)
+{
+	selectedView = viewId;
+	action = (selectedView == -1)?netTreeAction:netViewAction.create(selectedView);
+	sValue = "";
+	element.text = "";
+	oSelectedItem = null;
+}
+
+function getValue()
+{
+	return sValue;
+}
+
+
+function setText(_text)
+{
+	sText = _text;
+	if(id_ipt)
+	{
+		id_ipt.value = sText;
+	}
+}
+
+function getText()
+{
+	return sText;
+}
+
+function setSortAtt(_sortAtt)
+{
+	isReload = true;
+	sSortAtt = _sortAtt;
+	if(transXslDoc!=null)
+	{
+		setXslAttribute('sortAtt',sSortAtt,transXslDoc);
+	}
+}
+
+function getSortAtt()
+{
+	return sSortAtt;
+}
+
+function setDefaultIco(_defaultIco)
+{
+	isReload = true;
+	sDefaultIco = _defaultIco;
+	if(transXslDoc!=null)
+	{
+		setXslAttribute('defaultIco',sDefaultIco,transXslDoc);
+	}
+}
+
+function getDefaultIco()
+{
+	return sDefaultIco;
+}
+
+function setDefaultParentIco(_defaultParentIco)
+{
+	isReload = true;
+	sDefaultParentIco = _defaultParentIco;
+	if(transXslDoc!=null)
+	{
+		setXslAttribute('defaultParentIco',sDefaultParentIco,transXslDoc);
+	}
+}
+
+function getDefaultParentIco()
+{
+	return sDefaultParentIco;
+}
+
+function setShowDepth(_showDepth)
+{
+	isReload = true;
+	iShowDepth = _showDepth;
+	if(transXslDoc!=null)
+	{
+		setXslAttribute('showDepth',iShowDepth,transXslDoc);
+	}
+}
+
+function getShowDepth()
+{
+	return iShowDepth;
+}
+
+function setShowRoot(_isShowRoot)
+{
+	isReload = true;
+	isShowRoot = getBooleanAtt(_isShowRoot);
+}
+
+function getShowRoot()
+{
+	return isShowRoot;
+}
+
+function setAllowClear(_boolean)
+{
+	isAllowClear = getBooleanAtt(_boolean);
+	if(oClearBtn)
+	{
+		oClearBtn.disabled = !isAllowClear;
+	}
+}
+
+function getAllowClear()
+{
+	return isAllowClear;
+}
+
+function setParam(sName,sValue,sType,isMultiple)
+{
+	var root = oParamXml.documentElement;
+	var oParamNode = root.selectSingleNode('param[@name="'+sName+'"]');
+	if(oParamNode)
+	{
+		oParamNode.text = sValue;
+		oParamNode.setAttribute("type",sType);
+		oParamNode.setAttribute("isMultiple",isMultiple);
+	}
+	else
+	{
+		oParamNode = oParamXml.createElement('param');
+		oParamNode.text = sValue;
+		oParamNode.setAttribute("name",sName);
+		oParamNode.setAttribute("type",sType);
+		oParamNode.setAttribute("isMultiple",isMultiple);
+		root.appendChild(oParamNode);
+	}
+	isReload = true;
+}
+
+function getAttribute(name)
+{
+	var attValue = "";
+	if(oSelectedItem)
+	{
+		attValue = oSelectedItem.getAttribute(name);
+	}
+	else
+	{
+		if(element.value)
+		{
+			var oXml = getAttXml(element.value,name);
+			if(oXml && (oNode = oXml.selectSingleNode('/root/rowSet/*[0]')))
+			{
+				attValue = oNode.text;
+			}
+		}
+	}
+	return attValue;
+}
+
+function setAttribute(name,value)
+{
+	if(oSelectedItem)
+	{
+		oSelectedItem.setAttribute(name,value);
+	}
+}
+function isSelectedItem(){
+	if(oSelectedItem==null)
+		return false;
+	else
+		return true;
+}
+</SCRIPT>

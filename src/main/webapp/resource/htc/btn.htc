@@ -1,0 +1,144 @@
+<PUBLIC:COMPONENT TAGNAME="button">
+	<PUBLIC:PROPERTY NAME="value"/>
+	<PUBLIC:PROPERTY NAME="width"/>
+	<PUBLIC:PROPERTY NAME="cssUrl"/>
+	<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="btnInit()"/>
+	<PUBLIC:ATTACH EVENT="onkeydown" ONEVENT="btnKeyDown()"/>
+	<PUBLIC:ATTACH EVENT="onpropertychange" ONEVENT="btnChage()"/>
+	<PUBLIC:ATTACH EVENT="onselectstart" ONEVENT="cancel()" />
+	<PUBLIC:ATTACH EVENT="ondrag" ONEVENT="cancel()" />
+</PUBLIC:COMPONENT>
+
+<SCRIPT LANGUAGE="JScript">
+var selfName = 'btn.htc';
+var selfPath = document.URL.substring(0,document.URL.indexOf(selfName));
+var normalLeftImg = '/resource/image/btnLinit.gif';
+var normalRightImg = '/resource/image/btnRinit.gif';
+var normalBtnImg = '/resource/image/btnCinit.gif';
+
+var overLeftImg = '/resource/image/btnLover.gif';
+var overRightImg = '/resource/image/btnRover.gif';
+var overBtnImg = '/resource/image/btnCover.gif';
+
+var clickLeftImg = '/resource/image/btnLclick.gif';
+var clickRightImg = '/resource/image/btnRclick.gif';
+var clickBtnImg = '/resource/image/btnCclick.gif';
+
+var oLeftImg;
+var oBtn;
+var oRightImg;
+
+var clickEvent;
+
+function btnInit()
+{
+	if(cssUrl && !getCssPath(cssUrl)) {
+		window.document.createStyleSheet(cssUrl);
+	}
+	
+	btnCreate();
+}
+
+function btnCreate()
+{
+	element.style.height = '23px';
+	element.style.whiteSpace='nowrap';
+	element.style.verticalAlign = 'bottom';
+	element.className = "btn-element-height";
+	var html = '<span style="vertical-align: middle;height:23px;width:6;background-image: url('+ normalLeftImg +');" class="btn-normal-left"></span>'
+                + '<span style="border: 0px;height:23px;cursor: default;color: #0B333C;background-image: url('+ normalBtnImg +');text-align: center;vertical-align: middle;'
+                + 'font-family: ËÎÌו;font-size: 9pt;font-weight: normal;padding: 5px 10px 0px 10px;'
+                + 'white-space: nowrap;background-repeat:repeat-x" class="btn-normal-center">'
+                + '</span>'
+                + '<span style="vertical-align: middle;height:23px;width:6;background-image: url('+ normalRightImg +');" class="btn-normal-right"></span>';
+    element.innerHTML = html;
+    oLeftImg = element.childNodes[0];
+    oBtn = element.childNodes[1];
+    oRightImg = element.childNodes[2];
+    if(value)
+    {
+    	oBtn.innerText = value;
+    }
+    if(width)
+	{
+		oBtn.style.width = width;
+	}
+	oBtn.attachEvent("onkeydown",btnKeyDown);
+	clickEvent = element.onclick;
+	if(disabled)
+	{
+		element.onclick = null;
+	}
+	element.attachEvent("onmouseover",btnOver);
+	element.attachEvent("onmouseout",btnOut);
+	element.attachEvent("onmousedown",btnDown);
+	element.attachEvent("onmouseup",btnOut);
+}
+
+function btnKeyDown()
+{
+	if(event.keyCode==32 || event.keyCode==13)
+	{
+		element.click();
+	}
+}
+
+function btnChage()
+{
+	if(event.propertyName=="disabled")
+   	{
+		element.onclick = (disabled)?null:clickEvent;
+   	}
+	if(event.propertyName=="value")
+   	{
+		oBtn.innerText = value;
+   	}
+}
+
+function btnOver()
+{
+	if(!disabled)
+	{
+		oLeftImg.style.backgroundImage = "url(" + overLeftImg + ")";
+		oRightImg.style.backgroundImage = "url(" + overRightImg + ")";
+		oBtn.style.backgroundImage = "url(" + overBtnImg + ")";
+
+		oLeftImg.className = "btn-over-left";
+		oRightImg.className = "btn-over-right";
+		oBtn.className = "btn-over-center";
+	}
+}
+
+function btnOut()
+{
+	if(!disabled)
+	{
+		oLeftImg.style.backgroundImage = "url(" + normalLeftImg + ")";
+		oRightImg.style.backgroundImage = "url(" + normalRightImg + ")";
+		oBtn.style.backgroundImage = "url(" + normalBtnImg + ")";
+	
+		oLeftImg.className = "btn-normal-left";
+		oRightImg.className = "btn-normal-right";
+		oBtn.className = "btn-normal-center";
+	}
+}
+
+function btnDown()
+{
+	if(!disabled)
+	{
+		oLeftImg.style.backgroundImage = "url(" + clickLeftImg + ")";
+		oRightImg.style.backgroundImage = "url(" + clickRightImg + ")";
+		oBtn.style.backgroundImage = "url(" + clickBtnImg + ")";
+
+		oLeftImg.className = "btn-click-left";
+		oRightImg.className = "btn-click-right";
+		oBtn.className = "btn-click-center";
+	}
+}
+
+function cancel()
+{
+	event.returnValue = false;
+}
+</SCRIPT>

@@ -1,0 +1,51 @@
+.padding_2{padding:2px;}
+
+.text_center{text-align:center;}
+
+.tableDiv{
+  overflow: hidden;
+}
+
+.tableDivBorder{
+  border-left:1px solid #a4cdef;
+  border-right:1px solid #a4cdef;
+  border-bottom:1px solid #a4cdef;
+  border-top:0px;
+}
+.tableDiv TABLE, .tablediv TABLE
+{
+	highlightBackgroundColor: transparent;
+	highlightBorderColor: transparent;
+	color: windowtext;
+	border-collapse: collapse;
+}
+
+.evlTr
+{
+	background-color : #cccccc;
+}
+
+.tableDiv TABLE TBODY TD, .tablediv TABLE TBODY TD
+{
+	white-space: nowrap;
+	cursor:hand;
+	padding: 3px 5px;
+	margin: 0px;
+	border:1px solid #E9E9E9;
+	line-height:17px;
+}
+.evlTypeName{font-size:16px;font-weight:bold;color:#EA7500;}
+.evlTypeSuffix{font-size:14px;font-weight:bold;color:#009100;}
+.mapEvlTypeSuffix{font-size:14px;color:#009100;}
+.cursor_hand{cursor:hand;padding:0px 5px;}
+.font_20{font-size:20px;}
+.font_18{font-size:18px;}
+.font_16{font-size:16px;}
+.state_li{float:left;text-align:center;}
+/*.nowrap_td {white-space:nowrap;}*/
+.imgTabSelect{width:80px;border:1px solid #a4cdef;text-align:center;cursor:hand;}
+.imgTabDef{width:80px;border:0px solid #a4cdef;text-align:center;cursor:hand;}
+
+.tabTd1{border-bottom:1px solid #a4cdef;}
+.tabTd2{border-bottom:0px;}
+.tabTd3{text-align:center;}

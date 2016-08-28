@@ -1,0 +1,218 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<style>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@import url(../../css/DatePicker.css);
+@media all
+{
+  IE\:button{behavior:    url(../../htc/btn.htc);}
+  IE\:tree{behavior:    url(../../htc/tree.htc);}
+  IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+}
+.required{color:red;}
+.TreeDIV
+{
+	WIDTH:300px;HEIGHT:400px;OVERFLOW: scroll;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+}
+.TreeDIV SELECT{margin:-2px;}
+body{margin:10px 8px 0px 8px;}
+</style>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../stringUtil.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<title>表格列配置</title>
+</head>
+<body onUnload="winClose()" onLoad="iniPage()" oncontextmenu = "return false;">
+<table>
+	<tr>
+		<td>
+		<table border="0" cellpadding="0" cellspacing="0"
+			style="margin-top:6px">
+			<TR>
+				<TD background="../../image/dashed.gif"></TD>
+			</TR>
+
+			<TR>
+				<TD colspan=2>
+				<table border="0" cellpadding="0" cellspacing="0"
+					style="margin-top:16px">
+					<tr>
+						<td>可选列项：<br>&nbsp;<div id="neTreeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;"></div></td>
+						<td>
+						<table>
+							<tr id="addAllConfig">
+								<td align="center"><IE:button value=">>" width="30" onclick="addAll(configTarget,true)"/></td>
+							</tr>
+							<tr>
+								<td align="center"><div><IE:button value=">" width="30"
+									onclick="addSelected(configTarget,true)"
+									id="addOneConfig" /></div></td>
+							</tr>
+							<tr>
+								<td align="center"><div><IE:button value="<" width="30" onclick="javascript:configTarget.getObject().size--;configTarget.delSelectedOption();" id="delOneNe"/></div></td>
+							</tr>
+							<tr id="delAllConfig" >
+								<td align="center"><IE:button value="<<" width="30" onclick="javascript:configTarget.getObject().size=20;configTarget.delAllOption()"/></td>
+							</tr>
+						</table>
+						</td>
+						<td>已选列项：<br><br>&nbsp;<IE:XmlSelect id="configTarget" width="1500px" size="100" onOptionDblClick="delOneNe.click()" class='TreeDIV'/></td>						
+					</tr>
+				</table>
+				</TD>
+			</TR>
+
+		</table>
+		</td>
+	</tr>
+	<TR>
+		<TD background="../../image/dashed.gif" colspan="2"></TD>
+	</TR>
+</table>
+<div style="margin-top:10px;text-align:right">
+    <IE:button value="确&nbsp;&nbsp;定" onclick="enter()" />&nbsp; 
+	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />&nbsp;&nbsp;</div>
+<script>
+var neTree;//树对象
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var httpUrl = "../../../servlet/perManagerServlet?";
+var param;
+var neId;
+//页面初始化
+function iniPage(){
+	//父窗口传进参数
+    var dialogArgObj = window.dialogArguments;
+    neId = dialogArgObj.neId;
+    configTarget.getObject().length = 0;
+    configTarget.getObject().style.display="none";
+    if(dialogArgObj!=null)
+    {
+        var value = dialogArgObj.value;
+        var name = dialogArgObj.name;        
+		var values=value.split(",");
+		var names=name.split(",");
+		var object = document.getElementById("configTarget").getObject();
+		for(var i=0;i<values.length;i++)
+		{
+			if(values[i]!=null && values[i]!="")
+			{
+				object.style.display="block";
+				object.length++;
+				object.size++;
+				object.options[i].value = values[i];
+				object.options[i].text = names[i];
+			}
+		}
+		if(object.size<25)object.size=25;
+    }
+	
+	//初始化网元树
+	neTree = new XMLTree();	
+	neTree.xmlUrl = httpUrl+"tag=31&flag=10&id="+neId;
+	neTree.isRightFireOnClick = false;
+	neTree.setDblClickAction(new DblClickAction());
+	neTree.showAt(neTreeDiv);
+}
+//双击事件
+function DblClickAction()
+{
+	this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		document.getElementById("addOneConfig").click();
+	}
+	return this.parent;
+}
+
+function addSelected(oTargetSelect,isOnly)
+{
+	var oItem = neTree.getSelectedItem();
+	if(!oItem)return;
+	if (oItem.id==neId)
+	{
+		alert("不能选择根节点"+oItem.innerText+"!");
+		return false;
+	}	
+	var oTarget = oTargetSelect.getObject();
+	
+	var oSelect = document.getElementById("configTarget").getObject();
+	var flag=0;
+	for(var i=0;i<oSelect.options.length;i++)
+	{
+		if(oSelect.options[i].value==oItem.id)
+			flag=1;
+	}
+	if(flag==0){
+		oSelect.style.display="block";
+		oSelect.size++;
+		var oOption = document.createElement("OPTION");
+		oOption.text = oItem.innerText;
+		oOption.value = oItem.id;
+		oSelect.parentElement.fireMoveOptionIn(oOption);
+		oSelect.add(oOption);
+		if(oSelect.options.length<25)oSelect.size=25;
+	}
+}
+function addAll(oTargetSelect, isOnly){
+	var treeXml = neTree._treeDoc.xml;
+	var doc = new ActiveXObject("Microsoft.XMLDOM");
+	doc.async = false;
+	doc.loadXML(treeXml);
+	var nodeList = doc.selectNodes("//MenuItem");
+	oTargetSelect.delAllOption();
+	var oSelect = oTargetSelect.getObject();
+	for(var i=0; i<nodeList.length; i++){	
+		var node = nodeList[i];
+		if(node.getAttribute("LEVEL") != 1){
+			oSelect.style.display="block";
+			var oOption = document.createElement("OPTION");
+			oOption.text = node.getAttribute("label");
+			oOption.value = node.getAttribute("id");
+			oSelect.parentElement.fireMoveOptionIn(oOption);
+			oSelect.size++;
+			oSelect.add(oOption);
+		}
+	}
+	if(oSelect.options.length<25)oSelect.size=25;	
+}
+
+//关闭窗口
+function winClose()
+{
+	window.returnValue = param;
+}
+//确认返回
+function enter(){
+	//返回函数
+	var params = new Object();
+	var confOptions = configTarget.getObject().options;
+    var confList = "";
+    var confListName = "";
+	for (var i = 0; i<confOptions.length; i++){
+		confList += confOptions[i].value + ",";
+		confListName += confOptions[i].text + ",";
+	}
+
+	if(confList.lastIndexOf(",")==confList.length-1)
+	{
+		confList = confList.substring(confList,confList.length-1);
+		confListName = confListName.substring(confListName,confListName.length-1);
+	}
+
+	param = new Object();
+	param.value=confList;
+	param.name=confListName;
+
+	window.close();
+    	
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb18030">
+<title>测试ToolBar</title>
+</head>
+<SCRIPT src="../js/Common.js"></SCRIPT>
+<SCRIPT src="../js/Error.js"></SCRIPT>
+<?IMPORT namespace="IE" implementation="toolBar.htc" />
+<?IMPORT namespace="IE" implementation="calendarInput.htc">
+<link rel="stylesheet" type="text/css" href="../css/default.css" />
+<link rel="stylesheet" type="text/css" href="../css/jtitsm/toolBar.css" />
+<body>
+	<IE:bar id="bar">
+		<bar:input label="<B style='font-size:15px'>【问题管理】</B>当前环节：问题分析" ico="region.gif"/>
+		<bar:input label="支撑热线" align="right" style="margin-left:15px"/>
+		<bar:item label="处理" />
+		<bar:item label="关联" ico="region.gif" disabled/>
+		<bar:item label="打印1" ico="region.gif" align="right"/>
+		<bar:item label="<b style='color:red'>打印2</b>" align="right"/>
+		<bar:item label="打印3" align="left">
+			<bar:item label="打印4" align="right">
+				<bar:item label="关联" ico="region.gif" disabled/>
+			</bar:item>
+		</bar:item>
+		<bar:item label="打印4" align="right"/>
+		<bar:line/>
+		<bar:item label="保存" onClick="alert('保存')">
+			<bar:item label="打印" ico="region.gif"/>
+		</bar:item>
+		<bar:btn label="查询"/>
+		<bar:item label="打印" ico="region.gif"/>
+	</IE:bar>
+	
+<script>
+	//alert(bar.getHeight());
+</script>
+</body>
+</html>

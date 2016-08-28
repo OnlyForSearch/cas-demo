@@ -1,0 +1,135 @@
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<style>
+@import url(../../../../resource/css/default.css);
+@import url(../../../../resource/css/btn.css);
+@media all
+{
+   IE\:button{behavior:    url(../../../../resource/htc/btn.htc);}
+}
+.xmlTable
+{
+	behavior:url(../../../../resource/htc/table.htc);
+	cursor:hand;
+}
+.required
+{
+color:red;
+}
+</style>
+
+<TITLE>图像上传</TITLE>
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript">
+var objTag={}
+</script>
+<body onLoad="iniPage()">
+<form action="" method="post" enctype="multipart/form-data" name="uploadForm"  TARGET="documentInfo" style="margin-left:10px">
+<TABLE width="434" border="0" cellspacing="0" cellpadding="0" align="center">
+	<TR>
+		<TD width="16"><IMG src="../../../../resource/image/form_1.gif" width="16" height="16"></TD>
+		<TD width="402" background="../../../../resource/image/form_3.gif">&nbsp;</TD>
+		<TD width="16"><IMG src="../../../../resource/image/form_4.gif" width="16" height="16"></TD>
+	</TR>
+	<TR>
+		<TD background="../../../../resource/image/form_2.gif">&nbsp;</TD>
+		<TD background="../../../../resource/image/form_9.gif"><TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
+    	<TR>
+    		<TD width="16" height="28"><IMG src="../../../../resource/image/form_title_item.gif" width="10" height="10"></TD>
+    		<TD colspan="5"><DIV class="form_title">图像上传</DIV></TD>
+    	</TR>
+		<TR>
+    		<TD height="1"></TD>
+    		<TD colspan="5" background="../../../../resource/image/dashed.gif"></TD>
+    	</TR>
+    	<TR>
+    		<TD height="30">&nbsp;</TD>
+    		<TD><IMG src="../../../../resource/image/form_cell_item.gif" width="6" height="6"></TD>
+    		<TD class="form_cell">上传图片:</TD>
+    		<TD> <input type="file" style="width:100% " name="uploadFile"></TD>
+    		<TD class="required">*</TD>
+    	    <TD>&nbsp;</TD>
+    	</TR>
+		<TR>
+    		<TD height="1"></TD>
+    		<TD colspan="5" background="../../resource/image/dashed.gif"></TD>
+    	</TR>
+    	</TABLE>
+		<div style="margin-top:10px;text-align:center">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="enter()" />&nbsp;
+			<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()"/>
+		</div>
+       	</TD>
+		<TD background="../../../../resource/image/form_5.gif">&nbsp;</TD>
+	</TR>
+	<TR>
+		<TD><IMG src="../../../../resource/image/form_6.gif" width="16" height="14"></TD>
+		<TD background="../../../../resource/image/form_7.gif">&nbsp;</TD>
+		<TD><IMG src="../../../../resource/image/form_8.gif" width="16" height="14"></TD>
+	</TR>
+</TABLE>
+</form>
+<form name="theForm" style="display:none"><table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="1">
+      <tr valign="bottom">
+        <td height="25" id=tdTitle></td>
+      </tr>
+	        <tr>
+        <td height="6"><img src="../images/horizontal.gif" width="100%" height="6"></td>
+      </tr>
+      <tr>
+        <td valign="top" id="tdAttributeElements"></td>
+        </tr>
+    </table></form>
+<iframe name="documentInfo" onload="" style="display:none"></iframe>
+<SCRIPT language="javascript">
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var actionURL = '../../../../servlet/EditorAttach?';
+var workInfo="ok";
+
+function iniPage()
+{
+	initDialog();
+	initDocument();
+	document.all.documentInfo.attachEvent('onload',afterUpload);
+}
+
+function afterUpload()
+{
+  try{
+    if(document.readyState=="complete")
+    {
+      var xmlDom = window.frames["documentInfo"].document.XMLDocument;
+      if(xmlDom==null) return;
+      var errCode = xmlDom.selectSingleNode("/root/error_code");
+      if(errCode==null || errCode.text != 0)
+      {
+         EMsg(xmlDom.selectSingleNode("/root/error_msg").text);
+      }
+      else
+      {
+        alert("添加成功!");
+		var path = xmlDom.selectSingleNode("/root/path");
+		var html='<img src='+path.text+'>';
+		myEditor.window.insert(html);
+        window.returnValue = true;
+        window.close();
+      }
+    }
+  }catch(e){}
+}
+function enter()
+{
+	var fileName="";
+	if(document.all.uploadFile.value!=null || document.all.uploadFile.value!="")
+		fileName=document.all.uploadFile.value;
+	document.all.uploadForm.action = actionURL+'fileName='+encodeURIComponent(fileName);
+	document.uploadForm.submit();
+}
+</SCRIPT>
+</body>
+</html>

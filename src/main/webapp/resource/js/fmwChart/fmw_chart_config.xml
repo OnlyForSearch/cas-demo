@@ -1,0 +1,1524 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+
+<properties>
+
+  <!--
+     ****************************************************************************
+     ****************************************************************************
+      模板设置
+     ****************************************************************************
+     ****************************************************************************
+  -->
+  <category name="template" description="模板设置">
+    
+    <category name="线图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwLineChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">10</TopMargin>
+        <BottomMargin           description="底部边距">10</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="lineLayer" description="线图图层属性">
+        <!-- 其他属性 -->
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Symbol                 description="符号">FmwChart.Symbol.Square</Symbol>
+          <SymbolSize             description="符号大小">8</SymbolSize>
+        </category>
+        <category name="dataSet2" description="XY图层数据集属性">
+          <Symbol                 description="符号">FmwChart.Symbol.Diamond</Symbol>
+          <SymbolSize             description="符号大小">11</SymbolSize>
+        </category>
+        <category name="dataSet3" description="XY图层数据集属性">
+          <Symbol                 description="符号">FmwChart.Symbol.TriangleInverted</Symbol>
+          <SymbolSize             description="符号大小">11</SymbolSize>
+        </category>
+      </category>
+      
+      <category name="scatterLayer" description="散点图层属性">
+        <!-- 其他属性 -->
+        <LegendMode             description="图例显示模式">FmwChart.LegendMode.NoLegend</LegendMode>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+          <SymbolSize             description="符号大小">16</SymbolSize>
+          <SymbolFillColor        description="符号线宽">0xd0ff0000</SymbolFillColor>
+          <SymbolEdgeColor        description="符号边缘色">0xff0000</SymbolEdgeColor>
+          <SymbolLineWidth        description="符号线宽">2</SymbolLineWidth>
+        </category>
+        <category name="dataSet2" description="XY图层数据集属性">
+          <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+          <SymbolSize             description="符号大小">16</SymbolSize>
+          <SymbolFillColor        description="符号线宽">0xd000ff00</SymbolFillColor>
+          <SymbolEdgeColor        description="符号边缘色">0x00ff00</SymbolEdgeColor>
+          <SymbolLineWidth        description="符号线宽">2</SymbolLineWidth>
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-线形图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">LineLayer</Layer>
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.Square</Symbol>
+              <SymbolSize             description="符号大小">8</SymbolSize>
+            </category>
+            <category name="dataSet2" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">2</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.Diamond</Symbol>
+              <SymbolSize             description="符号大小">11</SymbolSize>
+            </category>
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.TriangleInverted</Symbol>
+              <SymbolSize             description="符号大小">11</SymbolSize>
+            </category>
+          </category>
+        </category>
+        
+        <category name="2-散点图层" description="图层名称">
+          <Layer                    description="(必须)图层类型">ScatterLayer</Layer>
+          <category name="dataSet" description="创建图层的数据">
+            <!-- <Col                   description="第几列数据">0, 1</Col> -->
+            <category name="data1" description="(必须)数据">
+              <Col                    description="第几列数据">0</Col>
+            </category>
+            <category name="data2" description="(必须)数据">
+              <Method                 description="方法">FmwChart.Data.getOuterLowerScopeData</Method>
+              <Types                  description="类型">double[], double[], double</Types>
+              <Params                 description="数据">1, 2, 0.05</Params>
+            </category>
+            <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+            <SymbolSize             description="符号大小">16</SymbolSize>
+            <SymbolFillColor        description="符号线宽">0xd0ff0000</SymbolFillColor>
+            <SymbolEdgeColor        description="符号边缘色">0xff0000</SymbolEdgeColor>
+            <SymbolLineWidth        description="符号线宽">2</SymbolLineWidth>
+          </category>
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                     description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Method                 description="方法">FmwChart.Data.getOuterUpperScopeData</Method>
+                <Types                  description="类型">double[], double[], double</Types>
+                <Params                 description="数据">1, 2, 0.05</Params>
+              </category>
+              <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+              <SymbolSize             description="符号大小">16</SymbolSize>
+              <SymbolFillColor        description="符号线宽">0xd000ff00</SymbolFillColor>
+              <SymbolEdgeColor        description="符号边缘色">0x00ff00</SymbolEdgeColor>
+              <SymbolLineWidth        description="符号线宽">3</SymbolLineWidth>
+            </category>
+          </category>
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="区域图1" description="模板名称">
+      <class description="图形类的名称">com.ffcs.fmw.chart.xy.FmwAreaChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">10</TopMargin>
+        <BottomMargin           description="底部边距">10</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="areaLayer" description="区域图层属性">
+        <!-- 其他属性，参考"XY图1"中的"xyLayer"设置 -->
+        
+        <GapColor               description="无值区颜色">0xff000000</GapColor>
+        <MinLabelSize           description="最小的标签宽度(小于该宽度则不显示)">-1</MinLabelSize>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Name                 description="名称"></Name>
+          <DataColor            description="颜色">-1</DataColor>
+          <EdgeColor            description="边缘颜色">-65535</EdgeColor>
+          <ShadowColor          description="阴影颜色">-1</ShadowColor>
+          <ShadowEdgeColor      description="阴影边缘颜色">-1</ShadowEdgeColor>
+          
+          <Symbol               description="符号">4</Symbol>
+          <SymbolSize           description="符号大小">5</SymbolSize>
+          <SymbolFillColor      description="符号填充色">-1</SymbolFillColor>
+          <SymbolEdgeColor      description="符号边缘色">-1</SymbolEdgeColor>
+          <SymbolLineWidth      description="符号线宽">1</SymbolLineWidth>
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-区域图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">AreaLayer</Layer>
+          
+          <!-- 其他属性，参考"areaLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet2" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Col                    description="第几列数据">2</Col>
+              </category>
+              <Name                   description="名称">硬件</Name>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Method                 description="方法">FmwChart.Data.getOuterLowerScopeData</Method>
+                <Types                  description="类型">double[], double[], double</Types>
+                <Params                 description="数据">1, 2, 0.05</Params>
+              </category>
+              <Name                   description="名称">服务</Name>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="柱形图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwBarChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="barLayer" description="区域图层属性">
+        <!-- 其他属性，参考"XY图1"中的"xyLayer"设置 -->
+        
+        <Shape                  description="柱形状">0</Shape>
+        <BarGap                 description="柱间距">0.25</BarGap>
+        <SubBarGap              description="子柱间距">0.20000000000000001</SubBarGap>
+        <!-- BarWidth               description="柱宽">0</BarWidth>
+        <SubBarWidth            description="子柱宽">0</SubBarWidth -->
+        <IconHeight             description="图标大小-高(10)">-1</IconHeight>
+        <IconWidth              description="图标大小-宽(10)">-1</IconWidth>
+        <MinLabelSize           description="最小的标签宽度(小于该宽度则不显示)">-1</MinLabelSize>
+        <OverlapRatio           description="重叠率">-0.20000000000000001</OverlapRatio>
+        <IsFirstOnTop           description="是否默认前一组数据置前">true</IsFirstOnTop>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Name                 description="名称"></Name>
+          <DataColor            description="颜色">-1</DataColor>
+          <EdgeColor            description="边缘颜色">-65535</EdgeColor>
+          <ShadowColor          description="阴影颜色">-1</ShadowColor>
+          <ShadowEdgeColor      description="阴影边缘颜色">-1</ShadowEdgeColor>
+          
+          <Symbol               description="符号">4</Symbol>
+          <SymbolSize           description="符号大小">5</SymbolSize>
+          <SymbolFillColor      description="符号填充色">-1</SymbolFillColor>
+          <SymbolEdgeColor      description="符号边缘色">-1</SymbolEdgeColor>
+          <SymbolLineWidth      description="符号线宽">1</SymbolLineWidth>
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-柱形图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">BarLayer</Layer>
+          
+          <!-- 其他属性，参考"barLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet2" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Col                    description="第几列数据">2</Col>
+              </category>
+              <Name                   description="名称">硬件</Name>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Method                 description="方法">FmwChart.Data.getOuterLowerScopeData</Method>
+                <Types                  description="类型">double[], double[], double</Types>
+                <Params                 description="数据">1, 2, 0.05</Params>
+              </category>
+              <Name                   description="名称">服务</Name>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="触须图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwBoxWhiskerChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="boxWhiskerLayer" description="区域图层属性">
+        <!-- 参考"箱形图1"中的"boxLayer"设置 -->
+        
+        <FillColor              description="箱的填充色">-1</FillColor>
+        <WhiskerColor           description="箱的触须色">-65535</WhiskerColor>
+        <EdgeColor              description="箱的边缘色">-65535</EdgeColor>
+        <MaxLineColor           description="箱的最大线颜色">-1</MaxLineColor>
+        <MinLineColor           description="箱的最小线颜色">-1</MinLineColor>
+        <MedLineColor           description="箱的中间线颜色">-1</MedLineColor>
+        <WhiskerBrightness      description="箱的触须亮度">0.5</WhiskerBrightness>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Name                 description="名称"></Name>
+          <DataColor            description="颜色">-1</DataColor>
+          <EdgeColor            description="边缘颜色">-65535</EdgeColor>
+          <ShadowColor          description="阴影颜色">-1</ShadowColor>
+          <ShadowEdgeColor      description="阴影边缘颜色">-1</ShadowEdgeColor>
+          
+          <Symbol               description="符号">4</Symbol>
+          <SymbolSize           description="符号大小">5</SymbolSize>
+          <SymbolFillColor      description="符号填充色">-1</SymbolFillColor>
+          <SymbolEdgeColor      description="符号边缘色">-1</SymbolEdgeColor>
+          <SymbolLineWidth      description="符号线宽">1</SymbolLineWidth>
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-触须图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">BoxWhiskerLayer</Layer>
+          
+          <category name="dataSet" description="创建图层的数据">
+            <!-- <Col                   description="第几列数据">1, 2</Col> -->
+            <category name="data1" description="(必须)箱的上端数据">
+              <Col                    description="(必须)第几列数据">1</Col>
+            </category>
+            <category name="data2" description="(必须)箱的下端数据">
+              <Col                    description="(必须)第几列数据">2</Col>
+            </category>
+            <category name="data3" description="(必须)箱颜色 (填充色和触须色)">
+              <Type                   description="(必须)类型">int</Type>
+              <Value                  description="(必须)值">0x00ff00</Value>
+            </category>
+            <category name="data4" description="(必须)数据集名称">
+              <Type                   description="(必须)类型">String</Type>
+              <Value                  description="(必须)值">触须</Value>
+            </category>
+            <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+          </category>
+          
+          <!-- 其他属性，参考"boxWhiskerLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="交叉线图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwInterLineChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="interLineLayer" description="区域图层属性">
+        <!-- 参考"XY图1"中的"xyLayer"设置 -->
+        
+        <GapUpperColor          description="基准线的上方颜色">-1</GapUpperColor>
+        <GapLowerColor          description="基准线的下方颜色">-1</GapLowerColor>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Name                 description="名称"></Name>
+          <DataColor            description="颜色">-1</DataColor>
+          <EdgeColor            description="边缘颜色">-65535</EdgeColor>
+          <ShadowColor          description="阴影颜色">-1</ShadowColor>
+          <ShadowEdgeColor      description="阴影边缘颜色">-1</ShadowEdgeColor>
+          
+          <Symbol               description="符号">4</Symbol>
+          <SymbolSize           description="符号大小">5</SymbolSize>
+          <SymbolFillColor      description="符号填充色">-1</SymbolFillColor>
+          <SymbolEdgeColor      description="符号边缘色">-1</SymbolEdgeColor>
+          <SymbolLineWidth      description="符号线宽">1</SymbolLineWidth>
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-交叉线图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">InterLineLayer</Layer>
+          
+          <category name="dataSet" description="创建图层的数据">
+            <!-- <Col                   description="(必须)第几列数据">1, 2</Col> -->
+            <category name="data1" description="(必须)浮动线">
+              <Type                   description="(必须)类型">double[]</Type>
+              <Value                  description="(必须)值">0</Value>
+            </category>
+            <category name="data2" description="(必须)浮动线">
+              <Col                    description="(必须)第几列数据">1</Col>
+            </category>
+            <category name="data3" description="(必须)基准线">
+              <Col                    description="(必须)第几列数据">2</Col>
+            </category>
+            <category name="data4" description="(必须)线间颜色">
+              <Type                   description="(必须)类型">int</Type>
+              <Value                  description="(必须)值">0x8000ff00</Value>
+            </category>
+            <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+          </category>
+          
+          <!-- 其他属性，参考"interLineLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="趋势图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwTrendChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="trendLayer" description="区域图层属性">
+        <!-- 参考"XY图1"中的"xyLayer"设置 -->
+        
+        <ImageMapWidth          description="热点区宽度">5</ImageMapWidth>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <!-- 参考"XY图1"中的"xyLayer"中的"dataSet1"设置 -->
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-趋势图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">TrendLayer</Layer>
+          
+          <category name="dataSet" description="创建图层的数据">
+            <!-- <Col                   description="(必须)第几列数据">1, 2</Col> -->
+            <category name="data1" description="(必须)浮动线">
+              <Col                    description="(必须)第几列数据">1</Col>
+            </category>
+            <category name="data2" description="(必须)线间颜色">
+              <Type                   description="(必须)类型">String</Type>
+              <Value                  description="(必须)值">趋势</Value>
+            </category>
+            <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+          </category>
+          
+          <!-- 其他属性，参考"trendLayer"设置 -->
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="线图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwLineChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="lineLayer" description="区域图层属性">
+        <!-- 参考"XY图1"中的"xyLayer"设置 -->
+        
+        <LineGapColor           description="断线间颜色">0xff000000</LineGapColor>
+        <LineGapWidth           description="断线的宽度">-1</LineGapWidth>
+        <ImageMapWidth          description="热点区宽度">5</ImageMapWidth>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <!-- 参考"XY图1"中的"xyLayer"中的"dataSet1"设置 -->
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-线形图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">LineLayer</Layer>
+          
+          <!-- 其他属性，参考"trendLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet2" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">2</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="散点图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwScatterChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="scatterLayer" description="区域图层属性">
+        <LegendMode             description="图例显示模式">FmwChart.LegendMode.NoLegend</LegendMode>
+        <!-- 参考"线图1"中的"lineLayer"设置 -->
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <!-- 参考"XY图1"中的"xyLayer"中的"dataSet1"设置 -->
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-散点图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">ScatterLayer</Layer>
+          
+          <category name="dataSet" description="创建图层的数据">
+            <!-- <Col                   description="(必须)第几列数据">0, 1</Col> -->
+            <category name="data1" description="(必须)数据">
+              <Col                    description="(必须)第几列数据">0</Col>
+            </category>
+            <category name="data2" description="(必须)数据">
+              <Method                 description="方法">FmwChart.Data.getOuterLowerScopeData</Method>
+              <Types                  description="类型">double[], double[], double</Types>
+              <Params                 description="数据">1, 2, 0.05</Params>
+            </category>
+            <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+            <SymbolSize             description="符号大小">16</SymbolSize>
+            <SymbolFillColor        description="符号线宽">0xd0ff0000</SymbolFillColor>
+            <SymbolEdgeColor        description="符号边缘色">0xff0000</SymbolEdgeColor>
+            <SymbolLineWidth        description="符号线宽">2</SymbolLineWidth>
+          </category>
+          
+          <!-- 其他属性，参考"scatterLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <category name="data" description="(必须)数据">
+                <Method                 description="方法">FmwChart.Data.getOuterUpperScopeData</Method>
+                <Types                  description="类型">double[], double[], double</Types>
+                <Params                 description="数据">1, 2, 0.05</Params>
+              </category>
+              <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+              <SymbolSize             description="符号大小">16</SymbolSize>
+              <SymbolFillColor        description="符号线宽">0xd000ff00</SymbolFillColor>
+              <SymbolEdgeColor        description="符号边缘色">0x00ff00</SymbolEdgeColor>
+              <SymbolLineWidth        description="符号线宽">3</SymbolLineWidth>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+              <SymbolSize             description="符号大小">10</SymbolSize>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    <category name="散点图2" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwScatterChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">900</Width>
+        <Height                   description="框架的高度">400</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="title" description="标题">
+        <Name                     description="(必须)名称">　　计算机行业的税收情况</Name>
+        
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+        <FontFamily               description="字体">黑体 Bold</FontFamily>
+        <FontSize                 description="字体大小-高">14</FontSize>
+      </category>
+      
+      <category name="text1" description="横线">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">20</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">25</Y>
+        <Name                     description="(必须)名称">&lt;*block,bgColor=80FF0000,width=850,height=5*&gt;  &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="text2" description="FFCS版权">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2008 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="text3" description="X轴箭头名称">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">400</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">368</Y>
+        <Name                     description="(必须)名称">时间轴</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="text4" description="Y轴箭头名称">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">32</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">160</Y>
+        <Name                     description="(必须)名称">税&lt;*br*&gt;收&lt;*br*&gt;情&lt;*br*&gt;况</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="plotArea" description="图区">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">100</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">60</Y>
+        <Width                  description="(必须)图区宽度">740</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <EdgeColor              description="边缘色">FmwChart.Color.Transparent</EdgeColor>
+        <HGridColor             description="水平网格线颜色">FmwChart.Color.Transparent</HGridColor>
+        <VGridColor             description="垂直网格线颜色">FmwChart.Color.Transparent</VGridColor>
+      </category>
+      
+      <category name="axis1" description="X轴，置中，错开刻度">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <X                      description="X轴，相对“坐标原点”位置(图坐标)">0</X>
+        <Y                      description="Y轴，相对“坐标原点”位置(图坐标)">-130</Y>
+        <LabelGap               description="标签间距">130</LabelGap>
+        
+        <Title                  description="标题">&lt;*img=arrow_right.png*&gt;</Title>
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">10</TopMargin>
+        <BottomMargin           description="底部边距">10</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="Y轴，置中，错开刻度">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <X                      description="X轴，相对“坐标原点”位置(图坐标)">370</X>
+        <Y                      description="Y轴，相对“坐标原点”位置(图坐标)">0</Y>
+        <LabelGap               description="标签间距">370</LabelGap>
+        
+        <Title                  description="标题">&lt;*img=arrow_up.png*&gt;</Title>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="scatterLayer" description="散点图层样式">
+        <LegendMode             description="图例显示模式">FmwChart.LegendMode.NoLegend</LegendMode>
+        <DataLabelName          description="数据标签">{field0} {value|2}</DataLabelName>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <Symbol               description="符号">FmwChart.Symbol.Circle</Symbol>
+          <SymbolSize           description="符号大小">5</SymbolSize>
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="滑线图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwSplineChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="splineLayer" description="区域图层属性">
+        <!-- 参考"线图1"中的"lineLayer"设置 -->
+        
+        <Tension                description="松紧度">0.0</Tension>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <!-- 参考"XY图1"中的"xyLayer"中的"dataSet1"设置 -->
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-滑线图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">SplineLayer</Layer>
+          
+          <!-- 其他属性，参考"scatterLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+              <SymbolSize             description="符号大小">16</SymbolSize>
+              <SymbolFillColor        description="符号线宽">0xd000ff00</SymbolFillColor>
+              <SymbolEdgeColor        description="符号边缘色">0x00ff00</SymbolEdgeColor>
+              <SymbolLineWidth        description="符号线宽">3</SymbolLineWidth>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet2" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">2</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <Symbol                 description="符号">FmwChart.Symbol.Circle</Symbol>
+              <SymbolSize             description="符号大小">10</SymbolSize>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="步进图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwStepLineChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <category name="stepLineLayer" description="区域图层属性">
+        <!-- 参考"线图1"中的"lineLayer"设置 -->
+        
+        <Alignment              description="对齐位置">4</Alignment>
+        
+        <category name="dataSet1" description="XY图层数据集属性">
+          <!-- 参考"XY图1"中的"xyLayer"中的"dataSet1"设置 -->
+        </category>
+      </category>
+      
+      <category name="data" description="数据">
+        <category name="1-步进图层" description="图层名称">
+          <Layer                  description="(必须)图层类型">StepLineLayer</Layer>
+          
+          <!-- 其他属性，参考"stepLineLayer"设置 -->
+          
+          <category name="dataSetGroup1" description="XY图层数据组属性">
+            <Name                   description="(必须)数据组名称"></Name>
+            
+            <category name="dataSet1" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">1</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet2" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">2</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+            
+            <category name="dataSet3" description="XY图层数据集属性">
+              <Col                    description="(必须)第几列数据">3</Col>
+              <!-- 参考"XY图1"中的"dataSetGroup1"设置的"dataSet"设置 -->
+            </category>
+          </category>
+          
+        </category>
+      </category>
+      
+    </category>
+    
+    
+    
+    
+    <category name="XY混合图1" description="模板名称">
+      <class description="类的名称">com.ffcs.fmw.chart.xy.FmwXYChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <Width                    description="框架的宽度">1000</Width>
+        <Height                   description="框架的高度">350</Height>
+        <PaletteColors            description="调色板">0x80ff0000, 0x8000ff00, 
+                                                      0x800000ff, 0x80ffff00, 0x80ff00ff, 0x8066ffff, 0x80ffcc33, 0x80cccccc, 0x809966ff, 0x80339966, 0x80999900, 0x80cc3300, 
+                                                      0x8099cccc, 0x80006600, 0x80660066, 0x80cc9999, 0x80ff9966, 0x8099ff99, 0x809999ff, 0x80cc6600, 0x8033cc33, 0x80cc99ff, 
+                                                      0x80ff6666, 0x8099cc66, 0x80009999, 0x80cc3333, 0x809933ff, 0x80ff0000, 0x800000ff, 0x8000ff00, 0x80ffcc99, 0x80999999</PaletteColors>
+        <ImageMapFormat           description="热点提示信息">title='{xLabel}-{value}' </ImageMapFormat>
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <X                        description="(必须)文本块位置-X坐标(图坐标)">370</X>
+        <Y                        description="(必须)文本块位置-Y坐标(图坐标)">270</Y>
+        <Name                     description="(必须)名称">&lt;*block,valign=absmiddle*&gt;&lt;*img=small_molecule.png*&gt; &lt;*block*&gt;&lt;*font=黑体 Bold Italic,size=12,color=804040*&gt; Copyright (c) 2007 FFCS &lt;*/*&gt;</Name>
+        <Alignment                description="对齐位置">FmwChart.Direction.TopLeft</Alignment>
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <X                        description="(必须)图例的位置-X坐标(图坐标)">40</X>
+        <Y                        description="(必须)图例的位置-Y坐标(图坐标)">20</Y>
+        <Alignment                description="对齐位置">FmwChart.Direction.BottomLeft</Alignment>
+        <IsVertical               description="纵向显示">false</IsVertical>
+        <RaiseEffect              description="边缘效果">FmwChart.RaiseEffect.softEffect(FmwChart.Direction.Left, 5)</RaiseEffect>
+      </category>
+      
+      <category name="plotArea" description="XY图区属性">
+        <X                      description="(必须)图区位置-X坐标(图坐标)">40</X>
+        <Y                      description="(必须)图区位置-Y坐标(图坐标)">20</Y>
+        <Width                  description="(必须)图区宽度">900</Width>
+        <Height                 description="(必须)图区高度">255</Height>
+        
+        <VGridColor             description="垂直网格线颜色">chart.getDashLineColor(FmwChart.Color.Red, FmwChart.DashPattern.DotLine)</VGridColor>
+      </category>
+      
+      <category name="axis1" description="轴属性">
+        <AxisType               description="(必须)轴的类型">X</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <LabelFormat            description="标签格式">{value|yyyy-mm-dd&lt;*br*&gt;&lt;*br*&gt;'&lt;*font=宋体,size=10,color=ff0000*&gt;'w}</LabelFormat>
+        
+        <TopMargin              description="顶部边距">30</TopMargin>
+        <BottomMargin           description="底部边距">30</BottomMargin>
+        <TopExtension           description="顶部延长空域">0</TopExtension>
+        <BottomExtension        description="底部延长空域">0</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="axis2" description="轴属性">
+        <AxisType               description="(必须)轴的类型">Y</AxisType>
+        <AxisNo                 description="(必须)第几轴">1</AxisNo>
+        
+        <TopExtension           description="顶部延长空域">0.1</TopExtension>
+        <BottomExtension        description="底部延长空域">0.1</BottomExtension>
+        <ZeroAffinity           description="零刻度接近程度">0</ZeroAffinity>
+      </category>
+      
+      <category name="xy" description="XY基本属性">
+        <IsZoomChart            description="是否为缩放图形">true</IsZoomChart>
+      </category>
+      
+      <!-- 可以定义以上所有XY图层 -->
+      
+      <category name="data" description="数据">
+        <!-- 可以定义所有XY图层 -->
+      </category>
+      
+    </category>
+    
+    
+    
+    <category name="饼图1" description="模板名称；可用“图1”中的所有属性">
+      <class description="图形类的名称">com.ffcs.fmw.chart.FmwPieChart</class>
+      
+      <category name="base" description="图形基本属性">
+        <!-- 参考"图1"中的"base"设置 -->
+      </category>
+      
+      <category name="pie" description="饼图基本属性">
+        <Depth3D        description="3D深度">10</Depth3D>
+        <Angle3D        description="3D角度(45度)">-1</Angle3D>
+        <Is3DShadowMode   description="是否阴影模式">false</Is3DShadowMode>
+      </category>
+      
+      <category name="title" description="标题">
+        <!-- 参考"图1"中的"title"设置 -->
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <!-- 参考"图1"中的"text"设置 -->
+      </category>
+      
+      <category name="legend" description="图例特有属性；可用“text”的所有属性">
+        <!-- 参考"图1"中的"legend"设置 -->
+      </category>
+      
+      <category name="circle" description="圆属性">
+        <CenterX     description="圆心X坐标">220</CenterX>
+        <CenterY     description="圆心Y坐标">200</CenterY>
+        <Radius      description="半径">120</Radius>
+        <DonutRadius description="半径(内圆)">0</DonutRadius>
+      </category>
+      
+      <category name="sector" description="扇区属性">
+        <LineColor   description="边缘色">-1</LineColor>
+        <StartAngle  description="开始扇区角度">60.0</StartAngle>
+        <CloseWise   description="扇区走向(顺时针)">false</CloseWise>
+      </category>
+      
+      <category name="label" description="标签属性">
+        <LabelLayout        description="布局(环绕)">1</LabelLayout>
+        <LabelFormat        description="格式">{label}&lt;*br*&gt;{percent}%</LabelFormat>
+        <LabelPos           description="相对位置(以边缘做为基准)">0</LabelPos>
+        <LabelJoinLineColor description="连接线颜色">-1</LabelJoinLineColor>
+        <LabelJoinLineWidth description="连接线宽度">1</LabelJoinLineWidth>
+      </category>
+      
+    </category>
+    
+    
+    
+  
+    <category name="多图1" description="模板名称；可用“图1”中的所有属性">
+      <class description="图形类的名称">com.ffcs.fmw.chart.FmwMultiChart</class>
+      
+      <category name="mainChart" description="主图">
+        <!-- 参考"饼图1"或者"线图1"设置 -->
+      </category>
+      
+      <category name="subChart1" description="子图">
+        <X        description="(必须)位置-X坐标(图坐标)">10</X>
+        <Y        description="(必须)位置-Y坐标(图坐标)">10</Y>
+        
+        <category name="饼图1" description="(必须)子模板名称">
+          <class description="图形类的名称">com.ffcs.fmw.chart.FmwPieChart</class>
+          
+          <!-- 参考"饼图1"设置 -->
+        </category>
+      </category>
+      
+      <category name="subChart2" description="子图">
+        <X        description="(必须)位置-X坐标(图坐标)">100</X>
+        <Y        description="(必须)位置-Y坐标(图坐标)">10</Y>
+        
+        <category name="线图1" description="(必须)子模板名称">
+          <class description="类的名称">com.ffcs.fmw.chart.xy.FmwLineChart</class>
+          
+          <!-- 参考"线图1"设置 -->
+        </category>
+      </category>
+      
+      <category name="base" description="图形基本属性">
+        <!-- 参考"图1"中的"base"设置 -->
+      </category>
+      
+      <category name="title" description="标题">
+        <!-- 参考"图1"中的"title"设置 -->
+      </category>
+      
+      <category name="text" description="文本块属性(包含文本、标签、图例等属性)">
+        <!-- 参考"图1"中的"text"设置 -->
+      </category>
+      
+    </category>
+    
+    
+    
+  </category>
+</properties>

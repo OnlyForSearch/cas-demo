@@ -1,0 +1,176 @@
+<public:component>
+<public:PROPERTY NAME="value"        GET="getValue"      PUT="setValue"         />
+<public:PROPERTY NAME="readOnly"     GET="isReadOnly"    PUT="setReadOnly"      />
+<public:PROPERTY NAME="height"                           PUT="setHeight"        />
+<public:PROPERTY NAME="text"         GET="getText"                              />
+<public:PROPERTY NAME="count"        GET="getCount"                              />
+<METHOD   NAME="doInit"	                                                        />
+<METHOD   NAME="hide"	                                                        />
+<METHOD   NAME="reloadChild"	                                                />
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var formLogHtcDefaultLang = {
+	person : '人员',
+	content : '内容',
+	submitTime : '提交时间'
+};
+//获取语言资源
+function getFormLogHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('formLogHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.formLogHtc.' + code);
+	}
+}
+
+var readOnly=false;
+var gHeight=100;
+function doInit()
+{
+    log.init();
+    if(readOnly)
+    {
+       log.setReadOnly();
+    }
+}
+
+function setHeight(pHeight)
+{
+	gHeight=pHeight;
+}
+
+function setValue(pValue)
+{
+   if(pValue)
+   {
+      log.show(pValue);
+   }
+}
+function getCount(){
+	return log.getRecordCount();
+}
+function  reloadChild(pValue){
+	log.reloadChild(pValue);
+}
+function getText()
+{
+   return log.getTextValue();
+}
+
+function getValue()
+{
+   return log.getTextValue();
+}
+
+function isReadOnly()
+{
+  return readOnly;
+}
+
+function setReadOnly(pReadOnly)
+{
+   readOnly=pReadOnly;
+}
+
+function hide()
+{
+	log.hidden();
+}
+var log=(function()
+{
+    function formLog()
+    {
+	    this.init=function()
+	    {
+	    	initInput();
+	    };
+	    this.reloadChild=function(pValue)
+	    {
+	    	var oLog=window.document.getElementById("oLog_"+uniqueID);
+	    	if(oLog){
+	    		oLog.doRefresh(true);
+	    		oLog.style.display="";
+	    	}
+	    	else this.show(pValue);
+	    };
+	    this.getRecordCount=function(){
+	    	var oLog=window.document.getElementById("oLog_"+uniqueID);
+	    	return oLog.recordCount;
+	    };
+	    this.show=function(pValue)
+	    {
+	    	initHead();
+	    	initLog();
+	        var iMainRequestId=pValue.requestId||0;
+            var sFieldName=pValue.fieldName;
+            var sValue=pValue.value;
+            if(sValue)
+            {
+            	var oInput=window.document.getElementById("oText_"+uniqueID);
+            	oInput.value=sValue;
+            }
+			var oLog=window.document.getElementById("oLog_"+uniqueID);
+			oLog.oDataHead="oHead"+uniqueID; 
+			oLog.xmlSrc="/servlet/formDispatch?requestId="+iMainRequestId
+	                      +"&OperType=17&fieldName="+sFieldName;
+	    };
+	    
+	    this.getTextValue=function()
+	    {
+	        var oInput=window.document.getElementById("oText_"+uniqueID);
+	        return oInput.value;
+	    };
+	    
+	    this.setReadOnly=function()
+	    {
+	        var oInput=window.document.getElementById("oText_"+uniqueID);
+	        oInput.style.display="none";
+	    };
+	    
+	    this.hidden=function()
+	    {	    	
+	    	var oLog=window.document.getElementById("oLog_"+uniqueID);
+	    	if(oLog.recordCount==0)
+	    	   oLog.style.display="none";
+	    }
+	    
+	    function initHead()
+		{
+		    var sHead='<TABLE id="oHead'+uniqueID+'" style="display:none">'+
+			          '<THEAD>'+
+				        '<TR align="center" bgcolor="#F1F1F6" height="23">'+
+					      '<TD width="10%" class="form_title">' + getFormLogHtcLan('person') + '</TD>'+
+					      '<TD width="70%" class="form_title">' + getFormLogHtcLan('content') + '</TD>'+
+					      '<TD width="70%" class="form_title">' + getFormLogHtcLan('submitTime') + '</TD>'+
+				       '</TR>'+
+			         '</THEAD>'+
+			        '</TABLE>';
+		    insertAdjacentHTML("beforeEnd",sHead);
+		};
+		
+		function initLog()
+		{
+		   var sTable='<table width="100%"><tr><td width="100%">'+
+		              '<div align="center" '+
+		                'style="display:inline;behavior:url(/resource/htc/table.htc);width:100%;cursor:hand"'+
+		                ' isMultiply="false" id="oLog_'+uniqueID+'" onTableReady="'+uniqueID+'.hide()">'+
+		              '</div></td></tr>'+
+		              '</table>';
+		   insertAdjacentHTML("afterBegin",sTable);
+		};
+		
+		function initInput()
+		{
+		   var sInput='<textarea id="oText_'+uniqueID+'" '+
+		              'style="margin-left:4px;width:100%;height:'+gHeight+'"></textarea>';
+		   insertAdjacentHTML("beforeEnd",sInput);			
+		}
+	}
+	return new formLog();
+})()
+</SCRIPT>
+</component>

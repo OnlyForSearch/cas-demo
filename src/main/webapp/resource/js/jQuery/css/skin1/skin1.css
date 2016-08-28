@@ -1,0 +1,134 @@
+/*index_top.html*/
+.index_top{ height:123px; background:url(top_bg.gif) repeat-x;} /*头部背景*/
+.index_top .logo{width:510px; height:114px; background:url(logo.gif) no-repeat;} /*LOGO*/
+/*index_top.html*/
+.index_top{ height:123px; background:url(top_bg.gif) repeat-x;} /*头部背景*/
+.index_top .logo{width:510px; height:114px; background:url(logo.gif) no-repeat;} /*LOGO*/
+.index_top .index_top_right .index_top_right_top{ height:32px; line-height:32px; text-align:right; color:#FFF; padding-right:30px;}
+.topmenu{ width:500px; margin-top:50px; margin-bottom:9px; overflow:hidden}
+.topmenu .topmenu_left{width:40px; padding-top:6px; text-align:left;}
+.top_menu{width:443px; height:32px; line-height:32px; background:url(top_3.gif) no-repeat; padding-left:15px;color:#FFF;}/*顶部导航背景*/
+.top_menu li{ width:80px; float:left; margin-left:1px;}
+.top_menu li a{ color:#FFF}
+.top_menu li a:hover{ text-decoration:none;}
+
+   /*按下后样式*/
+   .itemsel {width:78px;margin-left:1px;background:#201664;border-left:1px solid #d4eef4;border-right:1px solid #d4eef4;border-top:1px solid #d4eef4;height:31px;line-height:32px;}
+
+/*ingde_menu.html*/
+.left_body_bg{
+	color: #FFFFFF;
+	background-color: #0a5c8e;
+	background-image: url(../../images/bak.gif);
+	background-repeat: repeat-x;
+!important	
+}
+.index_menu_top{
+	height:27px;
+	background-repeat: no-repeat;
+	background-position: 0 -9px;
+}/*左边top背景*/
+.index_menu{ padding:0 6px 6px 6px;}
+#slider {width:100%}
+.header {
+	width:100%;
+	cursor:pointer;
+	height:23px;
+	line-height:25px;
+	margin-top:6px;
+	background-image: url(../../images/TE_2.gif);
+	background-repeat: no-repeat;
+	background-position: center;
+}/*主栏目背景*/
+.header:hover {background: url(../../images/TE_2.gif) no-repeat center;}
+.content{display:none; overflow:hidden}
+
+/*子栏目*/
+.index_menu_nav{
+	width:174px;
+	background: url(../../images/main5.gif) repeat-y center;
+}
+.index_menu_nav ul{ padding:10px;}
+.index_menu_nav ul li { height:24px; line-height:24px; background: url(left_meun_4.gif) no-repeat 10%; text-indent: 20%; text-align:left}
+
+/*index_body.html*/
+.index_body_bg{ background:#FFF url(index_body_bg.gif) repeat-x;!important}
+.index_body{ margin:20px 30px; text-align:left;}
+.index_body_position{ height:28px; border-bottom:1px #666 dashed; line-height:28px; background:url(pic_01.gif) no-repeat 0 8px; padding-left:15px; margin-bottom:20px;}
+.index_body .index_body_main{ padding:15px;border:1px #abd4ff solid; background:#f7fafd}
+
+   /*列表*/
+   /*------------------------------------------------------*/
+   /*-- 说明: 由于后台都是列表比较多，所以昨天晚上想了一个可以解决大部分列表需求的样式。--*/
+   /*-- 一般一行有好几列，但后台一般不会超过10列。所以干脆每块定义成10%至90%；这样可以 --*/
+   /*-- 根据具体需要进行组合;可以看具体的效果，IE6.0 7.0 8.0 friefox测试通过--*/
+   /*------------------------------------------------------*/
+   .list{background:#FFF}
+   .list li{border-bottom:1px #ccc dashed; background:#FFF;clear:both; padding-left:1%; padding-right:1%;display:inline; width:97%;float:left;}
+   .list li.alt {background:#f6fcff; }
+   .list li.over{background:#FEF3D1; }
+   .list em{display:block; float:left; line-height:18px; padding-top:6px; padding-bottom:6px;}
+   .list em.bfb10{ width:10%;}
+   .list em.bfb20{ width:20%;}
+   .list em.bfb30{ width:30%;}
+   .list em.bfb40{ width:40%;}
+   .list em.bfb50{ width:50%;}
+   .list em.bfb60{ width:60%;}
+   .list em.bfb70{ width:70%;}
+   .list em.bfb80{ width:80%;}
+   .list em.bfb90{ width:90%;}
+   
+   .list em.bfb5{ width:5%;}
+   .list em.bfb15{ width:15%;}
+   .list em.bfb25{ width:25%;}
+   .list em.bfb35{ width:35%;}
+   .list em.bfb45{ width:45%;}
+   .list em.bfb55{ width:55%;}
+   .list em.bfb65{ width:65%;}
+   .list em.bfb75{ width:75%;}
+   .list em.bfb85{ width:85%;}
+   .list em.bfb95{ width:95%;}
+   
+   .list em.bfbr15{ width:15%; text-align:right}
+   /*列表标题*/
+   .list_tit{}
+   .list_tit li{background:#d2e9ff;clear:both; padding-left:1%; padding-right:1%;display:inline; width:97%;float:left;}
+   .list_tit em{display:block; float:left; line-height:18px; padding-top:5px; padding-bottom:5px;}
+   .list_tit em.bfb10{ width:10%;}
+   .list_tit em.bfb20{ width:20%;}
+   .list_tit em.bfb30{ width:30%;}
+   .list_tit em.bfb40{ width:40%;}
+   .list_tit em.bfb50{ width:50%;}
+   .list_tit em.bfb60{ width:60%;}
+   .list_tit em.bfb70{ width:70%;}
+   .list_tit em.bfb80{ width:80%;}
+   .list_tit em.bfb90{ width:90%;}
+   
+   .list_tit em.bfb5{ width:5%;}
+   .list_tit em.bfb15{ width:15%;}
+   .list_tit em.bfb25{ width:25%;}
+   .list_tit em.bfb35{ width:35%;}
+   .list_tit em.bfb45{ width:45%;}
+   .list_tit em.bfb55{ width:55%;}
+   .list_tit em.bfb65{ width:65%;}
+   .list_tit em.bfb75{ width:75%;}
+   .list_tit em.bfb85{ width:85%;}
+   .list_tit em.bfb95{ width:95%;}
+   /*按钮*/
+   .button01{ width:45px; height:19px; line-height:19px; border:0; color:#014182; background:url(button01.gif) no-repeat;cursor: pointer;!important}
+   .button02{ width:45px; height:19px; line-height:19px; border:0; color:#014182; background:url(bu_cx.gif) no-repeat;cursor: pointer;!important}
+   .button03{ width:100px; height:19px; line-height:19px; border:0; color:#00f; background:url(button02.gif) repeat-x; border-right:1px #999 solid;cursor: pointer;!important}
+   .button04{ width:69px; height:23px; line-height:23px; border:0; color:#fff; background:url(button04.gif) no-repeat;cursor: pointer;!important}
+   .button05{ width:45px; height:18px; line-height:18px; border:0; color:#000; background:url(button05.gif) repeat-x; border-bottom:1px #acacac solid; border-right:1px #acacac solid;cursor: pointer;!important}
+   .button06{ width:69px; height:23px; line-height:23px; border:0; color:#fff; background:url(button06.gif) no-repeat;cursor: pointer;!important}
+   .btn_submit{ width:70px; height:25px; line-height:30px; font-size:12px; border:0; color:#FFF; background:url(../../images/btns/bt_tj.gif) no-repeat;cursor: pointer;!important}
+   .btn_reset{ width:70px; height:25px; line-height:30px; font-size:12px; border:0; color:#FFF; background:url(../../images/btns/bt_cz.gif) no-repeat;cursor: pointer;!important}
+   .btn_cancel{ width:70px; height:25px; line-height:30px; font-size:12px; border:0; color:#FFF; background:url(../../images/btns/bt_qx.gif) no-repeat;cursor: pointer;!important}
+   .btn_back{ width:70px; height:25px; line-height:30px; font-size:12px; border:0; color:#FFF; background:url(../../images/btns/bt_fh.gif) no-repeat;cursor: pointer;!important}
+   .btn_common{ width:70px; height:25px; line-height:30px; font-size:12px; border:0; color:#FFF; background:url(../../images/BK_01.GIF) ;cursor: pointer;!important}
+   .inputb1{ border:1px #ccc solid; padding:2px;}
+   .tab_common{text-align:center;width:90px;border-left:1px #ccc solid;border-right:1px #ccc solid;background:url(../../images/input.gif) ;cursor: pointer;!important}
+
+/*标题*/
+.main_tit{ height:28px; background:url(titbg.gif) repeat-x; border:1px #abd4ff solid; border-bottom-width:0;}
+

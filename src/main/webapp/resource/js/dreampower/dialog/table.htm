@@ -1,0 +1,157 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>表格</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		listClass(myEditor.designer.document,document.all('sltClass'))
+		listImage(myEditor.designer.document,document.all('sltBackground'))
+	}
+}
+function doOK(){
+	objectTag()
+}
+function objectTag(){
+	var strAttributes=compileAttributesString(myEditor.form)
+	var rows=myEditor.form.tfRows.value
+	var columns=myEditor.form.tfCols.value
+	var caption=myEditor.form.tfCaption.value.trim().trim('　')
+	var alignCaption=myEditor.form.sltAlignCaption.value
+	var tableCells='<TD>&nbsp;</TD>';
+	var tableRow='',tableContent='',html;
+	for (i=0; i< columns; i++) tableRow+=tableCells;
+	tableRow = "<TR>" + tableRow + "</TR>";
+	for (i=0; i< rows; i++) tableContent += tableRow;
+	if(caption!=''){
+		caption='<CAPTION'+(alignCaption?' align="'+alignCaption+'"':'')+'>'+caption.htmlEncode()+'</CAPTION>'
+	}
+	var html='<TABLE'+(strAttributes!=''?' '+strAttributes:'')+'>'
+				+caption+tableContent+'</TABLE>'
+	myEditor.window.insert(html,'select')
+	window.close()
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td height="25" colspan="2">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="28">常规</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+    </tr>
+  <tr>
+    <td width="80" height="22" align="right">行数:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><input name="tfRows" type="text" value="3" class="shortWidth"  restrict="0-9" onKeyPress="doRestrict()" onKeyUp="doRestrict()" onChange="doRestrict()"></td>
+          <td width="80" align="right">列数:</td>
+		  <td width="1"></td>
+          <td><input name="tfCols" type="text" value="2" class="shortWidth"  restrict="0-9" onKeyPress="doRestrict()" onKeyUp="doRestrict()" onChange="doRestrict()">            </td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">宽度:</td>
+    <td>
+<script>writeDigitalUnits('Width',100)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">高度:</td>
+    <td><script>writeDigitalUnits('Height')</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">单元格边距:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('CellPadding')</script></td>
+          <td width="80" align="right">单元格间距:</td>
+		  <td width="1"></td>
+          <td><script>writeDigitalTextfield('CellSpacing')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">边框粗细:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('Border',1)</script></td>
+          <td width="80" align="right"><nobr>边框颜色:</nobr></td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('BorderColor')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">对齐方式:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1">
+		<script>writeAlignSelect('Align','h')</script></td>
+          <td width="66" align="right">背景颜色:</td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('BgColor')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr style="display:none">
+    <td height="22" align="right">背景图像:</td>
+    <td><script language="JavaScript" type="text/JavaScript">writeUrlSelector('Background',195,[])</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">表格标题:</td>
+    <td><input name="tfCaption" type="text" class="longWidth" ></td>
+  </tr>
+    <tr>
+    <td height="22" align="right">标题对齐方式:</td>
+    <td><select name="sltAlignCaption">
+          <option>默认</option>
+          <option value="Top">顶部</option>
+          <option value="Bottom">底部</option>
+          <option value="left">左对齐</option>
+          <option value="Center">居中</option>
+          <option value="Right">右对齐</option>
+        </select></td>
+  </tr>
+<script language="JavaScript" type="text/JavaScript">
+writePublicAttributes()
+</script>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <script>writeButtonsRight()</script>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

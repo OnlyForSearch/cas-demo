@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 四川图地初始化配置 -->
+	<!-- 属性name是固化在flash中的元件名称，不能更改，属性regionId、level请根据实际情况配置 -->
+	<!-- level : L1表示绿色，L2表示黄色，L3表示红色，L4表示灰色 -->
+	<area name="ZG" nameCn="自贡" regionId="813" level="L4"/>
+	<area name="LZ" nameCn="泸州" regionId="830" level="L4"/>
+	<area name="DY" nameCn="德阳" regionId="838" level="L4"/>
+	<area name="MY" nameCn="锦阳" regionId="816" level="L4"/>
+	<area name="GY" nameCn="广元" regionId="839" level="L4"/>
+	<area name="SN" nameCn="遂宁" regionId="825" level="L4"/>
+	<area name="NJ" nameCn="内江" regionId="832" level="L4"/>
+	<area name="LSS" nameCn="乐山" regionId="833" level="L4"/>
+	<area name="NC" nameCn="南充" regionId="817" level="L4"/>
+	<area name="MS" nameCn="眉山" regionId="840" level="L4"/>
+	<area name="YB" nameCn="宜宾" regionId="831" level="L4"/>
+	<area name="GA" nameCn="广安" regionId="826" level="L4"/>
+	<area name="DZ" nameCn="达州" regionId="818" level="L4"/>
+	<area name="YA" nameCn="雅安" regionId="835" level="L4"/>
+	<area name="BZ" nameCn="巴中" regionId="827" level="L4"/>
+	<area name="ZY" nameCn="资阳" regionId="841" level="L4"/>
+	<area name="AB" nameCn="阿坝" regionId="837" level="L4"/>
+	<area name="GZ" nameCn="甘孜" regionId="836" level="L4"/>
+	<area name="LS" nameCn="凉山" regionId="834" level="L4"/>
+	<area name="CD" nameCn="成都" regionId="281" level="L4"/>
+	<area name="PZF" nameCn="攀枝花" regionId="812" level="L4"/>
+</root>

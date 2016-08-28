@@ -1,0 +1,221 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<style>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@import url(../../css/DatePicker.css);
+@media all
+{
+  IE\:button{behavior:    url(../../htc/btn.htc);}
+  IE\:tree{behavior:    url(../../htc/tree.htc);}
+  IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+}
+.required{color:red;}
+body{margin:10px 8px 0px 8px;}
+</style>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../stringUtil.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<title>表格列配置</title>
+</head>
+<body onUnload="winClose()" onLoad="iniPage()" oncontextmenu="return false;">
+<table>
+	<tr>
+		<td>
+		<table border="0" cellpadding="0" cellspacing="0"
+			style="margin-top:6px">
+			<TR>
+				<TD background="../../image/dashed.gif"></TD>
+			</TR>
+			<TR>
+				<TD colspan=2>
+				<table border="0" cellpadding="0" cellspacing="0"
+					style="margin-top:16px">
+					<tr>
+						<td> 可选列项：<br>&nbsp;<IE:XmlSelect id="configSource" size="22"
+							width="150" multiple onOptionDblClick="addOneConfig.click()"/></td>
+						<td>
+						<table>
+							<tr>
+								<td align="center"><IE:button value=">" width="30"
+									onclick="configSource.addSelectedTo(configTarget,true)"
+									id="addOneConfig" /></td>
+							</tr>
+							<tr id="addAll" display="none">
+								<td align="center"><IE:button value=">>" width="30"
+									onclick="configSource.addAllTo(configTarget,true)" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td align="center"><IE:button value="<" width="30" onclick="configTarget.delSelectedOption()" id="delOneConfig"/></td>
+							</tr>
+							<tr id="delAllConfig" display="none">
+								<td align="center"><IE:button value="<<" width="30" onclick="configTarget.delAllOption()"/></td>
+							</tr>
+						</table>
+						</td>
+						<td> 已选列项：<br>&nbsp;<IE:XmlSelect id="configTarget" size="22" width="150" multiple onchange="showColumn()" onOptionDblClick="delOneConfig.click()" /><br/> 列宽:<input type=text id='colprop' size='10' maxlength='4' onblur='setColumnWidth(this)' onkeypress='return (event.keyCode>=48&&event.keyCode<=57||event.keyCode==45)'><br/></td>
+						<td>
+						<table>
+							<tr>
+								<td align="center"><IE:button value="+" width="25" onclick="moveUp(configTarget)" id="moveUpConfig" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td align="center"><IE:button value="-" width="25" onclick="moveDown(configTarget)" id="moveDownConfig"/></td>
+							</tr>
+						</table>
+						</td>
+					</tr>
+				</table>
+				</TD>
+			</TR>
+		</table>
+		</td>
+	</tr>
+	<TR>
+		<TD background="../../image/dashed.gif" colspan="2"></TD>
+	</TR>
+</table>
+<div style="margin-top:10px;text-align:right">
+    <IE:button value="恢复默认" onclick="returnInit()" />&nbsp; 
+    <IE:button value="确&nbsp;&nbsp;定" onclick="enter()" />&nbsp; 
+	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />&nbsp;&nbsp;</div>
+<script>
+var confId;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var httpUrl = "../../../servlet/ColumnConfigServlet?";
+var ok=false;
+//页面初始化
+function iniPage(){
+	//父窗口传进参数
+    var dialogArgObj = window.dialogArguments;
+    if(dialogArgObj!=null) confId = dialogArgObj.confId;
+    //初始化配置项
+    configSource.xmlsrc = httpUrl+"tag=0&confId="+confId;
+    configTarget.xmlsrc = httpUrl+"tag=1&confId="+confId;
+    if(configSource.getObject().options.length == 0){
+    	MMsg("没有相关表格列项配置，页面返回!");
+    	window.close();
+    }
+    configTarget.getObject().selectedIndex = -1;
+}
+function moveUp(oTarget)
+{
+	var tempText,tempValue;
+	var object = oTarget.getObject();
+	var index = object.selectedIndex;
+	if(index>0)
+	{
+		tempText=object.options[index].text;
+		tempValue=object.options[index].value;
+		object.options[index].text=object.options[index-1].text;
+		object.options[index].value=object.options[index-1].value;
+		object.options[index-1].text=tempText;
+		object.options[index-1].value=tempValue;
+		object.selectedIndex=index-1;
+	}
+}
+function moveDown(oTarget)
+{
+	var tempText,tempValue;
+	var object = oTarget.getObject();
+	var index = object.selectedIndex;
+	if(index<object.length-1)
+	{
+		tempText=object.options[index].text;
+		tempValue=object.options[index].value;
+		object.options[index].text=object.options[index+1].text;
+		object.options[index].value=object.options[index+1].value;
+		object.options[index+1].text=tempText;
+		object.options[index+1].value=tempValue;
+		object.selectedIndex=index+1;
+	}	
+}
+//关闭窗口
+function winClose()
+{
+	window.returnValue = ok;
+}
+//确认返回
+function enter(){
+	//返回函数
+	var params = new Object();
+	var confOptions = configTarget.getObject().options;
+    var confList = "";
+        for (var i = 0; i<confOptions.length; i++){
+        	confList += confOptions[i].value + ",";
+        }
+    if(confList.length == 0){
+		MMsg("请选择表格列项!");
+		return;
+	}
+	while(true)
+	{
+		if(confList.lastIndexOf(",")==confList.length-1)
+			confList = confList.substring(confList,confList.length-1);
+		else
+			break;
+	}
+	xmlhttp.Open("POST",httpUrl+'tag=2&confId='+confId+'&confList='+confList,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		ok = true;
+		alert("保存成功!");
+	}
+	else
+	{
+		ok = false;
+		alert("保存失败!");
+	}
+	window.close();
+    	
+}
+function returnInit()
+{
+	xmlhttp.Open("POST",httpUrl+'tag=3&confId='+confId,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		ok = true;
+		alert("保存成功!");
+	}
+	else
+	{
+		ok = false;
+		alert("保存失败!");
+	}
+	window.close();
+}
+//************* 增加调整列宽功能 Add by chenxunxin 2007/12/14 ****
+function showColumn()
+{
+    var _index = configTarget.getObject().selectedIndex;
+    if(_index!=-1) {
+       var _value = configTarget.getObject().options[_index].value;
+       colprop.value =  _value.substring(_value.indexOf('|')+1, _value.length);
+    }
+}
+function setColumnWidth(obj)
+{
+    var _idx = configTarget.getObject().selectedIndex;
+    if(_idx!=-1) {
+       if(obj.value==''||(parseInt(obj.value)<=0||parseInt(obj.value)>200)&&parseInt(obj.value)!=-1) { alert('列宽设置超出范围,允许范围(0>X<200),请重新输入!'); obj.focus(); return false;}
+       var _value = configTarget.getObject().options[_idx].value;
+       var _tmp =  _value.substring(0, _value.indexOf('|'));
+       configTarget.getObject().options[_idx].value = _tmp + '|' + obj.value;
+    }
+}
+//********************************************************************
+</script>
+</body>
+</html>

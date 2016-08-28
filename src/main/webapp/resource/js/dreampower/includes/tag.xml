@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!-- 标签名前加入前缀_ 确保用getElementsByTagName()时只取得一项 -->
+<!-- 如果有多项时我们只取根节点下的子节点 -->
+<tag>
+	<_a bind="href" endtag="yes">
+		<general>
+			<href type="link"/>
+			<name type="txt"/>
+			<target type="target"/>
+		</general>
+	</_a>
+	<_abbr endtag="yes">
+	</_abbr>
+	<_acronym endtag="yes">
+	</_acronym>
+	<_address endtag="yes">
+	</_address>
+	<_applet endtag="yes">
+		<general>
+			<code type="longtxt"/>
+			<codeBase type="file"/>
+			<alt type="longtxt"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<align type="align"/>
+			<archive type="txt"/>
+		</general>
+	</_applet>
+	<_area bind="value" endtag="yes">
+		<general>
+			<name type="txt"/>
+			<value type="longtxt"/>
+			<shape type="select">
+				<option value="rect">矩形</option>
+				<option value="circle">圆形</option>
+				<option value="poly">多边形</option>
+			</shape>
+			<coords type="txt"/>
+			<href type="link"/>
+			<target type="target"/>
+			<alt type="longtxt"/>
+			<disabled type="chk"/>
+		</general>
+	</_area>
+	<_b endtag="yes">
+	</_b>
+	<_base endtag="no">
+		<general>
+			<href type="link"/>
+			<target type="target"/>
+		</general>
+	</_base>
+	<_basefont endtag="no">
+		<general>
+		 	<size type="select">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+			</size>
+		</general>
+	</_basefont>
+	<_bdo endtag="yes">
+	</_bdo>
+	<_body endtag="yes">
+		<general>
+			<bgColor type="color"/>
+			<bgProperties type="txt"/>
+			<text type="color"/>
+			<link type="color"/>
+			<aLink type="color"/>
+			<vLink type="color"/>
+			<leftMargin type="digital"/>
+			<topMargin type="digital"/>
+			<rightMargin type="digital"/>
+			<bottomMargin type="digital"/>
+			<marginHeight type="digital"/>
+			<marginWidth type="digital"/>
+		</general>
+	</_body>
+	<_br endtag="no">
+		<general>
+			<clear type="select">
+				<option value="">默认</option>
+				<option value="left">左</option>
+				<option value="right">右</option>
+				<option value="all">两端</option>
+			</clear>
+		</general>
+	</_br>
+	<_bgsound endtag="yes">
+		<general>
+			<src type="file"/>
+			<loop type="digital"/>
+			<balance type="digital"/>
+			<volume type="digital"/>
+			<delay type="digital"/>
+		</general>
+	</_bgsound>
+	<_blockquote endtag="yes">
+		<general>
+			<cite type="file"/>
+		</general>
+	</_blockquote>
+	<_big endtag="yes">
+	</_big>
+	<_col endtag="no">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<span type="txt"/>
+			<width type="digitalunits"/>
+		</general>
+	</_col>
+	<_colgroup endtag="no">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<span type="txt"/>
+			<width type="digitalunits"/>
+		</general>
+	</_colgroup>
+	<_cite endtag="yes">
+	</_cite>
+	<_caption endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+		</general>
+	</_caption>
+	<_center endtag="yes">
+	</_center>
+	<_code endtag="yes">
+	</_code>
+	<_div endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_div>
+	<_directive endtag="yes">
+	</_directive>
+	<_dl endtag="yes">
+		<general>
+			<compact type="chk"/>
+		</general>
+	</_dl>
+	<_dfn endtag="yes">
+	</_dfn>
+	<_del endtag="yes">
+		<general>
+			<cite type="file"/>
+			<datetime type="txt"/>
+		</general>
+	</_del>
+	<_dd endtag="yes">
+	</_dd>
+	<_dt endtag="yes">
+	</_dt>
+	<_frame endtag="yes">
+		<general>
+			<name type="txt"/>
+			<src type="link"/>
+			<frameborder type="select">
+				<option value=""></option>
+				<option value="1">1</option>
+				<option value="0">0</option>
+			</frameborder>
+			<borderColor type="Color"/>
+			<scrolling type="select">
+				<option value="">默认</option>
+				<option value="Auto">自动</option>
+				<option value="Yes">滚动</option>
+				<option value="No">无</option>
+			</scrolling>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<marginWidth type="digital"/>
+			<marginHeight type="digital"/>
+			<noresize type="chk"/>
+		</general>
+	</_frame>
+	<_form endtag="yes">
+		<general>
+			<name type="txt"/>
+			<action type="link"/>
+			<method type="select">
+				<option value=""></option>
+				<option value="Post">Post</option>
+				<option value="Get">Get</option>
+			</method>
+			<enctype type="editableselect">
+				<option value=""></option>
+				<option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+				<option value="multipart/form-data">multipart/form-data</option>				
+			</enctype>
+			<target type="target"/>
+		</general>
+	</_form>
+	<_font endtag="yes">
+		<general>
+    	<color type="color"/>
+			<size type="editableselect50">
+				<option value="+1">+1</option>
+				<option value="+2">+2</option>
+				<option value="+3">+3</option>
+				<option value="+4">+4</option>
+				<option value="+5">+5</option>
+				<option value="+6">+6</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="-1">-1</option>
+				<option value="-2">-2</option>
+				<option value="-3">-3</option>
+				<option value="-4">-4</option>
+				<option value="-5">-5</option>
+				<option value="-6">-6</option>
+			</size>
+			<face type="font"/>
+		</general>
+	</_font>
+	<_fieldset endtag="yes">
+	</_fieldset>
+	<_embed endtag="yes">
+		<general>
+			<name type="txt"/>
+			<src type="file"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<hidden type="select">
+				<option value=""></option>
+				<option value="true">是</option>
+				<option value="false">否</option>
+			</hidden>
+			<autostart type="select">
+				<option value=""></option>
+				<option value="true">是</option>
+				<option value="false">否</option>
+			</autostart>
+			<loop type="select">
+				<option value=""></option>
+				<option value="true">是</option>
+				<option value="false">否</option>
+			</loop>
+    		<align type="align"/>
+		</general>
+	</_embed>
+	<_em endtag="yes">
+	</_em>
+	<_frameset endtag="yes">
+		<general>
+			<cols type="txt"/>
+			<rows type="txt"/>
+			<framespacing type="digital"/>
+			<frameborder type="select">
+				<option value="">默认</option>
+				<option value="1">1</option>
+				<option value="0">0</option>
+			</frameborder>
+			<border type="digital"/>
+			<borderColor type="Color"/>
+		</general>
+	</_frameset>
+	<_h1 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h1>
+	<_h2 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h2>
+	<_h3 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h3>
+	<_h4 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h4>
+	<_h5 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h5>
+	<_h6 endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_h6>
+	<_hr endtag="no">
+		<general>
+			<align type="halign"/>
+			<width type="digitalunits"/>
+			<size type="digital"/>
+			<color type="color"/>
+			<noShade type="chk"/>
+		</general>
+	</_hr>
+	<_img endtag="no">
+		<general>
+			<src type="img"/>
+			<alt type="longtxt"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<border type="digital"/>
+			<lowsrc type="img"/>
+			<useMap type="txt"/>
+			<isMap type="chk"/>
+		</general>
+	</_img>
+	<_iframe endtag="yes">
+		<general>
+			<name type="txt"/>
+			<src type="link"/>
+			<frameborder type="select">
+				<option value="">默认</option>
+				<option value="1">1</option>
+				<option value="0">0</option>
+			</frameborder>
+			<borderColor type="Color"/>
+			<scrolling type="select">
+				<option value="">默认</option>
+				<option value="Auto">自动</option>
+				<option value="Yes">滚动</option>
+				<option value="No">无</option>
+			</scrolling>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<marginWidth type="digital"/>
+			<marginHeight type="digital"/>
+		</general>
+	</_iframe>
+	<_i endtag="yes">
+		<general>
+		</general>
+	</_i>
+	<_ins endtag="yes">
+		<general>
+			<cite type="file"/>
+			<datetime type="txt"/>
+		</general>
+	</_ins>
+	<_input endtag="no">
+		<general>
+			<type type="select">
+				<option value="text" offset="4" length="3">文本</option>
+				<option value="password" offset="4" length="3">密码</option>
+				<option value="radio" offset="7" length="1">单选框</option>
+				<option value="checkbox" offset="7" length="1">复选框</option>
+				<option value="image" offset="8" length="9">图像</option>
+				<option value="file" offset="4" length="3">文件</option>
+				<option value="hidden">隐藏域</option>
+				<option value="button">按钮</option>
+				<option value="submit">提交</option>
+				<option value="reset">重置</option>
+			</type>
+			<name type="txt"/>
+			<value type="longtxt"/>
+			<size type="digital"/>
+			<maxLength type="digital"/>
+			<readOnly type="chk"/>
+			<checked type="chk"/>
+			<src type="img"/>
+			<alt type="longtxt"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<border type="digital"/>
+			<useMap type="txt"/>
+			<isMap type="chk"/>
+			<disabled type="chk"/>
+		</general>
+	</_input>
+	<_kdb endtag="yes">
+		<general>
+		</general>
+	</_kdb>
+	<_li endtag="yes">
+		<general>
+			<type type="select">
+				<option value="">默认</option>	
+				<option value="1">数字</option>	
+				<option value="i">小写罗马数字</option>
+				<option value="I">大写罗马数字</option>
+				<option value="a">小写字母</option>
+				<option value="A">大字字母</option>
+				<option value="disc">圆点</option>
+				<option value="circle">圆圈</option>
+				<option value="square">方块</option>
+			</type>
+			<value type="txt"/>
+		</general>
+	</_li>
+	<_marquee endtag="yes">
+		<general>
+			<behavior type="select">
+				<option value="">默认</option>
+				<option value="scroll">滚动</option>
+				<option value="slide">幻灯片</option>
+				<option value="alternate">交替</option>
+			</behavior>
+			<align type="align"/>
+			<direction type="select">
+				<option value="">默认</option>
+				<option value="left">左</option>
+				<option value="right">右</option>
+				<option value="up">上</option>
+				<option value="down">下</option>
+			</direction>
+			<bgColor type="color"/>
+			<loop type="digital"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<scrollAmount type="digital"/>
+			<scrollDelay type="digital"/>
+			<trueSpeed type="chk"/>
+		</general>
+	</_marquee>
+	<_map endtag="yes">
+		<general>
+			<name type="txt"/>
+		</general>
+	</_map>
+	<_label endtag="yes">
+		<general>
+			<for type="txt"/>
+		</general>
+	</_label>
+	<_legend endtag="yes">
+		<general>
+			<align type="halign"/>
+		</general>
+	</_legend >
+	<_noframes endtag="yes">
+	</_noframes>
+	<_object endtag="yes">
+		<general>
+			<classid type="longtxt"/>
+			<code type="longtxt"/>
+			<codeBase type="file"/>
+			<data type="file"/>
+			<type type="select">
+				<option value=""></option>
+				<option value="screen">Screen</option>
+				<option value="tty">TTY</option>
+				<option value="tv">TV</option>
+				<option value="projection">Projection</option>
+				<option value="handheld">Handheld</option>
+				<option value="print">Print</option>
+				<option value="braille">Braille</option>
+				<option value="aural">Aural</option>
+				<option value="all">All</option>
+			</type>
+			<archive type="txt"/>
+			<name type="txt"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<hspace type="digital"/>
+			<vspace type="digital"/>
+			<align type="align"/>
+			<border type="digital"/>
+			<standby type="txt"/>
+			<declare type="chk"/>
+		</general>
+	</_object>
+	<_ol endtag="yes">
+		<general>
+			<start type="txt"/>
+			<type type="select">
+				<option value="">默认</option>	
+				<option value="1">数字</option>	
+				<option value="i">小写罗马数字</option>
+				<option value="I">大写罗马数字</option>
+				<option value="a">小写字母</option>
+				<option value="A">大字字母</option>
+			</type>
+			<compact type="chk"/>
+		</general>
+	</_ol>
+	<_optgroup endtag="yes">
+		<general>
+			<label type="txt"/>
+			<disabled type="chk"/>
+		</general>
+	</_optgroup>
+	<_param endtag="no">
+		<general>
+			<name type="txt"/>
+			<value type="longtxt"/>
+			<valueType type="select">
+				<option value="">默认</option>
+				<option value="data">Data</option>
+				<option value="ref">Ref</option>
+				<option value="object">Object</option>
+			</valueType>
+			<type type="editableselect">
+				<option value="">默认</option>
+				<option value="text/html">text/html</option>
+				<option value="text/plain">text/plain</option>
+				<option value="application/msword">application/msword</option>
+				<option value="application/msexcel">application/msexcel</option>
+				<option value="application/postscript">application/postscript</option>
+				<option value="application/x-zip-compressed">application/x-zip-compressed</option>
+				<option value="application/pdf">application/pdf</option>
+				<option value="application/rtf">application/rtf</option>
+				<option value="video/x-msvideo">video/x-msvideo</option>
+				<option value="video/quicktime">video/quicktime</option>
+				<option value="video/x-mpeg2">video/x-mpeg2</option>
+				<option value="audio/x-pn/realaudio">audio/x-pn/realaudio</option>
+				<option value="audio/x-mpeg">audio/x-mpeg</option>
+				<option value="audio/x-waw">audio/x-waw</option>
+				<option value="audio/x-aiff">audio/x-aiff</option>
+				<option value="audio/basic">audio/basic</option>
+				<option value="image/tiff">image/tiff</option>
+				<option value="image/jpeg">image/jpeg</option>
+				<option value="image/gif">image/gif</option>
+				<option value="image/x-png">image/x-png</option>
+				<option value="image/x-photo-cd">image/x-photo-cd</option>
+				<option value="image/x-MS-bmp">image/x-MS-bmp</option>
+				<option value="image/x-rgb">image/x-rgb</option>
+				<option value="image/x-portable-pixmap">image/x-portable-pixmap</option>
+				<option value="image/x-portable-greymap">image/x-portable-greymap</option>
+				<option value="image/x-portablebitmap">image/x-portablebitmap</option>
+			</type>
+		</general>
+	</_param>
+	<_p endtag="yes">
+		<general>
+			<align type="align"/>
+		</general>
+	</_p>
+	<_q endtag="yes">
+		<general>
+			<cite type="file"/>
+		</general>
+	</_q>
+	<_pre endtag="yes">
+	</_pre>
+	<_option endtag="yes">
+		<value type="longtxt"/>
+		<selected type="chk"/>
+		<disabled type="chk"/>
+	</_option>
+	<_samp endtag="yes">
+	</_samp>
+	<_small endtag="yes">
+	</_small>
+	<_select endtag="yes">
+		<general>
+			<name type="txt"/>
+			<size type="digital"/>
+			<multiple type="chk"/>
+			<disabled type="chk"/>
+		</general>
+	</_select>
+	<_span endtag="yes">
+	</_span>
+	<_strong endtag="yes">
+	</_strong>
+	<_sub endtag="yes">
+	</_sub>
+	<_sup endtag="yes">
+	</_sup>
+	<_tt endtag="yes">
+	</_tt>
+	<_var endtag="yes">
+	</_var>
+	<_ul endtag="yes">
+		<general>
+			<type type="select">
+				<option value="">默认</option>	
+				<option value="disc">圆点</option>
+				<option value="circle">圆圈</option>
+				<option value="square">方块</option>
+			</type>
+			<compact type="chk"/>
+		</general>
+	</_ul>
+	<_textarea endtag="yes">
+		<general>
+			<name type="txt"/>
+			<cols type="digital"/>
+			<rows type="digital"/>
+			<wrap type="select">
+				<option value="">默认</option>	
+				<option value="off">关</option>
+				<option value="circle">虚拟</option>
+				<option value="square">实体</option>
+			</wrap>
+			<disabled type="chk"/>
+			<readOnly type="chk"/>
+		</general>
+		<content label="内容">
+			<value type="textarea"/>
+		</content>
+	</_textarea>
+	<_table endtag="yes">
+		<general>
+			<cellPadding type="digital"/>
+			<cellSpacing type="digital"/>
+			<border type="digital"/>
+			<align type="halign"/>
+			<frame type="select">
+				<option>默认</option>
+				<option value="box">显示四边</option>
+				<option value="above">仅显示顶部边框</option>
+				<option value="rhs">仅显示右边框</option>
+				<option value="lhs">仅显示左边框</option>
+				<option value="hsides">仅显示水平边框</option>
+				<option value="vsides">仅显示垂直边框</option>
+				<option value="border">显示四边</option>
+				<option value="void">不显示边框</option>
+			</frame>
+			<rules type="select">
+				<option>默认</option>
+				<option value="all">每个单元的边框</option>
+				<option value="cols">列之间的垂直边框</option>
+				<option value="rows">行之间的垂直边框</option>
+				<option value="groups">行列之间的垂直边框</option>
+				<option value="none">无边框</option>
+			</rules>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<bgColor type="color"/>
+			<borderColor type="color"/>
+			<borderColorDark type="color"/>
+			<borderColorLight type="color"/>
+		</general>
+	</_table>
+	<_tbody endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<bgColor type="color"/>
+		</general>
+	</_tbody>
+	<_td endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<bgColor type="color"/>
+			<borderColor type="color"/>
+			<borderColorDark type="color"/>
+			<borderColorLight type="color"/>
+			<noWrap type="chk"/>
+		</general>
+	</_td>
+	<_tr endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<bgColor type="color"/>
+			<borderColor type="color"/>
+			<borderColorDark type="color"/>
+			<borderColorLight type="color"/>
+		</general>
+	</_tr>
+	<_th endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<width type="digitalunits"/>
+			<height type="digitalunits"/>
+			<bgColor type="color"/>
+			<borderColor type="color"/>
+			<borderColorDark type="color"/>
+			<borderColorLight type="color"/>
+			<noWrap type="chk"/>
+		</general>
+	</_th>
+	<_thead endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<bgColor type="color"/>
+		</general>
+	</_thead>
+	<_tfoot endtag="yes">
+		<general>
+			<align type="halign"/>
+			<vAlign type="valign"/>
+			<bgColor type="color"/>
+		</general>
+	</_tfoot>
+</tag>

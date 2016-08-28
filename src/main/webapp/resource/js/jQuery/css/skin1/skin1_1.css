@@ -1,0 +1,95 @@
+/*index_top.html*/
+.index_top{ height:123px; background:url(top_bg.gif) repeat-x;} /*头部背景*/
+.index_top .logo{width:510px; height:114px; background:url(logo.gif) no-repeat;} /*LOGO*/
+.index_top .index_top_right .index_top_right_top{ height:32px; line-height:32px; text-align:right; color:#FFF; padding-right:30px;}
+.topmenu{ width:500px; margin-top:50px; margin-bottom:9px; overflow:hidden}
+.topmenu .topmenu_left{width:40px; padding-top:6px; text-align:left;}
+.top_menu{width:443px; height:32px; line-height:32px; background:url(top_3.gif) no-repeat; padding-left:15px;color:#FFF;}/*顶部导航背景*/
+.top_menu li{ width:80px; float:left; margin-left:1px;}
+.top_menu li a{ color:#FFF}
+.top_menu li a:hover{ text-decoration:none;}
+
+   /*按下后样式*/
+   .itemsel {width:78px;margin-left:1px;background:#201664;border-left:1px solid #d4eef4;border-right:1px solid #d4eef4;border-top:1px solid #d4eef4;height:31px;line-height:32px;}
+
+/*ingde_menu.html*/
+.left_body_bg{
+	color: #FFFFFF;
+	background-color: #0a5c8e;
+	background-image: url(../../images/bak.gif);
+	background-repeat: repeat-x;
+!important	
+}
+.index_menu_top{
+	height:27px;
+	background-repeat: no-repeat;
+	background-position: 0 -9px;
+}/*左边top背景*/
+.index_menu{ padding:0 6px 6px 6px;}
+#slider {width:100%}
+.header {
+	width:100%;
+	cursor:pointer;
+	height:23px;
+	line-height:25px;
+	margin-top:6px;
+	background-image: url(../../images/TE_2.gif);
+	background-repeat: no-repeat;
+	background-position: center;
+}/*主栏目背景*/
+.header:hover {background: url(left_meun_3.gif) no-repeat center;}
+.content{display:none; overflow:hidden}
+
+/*子栏目*/
+.index_menu_nav{
+	width:174px;
+	background: url(../../images/main5.gif) repeat-y center;
+}
+.index_menu_nav ul{ padding:10px;}
+.index_menu_nav ul li { height:24px; line-height:24px; background: url(left_meun_4.gif) no-repeat 10%; text-indent: 20%; text-align:left}
+
+/*index_body.html*/
+.index_body_bg{ background:#FFF url(index_body_bg.gif) repeat-x;!important}
+.index_body{
+	margin:20px 30px;
+	text-align:left;
+}
+.index_body_position{ height:28px; border-bottom:1px #666 dashed; line-height:28px; background:url(pic_01.gif) no-repeat 0 8px; padding-left:15px; margin-bottom:20px;}
+.index_body .index_body_main{ padding:15px;border:1px #CCC solid; background:#f7fafd}
+
+   /*列表*/
+   /*------------------------------------------------------*/
+   /*-- 说明: 由于后台都是列表比较多，所以昨天晚上想了一个可以解决大部分列表需求的样式。--*/
+   /*-- 一般一行有好几列，但后台一般不会超过10列。所以干脆每块定义成10%至90%；这样可以 --*/
+   /*-- 根据具体需要进行组合;可以看具体的效果，IE6.0 7.0 8.0 friefox测试通过--*/
+   /*------------------------------------------------------*/
+   .list{background:#FFF}
+   .list li{border-bottom:1px #ccc dashed;clear:both; padding-left:1%; padding-right:1%;display:inline; width:97%;float:left;}
+   .list li.alt {background:#ecf6fc; }
+   .list li.over{background:#FEF3D1; }
+   .list em{display:block; float:left; line-height:18px; padding-top:6px; padding-bottom:6px;}
+   .list em.bfb10{ width:10%;}
+   .list em.bfb20{ width:20%;}
+   .list em.bfb30{ width:30%;}
+   .list em.bfb40{ width:40%;}
+   .list em.bfb50{ width:50%;}
+   .list em.bfb60{ width:60%;}
+   .list em.bfb70{ width:70%;}
+   .list em.bfb80{ width:80%;}
+   .list em.bfb90{ width:90%;}
+   /*列表标题*/
+   .list_tit{}
+   .list_tit li{background:#d2e9ff; font-weight:bold;border-bottom:1px #ccc solid;clear:both; padding-left:1%; padding-right:1%;display:inline; width:97%;float:left;}
+   .list_tit em{display:block; float:left; line-height:18px; padding-top:6px; padding-bottom:6px;}
+   .list_tit em.bfb10{ width:10%;}
+   .list_tit em.bfb20{ width:20%;}
+   .list_tit em.bfb30{ width:30%;}
+   .list_tit em.bfb40{ width:40%;}
+   .list_tit em.bfb50{ width:50%;}
+   .list_tit em.bfb60{ width:60%;}
+   .list_tit em.bfb70{ width:70%;}
+   .list_tit em.bfb80{ width:80%;}
+   .list_tit em.bfb90{ width:90%;}
+   /*按钮*/
+   .button01{ width:45px; height:19px; line-height:19px; border:0; color:#014182; background:url(button01.gif) no-repeat;cursor: pointer;!important}
+   

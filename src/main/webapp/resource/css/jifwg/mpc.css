@@ -1,0 +1,31 @@
+/*
+    MPC.htcÑùÊ½¼¯
+*/
+.mpc-dormant-tab-span-background,.mpc-dormant-content-background,.mpc-select-tab-span-background,.mpc-deselect-tab-span-background
+    {
+    border-color: #a4d0ed !important;
+}
+
+.mpc-dormant-tab-span-background,.mpc-dormant-tab-text-background,.mpc-deselect-tab-span-background,.mpc-deselect-tab-text-background
+{
+    background-color:#F8FDFF !important;
+}
+
+.mpc-select-tab-text-background,.mpc-select-tab-span-background
+{
+    background-color:#d4effa !important;
+}
+
+.mpc-dormant-content-background{
+	background-color:#F8FDFF !important;
+	width: 1050px;
+}
+
+.mpc-select-tab-text-background,.mpc-dormant-tab-text-background{
+	 color:#0072bc !important;
+}
+
+body{
+	 background-color: #d4effa !important;
+}
+

@@ -1,0 +1,738 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择类型</title>
+<script src="../jquery-1.4.2.min.js"></script>
+<script src="../jquery.cookie.js"></script>
+<script src="../jquery-ui-1.7.2.custom.min.js"></script>
+<script src="../jqueryUI/external/jquery.bgiframe-3.0.1.js"></script>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<link href="../../css/redmond/jquery-ui-1.7.2.custom.css" type="text/css" rel="stylesheet"/>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto;
+	min-height: 100%;
+}
+
+</STYLE>
+<style type="text/css">
+div#searchDiv {position: relative;}
+div#listDiv ul {border: 1px solid #d9d6c3;text-align: left;background-color: #FFFFFF;}
+div#listDiv li {
+position: relative;
+width: 100%;
+cursor: default;
+line-height: 18px;
+text-indent: 2px;
+}
+div#listDiv li.hov {background-color: #6666FF;color: #FFFFFF;}
+div#listDiv li.hov span {color: #99FFFF;}
+div#listDiv li span {color: #009900;}
+UL {list-style-type: none;}
+.ellipsis_row{   
+  overflow:hidden;   
+  text-overflow:ellipsis;   
+  white-space:nowrap;   
+  }
+.TreeDIV{
+	WIDTH:200px;HEIGHT:300px;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+	}
+.my-dialog .ui-dialog-titlebar-close{
+	display: none;
+}
+</style>
+
+</head>
+<body onload="iniPage();">
+<fieldset style="margin-top:5px">
+<legend>需求类型选择</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr height="20">
+    <td ALIGN="center">需&nbsp;求&nbsp;类&nbsp;型</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">需&nbsp;求&nbsp;涉&nbsp;及&nbsp;域</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">需&nbsp;求&nbsp;涉&nbsp;系&nbsp;统</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;系&nbsp;统</td>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+    	<IE:XmlSelect id="requireType" size="20" width="185" xmlsrc=""  onchange="showInvole()"/>
+    </td>
+    <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="involveDomain" size="20" width="185"  onchange="showSystem()"/>
+    <!--<select id="staffByOrgList" size="11"  style=" width:160px;" ondblclick="addBtn.click()"/>-->
+    </td>
+    <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="involveSystem" size="20" width="185"  onOptionDblClick="addBtn.click()"/>
+    <!--<select id="staffByOrgList" size="11"  style=" width:160px;" ondblclick="addBtn.click()"/>-->
+    </td>
+    <td width="33">
+    	<table border="0" cellspacing="2" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="addSelect()" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="delSelect();" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn" style="display:none">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="addAllSelect();"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn" style="display:none">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="delAllSelect();"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="20" width="185" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:5px">
+<legend>需求类型描述</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr>
+  	<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  		<tr>
+		    <TD colspan="7" width="655">
+				<TEXTAREA id="oReamrk" style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid;WIDTH: 100%; height: 100;" readonly="readonly"></TEXTAREA>
+			</TD>
+		  </tr>
+  	</table>
+  </tr>
+  
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<!-- <IE:button value="添&nbsp;&nbsp;加" width="33" onclick="add()"/>&nbsp; -->
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+
+<div title="类型项选择" id="2hDomain" style="padding:0;display:none;">
+	<!--div id="2hDomainSel" style="height:150px;padding:0px;overflow:auto;text-align:left;"-->
+	<div>
+		<br/>
+		<font style="font-weight:bold;font:12px verdana,geneva,arial,helvetica,sans-serif,宋体;">需求业务类型:</font>
+			<select style="width:180px" id="RequireBusinessType" onclick="selLevel(this.value)"></select><span style="color:red;">*</span>
+		<br/><br/>
+	</div>
+	<div id="RequireOSSMajorDiv" style="display:none;">
+		<font style="font-weight:bold;font:12px verdana,geneva,arial,helvetica,sans-serif,宋体;">需求业务细类:</font>
+			<select style="width:180px" id="RequireOSSMajor"></select><span style="color:red;">*</span>
+	</div>
+</div>
+
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/staff_manage?tag=36&id=';
+var defaultOrg= '../../../servlet/staff_manage?tag=43';
+var isMultiple;
+var isReturn = false;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var isSetRoot;
+var orgId;
+var oAction;
+var parWin;
+
+var sendRequest;
+var searchDiv;
+var listDiv;
+var searchStaffName;
+var searchUrl = '../../../servlet/staff_manage?tag=78';
+var filters;
+var isRead = false;
+var sendXml;
+
+var isKeyToDo = false;       //是否键盘操作
+var isLiOnclick = false;     //是否是Li点击操作
+
+var keyControlClass = null;  //键盘操作类
+var isChange = false;        //查询内容是否重新加载过
+
+var orgTree;
+
+var seeAllDomain = false;
+
+var element = {
+	requireId :"",
+	requireName :"",
+	involveDomainId :"",
+	involveDomainName : "",
+	involveSystemId : "",
+	involveSystemName : ""
+}
+
+var resultArray = new Array();
+
+var requireIdTemp = "";
+function iniPage()
+{
+	isMultiple = true;
+	//keyControlClass  = new initKeyControl();
+	involveSystem.multiple = true;
+	selectedStaffList.multiple = true;
+	multipleAddBtn.style.display = "inline";
+	multipleDelBtn.style.display = "inline";
+	requireType.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue=-1&domainType=REQUIRE_TYPE";
+	requireType.selectedIndex = 1;
+	//var win = window.dialogArguments;
+	var applyDeptId = getCurrentStaffOrg();
+	var sql = "SELECT instr(','||strcat(org_id)||',',',"+applyDeptId+",') TEXT FROM organization "+
+			  "	START WITH org_id in (2357,1934,2386,198,84,503,1618,1689,1803,396,730,1374,1475,847,1123,62) "+
+			  " CONNECT BY PRIOR org_id=parent_org_id and state='0SA' ";
+	var retVal = queryData(sql);	
+	seeAllDomain = retVal > 0 ? true : false;	
+}
+
+function showInvole(){
+	var requireObj = requireType.getObject();
+	var requireSelectId = "";
+	var requireSelectText = "";
+	for(i=0;i<requireObj.options.length;i++)
+    {
+        if(requireObj.options[i].selected)
+        {
+            requireSelectId = requireObj.options[i].value;
+            requireSelectText = requireObj.options[i].innerHTML;
+            var str = setRemark(requireSelectId,'REQUIRE_TYPE');
+            if(str){
+            	oReamrk.value= str;
+            }
+            break;
+        }
+    }
+    clearElement();
+    involveDomain.delAllOption();  //清空需求涉及系统数据
+    involveSystem.delAllOption();  //清空需求涉及系统
+    //selectedStaffList.delAllOption();  //清除选入框
+    if(requireSelectId != "5" && requireSelectId != "7"){
+    	involveDomain.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="+requireSelectId+"&domainType=REQUIRE_INVOLVE_DOMAIN";
+    }else{
+    	if(seeAllDomain){
+    		involveDomain.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="+requireSelectId+"&domainType=REQUIRE_INVOLVE_DOMAIN";
+        }else{
+        	var applyDeptId = getCurrentStaffOrg();
+        		//window.dialogArguments.oApplyDept.value;
+        	var sql = "select t.type_code from cust_zj_req_domain_map t";
+        	sql += " where t.domain_type='REQUIRE_INVOLVE_DOMAIN'";
+        	sql += " and t.parent_type_code='" + requireSelectId +"'";
+        	sql += " and t.state<>'0BF'";
+        	sql += " and t.is_default<>'1'";
+        	sql += " AND EXISTS ";
+        	sql += " (SELECT COLUMN_VALUE ";
+        	sql += "     FROM TABLE(PKP_STRING_UTIL.INLIST(ORG_ID)) ";
+        	sql += "  WHERE COLUMN_VALUE IN ";
+        	sql += "        (SELECT ORG_ID ";
+        	sql += "                FROM ORGANIZATION ";
+        	sql += "              START WITH ORG_ID = "+ applyDeptId ;
+        	sql += "       CONNECT BY PRIOR PARENT_ORG_ID = ORG_ID)) ";
+        	//sql += " and ','||t.org_id||',' like ('%," + applyDeptId +",%')";
+        	sql += " union";
+        	sql += " select tt.type_code from cust_zj_req_domain_map tt";
+        	sql += " where tt.domain_type='REQUIRE_INVOLVE_DOMAIN'";
+        	sql += " and tt.parent_type_code='" + requireSelectId +"'";
+        	sql += " and tt.state<>'0BF'";
+        	sql += " and tt.org_id = '-1'";
+        	sql += " and tt.is_default='1'";
+        	var retVal = queryAllData(sql);
+        	var retStrVal = [];
+        	for(var k in retVal){
+        		retStrVal.push("'"+retVal[k].TYPE_CODE+"'");
+        	}
+        	var finalStr = retStrVal.length == 0 ? ["'502'","'508'"].join(",") : retStrVal.join(",");
+        	involveDomain.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="+requireSelectId+"&domainType=REQUIRE_INVOLVE_DOMAIN&param=type_code in (" + finalStr +")";
+        }
+    }
+    element.requireId = requireSelectId;
+    element.requireName = requireSelectText;
+}
+
+
+
+function setRemark(typeCode, domainType){
+	var str = "";
+	xmlhttp.Open("POST","/servlet/flowActionZJ.do?method=getTpTreeDescription&domainType="+domainType+'&typeCode='+typeCode,false);
+ 	xmlhttp.send();
+ 	var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+    dataXML.load(xmlhttp.responseXML);
+    var oMsgList = dataXML.selectNodes("/root/rowSet");
+    if(oMsgList.length>0){
+    	str = oMsgList[0].selectSingleNode('DESCRIPTION').text;
+    }
+    return str;
+}
+function clearElement(){
+	element = {
+		requireId :"",
+		requireName :"",
+		involveDomainId :"",
+		involveDomainName : "",
+		involveSystemId : "",
+		involveSystemName : ""
+	}
+}
+
+function showSystem(){
+	var involveDomainObj = involveDomain.getObject();
+	var involveDomainSelectId = "";
+	var involveDomainSelectText = "";
+	for(i=0;i<involveDomainObj.options.length;i++)
+    {
+        if(involveDomainObj.options[i].selected)
+        {
+            involveDomainSelectId = involveDomainObj.options[i].value;
+            involveDomainSelectText = involveDomainObj.options[i].text;
+            var str = setRemark(involveDomainSelectId,'REQUIRE_INVOLVE_DOMAIN');
+            if(str){
+            	oReamrk.value= str;
+            }
+            
+            break;
+        }
+    }
+    
+    element.involveDomainId="";
+    element.involveDomainName="";
+    element.involveSystemId="";
+    element.involveSystemName="";
+    
+    involveSystem.delAllOption();  //清空需求涉及系统
+    //selectedStaffList.delAllOption();  //清除选入框
+    involveSystem.selectedIndex = 0;
+    involveSystem.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="+involveDomainSelectId+"&domainType=REQUIRE_INVOLVE_SYSTEM";
+    element.involveDomainId = involveDomainSelectId;
+    element.involveDomainName = involveDomainSelectText;
+    
+    if(!involveSystem.isNull()){
+    	automaticAdd();
+    }
+}
+
+function automaticAdd(){
+	var obj = involveSystem.getObject();
+	if(obj){
+		addSelect();
+		return ;
+	}
+	else {
+		setTimeout(function(){automaticAdd()},2000);
+	}
+}
+
+
+function addSelect(){
+	var flag = false;
+	if(element.requireId){
+		if(requireIdTemp&&(requireIdTemp!=element.requireId)){
+			EMsg("一个需求表单只能指定一个需求类型，请重新选择！");
+			return false;
+		}
+		var obj = involveSystem.getObject();
+		for(i=0;i<obj.options.length;i++)
+	    {
+	        if(obj.options[i].selected)
+	        {
+	        	resultArray[element.requireId+'@@'+element.involveDomainId+'@@'+obj.options[i].value] = 
+				element.requireId+"@@"+element.requireName+"@@"+element.involveDomainId+"@@"+element.involveDomainName+"@@"+obj.options[i].value+"@@"+obj.options[i].text;
+				flag = true;
+	        }
+	    }
+		involveSystem.addSelectedTo(selectedStaffList,true);
+		requireIdTemp = element.requireId;
+		
+		//添加判断需求涉及域类型 弹出框
+    	if((',104,202,604,201,').indexOf(','+element.involveDomainId+',')>-1){
+    		showLevle2h(element.involveDomainId);
+    	}
+	}
+}
+
+function addAllSelect(){
+	if(element.requireId){
+		if(requireIdTemp&&(requireIdTemp!=element.requireId)){
+			EMsg("一个需求表单只能指定一个需求类型，请重新选择！");
+			return false;
+		}
+		
+		var obj = involveSystem.getObject();
+		for(i=0;i<obj.options.length;i++)
+	    {
+	        if(obj.options[i])
+	        {
+	        	resultArray[element.requireId+'@@'+element.involveDomainId+'@@'+obj.options[i].value] = 
+				element.requireId+"@@"+element.requireName+"@@"+element.involveDomainId+"@@"+element.involveDomainName+"@@"+obj.options[i].value+"@@"+obj.options[i].text;
+				
+	        }
+	    }
+		involveSystem.addAllTo(selectedStaffList,true)
+		requireIdTemp = element.requireId;
+	}
+}
+
+
+function delSelect(){
+	selectedStaffList.delSelectedOption();
+	for(var props in resultArray) {
+		if(props!='indexOf'&&props!='remove'){
+			if(resultArray[props]){
+				var involveSystemId =resultArray[props].split('@@')[4];
+				var obj = selectedStaffList.getObject();
+				var flag = true;
+				for(i=0;i<obj.options.length;i++)
+			    {
+			        if(obj.options[i].value == involveSystemId)
+			        {
+			        	flag = false; 
+			        	break;
+			        }
+			    }
+			    if(flag){
+			    	delete resultArray[props];
+			    }
+			}
+		}
+	}
+	
+	if(selectedStaffList.getObject().options.length==0){
+		resultArray = new Array();
+		requireIdTemp = "";
+	}
+}
+
+function delAllSelect(){
+	resultArray = new Array();
+	requireIdTemp = "";
+	selectedStaffList.delAllOption();
+}
+
+function initTree(oDoc)
+{
+	if(isSetRoot && orgId)
+	{
+		var menuRoot = oDoc.selectSingleNode('/root/Menu');
+		var vaOrg = orgId.split(','),xpath = [];
+		for(var i = 0;i< vaOrg.length;i++)
+		{
+			menuRoot.appendChild(oDoc.selectSingleNode('//MenuItem[@id='+vaOrg[i]+']'));
+			xpath[i] = "@id!=" + vaOrg[i];
+		}
+		
+		oDoc.selectNodes("/root/Menu/MenuItem["+xpath.join(" and ")+"]").removeAll();
+	}
+	if(!isNull(oAction))
+	{
+		oAction.pretreatment(oDoc);
+	}
+}
+
+function treeChangeEvent(oItem)
+{
+	if(!oItem || isRead) return;
+	var selectedValue = oItem.id;
+	if(selectedValue!="")
+	{
+		var url = actionURL+selectedValue;
+		if(!isNull(oAction))
+		{
+			var _url = oAction.change(event);
+			if(oAction.isReplace)
+			{
+				url = getXMLSrc(parWin.document.URL,_url);
+			}
+		}
+		getStaffList(url);
+	}
+	else
+	{
+		staffByOrgList.xmlsrc = "";
+	}
+}
+
+//如果以","分隔返回第一个","前面的数据,否则直接返回。
+function getOrgId(orgId)
+{
+	if(!orgId) return orgId;
+	var index = orgId.indexOf(',');
+	if(index < 0)
+		return orgId;
+	else
+		return orgId.substring(0,index);
+}
+
+function ClickAction()
+{
+	this.parent = new XMLTree_onClick_Action;;
+	this.parent.click = function(oItem)
+	{
+		treeChangeEvent(oItem);
+	}
+
+	return this.parent
+}
+
+function newTree()
+{
+	this.parent = new XMLTree_onBeforeXMLTrans_Action
+	this.parent.pretreatment = function(oDoc)
+	{
+		initTree(oDoc);		
+		return oDoc;
+	}
+	return this.parent;
+}
+
+function LoadAction() 
+{
+	this.parent = new XMLTree_onLoad_Action;
+	this.parent.load = function() 
+	{
+		if(orgId)
+		{
+			//默认选中某个组织
+			var rootOrgId;
+			if(isSetRoot && orgId)
+				rootOrgId = getOrgId(orgId);
+			else
+				rootOrgId = 0;
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var url = "../../../servlet/staff_manage?tag=82&orgId="+getOrgId(orgId)+"&rootOrgId="+rootOrgId;
+			xmlhttp.open("POST",url,false);
+			xmlhttp.send();
+			var path = xmlhttp.responseXML.selectSingleNode('//PATH');
+			if(path)			
+				orgTree.selectItemByPath(path.text.replace(/^\//g, ""));
+			else
+			{
+				var oItem = document.getElementById(getOrgId(orgId));
+				if(oItem) oItem.click();
+			}
+		}
+		
+		if(isRead)
+		{
+			orgTree.isReadOnly = true;
+			orgTreeDiv.disabled = true;			
+		}
+	}
+	
+	return this.parent;
+}
+
+function getStaffList(_url)
+{
+	staffByOrgList.xmlsrc = _url;
+}
+
+function moveIn()
+{
+	if(!isMultiple)
+	{
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter()
+{	
+	if(setElement()){
+		//if(window.dialogArguments.isExistOther(element.requireId+"@@"+element.involveDomainId+"@@"+element.involveSystemId))
+		//{
+		//	EMsg("该需求类型已经存在，请重新选择！");
+		//	return;
+		//}
+		if(window.dialogArguments.isSameRequire(requireIdTemp))
+		{
+			EMsg("一个需求表单只能指定一个需求类型，请重新选择！");
+			return;
+		}
+		window.returnValue = resultArray;
+		window.close();
+	}
+}
+
+function setElement(){
+	var staffObj = new Object();
+	var oSelect = selectedStaffList.getObject();
+	if(selectedStaffList.getLength()==0){
+		EMsg("请选择指定的数据！");
+		return false;
+	}
+	if(involveSystem.getLength()==0||involveDomain.getLength()==0)
+	{
+		element.involveSystemId = "";
+		element.involveSystemName = "";
+	}
+	else{
+		element.involveSystemId = oSelect.options[0].value;
+		element.involveSystemName = oSelect.options[0].text;
+	}
+	return true;
+}
+function add(){
+	if(setElement()){
+		if(window.dialogArguments.isExistOther(element.requireId+"@@"+element.involveDomainId+"@@"+element.involveSystemId))
+		{
+			EMsg("该需求类型已经存在，请重新选择！");
+			return;
+		}
+		if(window.dialogArguments.isSameRequire(element.requireId))
+		{
+			EMsg("一个需求表单只能指定一个需求类型，请重新选择！");
+			return;
+		}
+		window.dialogArguments.addRowOther(element.requireId,element.requireName,element.involveDomainId,element.involveDomainName,element.involveSystemId,element.involveSystemName);
+	}
+}
+
+function getXMLSrc(documentURL,xmlSrc)
+{
+	var re = /(.*\/)(.*)/g;
+	return  documentURL.replace(re, "$1"+xmlSrc);
+}
+
+function isNull(value)
+{
+    return (typeof value == "undefined" || value==null);
+}
+
+//判断是否已经存在option后再添加option
+function addSelectOption(selectOjb,option)
+{
+	var flag = true;
+	for(var j=0;j<selectOjb.options.length;j++)
+	{
+		if(selectOjb.options[j].value==option.value)
+		{
+			flag = false;
+			break;
+		}
+	}
+	if(flag)
+	{
+		selectOjb.add(option);
+	}
+}
+//2.5级菜单
+function showLevle2h(involveId){
+	var url = "../../../servlet/DataOperServlet?tag=18&parentValue="+involveId+"&domainType=REQUIRE_INVOLVE_DOMAIN2.5";
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	xmlhttp.open("POST",url,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp)){
+		//alert(xmlhttp.responseXML.xml);
+		var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+		dataXML.load(xmlhttp.responseXML);	
+		var oRows = dataXML.selectNodes("/root/rowSet");
+		var iLen = oRows.length;
+		
+		if(iLen<=0){return;}
+		
+		//需求业务类型
+		var oSelect = document.getElementById("RequireBusinessType");
+		var selectedValue;
+		for(var i=oSelect.length-1;i>=0;i--)
+		{
+	    	oSelect.options.remove(i);
+		}
+		for(var i=0;i<iLen;i++)
+    	{
+			var oOption = document.createElement("OPTION");
+			oOption.value =oRows[i].getAttribute("id");
+			oOption.text = oRows[i].selectSingleNode("TYPE_NAME").text;	
+			oSelect.add(oOption);
+			if(i==0){
+				oOption.selected = true;
+				selectedValue = oOption.value;
+			}
+		}
+		
+		if((',604,104,202,201,').indexOf(','+element.involveDomainId+',')>-1){//功能开发类的OSS，数据补丁类的OSS，产品套餐类的套餐与营销活动支撑
+			//需求业务细类
+			document.getElementById("RequireOSSMajorDiv").style.display = 'block';
+			selLevel(selectedValue);
+		}else{
+			delete resultArray['RequireOSSMajor'];
+			document.getElementById("RequireOSSMajorDiv").style.display = 'none';
+		}
+					
+	 	$('#2hDomain').dialog({
+	 		dialogClass: "my-dialog",
+	        modal:true,
+	        width: '300px',
+	        heigth: '150px',
+	        autoOpen: false,
+	        zIndex : 1000,
+	        bgiframe:true,
+	        //overlay: {
+	        //        backgroundColor: '#000',
+	        //        background: "black" ,
+	        //        opacity: 0.1
+	        //},
+	        buttons: {
+	            '确 定' : function(){
+	            	var requireBusinessType = document.getElementById('RequireBusinessType');
+	            	var requireOSSMajor = document.getElementById('RequireOSSMajor');
+	            	resultArray['RequireBusinessType']= requireBusinessType.value+'@@'+requireBusinessType.options[requireBusinessType.selectedIndex].innerText;
+	            	if((',604,104,202,201,').indexOf(','+element.involveDomainId+',')>-1){
+	            		resultArray['RequireOSSMajor'] = requireOSSMajor.value+'@@'+requireOSSMajor.options[requireOSSMajor.selectedIndex].innerText;
+	                }else{
+	                	delete resultArray['RequireOSSMajor'];
+	                }
+	                $(this).dialog('close');
+	            }
+	        }
+	    });
+	    $("#2hDomain").dialog('open');
+	}
+}
+
+//联动 需求业务细类	    
+function selLevel(orequireBusinessTypeValue){
+	var isShow = document.getElementById("RequireOSSMajorDiv").style.display;
+	if(isShow=='none'){return;}
+	
+ 	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	xmlhttp.Open("POST","../../../servlet/DataOperServlet?tag=18&domainType=REQUIRE_OSS_MAJOR2.5&parentValue="+orequireBusinessTypeValue,false);
+	xmlhttp.send();
+		
+	var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+	dataXML.load(xmlhttp.responseXML);	
+	var oSelect=document.getElementById("RequireOSSMajor")
+	for(var i=oSelect.length-1;i>=0;i--)
+	{
+    	oSelect.options.remove(i);
+	}
+	var oRows = dataXML.selectNodes("/root/rowSet");
+	var iLen = oRows.length;
+	for(var i=0;i<iLen;i++)
+   	{
+		var oOption = document.createElement("OPTION");
+		oOption.value =oRows[i].getAttribute("id");
+		oOption.text = oRows[i].selectSingleNode("TYPE_NAME").text;	
+		oSelect.add(oOption);
+	}  
+}
+</SCRIPT>
+
+</body>
+</html>

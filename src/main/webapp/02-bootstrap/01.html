@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-3.3.7/dist/css/bootstrap.css">
+    <!--[if lt IE 9]>
+    <script src="bootstrap-3.3.7/dist/html5shiv-printshiv/html5shiv.js"></script>
+    <script src="bootstrap-3.3.7/dist/html5shiv-printshiv/respond.js"></script>
+    <![endif]-->
+    <style>
+        h4 {
+            margin-top: 25px;
+        }
+        .row {
+            margin-bottom: 10px;
+        }
+        .row .row {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+        [class*="col-"] {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            background-color: #eee;
+            background-color: rgba(86,61,124,.15);
+            border: 1px solid #ddd;
+            border: 1px solid rgba(86,61,124,.2);
+        }
+
+        hr {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-8">col-md-8</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-4">col-md-4</div>
+
+    </div>
+
+
+</div>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-8">col-md-8</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+        <div class="col-md-3">col-md-3</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-4">col-md-4</div>
+        <div class="col-md-4">col-md-4</div>
+
+    </div>
+
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 ">col-md-6</div>
+        <div class="col-md-3 col-md-offset-3">col-md-3 col-md-offset-3</div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">col-md-5</div>
+        <div class="clearfix visible-md-block"></div>
+        <div class="col-md-5 col-md-offset-2">col-md-5 col-md-offset-2</div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-5">col-md-5</div>
+        <div class="col-md-5 col-xs-offset-2">col-md-5 col-xs-offset-2</div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">col-md-6 col-md-offset-3</div>
+    </div>
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-9">
+                行包行
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    row :col-md-5 col-md-offset-1
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-push-4">left :col-md-8</div>
+        <div class="col-md-4 col-md-pull-8">right:col-md-4</div>
+
+    </div>
+</div>
+
+<div class="container">
+    <ul class="list-unstyled list-inline">
+        <li>list-unstyled list-inline</li>
+        <li>list-unstyled list-inline</li>
+        <li>list-unstyled list-inline</li>
+        <li>list-unstyled list-inline</li>
+
+    </ul>
+
+    <dl class="dl-horizontal">
+        <dt>dt dl-horizontal <kbd>cd</kbd></dt>
+        <dd>dd</dd>
+        <dt>dt dl-horizontal <kbd><kbd>ctrl</kbd> + <kbd>,</kbd></kbd></dt>
+        <dd>dd</dd>
+    </dl>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="">
+            <table class="table table-bordered table-striped table-hover table-condensed">
+                <thead>
+                <tr class="active">
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="success">
+                    <td rowspan="2">1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr class="info">
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@TwBootstrap</td>
+                </tr>
+                <tr class="danger">
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr class="warning">
+                    <td>3</td>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table <!--table-condensed-->">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="jquery-1.11.3/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="bootstrap-3.3.7/dist/js/bootstrap.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="bootstrap-3.3.7/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

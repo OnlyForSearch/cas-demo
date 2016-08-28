@@ -1,0 +1,36 @@
+BODY {
+	MARGIN: 0px;
+}
+
+.MenuDIV{
+	SCROLLBAR-FACE-COLOR: #F5F5F5;
+	SCROLLBAR-HIGHLIGHT-COLOR: #C0C0C0;
+	SCROLLBAR-SHADOW-COLOR: #C0C0C0;
+	SCROLLBAR-ARROW-COLOR: #808080;
+	SCROLLBAR-DARKSHADOW-COLOR: #F5F5F5;
+	SCROLLBAR-BASE-COLOR: #F5F5F5;
+	OVERFLOW: auto;
+	PADDING: 4px 0px 0px 5px;
+	/*BACKGROUND-COLOR: #FCFEFC;  */
+}
+
+.MenuItem{
+	HEIGHT: 100%;
+	PADDING: 4px 2px 0px 2px;
+	CURSOR: default;
+	COLOR: #000000;
+}
+
+.icoItem{
+	HEIGHT: 100%;
+	PADDING: 2px 0px 0px 1px;
+}
+
+.DragDIV{
+	POSITION: absolute;
+	Z-INDEX: 99;
+	DISPLAY: block;
+	FILTER: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+	border:1px solid black;
+}
+

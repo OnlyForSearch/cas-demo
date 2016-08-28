@@ -1,0 +1,215 @@
+<PUBLIC:COMPONENT tagname="hint" literalcontent="true">
+	<PUBLIC:PROPERTY NAME="width" value="160"/>
+	<PUBLIC:PROPERTY NAME="height" value="30"/>
+	<PUBLIC:PROPERTY NAME="cacheTime" put="setCacheTime" get="getCacheTime"/>
+	<PUBLIC:METHOD NAME="show"/>
+	<PUBLIC:METHOD NAME="hide"/>
+	<PUBLIC:METHOD NAME="loadHtml"/>
+	<PUBLIC:METHOD NAME="getElementById"/>
+	<PUBLIC:METHOD NAME="addNamespace"/>
+	<PUBLIC:METHOD NAME="clear"/>
+	<PUBLIC:EVENT id="createId" name="onCreate" />
+</PUBLIC:COMPONENT>
+<SCRIPT language="JScript">
+var bodyCss = 'border:1px solid #DADADA;margin:0;overflow:hidden;font-size:9pt;';
+var divCss = "border:1px solid white;background:#F5F5F5;height:100%;weight:100%;overflow:auto;scrollbar-3dlight-color:'#ABACA9';scrollbar-highlight-color:'#FFFFFF';scrollbar-face-color: '#E6E4DF';scrollbar-shadow-color:'#FFFFFF';scrollbar-darkshadow-color:'#ABACA9';scrollbar-track-color:'#F1F1F6';";
+var oHint;
+var oHintDiv;
+var isOutHint = true;
+var showSrcElement;
+var deferShowId;
+var deferHideId;
+var namespaceList=[];
+var isLoadHtml = false;
+var oTimer;
+
+var showDeferTime = 300;
+var hintDeferTime = 300;
+var cacheMinute;
+
+function defer(fn,millis,args,o)
+{
+	var deferFn = function()
+	{
+		fn.apply(o||this,args||[]);
+	}
+	return window.setTimeout(deferFn,millis);
+}
+
+function createHint()
+{
+	oHint = window.createPopup();
+	var oHintDocument = oHint.document;
+	var oHintBody = oHintDocument.body;
+	oHintBody.style.cssText = bodyCss;
+	oHintBody.attachEvent('onmouseenter',onHint);
+	oHintBody.attachEvent('onmouseleave',outHint);
+	oHintDiv = oHintDocument.createElement('div');
+	oHintDiv.style.cssText = divCss;
+	oHintBody.appendChild(oHintDiv);
+	if(oHintDocument.readyState == "complete")
+	{
+		importNamespace(oHintDocument,0);
+	}
+	else
+	{
+		oHintDocument.onreadystatechange = function()
+		{
+			if(oHintDocument.readyState == "complete")
+			{
+				importNamespace(oHintDocument,0);
+				oHintDocument.onreadystatechange = null;
+			}
+		}
+	}
+}
+
+function importNamespace(doc,index)
+{
+	var ns = namespaceList[index];
+	if(ns)
+	{
+		var existNs;
+		for(var i=0;existNs=doc.namespaces[i]&&(ns.name != existNs.name);i++);
+		if(existNs)
+		{
+			existNs.doImport(ns.url);
+		}
+		else
+		{
+			existNs = doc.namespaces.add(ns.name,"hint",ns.url);
+		}
+		if(existNs.readyState == "complete")
+		{
+			importNamespace(doc,++index);
+		}
+		else
+		{
+			existNs.onreadystatechange = function()
+			{
+				if(existNs.readyState == "complete")
+				{
+					importNamespace(doc,++index);
+					existNs.onreadystatechange = null;
+				}
+			}
+		}
+	}
+	else
+	{
+		loadHtml(element.innerHTML);
+		fireCreateEvent();
+	}
+}
+
+function fireCreateEvent()
+{
+	var currentTime = new Date();
+	if(!oTimer || (currentTime-oTimer)>cacheTime)
+	{
+		oEvent = createEventObject();
+		oEvent.hint = element;
+		oEvent.showElement = showSrcElement;
+		createId.fire(oEvent);		
+		oTimer = currentTime;
+	}
+}
+
+function onHint()
+{
+	isOutHint = false;
+}
+
+function outHint()
+{
+	if(isOutHint === false)
+	{
+		isOutHint = true;
+		hide();
+	}
+}
+
+function loadHtml(sHtml)
+{
+	oHintDiv.innerHTML = sHtml;
+	isLoadHtml = true;
+}
+
+function showPopup(x,y)
+{
+	if(!oHint)
+	{
+		createHint();
+	}
+	if(isLoadHtml)
+	{
+		fireCreateEvent();
+	}
+	oHint.show(x,y,element.width,element.height);
+}
+
+function show(sHtml)
+{
+	window.clearTimeout(deferHideId);
+	var oSrc = event.srcElement;
+	if(showSrcElement != oSrc)
+	{
+		hidePopup();
+		showSrcElement = oSrc;
+	}
+	if(!oHint || !oHint.isOpen)
+	{
+		window.clearTimeout(deferShowId);
+		deferShowId = defer(showPopup,showDeferTime,[event.screenX,event.screenY+25,sHtml]);
+	}
+}
+
+function hidePopup()
+{
+	if(oHint && isOutHint)
+	{
+		oHint.hide();
+	}
+}
+
+function hide()
+{
+	window.clearTimeout(deferShowId);
+	window.clearTimeout(deferHideId);
+	deferHideId = defer(hidePopup,hintDeferTime);
+}
+
+function addNamespace(name,url)
+{
+	namespaceList.push({
+		name	: name,
+		url		: url
+	});
+}
+
+function getElementById(sId)
+{
+	return oHint.document.getElementById(sId);
+}
+
+function setCacheTime(_cacheTime)
+{
+	cacheMinute = parseInt(_cacheTime,10);
+	if(!isNaN(cacheMinute))
+	{
+		cacheMinute = cacheMinute*1000;
+	}
+}
+
+function clear()
+{
+	oHint = null;
+	oTimer = null;
+	isLoadHtml = false;
+}
+
+function getCacheTime()
+{
+	return cacheMinute;
+}
+</SCRIPT>

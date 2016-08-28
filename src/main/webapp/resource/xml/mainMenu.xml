@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<root>
+  <SYS_MENU>
+    <ICO>resource/image/ITindex/page2_lable.gif</ICO><!-- resource/image/indexImage/dot1.gif -->
+    <BACKGROUND>resource/image/ITindex/page2_bg.jpg</BACKGROUND><!--resource/image/indexImage/index_bg2.gif -->
+    <BACKGROUND_COLOR>#FFFFFF</BACKGROUND_COLOR><!-- 默认使用：#FFFFFF，SFM使用#F2F7FB -->
+  </SYS_MENU>
+  <MID>
+    <BACKGROUND>resource/image/ITindex/page2_bg3.jpg</BACKGROUND><!-- resource/image/bg2.gif -->
+    <LEFT_MID_IMG>resource/image/bg2.gif</LEFT_MID_IMG><!-- resource/image/bg2_Ah.gif-->
+    <OUT_IMG>resource/image/ITindex/page2_botton_1.jpg</OUT_IMG><!--resource/image/cl2.gif -->
+    <MOVE_IMG>resource/image/ITindex/page2_botton.jpg</MOVE_IMG><!-- resource/image/cl2-1.gif -->
+    <OUT_IMG_HIDE>resource/image/ITindex/page2_botton2.jpg</OUT_IMG_HIDE><!-- resource/image/cl1.gif -->
+    <MOVE_IMG_HIDE>resource/image/ITindex/page2_botton2_1.jpg</MOVE_IMG_HIDE><!-- resource/image/cl1-1.gif -->
+  </MID>
+</root>

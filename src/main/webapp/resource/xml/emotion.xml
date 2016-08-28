@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="GB2312"?>
+<EMOTIONS>
+  <EMOTION title="惊讶"><SRC>resource/image/emotion/1-suprise.gif</SRC></EMOTION>
+  <EMOTION title="发呆"><SRC>resource/image/emotion/2-daze.gif</SRC></EMOTION>
+  <EMOTION title="流泪"><SRC>resource/image/emotion/3-weep.gif</SRC></EMOTION>
+  <EMOTION title="睡"><SRC>resource/image/emotion/4-sleep.gif</SRC></EMOTION>
+  <EMOTION title="撇嘴"><SRC>resource/image/emotion/5-lip.gif</SRC></EMOTION>
+  
+  <EMOTION title="色"><SRC>resource/image/emotion/6-love.gif</SRC></EMOTION>
+  <EMOTION title="得意"><SRC>resource/image/emotion/7-exultation.gif</SRC></EMOTION>
+  <EMOTION title="害羞"><SRC>resource/image/emotion/8-pudency.gif</SRC></EMOTION>
+  <EMOTION title="闭嘴"><SRC>resource/image/emotion/9-stopper.gif</SRC></EMOTION>
+  <EMOTION title="大哭"><SRC>resource/image/emotion/10-cry.gif</SRC></EMOTION>
+  
+  <EMOTION title="尴尬"><SRC>resource/image/emotion/11-embarrassed.gif</SRC></EMOTION>
+  <EMOTION title="发怒"><SRC>resource/image/emotion/12-huff.gif</SRC></EMOTION>
+  <EMOTION title="调皮"><SRC>resource/image/emotion/13-actup.gif</SRC></EMOTION>
+  <EMOTION title="呲牙"><SRC>resource/image/emotion/14-tooth.gif</SRC></EMOTION>
+  <EMOTION title="微笑"><SRC>resource/image/emotion/15-smile.gif</SRC></EMOTION>
+  
+  <EMOTION title="难过"><SRC>resource/image/emotion/16-sad.gif</SRC></EMOTION>
+  <EMOTION title="酷"><SRC>resource/image/emotion/17-cool.gif</SRC></EMOTION>
+  <EMOTION title="非典"><SRC>resource/image/emotion/18-mouth.gif</SRC></EMOTION>
+  <EMOTION title="抓狂"><SRC>resource/image/emotion/19-crazy.gif</SRC></EMOTION>
+  <EMOTION title="呕吐"><SRC>resource/image/emotion/20-vomit.gif</SRC></EMOTION>
+  
+  <EMOTION title="偷笑"><SRC>resource/image/emotion/21-titter.gif</SRC></EMOTION>
+  <EMOTION title="可爱"><SRC>resource/image/emotion/22-lovely.gif</SRC></EMOTION>
+  <EMOTION title="白眼"><SRC>resource/image/emotion/23-supercilious.gif</SRC></EMOTION>
+  <EMOTION title="傲慢"><SRC>resource/image/emotion/24-haughty.gif</SRC></EMOTION>
+  <EMOTION title="饥饿"><SRC>resource/image/emotion/25-hunger.gif</SRC></EMOTION>
+  
+  <EMOTION title="困"><SRC>resource/image/emotion/26-sleepy.gif</SRC></EMOTION>
+  <EMOTION title="惊恐"><SRC>resource/image/emotion/27-frighten.gif</SRC></EMOTION>
+  <EMOTION title="汗"><SRC>resource/image/emotion/28-sweat.gif</SRC></EMOTION>
+  <EMOTION title="憨笑"><SRC>resource/image/emotion/29-simper.gif</SRC></EMOTION>
+  <EMOTION title="咒骂"><SRC>resource/image/emotion/30-drat.gif</SRC></EMOTION>
+  
+  <EMOTION title="疑问"><SRC>resource/image/emotion/31-doubt.gif</SRC></EMOTION>
+  <EMOTION title="嘘..."><SRC>resource/image/emotion/32-sh.gif</SRC></EMOTION>
+  <EMOTION title="晕"><SRC>resource/image/emotion/33-dizzy.gif</SRC></EMOTION>
+  <EMOTION title="折磨"><SRC>resource/image/emotion/34-agonize.gif</SRC></EMOTION>
+  <EMOTION title="衰"><SRC>resource/image/emotion/35-decline.gif</SRC></EMOTION>
+  
+  <EMOTION title="骷髅"><SRC>resource/image/emotion/36-death.gif</SRC></EMOTION>
+  <EMOTION title="敲打"><SRC>resource/image/emotion/37-beat.gif</SRC></EMOTION>
+  <EMOTION title="再见"><SRC>resource/image/emotion/38-goodbye.gif</SRC></EMOTION>
+  <EMOTION title="闪"><SRC>resource/image/emotion/39-leave.gif</SRC></EMOTION>
+  <EMOTION title="发抖"><SRC>resource/image/emotion/40-shake.gif</SRC></EMOTION>
+  
+  <EMOTION title="爱情"><SRC>resource/image/emotion/41-lovers.gif</SRC></EMOTION>
+  <EMOTION title="跳"><SRC>resource/image/emotion/42-jump.gif</SRC></EMOTION>
+  <EMOTION title="找"><SRC>resource/image/emotion/43-seek.gif</SRC></EMOTION>
+  <EMOTION title="拥抱"><SRC>resource/image/emotion/44-embrace.gif</SRC></EMOTION>
+  <EMOTION title="胜利"><SRC>resource/image/emotion/45-victory.gif</SRC></EMOTION>
+  
+  <EMOTION title="心碎"><SRC>resource/image/emotion/46-heartbreaken.gif</SRC></EMOTION>
+  <EMOTION title="握手"><SRC>resource/image/emotion/47-handshake.gif</SRC></EMOTION>
+  <EMOTION title="玫瑰"><SRC>resource/image/emotion/48-rose.gif</SRC></EMOTION>
+  <EMOTION title="凋谢"><SRC>resource/image/emotion/49-sear.gif</SRC></EMOTION>
+  <EMOTION title="吻"><SRC>resource/image/emotion/50-kiss.gif</SRC></EMOTION>
+</EMOTIONS>

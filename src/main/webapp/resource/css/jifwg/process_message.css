@@ -1,0 +1,165 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.main {
+	width: 100%;
+	margin-left: auto; 
+	margin-right: auto; 
+	background-color:#F8FDFF;
+}
+body {
+	font-size: 14px;
+	font-family: 宋体;
+}
+.round {
+	-moz-border-radius: 4px; 
+	-webkit-border-radius: 4px; 
+	border-radius: 4px; 
+	background: #FFF;
+	-moz-box-shadow: 0px 2px 3px #9C9C9C; 
+	-webkit-box-shadow: 0px 2px 3px #9C9C9C; 
+	box-shadow: 0px 2px 3px #9C9C9C; 	
+	float: right;
+}
+.round2 {
+	-moz-border-radius: 2px; 
+	-webkit-border-radius: 2px; 
+	border-radius: 2px;
+	background: #b9e3f1;
+}
+.right_content {
+	position: relative;
+	width: 840px;
+	height: 130px;
+	border: 1px;
+	font-weight: bold;
+}
+.content {
+	position: relative;
+	border: 1px solid #efd2a4; 
+	width: 760px;
+	height: 100px;
+	padding: 8px 0 1px 5px;
+	background-color: #fffbf6; 
+	font-weight: bold;
+}
+.img_list {
+	padding: 0;
+	margin-top: 5px;
+	width: 270px;
+}
+.img_list img {
+	width: 270px; 
+	height: 202px; 
+	border: 1px;
+}
+.left_city {
+	width: 80px; 
+	height: 123px;
+	float: left;
+}
+.arrows_left {
+	width: 9px;
+	height: 8px;
+	margin-top: 45px;
+	background: url(/resource/image/detail-left-arrows.png);
+	float: right;
+}
+.arrows_left_ls {
+	width: 9px;
+	height: 8px;
+	margin-top: 45px;
+	background: url(/resource/image/right-arrows.png);
+	float: right;
+}
+.city_img {
+	width: 54px; 
+	height: 54px;
+	padding: 17px 5 5px 13px;
+	margin-top: 35px;
+	float: left;
+	background: url(/resource/image/cityimgcs.png) center no-repeat;
+}
+.city_img_ls {
+	width: 54px; 
+	height: 54px;
+	padding: 17px 5 5px 13px;
+	margin-top: 35px;
+	float: left;
+	background: url(/resource/image/cityimgls.png) center no-repeat;
+}
+
+.content_ls {
+	position: relative;
+	border: 1px solid #b2e5f9; 
+	width: 760px;
+	height: 100px;
+	padding: 8px 0 1px 5px;
+	background-color: #e0f4fc; 
+	font-weight: bold;
+}
+
+
+.timeline_div {
+	float: left;
+	width: 160px;
+}
+
+.time_line {
+	height: 200px; 
+	width: 130px;
+	border-right: 2px solid #d4effa;
+}
+
+.content_list {
+	width: 840px; 
+	float: left;
+	padding-top:50px;
+}
+
+/*时间框*/
+.time_box {
+	position: relative;	
+	z-index: 10000;
+	top: -28px;
+	left: -114px;
+	font-size: 13px;
+	width: 114px;
+	height: 16px;
+	line-height: 20px;
+	text-align: left;
+	font-weight:bold;
+}
+.time_val {
+	float: left;
+	width: 87px;
+	background: url(/resource/image/time.png) no-repeat right;
+}
+
+.detail_cs {
+	clear: both;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+	background-color: #faddaf; 
+}
+.detail_ls {
+	clear: both;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+	background-color: #b2e5f9; 
+}
+.detail {
+	clear: both;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+}
+
+/*字体颜色*/
+.font_color_cs {
+	color: #efd2a4;
+}

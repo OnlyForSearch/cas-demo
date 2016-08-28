@@ -1,0 +1,143 @@
+.quickMenuNormal {width:49px;height:108px;background:url(/resource/image/indexFJLT/right_function.png) center no-repeat;cursor:pointer;}
+.quickMenuShow {width:86px;height:300px;background:url(/resource/image/indexFJLT/right_pannel.png) center no-repeat;cursor:pointer;}
+#quickMenuList {display:none;margin-top:50px;padding-left:5px;}
+.quickMenuItem {position:relative;left:23px;width:60px;height:25px;padding-top:45px; color:#67B0E7;}
+
+.mainTab {
+	border-left:1px solid #98D4EE; 
+	border-right:1px solid #98D4EE; 
+	border-bottom:1px solid #98D4EE; 
+	width:1325px;
+	margin-top:24px;
+	margin-bottom:24px;}
+.mainTab2 {
+	margin-bottom:45px;}
+.shadow {
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);/*ie*/ 
+	-moz-box-shadow: 2px 2px 10px #909090;/*firefox*/ 
+	-webkit-box-shadow: 2px 2px 10px #909090;/*safari»òchrome*/ 
+	box-shadow:2px 2px 0px #909090;/*opera»òie9*/ 
+}
+.mainTabTopBlank {
+	float:right;
+	border-top:1px solid #98D4EE;
+	border-bottom:1px solid #98D4EE;
+	width: 1174px;
+	height: 35px;
+	filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#F1FAFF',endColorStr='#E1F3FF',gradientType='0'); 
+	background: -moz-linear-gradient(top, #F1FAFF, #E1F3FF); 
+	background: -o-linear-gradient(top,#F1FAFF, #E1F3FF); 
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F1FAFF), to(#E1F3FF)); 
+}
+.mainTabTopTitle {float:left;left:1px;border-top:4px solid #FFAE1F;width:149px;height:35px;line-height:30px;color:#3E9FDF;font-size:16px;font-weight:bold;}
+.titleBackG1 {background-color:#FFFFFF;}
+.titleBackG2 {background: url(/resource/image/indexFJLT/bg.gif);}
+
+.sysState {height:328px;width:1324px;background-color:#FFFFFF;}
+	.sysMainDiv {float:left;height:310px;width:263px;text-align:center;border-left:1px dashed #D0D0D0;}
+	.noLine {border-left:0px;}
+	.sysName {height:35px;width:100%;font-size:22px;margin-top:70px;}
+	.sysAlarmCount {height:30px;width:100%;margin-top:10px;}
+	.sysAlarmLevel1 {color:#E20001;}
+	.sysAlarmLevel2 {color:#FE9404;}
+	.sysAlarmLevel3 {color:#177BC6;}
+	.sysLogoPosi {margin-top:40px;height:116px;width:116px;cursor:pointer;}
+	.sys1Logo {background:url(/resource/image/indexFJLT/zgscxt.png) center no-repeat;}
+	.sys2Logo {background:url(/resource/image/indexFJLT/zgcxxt.png) center no-repeat;}
+	.sys3Logo {background:url(/resource/image/indexFJLT/wsbsxt.png) center no-repeat;}
+	.sys4Logo {background:url(/resource/image/indexFJLT/jdfpxt.png) center no-repeat;}
+	.sys5Logo {background:url(/resource/image/indexFJLT/ywjk.png) center no-repeat;}
+	
+	.stateLogoPosi {position:relative;left:33px;top:55px; height:36px;width:36px;}
+	.stateLogoYes {background:url(/resource/image/indexFJLT/green_yes.png) center no-repeat;}
+	.stateLogoNo {background:url(/resource/image/indexFJLT/red_wrong.png) center no-repeat;}
+	
+	.sysDetailDiv {background-color:#FAFAFA;height:310px;font-size:16px;display:none;}
+	.sysDetailDiv ul {white-space:nowrap;height:100%;width:100%;margin:0px;text-align:left;}
+	.sysDetailDiv ul li {margin-top:20px;width:100%;line-height:37px;margin-left:15px;list-style-type:none;}
+	.sysDetailItem {float:left;width:160px;padding-left:40px;}
+	
+	.mainFrameLogo {background:url(/resource/image/indexFJLT/icon_zhuji.png) left no-repeat;}
+	.storageLogo {background:url(/resource/image/indexFJLT/icon_storage.png) left no-repeat;}
+	.networkLogo {background:url(/resource/image/indexFJLT/icon_network.png) left no-repeat;}
+	.databaseLogo {background:url(/resource/image/indexFJLT/icon_data.png) left no-repeat;}
+	.appLogo {background:url(/resource/image/indexFJLT/icon_applica_plus.png) left no-repeat;}
+	.busiLogo {background:url(/resource/image/indexFJLT/icon_jiankong.png) left no-repeat;}
+	
+	.sysDetailLogoState {float:right;height:37px;width:38px;margin-right:25px;}
+	.detailLogoYes {background:url(/resource/image/indexFJLT/yes.png) center no-repeat;}
+	.detailLogoNo {background:url(/resource/image/indexFJLT/wrong.png) center no-repeat;}
+	.detailLogoNoObj {background:url(/resource/image/indexFJLT/ico_nomonitor.png) center no-repeat;}
+	.detailLogoNoNum {color:#505050;}
+	
+	.leftArrow {float:left;margin-left:-10px;margin-top:160px;height:21px;width:10px;background:url(/resource/image/indexFJLT/left_arrow.png) center no-repeat;z-index:9;}
+	.rightArrow {float:right;margin-right:-10px;margin-top:160px;height:21px;width:10px;background:url(/resource/image/indexFJLT/right_arrow.png) center no-repeat;z-index:9;}
+
+.alarmState {height:557px;width:1324px;padding-top:24px;background:url(/resource/image/indexFJLT/bg.gif);}
+	.alarmCount12 {width:529px;height:510px;float:left;margin-left:15px;text-align:left;white-space:nowrap;}
+	.alarmCount1 {width:100%;height:254px;background:url(/resource/image/indexFJLT/rec_bg.png) center no-repeat;}
+	.alarmCount2 {width:100%;height:254px;}
+	.alarmCount34 {width:700px;height:510px;float:right;margin-right:15px;background:url(/resource/image/indexFJLT/bg_right.png) center no-repeat;}
+	.alarmCount3 {width:100%;height:254px;}
+	.alarmCount4 {width:100%;height:254px;}
+	.alarmCountTitle {margin-top:20px;padding-left:30px;width:100%;height:23px;background:url(/resource/image/indexFJLT/title_arrow.png) left no-repeat;font-size:14px;font-weight:bold;text-align:left;}
+	.alarmCountTitle1 {float:left;margin-left:16px;line-height:25px;}
+	.alarmCountTitle2 {width:300px;line-height:25px;}
+	
+	.alarmKpiStyle {color:#191970;width:300px;line-height:23px;height:23px;overflow: hidden;}
+	#alarmKpi1 {background-color:#FF9999;margin-left:57px;margin-top:21px;}
+	#alarmKpiDetail1         {padding-left:65px;margin-top:4px;width:330px;height:23px;overflow: hidden;}
+	#alarmKpi2 {background-color:#F5C155;margin-left:70px;margin-top:4px;}
+	#alarmKpiDetail2         {padding-left:85px;margin-top:5px;width:330px;height:23px;overflow: hidden;}
+	#alarmKpi3 {background-color:#8ABC76;margin-left:88px;margin-top:4px;}
+	#alarmKpiDetail3         {padding-left:105px;margin-top:5px;width:330px;height:23px;overflow: hidden;}
+	.alarmCountNumFont {color:#FC4F02;font-weight:bold;cursor:pointer;}
+	
+	.drawLine {height:1px;width:100%;margin-left:12px;border-top:1px SOLID #E4E4E4;margin-top:22px;}
+	#alarmCountList {width:100%;height:174px;margin-left:12px;margin-top:20px;background:url(/resource/image/indexFJLT/series_list.png) left no-repeat;}
+	.alarmCountListRow {width:90%;margin-left:22px;height:29px;line-height:27px;}
+	.alarmCountListRowBg {background-color:#ECECEC;}
+	.alarmCountListDetail {float:left;width:370px;cursor:pointer;}
+	.alarmCountListNum1 {float:right;width:70px;text-align:right;}
+	.alarmCountListNum2 {color:#FF7900;cursor:pointer;}
+	
+	#alarmCountTimeLine {margin-top:25px;}
+	
+	
+	.searchCondition {margin-right:50px;width:278px;height:22px;float:right;}
+	.preMonth {float:right;width:69px;color:#0071e7;text-align:right;background:url(/resource/image/indexFJLT/btn_for_ico.png) center no-repeat;cursor:pointer;}
+	#monthCondition {float:right;width:140px;}
+	.afterMonth {float:right;width:69px;color:#0071e7;text-align:left;background:url(/resource/image/indexFJLT/btn_next_ico.png) center no-repeat;cursor:pointer;}
+
+#sysDetail5 li div{
+	 float: left;
+}
+.sysDetail5Font{
+    font-size: 13px;
+}
+#sysDetail5 LI {
+    height: 42px;
+    line-height: 21px;
+    margin-left: 40px;
+    width: 80%;
+    margin-top: 40px;
+}
+.busiKpiCount {
+    text-align: right;
+    font-size: 180%;
+    width: 100px;
+    height: 100%;
+    line-height: 42px;
+}
+#allKpiCount {
+    background: url(/resource/image/indexFJLT/zhibiao_total.png) no-repeat;
+    color: #3f88c9;
+}
+#normalKpiCount {
+    background: url(/resource/image/indexFJLT/zhibiao_normal.png) no-repeat;
+    color: #51d12d;
+}
+#errKpiCount {
+	background:url(/resource/image/indexFJLT/zhibiao_wrong.png) no-repeat;
+	color:#FF7777;
+}

@@ -1,0 +1,38 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk">
+<title>Insert title here</title>
+<script src="Common.js"></script>
+<SCRIPT src="Dialog.js"></SCRIPT>
+<SCRIPT src="Error.js"></SCRIPT>
+<SCRIPT src="ChoiceDialog.js"></SCRIPT>
+<SCRIPT src="ChoiceDialogAction.js"></SCRIPT>
+</head>
+<body>
+<INPUT TYPE="button" VALUE="ChoiceDialog.staff" ONCLICK="ChoiceDialog.staff()">
+<INPUT TYPE="button" VALUE="choiceStaff" ONCLICK="choiceStaff()">
+<INPUT TYPE="button" VALUE="choiceStaffByProject" ONCLICK="choiceStaffByProject()">
+<INPUT TYPE="button" VALUE="choiceStaffByProjectForItem" ONCLICK="choiceStaffByProjectForItem()">
+<INPUT TYPE="button" VALUE="choiceStaffForItem" ONCLICK="choiceStaffForItem()">
+<script>
+	function choiceStaffByProjectForItsm()
+	{
+		ChoiceDialog.staff({
+			panelType:"StaffByProjectForItsm",
+			projectId:"131,125"
+		})
+	}
+	
+	function choiceStaffForItsm()
+	{
+		ChoiceDialog.staff({
+			panelType:"StaffForItsm",
+			projectId:"131,125",
+			type:"region",
+			iniId:"1,14",
+			regionId:"福建,江西"
+		})
+	}
+</script>
+</body>
+</html>

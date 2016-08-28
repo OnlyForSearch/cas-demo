@@ -1,0 +1,158 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>Flash</title>
+
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+}
+function doOK(){
+	objectTag()
+}
+function objectTag(){
+	var openTag = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"';
+	var tmpOpenTag='<embed pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"';
+	var tmp='<param name="movie" value="'+document.frames('ifrmMovie').tf.value+'">'
+	var elts=myEditor.formElements
+	for(var i=1;i<elts.length;i++){
+		if(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/.test(elts[i].id)){
+			var id=elts[i].id
+			var elt=elts[i]
+			var s=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk))/,'')
+			var prefix=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/,'$1')
+			var v=""
+			v=/^chk.+/.test(id)?elts[i].checked.toString():elts[i].value
+			tmp+=v.length!=0?'<param name="'+s+'" value="'+v+'">':'';
+			var t=v!=''&&elts(s+"Units")?((elts(s+"Units").selectedIndex == 0)? '%' : ''):'';
+			openTag +=v!=""?' '+s+'="'+v+t+'"':"";
+			tmpOpenTag+=v!=""?' '+s+'="'+v+t+'"':""
+		}
+	}
+	openTag +='>';
+	tmpOpenTag+='></embed>'
+	myEditor.window.insert(openTag+tmp+tmpOpenTag+'</object>')
+	window.close()
+}
+</script>
+
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+  <tr>
+      <td width="80" height="22" align="right">源文件:</td>
+      <td><script>writeUrlSelector('Movie')</script></td>
+  </tr>
+    <tr>
+      <td height="22" align="right">名称:</td>
+      <td><script>writeTextfield('Name')</script></td>
+  </tr>
+    <tr>
+      <td height="22" align="right">宽度:</td>
+      <td><script>writeDigitalUnits('Width',480)</script></td>
+  </tr>
+    <tr>
+      <td height="22" align="right">高度:</td>
+      <td><script>writeDigitalUnits('Height',320)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">水平间距:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('Hspace')</script></td>
+          <td width="80" align="right">垂直间距:</td>
+		  <td width="1"></td>
+          <td><script>writeDigitalTextfield('Vspace')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">边框:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('Border')</script></td>
+          <td width="80" align="right">背景颜色:</td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('BgColor')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">控制器:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeCheckbox('Autoplay','1',true)</script></td>
+          <td width="80" class="paddingTop">自动播放</td>
+		  <td width="1"><script>writeCheckbox('Menu','1',true)</script></td>
+          <td class="paddingTop">显示菜单</td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">&nbsp;</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeCheckbox('Loop','1',true)</script></td>
+          <td width="80" class="paddingTop">循环</td>
+		  <td width="1" class="paddingTop"><script>writeCheckbox('DeviceFont','1')</script></td>
+          <td class="paddingTop">设备字体</td>
+        </tr>
+      </table></td>
+  </tr>
+      <tr>
+      <td height="22" align="right">品质:</td>
+      <td><script>writeSelect('Height',[
+                '低','low',
+                '自动降低','AutoLow',
+                '自动升高','AutoHigh',
+                '中','Medium',
+               	'高','High-selected',
+                '最佳','Best'
+	  									])</script></td>
+  </tr>
+      <tr>
+      <td height="22" align="right">窗口模式:</td>
+      <td><script>writeSelect('Wmode',[
+										'窗口','',
+										'不透明无窗口','Opaque',
+										'透明无窗口','Transparent'
+	  									])</script></td>
+  </tr>
+      <tr>
+      <td height="22" align="right">对齐方式:</td>
+      <td><script>writeAlignSelect('Align')</script></td>
+  </tr>
+      <tr>
+      <td height="22" align="right">缩放:</td>
+      <td><script>writeSelect('Scale',[
+               '默认(显示全部)', '',
+                '无边框','noborder',
+                '精确匹配','exactfit',
+               '不缩放' ,'noscale'
+	  									])</script></td>
+  </tr>
+	    </table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">	  <script>writeButtonsRight()</script>
+	  </td>
+</tr>
+</table>
+</body>
+</html>

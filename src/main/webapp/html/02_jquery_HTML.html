@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="1.10.2/jquery-1.10.2.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btn1").click(function () {
+                alert("Text:" + $("#test").text());
+
+            });
+
+            $("#btn2").click(function () {
+
+                alert("html:" + $("#test").html());
+            });
+
+
+            $("#btn3").click(function () {
+
+                alert("Attr:"+$("#w3s").attr("href"));
+            });
+
+
+            $("#btn4").click(function () {
+                $("#test1").text("text:Hello World");
+
+            });
+            $("#btn5").click(function () {
+                $("#test2").html("<b>html:Hello World!</b>")
+
+            });
+            $("#btn6").click(function () {
+                $("#test3").val("val:Hello World");
+
+            });
+
+
+        });
+    </script>
+</head>
+<body>
+    <p id="test">这是段落中的<b>粗体</b>文本。</p>
+    <button id="btn1">显示文本</button>
+    <button id="btn2">显示 HTML</button>
+    <p><a href="http://www.w3school.com.cn" id="w3s">W3School.com.cn</a></p>
+    <button id="btn3">显示 href 值</button>
+
+    <hr>
+<h3>设置内容 - text()、html() 以及 val()</h3>
+
+    <p id="test1">这是段落</p>
+    <p id="test2">这是另一个段落</p>
+    <p >Input File: <input type="text" name="" id="test3"> </p>
+    <button id="btn4">设置文本</button>
+    <button id="btn5">设置 HTML</button>
+    <button id="btn6">设置值</button>
+    <hr>
+<h3> text()、html() 以及 val() 的回调函数 </h3>
+
+    <script>
+        $(document).ready(function () {
+            $("#btn7").click(function () {
+                $("#test4").text(function (i, origTest) {
+                    return "Old Text(旧内容):" + origTest + "接下来 NextText: (index:)" + i;
+                });
+
+
+
+
+            });
+
+
+
+            $("#btn8").click(function(){
+                $("#test5").html(function(i,origText){
+                    return "Old html: " + origText + " New html: Hello <b>world!</b> (index: " + i + ")";
+                });
+            });
+
+            $("#btn9").click(function () {
+                $("#w3sHref").attr({
+                    href:"http://www.w3school.com.cn/jquery/",
+                    title:"W3c"
+
+                });
+            });
+
+
+
+            $("#btn10").click(function(){
+       
+                $("#w3sHref").attr("href", function(i,origValue){
+                    return origValue + "/jquery2";
+                });
+            });
+
+
+        });
+    </script>
+    <p id="test4">这是<b>粗体</b>文本。</p>
+    <p id="test5">这是另一段<b>粗体</b>文本。</p>
+
+    <p>请把鼠标指针移动到链接上，或者点击该链接，来查看已经改变的 href 值和已经设置的 title 值。</p>
+    <button id="btn7">显示旧/新文本</button>
+    <button id="btn8">显示旧/新 HTML</button>
+    <hr>
+    <a href="http://www.w3school.com.cn" id="w3sHref">W3School.com.cn</a></p>
+    <button id="btn9">改变 href 和 title 值</button>
+    <button id="btn10">attr() 的回调函数</button>
+
+    <hr>
+    <script>
+
+        $(document).ready(function () {
+
+            $("#btn11").click(function () {
+
+                $("p.p1,p.p2").append("<b>追加内容</b>")
+
+            });
+
+            $("#btn12").click(function () {
+
+                $("ul#ul1").append("<li>追加列表</li>")
+
+            });
+
+        });
+
+    </script>
+    <p class="p1">This is a paragraph</p>
+    <p class="p2">This is another paragraph</p>
+    <ul id="ul1">
+        <li>List item 1*3</li>
+        <li>List item 2*3</li>
+        <li>List item 3*3</li>
+    </ul>
+    <button id="btn11">追加文本</button>
+    <button id="btn12">追加列表项</button>
+    <hr>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btn13").click(function () {
+
+                $("p.p3,p.p4").prepend("<b>prepend Text</b>");
+
+            });
+
+            $("#btn14").click(function () {
+
+                $("ul#ul2").prepend("<li>Prepend Li</li>");
+            });
+
+        });
+
+    </script>
+    <p class="p3">This is a paragraph</p>
+    <p class="p4">This is another paragraph</p>
+    <ul id="ul2">
+        <li>List item 1*3</li>
+        <li>List item 2*3</li>
+        <li>List item 3*3</li>
+    </ul>
+    <button id="btn13">追加文本prepend</button>
+    <button id="btn14">追加列表项prepend</button>
+    <hr>
+
+    <script>
+        function appendText() {
+            var text1 = "<p>text.</p>";
+            var text2 = $("<p/>").text("Text2.");
+            var text3 = document.createElement("p");
+            text3.innerHTML = "text3";
+
+            $("body").append(text1, text2, text3);
+        }
+
+    </script>
+
+    <hr>
+    <h3>删除元素</h3>
+
+
+
+
+
+    <div id="div1" style="width: 300px;height: 100px;background:yellow;border: 1px solid #C3C3C3;">
+
+        会被删除的内容元素
+    </div>
+        <button id="btn16">删除元素</button>
+        <button id="btn17">删除元素</button>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            $("#btn16").click(function () {
+                $("#div1").remove();
+
+            });
+        });
+
+    </script>
+
+
+    <hr style="margin-bottom: 10%">
+</body>
+</html>

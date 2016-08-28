@@ -1,0 +1,2034 @@
+<html>
+<head>
+<title>CSS 样式编辑器</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link href="data/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="data/style.js"></script>
+<body bgcolor="E0DFE3" onLoad="InitDocument()">
+<table width="520" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td width="125" height="28" valign="bottom">&nbsp;&nbsp;&nbsp;分类</td>
+    <td width="5" valign="bottom"></td>
+    <td id="tdCategory" valign="bottom">类型</td>
+  </tr>
+  <tr> 
+    <td rowspan="2" align="right" valign="top">
+	<select size="19" style="width: 113px;border: none;" onChange="controlTable(this)">
+        <option selected value="Type">类型</option>
+        <option value="Background">背景</option>
+        <option value="Block">区块</option>
+        <option value="Box">方框</option>
+        <option value="Border">边框</option>
+        <option value="List">列表</option>
+        <option value="Positioning">定位</option>
+        <option value="Extensions">扩展</option>
+		<option value="Scrollbar">滚动条</option>
+        <option value="CssCode">CSS代码</option>
+      </select></td>
+    <td rowspan="2" align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top"><hr>
+	<table id="tblType" width="100%" border="0" cellpadding="0" cellspacing="3">
+        <tr> 
+          <td width="64" align="right">字体:</td>
+          <td colspan="5"><iframe id="font_family" width="251px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(251);"></iframe>
+            <select id="select_font_family" class="height20" style="width:270px;" onChange="sltChange(this)">
+              <option value="" selected> 
+              <option value="宋体">宋体 
+              <option value="黑体">黑体 
+              <option value="楷体_GB2312">楷体 
+              <option value="仿宋_GB2312">仿宋 
+              <option value="隶书">隶书 
+              <option value="幼圆">幼圆 
+              <option value="新宋体">新宋体 
+              <option value="细明体">细明体 
+              <option value="Arial">Arial 
+              <option value="Arial Black">Arial Black 
+              <option value="Arial Narrow">Arial Narrow 
+              <option value="Bradley Hand ITC">Bradley Hand ITC 
+              <option value="Brush Script MT">Brush Script MT 
+              <option value="Century Gothic">Century Gothic 
+              <option value="Comic Sans MS">Comic Sans MS 
+              <option value="Courier">Courier 
+              <option value="Courier New">Courier New 
+              <option value='Geneva'>Geneva 
+              <option value='Impact'>Impact 
+              <option value="MS Sans Serif">MS Sans Serif 
+              <option value='Optima'>Optima 
+              <option value="Script">Script 
+              <option value="System">System 
+              <option value='Times'>Times 
+              <option value="Times New Roman">Times New Roman 
+              <option value="Viner Hand ITC">Viner Hand ITC 
+              <option value="Verdana">Verdana 
+              <option value="Wide Latin">Wide Latin 
+              <option value="Wingdings">Wingdings</option>
+            </select> </td>
+        </tr>
+        <tr> 
+          <td align="right">大小:</td>
+          <td><iframe id="font_size" width="55px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(55,'font_size');"></iframe> 
+            <select id="select_font_size" class="height20X74" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="9">9 
+              <option value="10">10 
+              <option value="12">12 
+              <option value="14">14 
+              <option value="16">16 
+              <option value="18">18 
+              <option value="24">24 
+              <option value="36">36 
+              <option value="xx-small">极小
+              <option value="x-small">特小 
+              <option value="small">小
+              <option value="medium">中
+              <option value="large">大 
+              <option value="x-large">特大
+              <option value="xx-large">极大 
+              <option value="smaller">较小 
+              <option value="larger">较大</option>
+            </select> </td>
+          <td><select id="font_size_unit" disabled=true style="width:60px;">
+              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+              </select></td>
+          <td width="53" align="right">粗细:</td>
+          <td width="97"><iframe src="javascript:parent.ifrmHTML(55);" id="font_weight" width="55px" scrolling="no" frameborder="0"></iframe>
+              <select class="height20X74" id="select_font_weight" onChange="sltChange(this);">
+                <option value="" selected> 
+                <option value="normal">正常 
+                <option value="bold">粗体
+                <option value="bolder">特粗 
+                <option value="lighter">细体 
+                <option value="100">100 
+                <option value="200">200 
+                <option value="300">300 
+                <option value="400">400 
+                <option value="500">500 
+                <option value="600">600 
+                <option value="700">700 
+                <option value="800">800 
+                <option value="900">900</option>
+              </select> </td>
+          <td width="36">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">样式:</td>
+          <td><iframe id="font_style" width="55px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(55);"></iframe> 
+            <select id="select_font_style" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="normal">正常</option>
+              <option value="italic">斜体</option>
+              <option value="oblique">偏斜体</option>
+            </select></td>
+          <td>&nbsp;</td>
+          <td align="right">变量:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(55);" id="font_variant" width="55px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_font_variant" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="normal">正常</option>
+              <option value="small-caps">小型大字字母</option>
+            </select></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">行高:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(55,'line_height');" id="line_height" width="55px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_line_height" class="height20X74" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="normal">正常</option>
+            </select></td>
+          <td><select id="line_height_unit" disabled=true  style="width:60px;">
+              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+              </select></td>
+          <td align="right">大小字:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(55);" id="text_transform" width="55px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_text_transform" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="capitalize">首字母大写</option>
+              <option value="uppercase">大写</option>
+              <option value="lowercase">小写</option>
+              <option value="none">无</option>
+            </select></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">修饰:</td>
+          <td colspan="2" rowspan="5"><input id="text_decoration" type="checkbox" value="underline" onClick="if(this.checked){text_decoration[4].checked=false};">
+            下划线<br> <input id="text_decoration" type="checkbox" value="overline" onClick="if(this.checked){text_decoration[4].checked=false};">
+            上划线<br> <input id="text_decoration" type="checkbox" value="line-through" onClick="if(this.checked){text_decoration[4].checked=false};">
+            删除<br> <input id="text_decoration" type="checkbox" value="blink" onClick="if(this.checked){text_decoration[4].checked=false};">
+            闪烁<br> <input id="text_decoration" type="checkbox" value="none" onClick="if(this.checked){for(var i=0;i<4;i++)text_decoration[i].checked=false}">
+            无<br></td>
+          <td align="right">颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(color,this.style.backgroundColor)" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"></td>
+                <td><input id="color" type="text" class="height20" style="width:58px;" maxlength="7" onKeyUp=if(event.keyCode==13){txtHexChange(this)} onchange=txtHexChange(this)></td>
+              </tr>
+            </table></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+	  <table id="tblBackground" width="100%" border="0" cellpadding="0" cellspacing="3"  style="display:none;">
+        <tr> 
+          <td width="187" align="right">背景颜色:</td>
+          <td colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(background_color,this.style.backgroundColor)" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"></td>
+                <td><input id="background_color" type="text" class="height20" style="width:58px;" maxlength="7" onKeyUp=if(event.keyCode==13){txtHexChange(this)} onchange=txtHexChange(this)></td>
+              </tr>
+            </table></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">背景图像:</td>
+          <td colspan="2"><iframe src="javascript:parent.ifrmHTML(137);" id="background_image" width="137px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_background_image" class="height20" style="width:156px;" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="none">无</option>
+            </select></td>
+          <td width="109"><input name="Button" type="button" value="浏览"></td>
+        </tr>
+        <tr> 
+          <td align="right">重复:</td>
+          <td width="74"><iframe id="background_repeat" width="55px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(55);"></iframe> 
+            <select id="select_background_repeat" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="no-repeat">不重复</option>
+              <option value="repeat">重复</option>
+              <option value="repeat-x">横向重复</option>
+              <option value="repeat-y">纵向重复</option>
+            </select> </td>
+          <td width="5">&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">附件:</td>
+          <td><iframe id="background_attachment" width="55px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(55);"></iframe> 
+            <select id="select_background_attachment" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="fixed">固定</option>
+              <option value="scroll">滚动</option>
+            </select></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">水平位置:</td>
+          <td colspan="2"> <iframe src="javascript:parent.ifrmHTML(55,'background_position_h');" id="background_position_h" width="55px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_background_position_h" class="height20X74" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="left">左对齐 
+              <option value="center">居中 
+              <option value="right">右对齐</option>
+            </select>
+            <select name="select" disabled=true id="background_position_h_unit" style="width:60px;">
+              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td align="right">垂直位置:</td>
+          <td colspan="2"><iframe src="javascript:parent.ifrmHTML(55,'background_position_v');" id="background_position_v" width="55px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_background_position_v" class="height20X74" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="top">顶部 
+              <option value="center">居中
+              <option value="bottom">底部</option>
+            </select>
+            <select disabled=true id="background_position_v_unit"  style="width:60px;">
+              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+      <table id="tblBlock" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+        <tr> 
+          <td width="120" align="right">单词间隔:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(71,'word_spacing');" id="word_spacing" width="71px" scrolling="no" frameborder="0"></iframe>
+            <select id="select_word_spacing" class="height20X90" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="normal">正常</option>
+            </select>
+            <select disabled=true id="word_spacing_unit"  style="width:60px;">
+              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">字母间隔:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(71,'letter_spacing');" id="letter_spacing" width="71px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_letter_spacing" class="height20X90" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="normal">正常</option>
+            </select>
+            <select disabled=true id="letter_spacing_unit"  style="width:60px;">              <option value="px" selected>像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">垂直对齐:</td>
+          <td><iframe id="vertical_align" width="71px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(71,'vertical_align');"></iframe> 
+            <select id="select_vertical_align" class="height20X90" onChange="sltChange(this,1);">
+              <option value="" selected> 
+              <option value="baseline">其线</option>
+              <option value="sub">上标</option>
+              <option value="super">下标</option>
+              <option value="top">顶部</option>
+              <option value="text-top">文本顶对齐</option>
+              <option value="middle">中线对齐</option>
+              <option value="bottom">底部</option>
+              <option value="text-bottom">文本底部对齐</option>
+            </select>
+            <select disabled=true id="vertical_align_unit"  style="width:60px;">
+              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%" selected>%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">文本对齐:</td>
+          <td><iframe id="text_align" width="71px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(71);"></iframe> 
+            <select id="select_text_align" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="left">左对齐</option>
+              <option value="right">右对齐</option>
+              <option value="center">居中对齐</option>
+              <option value="justify">两端对齐</option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">文字缩进:</td>
+          <td><iframe id="text_indent" width="71px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(71,'text_indent');"></iframe> 
+            <select id="select_text_indent" class="height20X90" onChange="sltChange(this,1);">
+              <option value="" selected></select>
+            <select disabled=true id="text_indent_unit" style="width:60px;">
+              <option value="px">像素
+              <option value="pt" selected>点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">空白:</td>
+          <td> <iframe src="javascript:parent.ifrmHTML(71);" id="white_space" width="71px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_white_space" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="normal">正常
+              <option value="pre">保留
+              <option value="nowrap">不换行</option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td align="right">显示:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(137);" id="display" width="137px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_display" class="height20" style="width:156px;" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="none">无</option>
+              <option value="inline">内嵌</option>
+              <option value="block">块</option>
+              <option value="list-item">列表项</option>
+              <option value="run-in">run-in</option>
+              <option value="compact">紧凑</option>
+              <option value="marker">标记</option>
+              <option value="table">表格</option>
+              <option value="inline-table">内嵌表格</option>
+              <option value="table-row-group">表格行组</option>
+              <option value="table-header-group">表格标题组</option>
+              <option value="table-footer-group">表格注脚组</option>
+              <option value="table-row">表格行</option>
+              <option value="table-column-group">表格列组</option>
+              <option value="table-column">表格列</option>
+              <option value="table-cell">表格单元格</option>
+              <option value="table-caption">表格标题</option>
+            </select></td>
+        </tr>
+      </table>
+	  <table id="tblBox" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+  <tr> 
+    <td width="48" align="right">宽度:</td>
+    <td width="161"><iframe src="javascript:parent.ifrmHTML(55,'width');" id="width" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_width" class="height20X74" onChange="sltChange(this,1);">
+        <option value="" selected> 
+        <option value="auto">自动</option>
+      </select> <select disabled=true id="width_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+      </select></td>
+    <td width="47" align="right">浮动:</td>
+    <td width="119"><iframe src="javascript:parent.ifrmHTML(55);" id="float" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_float" class="height20X74" onChange="sltChange(this);">
+        <option value="" selected> 
+        <option value="left">左对齐</option>
+        <option value="right">右对齐</option>
+        <option value="none">无</option>
+      </select> </td>
+  </tr>
+  <tr> 
+    <td align="right">高度:</td>
+    <td> <iframe src="javascript:parent.ifrmHTML(55,'height');" id="height" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_height" class="height20X74" onChange="sltChange(this,1);">
+        <option value="" selected> 
+        <option value="auto">自动</option>
+      </select> <select id="height_unit" disabled=true style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+      </select></td>
+    <td align="right">清除:</td>
+    <td><iframe src="javascript:parent.ifrmHTML(55);" id="clear" width="55px" scrolling="no" frameborder="0"></iframe> 
+       <select id="select_clear" class="height20X74" onChange="sltChange(this);">
+        <option value="" selected> 
+        <option value="left">左对齐</option>
+        <option value="right">右对齐</option>
+		<option value="both">两面者</option>
+        <option value="none">无</option>
+      </select></td>
+  </tr>
+  <tr> 
+    <td colspan="4"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="250" align="center"><fieldset>
+            <legend>填补</legend>
+            <table width="100%" border="0" cellspacing="3" cellpadding="0">
+              <tr align="center"> 
+                <td colspan="2"><input type="checkbox" id="padding" onClick="doSame(this.id,padding_top.t.value)" checked>
+                  全部相同</td>
+              </tr>
+              <tr> 
+                <td width="23%" align="right">上:</td>
+                      <td width="77%" onFocusOut="doSame('padding',eval(this.firstChild.id+'.t.value'))">
+					  <iframe src="javascript:parent.ifrmHTML(40,'padding_top');" id="padding_top" width="40px" scrolling="no" frameborder="0"></iframe> 
+                        <select id="select_padding_top" class="height20X59" onChange="sltChange(this,1);">
+                          <option value="" selected> </select> 
+                        <select disabled=true  id="padding_top_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">右:</td>
+                <td onFocusOut="doSame('padding',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'padding_right');" id="padding_right" width="40px" scrolling="no" frameborder="0"></iframe>
+                        <select class="height20X59" id="select_padding_right" onChange="sltChange(this,1);">
+                          <option value="" selected> </select> 
+                        <select disabled=true id="padding_right_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">下:</td>
+                <td onFocusOut="doSame('padding',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'padding_bottom');" id="padding_bottom" width="40px" scrolling="no" frameborder="0"></iframe>
+                        <select class="height20X59" id="select_padding_bottom" onChange="sltChange(this,1);">
+                          <option value="" selected> </select> 
+                        <select disabled=true id="padding_bottom_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">左:</td>
+                <td onFocusOut="doSame('padding',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'padding_left');" id="padding_left" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_padding_left" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected>
+                  </select> <select disabled=true id="padding_left_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+            </table>
+            </fieldset></td>
+          <td width="8" align="center">&nbsp;</td>
+          <td width="250" align="center"><fieldset>
+            <legend>边界</legend>
+            <table width="100%" border="0" cellspacing="3" cellpadding="0">
+              <tr align="center"> 
+                <td colspan="2"><input type="checkbox" id="margin" onClick="doSame(this.id,margin_top.t.value)" checked>
+                  全部相同</td>
+              </tr>
+              <tr> 
+                <td width="22%" align="right">上:</td>
+                <td width="78%" onFocusOut="doSame('margin',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'margin_top');" id="margin_top" width="40px" scrolling="no" frameborder="0"></iframe>
+                        <select class="height20X59" id="select_margin_top" onChange="sltChange(this,1);doSame('margin',this.value)">
+                          <option value="" selected> 
+                          <option value="auto">自动</option>
+                        </select> 
+                        <select disabled=true id="margin_top_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">右:</td>
+                <td onFocusOut="doSame('margin',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'margin_right');" id="margin_right" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_margin_right" class="height20X59" onChange="sltChange(this,1);doSame('margin',this.value)">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="margin_right_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">下:</td>
+                <td onFocusOut="doSame('margin',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'margin_bottom');" id="margin_bottom" width="40px" scrolling="no" frameborder="0"></iframe>
+                  <select id="select_margin_bottom" class="height20X59" onChange="sltChange(this,1);doSame('margin',this.value)">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> 
+                  <select disabled=true id="margin_bottom_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">左:</td>
+                <td onFocusOut="doSame('margin',eval(this.firstChild.id+'.t.value'))">
+				<iframe src="javascript:parent.ifrmHTML(40,'margin_left');" id="margin_left" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_margin_left" class="height20X59" onChange="sltChange(this,1);doSame('margin',this.value)">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="margin_left_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+            </table>
+            </fieldset></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<table id="tblBorder" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none">
+  <tr> 
+    <td width="30" valign="bottom"><table width="100%" border="0" cellspacing="3" cellpadding="0">
+        <tr> 
+          <td height="22" align="right"> 
+            上:</td>
+        </tr>
+        <tr> 
+          <td height="22" align="right">右:</td>
+        </tr>
+        <tr> 
+          <td height="22" align="right">下:</td>
+        </tr>
+        <tr> 
+          <td height="22" align="right">左:</td>
+        </tr>
+		 <tr> 
+          <td height="2" align="right"></td>
+        </tr>
+      </table></td>
+    <td align="right"><fieldset>
+     <legend>样式</legend>
+      <table width="100%" border="0" cellspacing="3" cellpadding="0">
+        <tr align="center"> 
+          <td><input type="checkbox" id="border_style" onClick="doSame('border',border_top_style.t.value,'style',1)" checked>
+                  全部相同</td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'style',1)"> 
+            <iframe src="javascript:parent.ifrmHTML(40);" id="border_top_style" width="40px" scrolling="no" frameborder="0"></iframe>
+                  <select  id="select_border_top_style" class="height20X59" onChange="sltChange(this);doSame('border',this.value,'style',1)">
+                    <option value="" selected></option>
+					<option value="none">无</option>
+                    <option value="dotted">点划线</option>
+                    <option value="dashed">虚线</option>
+                    <option value="solid">实线</option>
+                    <option value="double">双线</option>
+                    <option value="groove">槽状</option>
+                    <option value="ridge">脊状</option>
+                    <option value="inset">凹陷</option>
+                    <option value="outset">凸出</option>
+                  </select> </td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'style',1)"> 
+            <iframe src="javascript:parent.ifrmHTML(40);" id="border_right_style" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_right_style" class="height20X59" onChange="sltChange(this);doSame('border',this.value,'style',1)">
+                    <option value="" selected></option>
+					<option value="none">无</option>
+                    <option value="dotted">点划线</option>
+                    <option value="dashed">虚线</option>
+                    <option value="solid">实线</option>
+                    <option value="double">双线</option>
+                    <option value="groove">槽状</option>
+                    <option value="ridge">脊状</option>
+                    <option value="inset">凹陷</option>
+                    <option value="outset">凸出</option>
+                  </select>
+                </td>
+        </tr>
+        <tr> 
+         <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'style',1)"> 
+            <iframe src="javascript:parent.ifrmHTML(40);" id="border_bottom_style" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_bottom_style" class="height20X59" onChange="sltChange(this);doSame('border',this.value,'style',1)">
+                    <option value="" selected></option>
+					<option value="none">无</option>
+                    <option value="dotted">点划线</option>
+                    <option value="dashed">虚线</option>
+                    <option value="solid">实线</option>
+                    <option value="double">双线</option>
+                    <option value="groove">槽状</option>
+                    <option value="ridge">脊状</option>
+                    <option value="inset">凹陷</option>
+                    <option value="outset">凸出</option>
+                  </select>
+                </td>
+        </tr>
+	<tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'style',1)"> 
+            <iframe src="javascript:parent.ifrmHTML(40);" id="border_left_style" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_left_style" class="height20X59" onChange="sltChange(this);doSame('border',this.value,'style',1)">
+                    <option value="" selected></option>
+					<option value="none">无</option>
+                    <option value="dotted">点划线</option>
+                    <option value="dashed">虚线</option>
+                    <option value="solid">实线</option>
+                    <option value="double">双线</option>
+                    <option value="groove">槽状</option>
+                    <option value="ridge">脊状</option>
+                    <option value="inset">凹陷</option>
+                    <option value="outset">凸出</option>
+                  </select>
+                </td>
+        </tr>
+      </table>
+            </fieldset></td>
+    <td width="150"><fieldset>
+           <legend>宽度</legend>
+      <table width="100%" border="0" cellspacing="3" cellpadding="0">
+        <tr align="center"> 
+          <td><input type="checkbox" id="border_width"  onClick="doSame('border',border_top_width.t.value,'width')" checked>
+                  全部相同</td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'width')"> 
+            <iframe src="javascript:parent.ifrmHTML(40,'border_top_width');" id="border_top_width" width="40px" scrolling="no" frameborder="0"></iframe>
+                  <select id="select_border_top_width" class="height20X59" onChange="sltChange(this,1);doSame('border',this.value,'width')">                    <option value="" selected> 
+                    <option value="thin">细</option>
+                    <option value="medium">中</option>
+                    <option value="thick">粗</option>
+                  </select> 
+                  <select disabled=true id="border_top_width_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'width')"> 
+            <iframe src="javascript:parent.ifrmHTML(40,'border_right_width');" id="border_right_width" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_right_width" class="height20X59" onChange="sltChange(this,1);doSame('border',this.value,'width')">                    <option value="" selected> 
+                    <option value="thin">细</option>
+                    <option value="medium">中</option>
+                    <option value="thick">粗</option>
+            </select> <select disabled=true id="border_right_width_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'width')"> 
+            <iframe src="javascript:parent.ifrmHTML(40,'border_bottom_width');" id="border_bottom_width" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_bottom_width" class="height20X59" onChange="sltChange(this,1);doSame('border',this.value,'width')">                    <option value="" selected> 
+                    <option value="thin">细</option>
+                    <option value="medium">中</option>
+                    <option value="thick">粗</option>
+            </select> <select disabled=true id="border_bottom_width_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22" onFocusOut="doSame('border',eval(this.firstChild.id+'.t.value'),'width')"> 
+            <iframe src="javascript:parent.ifrmHTML(40,'border_left_width');" id="border_left_width" width="40px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_border_left_width" class="height20X59" onChange="sltChange(this,1);doSame('border',this.value,'width')">                    <option value="" selected> 
+                    <option value="thin">细</option>
+                    <option value="medium">中</option>
+                    <option value="thick">粗</option>
+            </select> <select disabled=true id="border_left_width_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+            </select></td>
+        </tr>
+      </table>
+            </fieldset></td>
+    <td width="96"><fieldset> 
+      <legend>颜色</legend>
+      <table width="100%" border="0" cellspacing="3" cellpadding="0">
+        <tr align="center"> 
+          <td><input type="checkbox" id="border_color" onClick="doSame('border',border_top_color.value,'color',1)" checked>
+                  全部相同</td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22"> 
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(border_top_color,this.style.backgroundColor);doSame('border',border_top_color.value,'color',1);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="border_top_color" style="width:58px;" onChange="txtHexChange(this);doSame('border',border_top_color.value,'color',1);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22"> 
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(border_right_color,this.style.backgroundColor);doSame('border',border_right_color.value,'color',1);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="border_right_color" style="width:58px;" onChange="txtHexChange(this);doSame('border',border_right_color.value,'color',1);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22"> 
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(border_bottom_color,this.style.backgroundColor);doSame('border',border_bottom_color.value,'color',1);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="border_bottom_color" style="width:58px;" onChange="txtHexChange(this);doSame('border',border_bottom_color.value,'color',1);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td width="78%" height="22"> 
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(border_left_color,this.style.backgroundColor);doSame('border',border_left_color.value,'color',1);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="border_left_color" style="width:58px;" onChange="txtHexChange(this);doSame('border',border_left_color.value,'color',1);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table>
+            </fieldset></td>
+  </tr>
+</table>
+<table id="tblList" width="100%" border="0" cellpadding="0" cellspacing="3"  style="display:none;">
+  <tr> 
+    <td width="140" align="right">类型:</td>
+    <td width="306"><iframe id="list_style_type" width="71px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(71);"></iframe> 
+            <select id="select_list_style_type" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="disc">圆点</option>
+              <option value="circle">圆圈</option>
+              <option value="square">方块</option>
+              <option value="decimal">数字</option>
+			  <option value="lower-roman">小写罗马数字</option>
+			  <option value="upper-roman">大写罗马数字</option>
+			  <option value="lower-alpha">小写字母</option>
+			  <option value="upper-alpha">大字字母</option>
+            <option value="none">无</option>
+			</select></td>
+  </tr>
+  <tr>
+    <td align="right">项目符号图像:</td>
+    <td><iframe src="javascript:parent.ifrmHTML(137);" id="list_style_image" width="137px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_list_style_image" class="height20" style="width:156px;" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="none">无</option>
+            </select> <input type="button" value="浏览"></td>
+  </tr>
+  <tr>
+    <td align="right">位置:</td>
+    <td><iframe id="list_style_position" width="71px" scrolling="no" frameborder="0" src="javascript:parent.ifrmHTML(71);"></iframe> 
+            <select id="select_list_style_position" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> 
+              <option value="inside">内</option>
+              <option value="outside">外</option>
+			</select></td>
+  </tr>
+</table>
+<table id="tblPositioning" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+  <tr> 
+    <td width="83" align="right">类型:</td>
+    <td width="95"><iframe src="javascript:parent.ifrmHTML(55);" id="position" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_position" class="height20X74" onChange="sltChange(this);">
+              <option value="" selected></option>
+              <option value="absolute">绝对</option>
+              <option value="relative">相对</option>
+              <option value="static">静态</option>
+            </select> </td>
+    <td width="89" align="right">显示:</td>
+    <td width="108"><iframe src="javascript:parent.ifrmHTML(55);" id="visibility" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_visibility" class="height20X74" onChange="sltChange(this);">
+        <option value="" selected> 
+        <option value="inherit">继承</option>
+        <option value="visible">可见</option>
+        <option value="hidden">隐藏</option>
+      </select> </td>
+  </tr>
+  <tr> 
+    <td align="right">溢出:</td>
+    <td><iframe src="javascript:parent.ifrmHTML(55);" id="overflow" width="55px" scrolling="no" frameborder="0"></iframe>
+            <select name="select2" class="height20X74" id="select_overflow" onChange="sltChange(this);">
+              <option value="" selected></option>
+              <option value="visible">可见</option>
+              <option value="hidden">隐藏</option>
+              <option value="scroll">滚动</option>
+              <option value="auto">自动</option>
+            </select> </td>
+    <td align="right">Z轴:</td>
+    <td><iframe src="javascript:parent.ifrmHTML(55);" id="z_index" width="55px" scrolling="no" frameborder="0"></iframe> 
+      <select id="select_z_index" class="height20X74" onChange="sltChange(this);">
+        <option value="" selected> 
+        <option value="auto">自动</option>
+      </select></td>
+  </tr>
+  <tr> 
+    <td colspan="4"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="250" align="center"><fieldset>
+            <legend>定位</legend>
+            <table width="100%" border="0" cellspacing="3" cellpadding="0">
+              <tr> 
+                <td align="right">左:</td>
+                <td> 
+                  <iframe src="javascript:parent.ifrmHTML(40,'left');" id="left" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_left" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected>
+					<option value="auto">自动</select> <select disabled=true id="left_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td width="23%" align="right">上:</td>
+                <td width="77%"> 
+                  <iframe src="javascript:parent.ifrmHTML(40,'top0');" id="top0" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_top0" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected><option value="auto">自动</select>
+					 <select disabled=true  id="top0_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">右:</td>
+                <td> 
+                  <iframe src="javascript:parent.ifrmHTML(40,'right');" id="right" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_right" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected><option value="auto">自动</select> <select disabled=true id="right_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">下:</td>
+                <td> 
+                  <iframe src="javascript:parent.ifrmHTML(40,'bottom');" id="bottom" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_bottom" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected><option value="auto">自动</select> <select disabled=true id="bottom_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+            </table>
+            </fieldset></td>
+          <td width="8" align="center">&nbsp;</td>
+          <td width="250" align="center"><fieldset>
+            <legend>剪辑</legend>
+            <table width="100%" border="0" cellspacing="3" cellpadding="0">
+              <tr> 
+                <td width="22%" align="right">上:</td>
+                <td width="78%"> 
+                  <iframe src="javascript:parent.ifrmHTML(40,'clip_top');" id="clip_top" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_clip_top" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="clip_top_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">右:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(40,'clip_right');" id="clip_right" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_clip_right" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="clip_right_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">下:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(40,'clip_bottom');" id="clip_bottom" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_clip_bottom" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="clip_bottom_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">左:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(40,'clip_left');" id="clip_left" width="40px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_clip_left" class="height20X59" onChange="sltChange(this,1);">
+                    <option value="" selected> 
+                    <option value="auto">自动</option>
+                  </select> <select disabled=true id="clip_left_unit"  style="width:60px;">              <option value="px">像素
+              <option value="pt">点数 
+              <option value="in">英寸
+              <option value="cm">厘米 
+              <option value="mm">毫米
+              <option value="pc">12pt字 
+              <option value="em">字体高
+              <option value="ex">字母X高
+              <option value="%">%<option value=""></option>
+                  </select></td>
+              </tr>
+            </table>
+            </fieldset></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+      <table id="tblExtensions" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+        <tr> 
+          <td align="center">&nbsp;</td>
+          <td colspan="3">分页</td>
+        </tr>
+        <tr> 
+          <td width="82" align="right">之前:</td>
+          <td width="115"><iframe src="javascript:parent.ifrmHTML(71);" id="page_break_before" width="71px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_page_break_before" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> </option>
+              <option value="always">总是</option>
+              <option value="left">左对齐</option>
+              <option value="right">右对齐</option>
+              <option value="auto">自动</option>
+            </select> </td>
+          <td width="58" align="right">之后:</td>
+          <td width="120"><iframe src="javascript:parent.ifrmHTML(71);" id="page_break_after" width="71px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_page_break_after" name="select" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> </option>
+              <option value="always">总是</option>
+              <option value="left">左对齐</option>
+              <option value="right">右对齐</option>
+              <option value="auto">自动</option>
+            </select></td>
+        </tr>
+        <tr> 
+          <td>&nbsp;</td>
+          <td colspan="3">视觉效果</td>
+        </tr>
+        <tr> 
+          <td width="82" align="right">光标:</td>
+          <td colspan="3"><iframe src="javascript:parent.ifrmHTML(71);" id="cursor" width="71px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_cursor" class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> </option>
+              <option value="hand">hand</option>
+              <option value="crosshair">crosshair</option>
+              <option value="text">text</option>
+              <option value="wait">wait</option>
+              <option value="default">default</option>
+              <option value="help">help</option>
+              <option value="e-resize">e-resize</option>
+              <option value="ne-resize">ne-resize</option>
+              <option value="n-resize">n-resize</option>
+              <option value="nw-resize">nw-resize</option>
+              <option value="w-resize">w-resize</option>
+              <option value="sw-resize">sw-resize</option>
+              <option value="s-resize">s-resize</option>
+              <option value="se-resize">se-resize</option>
+              <option value="auto">auto</option>
+            </select> </td>
+        </tr>
+        <tr> 
+          <td align="right">滤镜:</td>
+          <td colspan="3" ><iframe src="javascript:parent.ifrmHTML(250);" id="filter" width="250px" scrolling="no" frameborder="0"></iframe> 
+            <select id="select_filter" class="height20" style="width:269px;" onChange="sltChange(this);chgFilter(this.value);">
+              <option selected></option>
+			  <option value="Alpha">Alpha(Opacity=?, FinishOpacity=?, Style=?, 
+              StartX=?, StartY=?, FinishX=?, FinishY=?) </option>
+              <option value="BlendTrans">BlendTrans(Duration=?) </option>
+              <option value="Blur">Blur(Add=?, Direction=?, Strength=?) </option>
+              <option value="Chroma">Chroma(Color=?) </option>
+              <option value="DropShadow">DropShadow(Color=?, OffX=?, OffY=?, Positive=?) 
+              </option>
+              <option value="FlipH">FlipH </option>
+              <option value="FlipV">FlipV </option>
+              <option value="Glow">Glow(Color=?, Strength=?) </option>
+              <option value="Gray">Gray </option>
+              <option value="Invert">Invert </option>
+              <option value="Light">Light </option>
+              <option value="Mask">Mask(Color=?) </option>
+              <option value="RevealTrans">RevealTrans(Duration=?, Transition=?) 
+              </option>
+              <option value="Shadow">Shadow(Color=?, Direction=?) </option>
+              <option value="Wave">Wave(Add=?, Freq=?, LightStrength=?, Phase=?, 
+              Strength=?) </option>
+              <option value="Xray">Xray</option>
+            </select></td>
+        </tr>
+        <tr><td></td> 
+          <td colspan="3"><fieldset id="subFilter"  style="display:none">
+            <legend id="filterName"></legend>
+            <table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblalpha"  style="display:none">
+              <tr> 
+                <td width="15%" align="right">Opacity:</td>
+                <td width="33%"><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_opacity" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_opacity" class="height20X49" onChange="sltChange(this)">
+                    <option value="" selected> 
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                    <option value=11>11</option>
+                    <option value=12>12</option>
+                    <option value=13>13</option>
+                    <option value=14>14</option>
+                    <option value=15>15</option>
+                    <option value=16>16</option>
+                    <option value=17>17</option>
+                    <option value=18>18</option>
+                    <option value=19>19</option>
+                    <option value=20>20</option>
+                    <option value=21>21</option>
+                    <option value=22>22</option>
+                    <option value=23>23</option>
+                    <option value=24>24</option>
+                    <option value=25>25</option>
+                    <option value=26>26</option>
+                    <option value=27>27</option>
+                    <option value=28>28</option>
+                    <option value=29>29</option>
+                    <option value=30>30</option>
+                    <option value=31>31</option>
+                    <option value=32>32</option>
+                    <option value=33>33</option>
+                    <option value=34>34</option>
+                    <option value=35>35</option>
+                    <option value=36>36</option>
+                    <option value=37>37</option>
+                    <option value=38>38</option>
+                    <option value=39>39</option>
+                    <option value=40>40</option>
+                    <option value=41>41</option>
+                    <option value=42>42</option>
+                    <option value=43>43</option>
+                    <option value=44>44</option>
+                    <option value=45>45</option>
+                    <option value=46>46</option>
+                    <option value=47>47</option>
+                    <option value=48>48</option>
+                    <option value=49>49</option>
+                    <option value=50>50</option>
+                    <option value=51>51</option>
+                    <option value=52>52</option>
+                    <option value=53>53</option>
+                    <option value=54>54</option>
+                    <option value=55>55</option>
+                    <option value=56>56</option>
+                    <option value=57>57</option>
+                    <option value=58>58</option>
+                    <option value=59>59</option>
+                    <option value=60>60</option>
+                    <option value=61>61</option>
+                    <option value=62>62</option>
+                    <option value=63>63</option>
+                    <option value=64>64</option>
+                    <option value=65>65</option>
+                    <option value=66>66</option>
+                    <option value=67>67</option>
+                    <option value=68>68</option>
+                    <option value=69>69</option>
+                    <option value=70>70</option>
+                    <option value=71>71</option>
+                    <option value=72>72</option>
+                    <option value=73>73</option>
+                    <option value=74>74</option>
+                    <option value=75>75</option>
+                    <option value=76>76</option>
+                    <option value=77>77</option>
+                    <option value=78>78</option>
+                    <option value=79>79</option>
+                    <option value=80>80</option>
+                    <option value=81>81</option>
+                    <option value=82>82</option>
+                    <option value=83>83</option>
+                    <option value=84>84</option>
+                    <option value=85>85</option>
+                    <option value=86>86</option>
+                    <option value=87>87</option>
+                    <option value=88>88</option>
+                    <option value=89>89</option>
+                    <option value=90>90</option>
+                    <option value=91>91</option>
+                    <option value=92>92</option>
+                    <option value=93>93</option>
+                    <option value=94>94</option>
+                    <option value=95>95</option>
+                    <option value=96>96</option>
+                    <option value=97>97</option>
+                    <option value=98>98</option>
+                    <option value=99>99</option>
+                    <option value=100>100</option>
+                  </select></td>
+                <td width="15%" align="right">FinishOpacity:</td>
+                <td width="37%"><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_finishopacity" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_finishopacity" class="height20X49" onChange="sltChange(this)">
+                    <option value="" selected> 
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                    <option value=11>11</option>
+                    <option value=12>12</option>
+                    <option value=13>13</option>
+                    <option value=14>14</option>
+                    <option value=15>15</option>
+                    <option value=16>16</option>
+                    <option value=17>17</option>
+                    <option value=18>18</option>
+                    <option value=19>19</option>
+                    <option value=20>20</option>
+                    <option value=21>21</option>
+                    <option value=22>22</option>
+                    <option value=23>23</option>
+                    <option value=24>24</option>
+                    <option value=25>25</option>
+                    <option value=26>26</option>
+                    <option value=27>27</option>
+                    <option value=28>28</option>
+                    <option value=29>29</option>
+                    <option value=30>30</option>
+                    <option value=31>31</option>
+                    <option value=32>32</option>
+                    <option value=33>33</option>
+                    <option value=34>34</option>
+                    <option value=35>35</option>
+                    <option value=36>36</option>
+                    <option value=37>37</option>
+                    <option value=38>38</option>
+                    <option value=39>39</option>
+                    <option value=40>40</option>
+                    <option value=41>41</option>
+                    <option value=42>42</option>
+                    <option value=43>43</option>
+                    <option value=44>44</option>
+                    <option value=45>45</option>
+                    <option value=46>46</option>
+                    <option value=47>47</option>
+                    <option value=48>48</option>
+                    <option value=49>49</option>
+                    <option value=50>50</option>
+                    <option value=51>51</option>
+                    <option value=52>52</option>
+                    <option value=53>53</option>
+                    <option value=54>54</option>
+                    <option value=55>55</option>
+                    <option value=56>56</option>
+                    <option value=57>57</option>
+                    <option value=58>58</option>
+                    <option value=59>59</option>
+                    <option value=60>60</option>
+                    <option value=61>61</option>
+                    <option value=62>62</option>
+                    <option value=63>63</option>
+                    <option value=64>64</option>
+                    <option value=65>65</option>
+                    <option value=66>66</option>
+                    <option value=67>67</option>
+                    <option value=68>68</option>
+                    <option value=69>69</option>
+                    <option value=70>70</option>
+                    <option value=71>71</option>
+                    <option value=72>72</option>
+                    <option value=73>73</option>
+                    <option value=74>74</option>
+                    <option value=75>75</option>
+                    <option value=76>76</option>
+                    <option value=77>77</option>
+                    <option value=78>78</option>
+                    <option value=79>79</option>
+                    <option value=80>80</option>
+                    <option value=81>81</option>
+                    <option value=82>82</option>
+                    <option value=83>83</option>
+                    <option value=84>84</option>
+                    <option value=85>85</option>
+                    <option value=86>86</option>
+                    <option value=87>87</option>
+                    <option value=88>88</option>
+                    <option value=89>89</option>
+                    <option value=90>90</option>
+                    <option value=91>91</option>
+                    <option value=92>92</option>
+                    <option value=93>93</option>
+                    <option value=94>94</option>
+                    <option value=95>95</option>
+                    <option value=96>96</option>
+                    <option value=97>97</option>
+                    <option value=98>98</option>
+                    <option value=99>99</option>
+                    <option value=100>100</option>
+                  </select></td>
+              </tr>
+              <tr> 
+                <td align="right">Style:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(55);" id="alpha_style" width="55px" scrolling="no" frameborder="0"></iframe> 
+                  <select class="height20X74" id="select_alpha_style" onChange="sltChange(this);">
+                    <option value="" selected></option>
+                     <option value="1">linear</option>
+                    <option value="2">radial</option>
+                    <option value="3">box</option>
+                  </select></td>
+                <td align="right">&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr> 
+                <td align="right">StartX:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_startx" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_startx" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+                <td align="right">StartY:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_starty" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_starty" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+              </tr>
+			  <tr> 
+                <td align="right">FinishX:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_finishx" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_finishx" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+                <td align="right">FinishY:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="alpha_finishy" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_alpha_finishy" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblblendtrans"  style="display:none">
+			  <tr> 
+                <td align="right">Duration:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="blendtrans_duration" width="30px" scrolling="no" frameborder="0"></iframe>
+                  <select class="height20X49" id="select_blendtrans_duration" onChange="sltChange(this);">
+                    <option value="" selected></option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblblur"  style="display:none">
+              <tr> 
+                <td width="15%" align="right">Add:</td>
+                <td width="33%"><input type="checkbox" id="blur_add"></td>
+              </tr>
+              <tr> 
+                <td align="right">Direction:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="blur_direction" width="30px" scrolling="no" frameborder="0"></iframe>
+                  <select class="height20X49" id="select_blur_direction" onChange="sltChange(this);">
+                    <option value="" selected></option>
+					<option value="0">0</option>
+                    <option value="45">45</option>
+                    <option value="90">90</option>
+                    <option value="135">135</option>
+                    <option value="180">180</option>
+                    <option value="225">225</option>
+                    <option value="270">270</option>
+                    <option value="315">315</option>
+                  </select>
+                </td>
+              </tr>
+              <tr> 
+                <td align="right">Strength:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="blur_strength" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_blur_strength" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblchroma" style="display:none">
+              <tr> 
+                <td width="15%" align="right">Color:</td>
+                <td width="33%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(chroma_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="chroma_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tbldropshadow" style="display:none">
+              <tr> 
+                <td width="15%" align="right">Color:</td>
+                <td width="33%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(dropshadow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="dropshadow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+                <td width="15%" align="right">&nbsp;</td>
+                <td width="37%">&nbsp;</td>
+              </tr>
+              <tr> 
+                <td align="right">OffX:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="dropshadow_offx" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_dropshadow_offx" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select></td>
+                <td align="right">OffY:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="dropshadow_offy" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_dropshadow_offy" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select></td>
+              </tr>
+              <tr> 
+                <td align="right">Positive:</td>
+                <td><input type="checkbox" id="dropshadow_positive"></td>
+                <td align="right">&nbsp;</td>
+                <td>&nbsp; </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblglow" style="display:none">
+              <tr> 
+                <td width="42%" align="right">Color:</td>
+                <td width="58%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(glow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="glow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+              </tr>
+			  <tr> 
+                <td width="42%" align="right">Strength:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="glow_strength" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_glow_strength" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblmask" style="display:none">
+              <tr> 
+                <td width="15%" align="right">Color:</td>
+                <td width="33%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(mask_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="mask_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblrevealtrans" style="display:none">
+			  <tr> 
+                <td align="right">Duration:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="revealtrans_duration" width="30px" scrolling="no" frameborder="0"></iframe>
+                  <select class="height20X49" id="select_revealtrans_duration" onChange="sltChange(this);">
+                    <option value="" selected></option>
+                  </select>
+                </td>
+              </tr>
+			  <tr> 
+                <td align="right">Transition:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="revealtrans_transition" width="30px" scrolling="no" frameborder="0"></iframe>
+                  <select class="height20X49" id="select_revealtrans_transition" onChange="sltChange(this);">
+                    <option value="" selected></option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblshadow" style="display:none">
+              <tr> 
+                <td width="15%" align="right">Color:</td>
+                <td width="33%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(shadow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                      <td><input type="text" class="height20" id="shadow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+              </tr>
+			  <tr> 
+                <td align="right">Direction:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="shadow_direction" width="30px" scrolling="no" frameborder="0"></iframe>
+                  <select class="height20X49" id="select_shadow_direction" onChange="sltChange(this);">
+                    <option value="" selected></option>
+					<option value="0">0</option>
+                    <option value="45">45</option>
+                    <option value="90">90</option>
+                    <option value="135">135</option>
+                    <option value="180">180</option>
+                    <option value="225">225</option>
+                    <option value="270">270</option>
+                    <option value="315">315</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0" id="tblwave" style="display:none">
+              <tr> 
+                <td width="15%" align="right">Add:</td>
+                <td width="33%"><input type="checkbox" id="wave_add"></td>
+                <td width="15%" align="right">&nbsp;</td>
+                <td width="37%">&nbsp;</td>
+              </tr>
+              <tr> 
+                <td align="right">Freq:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="wave_freq" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_wave_freq" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected> </select></td>
+                 <td align="right">LightStrength:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="wave_lightstrength" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_wave_lightstrength" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected>
+					<option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                    <option value=11>11</option>
+                    <option value=12>12</option>
+                    <option value=13>13</option>
+                    <option value=14>14</option>
+                    <option value=15>15</option>
+                    <option value=16>16</option>
+                    <option value=17>17</option>
+                    <option value=18>18</option>
+                    <option value=19>19</option>
+                    <option value=20>20</option>
+                    <option value=21>21</option>
+                    <option value=22>22</option>
+                    <option value=23>23</option>
+                    <option value=24>24</option>
+                    <option value=25>25</option>
+                    <option value=26>26</option>
+                    <option value=27>27</option>
+                    <option value=28>28</option>
+                    <option value=29>29</option>
+                    <option value=30>30</option>
+                    <option value=31>31</option>
+                    <option value=32>32</option>
+                    <option value=33>33</option>
+                    <option value=34>34</option>
+                    <option value=35>35</option>
+                    <option value=36>36</option>
+                    <option value=37>37</option>
+                    <option value=38>38</option>
+                    <option value=39>39</option>
+                    <option value=40>40</option>
+                    <option value=41>41</option>
+                    <option value=42>42</option>
+                    <option value=43>43</option>
+                    <option value=44>44</option>
+                    <option value=45>45</option>
+                    <option value=46>46</option>
+                    <option value=47>47</option>
+                    <option value=48>48</option>
+                    <option value=49>49</option>
+                    <option value=50>50</option>
+                    <option value=51>51</option>
+                    <option value=52>52</option>
+                    <option value=53>53</option>
+                    <option value=54>54</option>
+                    <option value=55>55</option>
+                    <option value=56>56</option>
+                    <option value=57>57</option>
+                    <option value=58>58</option>
+                    <option value=59>59</option>
+                    <option value=60>60</option>
+                    <option value=61>61</option>
+                    <option value=62>62</option>
+                    <option value=63>63</option>
+                    <option value=64>64</option>
+                    <option value=65>65</option>
+                    <option value=66>66</option>
+                    <option value=67>67</option>
+                    <option value=68>68</option>
+                    <option value=69>69</option>
+                    <option value=70>70</option>
+                    <option value=71>71</option>
+                    <option value=72>72</option>
+                    <option value=73>73</option>
+                    <option value=74>74</option>
+                    <option value=75>75</option>
+                    <option value=76>76</option>
+                    <option value=77>77</option>
+                    <option value=78>78</option>
+                    <option value=79>79</option>
+                    <option value=80>80</option>
+                    <option value=81>81</option>
+                    <option value=82>82</option>
+                    <option value=83>83</option>
+                    <option value=84>84</option>
+                    <option value=85>85</option>
+                    <option value=86>86</option>
+                    <option value=87>87</option>
+                    <option value=88>88</option>
+                    <option value=89>89</option>
+                    <option value=90>90</option>
+                    <option value=91>91</option>
+                    <option value=92>92</option>
+                    <option value=93>93</option>
+                    <option value=94>94</option>
+                    <option value=95>95</option>
+                    <option value=96>96</option>
+                    <option value=97>97</option>
+                    <option value=98>98</option>
+                    <option value=99>99</option>
+                    <option value=100>100</option>
+				  </select>
+					
+				</td>
+              </tr>
+              <tr> 
+                <td align="right">Phase:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="wave_phase" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_wave_phase" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected>
+					<option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                    <option value=11>11</option>
+                    <option value=12>12</option>
+                    <option value=13>13</option>
+                    <option value=14>14</option>
+                    <option value=15>15</option>
+                    <option value=16>16</option>
+                    <option value=17>17</option>
+                    <option value=18>18</option>
+                    <option value=19>19</option>
+                    <option value=20>20</option>
+                    <option value=21>21</option>
+                    <option value=22>22</option>
+                    <option value=23>23</option>
+                    <option value=24>24</option>
+                    <option value=25>25</option>
+                    <option value=26>26</option>
+                    <option value=27>27</option>
+                    <option value=28>28</option>
+                    <option value=29>29</option>
+                    <option value=30>30</option>
+                    <option value=31>31</option>
+                    <option value=32>32</option>
+                    <option value=33>33</option>
+                    <option value=34>34</option>
+                    <option value=35>35</option>
+                    <option value=36>36</option>
+                    <option value=37>37</option>
+                    <option value=38>38</option>
+                    <option value=39>39</option>
+                    <option value=40>40</option>
+                    <option value=41>41</option>
+                    <option value=42>42</option>
+                    <option value=43>43</option>
+                    <option value=44>44</option>
+                    <option value=45>45</option>
+                    <option value=46>46</option>
+                    <option value=47>47</option>
+                    <option value=48>48</option>
+                    <option value=49>49</option>
+                    <option value=50>50</option>
+                    <option value=51>51</option>
+                    <option value=52>52</option>
+                    <option value=53>53</option>
+                    <option value=54>54</option>
+                    <option value=55>55</option>
+                    <option value=56>56</option>
+                    <option value=57>57</option>
+                    <option value=58>58</option>
+                    <option value=59>59</option>
+                    <option value=60>60</option>
+                    <option value=61>61</option>
+                    <option value=62>62</option>
+                    <option value=63>63</option>
+                    <option value=64>64</option>
+                    <option value=65>65</option>
+                    <option value=66>66</option>
+                    <option value=67>67</option>
+                    <option value=68>68</option>
+                    <option value=69>69</option>
+                    <option value=70>70</option>
+                    <option value=71>71</option>
+                    <option value=72>72</option>
+                    <option value=73>73</option>
+                    <option value=74>74</option>
+                    <option value=75>75</option>
+                    <option value=76>76</option>
+                    <option value=77>77</option>
+                    <option value=78>78</option>
+                    <option value=79>79</option>
+                    <option value=80>80</option>
+                    <option value=81>81</option>
+                    <option value=82>82</option>
+                    <option value=83>83</option>
+                    <option value=84>84</option>
+                    <option value=85>85</option>
+                    <option value=86>86</option>
+                    <option value=87>87</option>
+                    <option value=88>88</option>
+                    <option value=89>89</option>
+                    <option value=90>90</option>
+                    <option value=91>91</option>
+                    <option value=92>92</option>
+                    <option value=93>93</option>
+                    <option value=94>94</option>
+                    <option value=95>95</option>
+                    <option value=96>96</option>
+                    <option value=97>97</option>
+                    <option value=98>98</option>
+                    <option value=99>99</option>
+                    <option value=100>100</option>
+				  </select></td>
+                <td align="right">Strength:</td>
+                <td><iframe src="javascript:parent.ifrmHTML(30);" id="wave_strength" width="30px" scrolling="no" frameborder="0"></iframe> 
+                  <select id="select_wave_strength" class="height20X49" onChange="sltChange(this);">
+                    <option value="" selected>
+			      </select></td>
+              </tr>
+            </table>
+            </fieldset></td>
+          
+        </tr>
+      </table>
+	  <table id="tblScrollbar" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+        <tr> 
+          <td width="43%" align="right">3D光线颜色:</td>
+          <td width="57%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_3d_light_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_3d_light_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">基本颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_base_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_base_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">表面颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_face_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_face_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">阴影颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_shadow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_shadow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">箭头颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_arrow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_arrow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">黑影颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_dark_shadow_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_dark_shadow_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">高光颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_highlight_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_highlight_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <td align="right">滚动道颜色:</td>
+          <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr> 
+                <td width="16"><img src="data/btColor.gif" class="overBorder" onClick="setColor(scrollbar_track_color,this.style.backgroundColor);" onMouseDown="this.className='upBorder'" onMouseUp="this.className='overBorder'"></td>
+                <td width="3"><img width=3px height=1px></td>
+                <td><input type="text" class="height20" id="scrollbar_track_color" style="width:58px;" onChange="txtHexChange(this);" onKeyUp=if(event.keyCode==13){txtHexChange(this)} maxlength="7"></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table>
+	  
+      <table id="tblCssCode" width="100%" border="0" cellpadding="0" cellspacing="3" style="display:none;">
+        <tr> 
+          <td width="59" align="right" valign="top">CSS 代码:</td>
+          <td width="322"><textarea cols="42" rows="13" wrap="OFF" id="taCssCode"></textarea> 
+          </td>
+        </tr>
+      </table>
+	</td>
+  </tr>
+  <tr>
+    <td height="20" align="center" valign="bottom">
+	<table width="100%" height="20" border="0" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td align="right" valign="top"><input id="isMul" type="checkbox" value=""></td>
+          <td>多行</td>
+          <td align="right">名称:</td>
+          <td><iframe src="javascript:parent.ifrmHTML(71);" name="cssName" width="71px" scrolling="no" frameborder="0" id="cssName" style="top:280px;"></iframe> 
+            <select class="height20X90" onChange="sltChange(this);">
+              <option value="" selected> </option>
+              <option value='a:link'>a:link</option>
+              <option value='a:visited'>a:visited</option>
+              <option value='a:hover'>a:hover</option>
+              <option value='a:active'>a:active</option>
+              <option value='a'>a</option>
+              <option value='abbr'>abbr</option>
+              <option value='acronym'>acronym</option>
+              <option value='address'>address</option>
+              <option value='applet'>applet</option>
+              <option value='area'>area</option>
+              <option value='b'>b</option>
+              <option value='base'>base</option>
+              <option value='basefont'>basefont</option>
+              <option value='bdo'>bdo</option>
+              <option value='bgsound'>bgsound</option>
+              <option value='big'>big</option>
+              <option value='blockquote'>blockquote</option>
+              <option value='body'>body</option>
+              <option value='br'>br</option>
+              <option value='button'>button</option>
+              <option value='caption'>caption</option>
+              <option value='cite'>cite</option>
+              <option value='code'>code</option>
+              <option value='col'>col</option>
+              <option value='colgroup'>colgroup</option>
+              <option value='dd'>dd</option>
+              <option value='del'>del</option>
+              <option value='dfn'>dfn</option>
+              <option value='div'>div</option>
+              <option value='dl'>dl</option>
+              <option value='dt'>dt</option>
+              <option value='em'>em</option>
+              <option value='embed'>embed</option>
+              <option value='fieldset'>fieldset</option>
+              <option value='font'>font</option>
+              <option value='form'>form</option>
+              <option value='frame'>frame</option>
+              <option value='frameset'>frameset</option>
+              <option value='h1'>h1</option>
+              <option value='h2'>h2</option>
+              <option value='h3'>h3</option>
+              <option value='h4'>h4</option>
+              <option value='h5'>h5</option>
+              <option value='h6'>h6</option>
+              <option value='head'>head</option>
+              <option value='hr'>hr</option>
+              <option value='html'>html</option>
+              <option value='i'>i</option>
+              <option value='iframe'>iframe</option>
+              <option value='img'>img</option>
+              <option value='input'>input</option>
+              <option value='ins'>ins</option>
+              <option value='kbd'>kbd</option>
+              <option value='label'>label</option>
+              <option value='legend'>legend</option>
+              <option value='li'>li</option>
+              <option value='link'>link</option>
+              <option value='map'>map</option>
+              <option value='meta'>meta</option>
+              <option value='noframes'>noframes</option>
+              <option value='noscript'>noscript</option>
+              <option value='object'>object</option>
+              <option value='ol'>ol</option>
+              <option value='optgroup'>optgroup</option>
+              <option value='option'>option</option>
+              <option value='p'>p</option>
+              <option value='param'>param</option>
+              <option value='pre'>pre</option>
+              <option value='q'>q</option>
+              <option value='samp'>samp</option>
+              <option value='script'>script</option>
+              <option value='select'>select</option>
+              <option value='small'>small</option>
+              <option value='sound'>sound</option>
+              <option value='span'>span</option>
+              <option value='strong'>strong</option>
+              <option value='style'>style</option>
+              <option value='sub'>sub</option>
+              <option value='sup'>sup</option>
+              <option value='table'>table</option>
+              <option value='tbody'>tbody</option>
+              <option value='td'>td</option>
+              <option value='textarea'>textarea</option>
+              <option value='tfoot'>tfoot</option>
+              <option value='th'>th</option>
+              <option value='thead'>thead</option>
+              <option value='tr'>tr</option>
+              <option value='tt'>tt</option>
+              <option value='ul'>ul</option>
+              <option value='var'>var</option>
+            </select> </td>
+          <td><input type="button" value="确 定" style="width:74px;" onClick="window.returnValue=(cssName.t.value!=''?cssName.t.value+'{':'')+(isMul.checked?genCssCode().replace(/;/g,';\n\r'):genCssCode())+(cssName.t.value!=''?'}':'');window.close()"></td>
+          <td><input name="button" type="button" style="width:74px;" value="取 消" onClick="window.close()"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

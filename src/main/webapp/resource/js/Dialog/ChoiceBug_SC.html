@@ -1,0 +1,270 @@
+<html XMLNS:IE>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+		<title>选择类型</title>
+		<SCRIPT src="../Common.js"></SCRIPT>
+		<SCRIPT src="../Dialog.js"></SCRIPT>
+		<SCRIPT src="../Error.js"></SCRIPT>
+		<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+		<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+		<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+		<STYLE>
+			@import url(../../css/default.css);
+			@import url(../../css/btn.css);
+			@media all {
+				IE\:XmlSelect {
+					behavior: url(../../htc/XmlSelect.htc);
+				}
+				IE\:button {
+					behavior: url(../../htc/btn.htc);
+				}
+			}
+			BODY {
+				margin: 8px 15px 0px 15px;
+				overflow: auto;
+				min-height: 100%;
+			}
+		</STYLE>
+	</head>
+
+	<body onload="iniPage();">
+		<fieldset style="margin-top: 5px">
+			<legend>
+				bug类型选择
+			</legend>
+			<table border="0" cellpadding="0" cellspacing="0" style="margin: 4px">
+				<tr height="20">
+					<td ALIGN="center">
+						bug&nbsp;类&nbsp;型
+					</td>
+					<td>
+						&nbsp;
+					</td>
+					<td ALIGN="center">
+						bug&nbsp;涉&nbsp;及&nbsp;域
+					</td>
+					<td>
+						&nbsp;
+					</td>
+					<td ALIGN="center">
+						bug&nbsp;涉&nbsp;及&nbsp;系&nbsp;统
+					</td>
+					<td>
+						&nbsp;
+					</td>
+					<td ALIGN="center">
+						选&nbsp;中&nbsp;系&nbsp;统
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="top">
+						<IE:XmlSelect id="requireType" size="20" width="185"
+							xmlsrc="../../../servlet/DataOperServlet?tag=18&parentValue=99&domainType=REQUIRE_TYPE"
+							onchange="showInvole()" />
+					</td>
+					<td align="center">
+						&nbsp;&nbsp;
+					</td>
+					<td>
+						<IE:XmlSelect id="involveDomain" size="20" width="185" onchange="showSystem()" />
+					</td>
+					<td align="center">
+						&nbsp;&nbsp;
+					</td>
+					<td>
+						<IE:XmlSelect id="involveSystem" size="20" width="185" onOptionDblClick="addBtn.click()" />
+					</td>
+					<td width="33">
+						<table border="0" cellspacing="2" cellpadding="0" width="100%" valign="center">
+							<tr>
+								<td align="center">
+									<IE:button value=">" width="33" onclick="addSelect()" id="addBtn" />
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<IE:button value="<" width="33" onclick="delSelect();" id="delBtn"/>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<IE:XmlSelect id="selectedStaffList" size="20" width="185"
+							onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()" />
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<fieldset style="margin-top: 5px">
+			<legend>
+				bug类型描述
+			</legend>
+			<table border="0" cellpadding="0" cellspacing="0" style="margin: 4px">
+				<tr>
+					<table border="0" cellpadding="0" cellspacing="0"
+						style="margin: 4px">
+						<tr>
+							<TD colspan="7" width="655">
+								<TEXTAREA id="oReamrk"
+									style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid; WIDTH: 100%; height: 100;"
+									readonly="readonly"></TEXTAREA>
+							</TD>
+						</tr>
+					</table>
+				</tr>
+			</table>
+		</fieldset>
+		<div style="margin-top: 10px; text-align: right">
+			<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()" />
+			&nbsp;
+			<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()" />
+		</div>
+<SCRIPT language="javascript">
+var isMultiple;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var element = {
+	requireId :"",
+	requireName :"",
+	involveDomainId :"",
+	involveDomainName : "",
+	involveSystemId : "",
+	involveSystemName : ""
+}
+var param = window.dialogArguments;
+
+function iniPage() {
+	isMultiple = false;
+	if(param.bugInvolveSystemId != ''){
+		
+		involveDomain.xmlsrc = "/servlet/DataOperServlet?tag=18&parentValue="+param.bugType+"&domainType=REQUIRE_INVOLVE_DOMAIN";
+		involveSystem.xmlsrc = "/servlet/flowActionSC.do?method=requireinvolveSys&parentValue="+param.bugInvolveDomain+"&domainType=REQUIRE_INVOLVE_SYSTEM";
+		
+		selectedObj(requireType, param.bugType);
+		selectedObj(involveDomain, param.bugInvolveDomain);
+		selectedObj(involveSystem, param.bugInvolveSystem);
+		involveSystem.addSelectedTo(selectedStaffList,true);
+		
+	    element.requireId = param.bugType;
+	    element.requireName = param.bugTypeName;
+	    element.involveDomainId= param.bugInvolveDomain;
+	    element.involveDomainName= param.bugInvolveDomainName;
+	    element.involveSystemId= param.bugInvolveSystem;
+	    element.involveSystemName= param.bugInvolveSystemName;
+	}
+}
+
+function setRemark(typeCode, domainType){
+	var str = "";
+	xmlhttp.Open("POST","/servlet/flowActionSC.do?method=getTpTreeDescription&domainType="+domainType+'&typeCode='+typeCode,false);
+ 	xmlhttp.send();
+ 	var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+    dataXML.load(xmlhttp.responseXML);
+    var oMsgList = dataXML.selectNodes("/root/rowSet");
+    if(oMsgList.length>0){
+    	str = oMsgList[0].selectSingleNode('DESCRIPTION').text;
+    }else{
+    	str = '';
+    }
+    return str;
+}
+
+function showInvole(){
+	var requireObj = requireType.getObject();
+	var requireSelectId = "";
+	var requireSelectText = "";
+	for(var i=0; i<requireObj.options.length; i++) {
+        if(requireObj.options[i].selected) {
+            requireSelectId = requireObj.options[i].value;
+            requireSelectText = requireObj.options[i].innerHTML;
+            var str = setRemark(requireSelectId,'REQUIRE_TYPE');
+            if(str){
+            	oReamrk.value= str;
+            }
+            break;
+        }
+    }
+    
+    involveDomain.delAllOption();
+    involveSystem.delAllOption();
+    selectedStaffList.delAllOption();
+    
+    involveDomain.xmlsrc = "../../../servlet/DataOperServlet?tag=18&parentValue="+requireSelectId+"&domainType=REQUIRE_INVOLVE_DOMAIN";
+    
+    element.requireId = requireSelectId;
+    element.requireName = requireSelectText;
+    element.involveDomainId="";
+    element.involveDomainName="";
+    element.involveSystemId="";
+    element.involveSystemName="";
+}
+
+function showSystem(){
+
+	var involveDomainObj = involveDomain.getObject();
+	var involveDomainSelectId = "";
+	var involveDomainSelectText = "";
+	for(i=0;i<involveDomainObj.options.length;i++) {
+        if(involveDomainObj.options[i].selected) {
+            involveDomainSelectId = involveDomainObj.options[i].value;//"102"
+            involveDomainSelectText = involveDomainObj.options[i].text;//"BSS域"
+            var str = setRemark(involveDomainSelectId,'REQUIRE_INVOLVE_DOMAIN');
+            if(str){
+            	oReamrk.value= str;
+            }
+            break;
+        }
+    }
+    
+    involveSystem.delAllOption();
+    selectedStaffList.delAllOption();
+    
+    involveSystem.xmlsrc = "/servlet/flowActionSC.do?method=requireinvolveSys&parentValue="+involveDomainSelectId+"&domainType=REQUIRE_INVOLVE_SYSTEM";
+	
+	element.involveDomainId = involveDomainSelectId;
+    element.involveDomainName = involveDomainSelectText;
+    element.involveSystemId="";
+    element.involveSystemName="";
+}
+
+function addSelect(){
+	involveSystem.addSelectedTo(selectedStaffList,true);
+	var oSelect = selectedStaffList.getObject();
+	if(selectedStaffList.getLength() > 0){
+		element.involveSystemId = oSelect.options[0].value;
+		element.involveSystemName = oSelect.options[0].text;
+	}
+}
+
+function delSelect(){
+	selectedStaffList.delSelectedOption();
+	element.involveSystemId = "";
+	element.involveSystemName = "";
+}
+
+function moveIn() {
+	if(!isMultiple) {
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter() {
+	if(element.involveSystemId != ""){
+		window.returnValue = element;
+		window.close();
+	}else {
+		EMsg("请选择指定的数据！");
+	}
+}
+
+function selectedObj(objId,value){
+	var obj = objId.getObject();
+	for(i=0; i<obj.length; i++){
+		if(obj.options[i].value == value){
+			obj.options[i].selected = true;
+			break;
+		}
+	}
+}
+</SCRIPT>
+	</body>
+</html>

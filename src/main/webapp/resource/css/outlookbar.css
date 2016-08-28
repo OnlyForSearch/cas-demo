@@ -1,0 +1,26 @@
+/* CSS Document */
+.barBG{
+	background: #E6F3FF;
+}
+.pNormal{
+	background-image:  url(../image/serviceDesk/outlookpanel-bg.gif); background-repeat: repeat-x; height: 21px; width: 100%;border-right: 1px solid #25649C;
+}
+.divText{
+	font: 11px verdana,helvetica, arial; color: #FFF; letter-spacing: 1px;margin-right:80px; 
+}
+.pRollOver{
+	background-color: #3F8EC4; height: 21px;width: 100%; border-left: 1px inset #25649C; border-top: 1px inset #25649C; border-bottom: 1px solid #66A3FF; border-right: 1px solid #66A3FF;
+}
+.pClick{
+	background-color: #3F8EC4; height: 21px; width: 100%; border: 1px inset #044C8D;
+}
+.itemText{
+	font: 9pt ËÎÌו,verdana,helvetica,sans-serif;
+}
+
+.itemTextOver{
+	background: #FFFFFF;
+}
+.itemborder{
+	background: #a6b5cb;
+}

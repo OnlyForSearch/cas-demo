@@ -1,0 +1,32 @@
+.button_group {
+	font-size: 0;
+}
+
+.button_group > a {
+	margin-right: 11px;
+}
+
+.button_group .a_button {
+	display: inline-block;
+	padding: 11px 29px 10px 30px;
+	font-size: 15px;
+	background-color: #ececec;
+	color: #999999;
+	/*
+	border:1px solid #e2e2e2;
+	*/
+	cursor: pointer;
+}
+
+.button_group .a_button_checked {
+	background: url(b_check_w.png) no-repeat right #eaf7fa;
+	color: #0086c8;
+	/*
+	border:1px solid #8bbde8;
+	*/
+}
+
+.button_group .a_button:hover {
+	background-color: #eaf7fa;
+	color: #0086c8;
+}

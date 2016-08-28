@@ -1,0 +1,109 @@
+body {
+	margin:0px 0px 2px 0px;
+	font-size:12px;
+	color:#000000;
+	font-family:Arial, Helvetica, sans-serif;
+	line-height:150%;
+}
+a:link,a:visited{
+	color:#363636;
+	text-decoration:none;
+}
+a:hover{
+	color:#FF6600;
+	text-decoration:none;
+}
+/* 登录页CSS开始*/
+
+.login_font{
+    color:#333333;
+}
+
+/* 登录页CSS结束*/
+
+
+/* 首页CSS开始*/
+.jianju_left20 {
+	margin: auto;
+	padding-left: 20px;
+}
+.jianju_left_right_top25 {
+	margin: auto;
+	padding-right: 25px;
+	padding-left: 25px;
+	padding-top: 15px;
+}
+.jianju_left_right_top55 {
+	margin: auto;
+	padding-right: 55px;
+	padding-left: 55px;
+	padding-top: 15px;
+}
+.biankuang_blue {
+	border: 1px solid #4D6D97;
+}
+.zhongdian_xuxian {
+	border-left-width: 10px;
+	border-left-style: dashed;
+	border-left-color: #C8C8C8;
+}
+.jianju_left_right_15 {
+	margin: auto;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.jianju_top_bottom_left_right_3{
+	margin: auto;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+.font_red {
+	color: #990000;
+	text-decoration: underline;
+}
+.font_red2 {
+	color: #990000;
+	text-decoration: none;
+	font-weight: bold;
+}
+.font_hui{
+	color: #333333;
+	text-decoration: none;
+}
+.font_danhui{
+	color: #666666;
+	text-decoration: none;
+}
+.biankuang_bottom {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #E9EEF3;
+}
+a.red:link,a.red:visited{
+	color:#990000;
+	text-decoration:underline;
+	
+}
+a.red:hover{
+	color:#FF6600;
+	text-decoration:none;
+}
+a.pic:link{
+    color:#000000;
+	text-decoration:none; 
+}
+a.pic:hover,a.pic:visited{
+    color:#000000;
+	font-weight: bold;
+	text-decoration:underline;
+	
+}
+.itMenuOver
+{
+    color:#000000;
+	font-weight: bold;
+	text-decoration:underline;
+}
+/* 首页CSS结束*/

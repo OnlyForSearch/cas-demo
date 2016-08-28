@@ -1,0 +1,297 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>CSS 样式管理器</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+var currRule
+function init(){
+	initDialog()
+	initDocument()
+	document.all('btOK').parentNode.parentNode.style.display='none'
+	document.all('btCancel').value="关闭"
+	document.all('sltClass').ondblclick=function(){
+		editCss()
+	}
+	document.all('sltClass').onclick=function(){
+		if(this.selectedIndex>=0){
+			var name=this.options[this.selectedIndex].text.trim()
+			if(/^R:/.test(name)){
+				document.frames('ifrmName').tf.value=name.replace(/^R:/,'')
+			}
+		}
+	}
+	if(myEditor.designer){
+		loadCSS()
+	}
+}
+function doOK(){
+	
+}
+function loadCSS(){
+	var dom=myEditor.designer.document
+	var index=document.all('sltClass').selectedIndex
+	document.all('sltClass').length=0
+	for(var i=0;i<dom.styleSheets.length;i++){
+		with(dom.styleSheets[i]){
+			addOption(document.all('sltClass'),'S: '+(href?"Link( "+href+" )":'Document'),i)
+			for(var p=0;p<imports.length;p++){
+				addOption(document.all('sltClass'),"   @: Import( "+imports[p].href+" )",i+",-1,"+p)
+			}
+			for(var j=0;j<rules.length;j++){
+				with(rules[j]){
+					addOption(document.all('sltClass'),"   R: "+selectorText,i+","+j)
+				}
+			}
+		}
+	}
+	document.all('sltClass').selectedIndex=index<document.all('sltClass').length?index:document.all('sltClass').length-1
+	myEditor.window.doSameContent('Design')
+}
+function newCSS(){
+	var oldCssText=new Array()
+	var dom=myEditor.designer.document
+	var selectorName=getSelectText(document.all('sltName')).trim()
+	if(selectorName==""){
+		inputError('请输入样式的类名称',document.frames('ifrmName').tf)
+		return
+	}
+	for(var i=0;i<dom.styleSheets.length;i++){
+		with(dom.styleSheets[i]){
+			for(var j=0;j<rules.length;j++){
+				with(rules[j]){
+					if(selectorText.toLowerCase()==selectorName.toLowerCase())currRule=rules[j],oldCssText[oldCssText.length]=style.cssText;
+				}
+			}
+		}
+	}
+	var css=showModalDialog("../cssStyleEditor/cssStyleEditor.htm",oldCssText.join(";"), "dialogWidth:530px; dialogHeight:345px; status:0;help:0;scroll:0;")
+	if(css){
+		css=css.replace(/^[^\{]+(.+)\}$/,'$1')
+		var arr=document.all('sltClass').value.split(",")
+		var isLink=/^S: Link/.test(getSelectText(document.all('sltClass')))
+		if(currRule){
+			currRule.style.cssText=css
+		}else{
+			var newStyle = arr[0]!="" && !isLink ?dom.styleSheets[arr[0]]:dom.createStyleSheet()
+			newStyle.addRule(selectorName,css)
+		}
+		loadCSS()
+	}
+	currRule=null
+}
+function editCSS(){
+	if(document.all('sltClass').selectedIndex>-1){
+		var arr=document.all('sltClass').value.split(",")
+		if(arr.length==2){
+			var currRule=myEditor.designer.document.styleSheets[arr[0]].rules[arr[1]]
+			var css=showModalDialog("../cssStyleEditor/cssStyleEditor.htm",currRule.style.cssText, "dialogWidth:530px; dialogHeight:345px; status:0;help:0;scroll:0;")
+			if(css){
+				currRule.style.cssText=css
+				loadCSS()
+			}	
+		}
+	}
+}
+function deleteCSS(){
+	if(document.all('sltClass').selectedIndex>-1){
+		var arr=document.all('sltClass').value.split(",")
+		with(myEditor.designer.document){
+			if(arr.length==2){
+				styleSheets[arr[0]].removeRule(arr[1])
+			}else if(arr.length==1){
+				var obj=styleSheets[arr[0]].owningElement
+				obj.parentNode.removeChild(obj)
+			}else{
+				var obj=styleSheets[arr[0]].owningElement
+				var str='@import url( '+styleSheets[arr[0]].imports[arr[2]].href+' );'
+				var html=obj.outerHTML
+				var index=html.indexOf(str)
+				obj.outerHTML=html.substring(0,index)+html.substr(index+str.length)
+			}
+		}
+		loadCSS()
+	}
+}
+function attachCSS(){
+	if(getSelectValue(document.all('sltUrl'))!=""){
+		var dom=myEditor.designer.document
+		var v=escape(getSelectValue(document.all('sltUrl')))
+		if(document.all('rdImport').checked){
+			var arr=document.all('sltClass').value.split(",")
+			var isLink=/^S: Link/.test(getSelectText(document.all('sltClass')))
+			var newStyle = arr[0]!="" && !isLink ?dom.styleSheets[arr[0]]:dom.createStyleSheet()
+			newStyle.addImport(v)
+		}else{
+			var newStyle =dom.createElement("link")
+		 	newStyle.href=escape(v);
+			newStyle.rel="stylesheet" 
+			newStyle.type="text/css"
+			dom.all[1].appendChild(newStyle)
+		}
+	}
+	loadCSS()
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td width="80" height="22" align="right">类名称:</td>
+    <td><script>writeEditableSelect('Name',195,[
+												'','',
+												'a:link','a:link',
+												'a:visited','a:visited',
+												'a:hover','a:hover',
+												'a:active','a:active',
+												'a','a',
+												'abbr','abbr',
+												'acronym','acronym',
+												'address','address',
+												'applet','applet',
+												'area','area',
+												'b','b',
+												'base','base',
+												'basefont','basefont',
+												'bdo','bdo',
+												'bgsound','bgsound',
+												'big','big',
+												'blockquote','blockquote',
+												'body','body',
+												'br','br',
+												'button','button',
+												'caption','caption',
+												'cite','cite',
+												'code','code',
+												'col','col',
+												'colgroup','colgroup',
+												'dd','dd',
+												'del','del',
+												'dfn','dfn',
+												'div','div',
+												'dl','dl',
+												'dt','dt',
+												'em','em',
+												'embed','embed',
+												'fieldset','fieldset',
+												'font','font',
+												'form','form',
+												'frame','frame',
+												'frameset','frameset',
+												'h1','h1',
+												'h2','h2',
+												'h3','h3',
+												'h4','h4',
+												'h5','h5',
+												'h6','h6',
+												'head','head',
+												'hr','hr',
+												'html','html',
+												'i','i',
+												'iframe','iframe',
+												'img','img',
+												'input','input',
+												'ins','ins',
+												'kbd','kbd',
+												'label','label',
+												'legend','legend',
+												'li','li',
+												'link','link',
+												'map','map',
+												'meta','meta',
+												'noframes','noframes',
+												'noscript','noscript',
+												'object','object',
+												'ol','ol',
+												'optgroup','optgroup',
+												'option','option',
+												'p','p',
+												'param','param',
+												'pre','pre',
+												'q','q',
+												'samp','samp',
+												'script','script',
+												'select','select',
+												'small','small',
+												'sound','sound',
+												'span','span',
+												'strong','strong',
+												'style','style',
+												'sub','sub',
+												'sup','sup',
+												'table','table',
+												'tbody','tbody',
+												'td','td',
+												'textarea','textarea',
+												'tfoot','tfoot',
+												'th','th',
+												'thead','thead',
+												'tr','tr',
+												'tt','tt',
+												'ul','ul',
+												'var','var'
+												])</script>
+												<input type="button" value="新建" onClick="newCSS()">
+												</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" valign="top">现有类:</td>
+    <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="1"><select id="sltClass" size="8" class="longWidth">
+        </select></td>
+        <td valign="top"><img width=0 height=0>
+		<input type="button" value="编辑" onClick="editCSS()">
+		<br>
+		<img width=0 height=0>
+		<input type="button" value="删除" onClick="deleteCSS()"></td>
+      </tr>
+    </table></td></tr>
+	<tr>
+	<td height=22 align="right">外部样式表:</td>
+	<td><script>writeUrlSelector('Url')</script>
+	</td>
+	</tr>
+	<tr>
+	<td height=22 ></td>
+	<td>
+	<table width="100%" height="22"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="1"><input id="rdLink" type="radio" name="radio" checked></td>
+    <td width="40" style="padding-top:5px">链接
+           </td>
+    <td width="1"><input id="rdImport" type="radio" name="radio"></td>
+    <td width="121" style="padding-top:5px">导入</td>
+    <td><input type="button" value="确定" onClick="attachCSS()"></td>
+  </tr>
+</table>
+	</td>
+	</tr>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <script>writeButtonsRight()</script>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

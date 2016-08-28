@@ -1,0 +1,700 @@
+<public:component>
+<public:PROPERTY NAME="flashSettings" put="setFlashSettings"    />
+<public:PROPERTY NAME="uploadedFile"  get="getUploadedFile"     />
+<public:PROPERTY NAME="readOnly"      put="setReadOnly"         />
+<public:PROPERTY NAME="allowHistory"  put="setAllowHistory"     />
+<public:attach   EVENT="ondocumentready"   HANDLER="doDocReady" />
+<METHOD   NAME="getFileQueuedCnt"	                            />
+<METHOD   NAME="init"	                                        />
+<METHOD   NAME="removeAll"	                                    />
+<METHOD   NAME="addAttach"	                                    />
+<METHOD   NAME="getUploader"	                                />
+<METHOD   NAME="hideUploader"	                                />
+<METHOD   NAME="showUploader"	                                />
+<PUBLIC:EVENT NAME="onFileAdd"          ID="oFileAdd"           />
+<PUBLIC:EVENT NAME="onFileUpdate"       ID="oFileUpdate"        />
+<PUBLIC:EVENT NAME="onFileDel"          ID="oFileDel"           />
+<PUBLIC:EVENT NAME="showFileHis"        ID="oFileHis"           />
+<PUBLIC:EVENT NAME="onUploadStart"      ID="oFileUploadStart"   />
+<SCRIPT LANGUAGE="javascript">
+var uploadHtcDefaultLang = {
+		loadFlashCtrlError : "加载flash上传控件失败！",
+		uploadFail : "上传失败",
+		del : "删除",
+		reTry : "重试",
+		update : "更新",
+		history : "历史",
+		onlyUploadAttach : "最多只能同时上传{0}个附件",
+		fileSizeLimitExceeded : "({0})文件大小为({1}),超出{3}的限制！",
+		fileSizeZero : "({0})文件大小为0，不能上传！",
+		fileTypeLllegal : "({0})非法的文件类型！",
+		fileUploadFailUnknownError : "({0})上传失败,未知错误！"
+};
+//获取语言资源
+function getUploadHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('uploadHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.uploadHtc.' + code);
+	}
+}
+var doc=window.document;
+var gFileUploaded={};
+var gSwfUploaderAdapter;
+var readOnly = false;
+var allowHistory=false;
+var gFlashSetting=
+{
+	flash_url : "/resource/js/swfUpload/swfupload.swf",
+	flash9_url : "/resource/js/swfUpload/swfupload_fp9.swf",
+	file_size_limit : "1000 MB",
+	file_types_description : "All Files",
+	file_upload_limit : "0",
+	file_queue_limit : "0",
+	prevent_swf_caching:false,
+	button_cursor:-2,
+	attach_ico:"/resource/image/attachment.jpg"
+};
+Function.prototype.extend = function(parentClass, m, sm)
+{
+	var oc = Object.prototype.constructor;
+	var F = new Function(), sbp, spp = parentClass.prototype;
+	F.prototype = spp;
+	sbp = this.prototype = new F();
+	sbp.constructor = this;
+	sbp.Super = parentClass;
+	this.superclass = spp;
+	this.methods(m);
+	this.methods(sm, true);
+	return this;
+}
+
+Function.prototype.methods = function(o, isStatic)
+{
+	if (o)
+	{
+		var Class = (isStatic === true) ? this : this.prototype;
+		for (var name in o)
+		{
+			Class[name] = o[name];
+		}
+	}
+	return this;
+}
+
+function setReadOnly(pReadOnly)
+{
+    readOnly=pReadOnly;
+    if(element.readyState!="complete") return;
+	for(var key in gFileUploaded)
+	{
+		if(gFileUploaded[key].updater)
+		{
+			var oFlash=gFileUploaded[key].updater.getMovieElement();
+			oFlash.style.display=(readOnly)?"none":"";
+			oFlash.nextSibling.style.display=(readOnly)?"none":"";
+		}
+	}
+	getUploader().style.display=(readOnly)?"none":"";
+	if(gFlashSetting.button_overlay_id)
+	{
+	    doc.getElementById(gFlashSetting.button_overlay_id).style.display=(readOnly)?"none":"";
+	}
+	ctrlDel();
+    function ctrlDel()
+    {
+    	var oDelElements=element.all(uniqueID+'_oDel');
+    	if(!oDelElements) return;
+    	var iLen=oDelElements.length;
+    	if(iLen)
+    	{
+    		for (var i=0;i<iLen;i++)
+    	    {
+    			oDelElements[i].style.display=(readOnly)?"none":"";
+    	    }
+    	}
+    	else
+        {
+    		var oDelElement=window.document.getElementById(uniqueID+'_oDel');
+    		if(oDelElement)
+    			oDelElement.style.display=(readOnly)?"none":"";
+        }
+    }
+}
+
+function setAllowHistory(pAllowHistory)
+{
+	allowHistory=pAllowHistory;
+}
+
+function getUploader()
+{
+	return gSwfUploaderAdapter.getUploader().getMovieElement();
+}
+function hideUploader()
+{
+	gSwfUploaderAdapter.getUploader().setButtonDisabled(true);
+	gSwfUploaderAdapter.getUploader().setButtonDimensions(1,1);
+	if(gFlashSetting.button_overlay_id)
+	{
+	    doc.getElementById(gFlashSetting.button_overlay_id).style.display="none";
+	}
+}
+function showUploader()
+{
+	gSwfUploaderAdapter.getUploader().setButtonDisabled(false);
+	gSwfUploaderAdapter.getUploader().setButtonDimensions(gSwfUploaderAdapter.button_width,gSwfUploaderAdapter.button_height);
+	if(gFlashSetting.button_overlay_id)
+	{
+		doc.getElementById(gFlashSetting.button_overlay_id).style.display="";
+	}
+}
+function getFileQueuedCnt()
+{
+	var oStat=gSwfUploaderAdapter.getUploader().getStats();
+	var iCnt=(oStat)?oStat.files_queued:0;
+	for(var key in gFileUploaded)
+	{
+		if(gFileUploaded[key].updater)
+		{
+			var updaterStat=gFileUploaded[key].updater.getStats();
+			iCnt+=(updaterStat)?updaterStat.files_queued:0;
+		}
+	}
+    return iCnt;
+}
+
+function addAttach(file)
+{
+	gSwfUploaderAdapter.custom_settings.render(file);
+	gFileUploaded[file.id]={name:file.name,size:file.size};
+	gSwfUploaderAdapter.showOperater(file);
+}
+
+function removeAll()
+{
+	for(var key in gFileUploaded)
+	{
+		delete gFileUploaded[key];
+	}
+	initDownHTML();
+}
+
+function execHook(oFire,oHook)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute("hook",oHook);
+	oFire.fire(oEvent);
+}
+
+
+function initDownHTML()
+{
+	element.innerHTML='<iframe name="'+uniqueID+'_download" style="display:none"></iframe>';
+}
+
+function doDocReady()
+{
+	element.style.overflow="auto";
+	initDownHTML();
+	downloadSwfJs();
+	function downloadSwfJs()
+	{
+	    var sSwfUploadNmae="swfupload.js";
+	    var sSwfQueueName="swfupload.queue.js";
+     	window.$import("/resource/js/swfUpload/swfupload.js");
+		window.$import("/resource/js/swfUpload/swfupload.queue.js");
+		//if(!isExistsScript(sSwfUploadNmae))
+        //{
+         //   window.$import("/resource/js/swfUpload/swfupload.js");
+        //}
+        //if(!isExistsScript(sSwfQueueName))
+        //{
+           // window.$import("/resource/js/swfUpload/swfupload.queue.js");
+        //}
+		SWFUpload.prototype.getFlashHTML = function (flashVersion)
+		{
+				var classId=" classid = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' ";
+				var sHTML= ['<object',classId,' id="', this.movieName, '" type="application/x-shockwave-flash" data="', (this.support.imageResize ? this.settings.flash_url : this.settings.flash9_url), '" width="', this.settings.button_width, '" height="', this.settings.button_height, '"',this.customSettings.cssStyle,' >',
+							'<param name="wmode" value="', this.settings.button_window_mode, '" />',
+							'<param name="movie" value="', (this.support.imageResize ? this.settings.flash_url : this.settings.flash9_url), '" />',
+							'<param name="quality" value="high" />',
+							'<param name="allowScriptAccess" value="always" />',
+							'<param name="flashvars" value="' + this.getFlashVars() + '" />',
+							'</object>'].join("");
+			   return sHTML;
+		};
+	}
+	function isExistsScript(scriptName)
+	{
+		var oScripts=window.document.scripts;
+		var iLen=oScripts.length;
+		for(var i=0;i<iLen;i++)
+		{
+		   var oScript=oScripts[i];
+		   var sSrc=oScript.src;
+		   var sCusJsPath=oScript.getAttribute("jsPath");
+		   var sTmpSrc=sSrc||sCusJsPath;
+		   if(sTmpSrc && isInclude(scriptName,sTmpSrc))
+			  return true;
+		}
+		return false;
+		function isInclude(sJsName,sJsPath)
+		{
+			 var sJsRealName=sJsPath.substr(sJsPath.lastIndexOf("/")+1,sJsPath.length);
+			 return (sJsRealName.indexOf(sJsName)!=-1);
+		}
+	}
+}
+
+function getUploadedFile()
+{
+	return gFileUploaded;
+}
+function setFlashSettings(sSetting)
+{
+	try
+	{
+	   var oSetting=(sSetting.constructor== String)?(new Function("return " + sSetting))():sSetting;
+	   for(var key in oSetting)
+	   {
+		   gFlashSetting[key]=oSetting[key];
+	   }
+	}
+	catch(e)
+	{
+		alert("无效的flash配置对象！");
+	}
+}
+
+function copySetting(oTo,oFrom)
+{
+    for (var key in oFrom)
+    {
+    	if(oTo[key]===undefined)
+           oTo[key]=oFrom[key];
+    }
+}
+
+function init()
+{
+	gSwfUploaderAdapter=new SwfUploaderAdapter();
+	initSetting();
+    var swfUploader = new SWFUpload(gSwfUploaderAdapter);
+    gSwfUploaderAdapter.setUploader(swfUploader);
+    function initSetting()
+    {
+    	copySetting(gSwfUploaderAdapter,gFlashSetting);
+    	if(gFlashSetting.button_overlay_id)
+        {
+    		var oOverlay=doc.getElementById(gFlashSetting.button_overlay_id);
+    		var buttonWidth=oOverlay.offsetWidth;
+    		var buttonHeight=oOverlay.offsetHeight;
+    		gSwfUploaderAdapter.button_width=buttonWidth;
+    		gSwfUploaderAdapter.button_height=buttonHeight;
+    		gSwfUploaderAdapter.custom_settings.cssStyle=" class='swfupload' style='position: absolute;z-index: 1;' ";
+
+    		if(!gFlashSetting.button_placeholder_id)
+    		{
+            	var oSelector=doc.createElement("span");
+            	oSelector.id=uniqueID+"_selector";
+            	oOverlay.insertAdjacentElement("beforeBegin",oSelector);
+            	gSwfUploaderAdapter.button_placeholder_id=oSelector.id;
+    		}
+        }
+    }
+}
+function getFielDiv(file)
+{
+   	return doc.getElementById(uniqueID+"_"+file.id);
+}
+
+function SwfUploaderAdapter()
+{
+	var swfUploader=null;
+	this.setUploader=function(uploader)
+	{
+		swfUploader=uploader;
+	}
+	this.getUploader=function()
+	{
+		return swfUploader;
+	}
+    this.showOperater=function(file)
+	{
+    	var oDel=getFielDiv(file).all(uniqueID+"_oDel");
+    	oDel.style.display="";
+    	var singleSwfUploader;
+    	if(allowHistory)
+    	{
+	    	var oUpdater=getFielDiv(file).all(uniqueID+"_oUpdate");
+	    	oUpdater.style.display="";
+	    	getFielDiv(file).all(file.id+"_oUpdate").style.display="";
+	   		var oSingleUploadAdapter=new SingleSwfUploaderAdapter(file);
+	   		copySetting(oSingleUploadAdapter,gFlashSetting);
+	   		oSingleUploadAdapter.setCustomSetting(this.custom_settings);
+	   		singleSwfUploader = new SWFUpload(oSingleUploadAdapter);
+	   		oSingleUploadAdapter.setUploader(singleSwfUploader);
+	   		gFileUploaded[file.id].updater=singleSwfUploader;
+    	}
+   		if(readOnly)
+   		{
+			oDel.style.display="none";
+			if(singleSwfUploader)
+			{
+	 			var oFlash=singleSwfUploader.getMovieElement();
+	   			oFlash.style.display="none";
+				oFlash.nextSibling.style.display="none";
+			}
+   		}
+    }
+	this.custom_settings=
+	{
+	   queueError:[],
+	   cssStyle:" class='swfupload' ",
+	   genHTML:function(file)
+	   {
+			var sHTML=getFileHTMLTemplate(file);
+			element.insertAdjacentHTML('beforeEnd',sHTML);
+			function getFileHTMLTemplate(file)
+			{
+			 	 var iSize=formatBytes(file.size);
+			 	 var path=(file.path)?file.path:"#";
+			 	 var title=(file.title)?file.title:"";
+			     return['<div style="display:inline;height:20px;white-space:nowrap;clear:none;float:none" id="',uniqueID,'_',file.id,'">',
+			              '<div style="display:inline">',
+			                 '<img src="',gFlashSetting.attach_ico,'" align="absmiddle"></img>',
+			                 '<span style="font-size:12px"><a id="',uniqueID,'_oLink" href="',path,
+			                 '" target="',uniqueID,'_download" class="attach_item" style="color:blue;text-decoration:underline;cursor:hand;margin:0;padding:0" ',
+				             'onmouseover="this.style.textDecoration=\'underline\';this.className=\'attach_item_hover\'" ',
+				             'onmouseout="this.style.textDecoration=\'none\';this.className=\'attach_item\'" ',
+			                 ' title="',title,'" >',
+			                 file.name,'</a></span>',
+			                 '<span style="font-size:12px;color:#8e877d;margin:0px;padding:0" class="attach_size" id="',uniqueID,'_oSize">(',iSize,')</span>',
+			               '</div>',
+			           '<div id="',uniqueID,'_oProcessOuter" style="width:100px;height:12px;border:1px solid black;',
+			                'display:none;overflow:hidden;margin:1 0 1 0;clear:none;padding:0px">',
+			             '<div id="',uniqueID,'_oProcess" STYLE="color: white; text-align: center;background-color: blue; margin: 0px; ',
+			             'width: 1px; height: 100%;display:inline;"></div>',
+			           '</div>',
+			           '<span id="',uniqueID,'_oFail" style="color: red; margin-right: 5px;font-size:12px;',
+			               'cursor: default;display:none" class="attach_upload_fail"> '+ getUploadHtcLan("uploadFail") +'</span>',
+			           '<span id="',uniqueID,'_oDel" style="margin-left:5px;color: #663a0d; margin-right: 5px;',
+			               'font-size:12px;cursor:default;text-decoration:none;cursor:hand" ',
+			               'onmouseover="this.style.textDecoration=\'underline\';this.className=\'attach_del_button_hover\'" ',
+			               'onmouseout="this.style.textDecoration=\'none\';this.className=\'attach_del_button\'" ',
+			               'class="attach_del_button">' + getUploadHtcLan("del") +'</span>',
+			           '<span id="',uniqueID,'_oRetry" style="color: #663a0d; margin-right: 5px;font-size:12px;cursor:hand;',
+			               'display:none;text-decoration:none"',
+			             ' onmouseover="this.style.textDecoration=\'underline\';this.className=\'attach_retry_button_hover\'" ',
+			             ' onmouseout="this.style.textDecoration=\'none\';this.className=\'attach_retry_button\'" ',
+			             ' class="attach_retry_button">'+getUploadHtcLan("reTry")+'</span>',
+			           '<span id="',file.id,'_oUpdate" style="display:none"></span>',
+			           '<span id="',uniqueID,'_oUpdate" style="display:none;color: #663a0d; margin-right: 5px;font-size:12px;float:none" ',
+			           'class="attach_update_button">'+ getUploadHtcLan("update") +'</span>',
+			           '<span id="',uniqueID,'_His" style="display:none;color: #663a0d; margin-right: 5px;font-size:12px;cursor:hand;"',
+			           ' onmouseover="this.style.textDecoration=\'underline\';this.className=\'attach_his_button_hover\'" ',
+			           ' onmouseout="this.style.textDecoration=\'none\';this.className=\'attach_his_button\'"',
+			           ' class="attach_his_button">'+ getUploadHtcLan("history") +'</span>',
+			        '</div>'].join("");
+			}
+	   },
+	   render:function(file)
+	   {
+            this.genHTML(file);
+			var oFileDiv=getFielDiv(file);
+			var oDel=oFileDiv.all(uniqueID+"_oDel");
+			var oHis=oFileDiv.all(uniqueID+"_His");
+			oFileDiv.style.whiteSpace="nowrap";
+			autoResize();
+			function autoResize()
+			{
+
+				if(element.clientHeight<=element.scrollHeight)
+				{
+					element.style.posHeight=element.scrollHeight;
+				}
+			}
+			oDel.onclick=function()
+			{
+			   swfUploader && swfUploader.cancelUpload(file.id,false);
+			   getFielDiv(file).style.display="none";
+			   delete gFileUploaded[file.id];
+			   showUploader();
+			   execHook(oFileDel,{file:file});
+			}
+			if(allowHistory) oHis.style.display="";
+			execHook(oFileHis,{file:file,his:oHis});
+	   },
+	   displayProcess:function(file)
+	   {
+	   	    if(!file) return;
+	   	    getFielDiv(file).all(uniqueID+"_oProcessOuter").style.display="inline";
+	   },
+	   startProcess:function(file, bytesLoaded, bytesTotal)
+	   {
+		   	if(!file) return;
+		   	if(file.filestatus==window.SWFUpload.FILE_STATUS.CANCELLED
+		   			 || file.filestatus==window.SWFUpload.FILE_STATUS.ERROR)
+		   		return;
+		    execHook(oFileUploadStart,{file:file,bytesLoaded:bytesLoaded,bytesTotal:bytesTotal});
+		   	var oFileDiv=getFielDiv(file);
+		   	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+		   	if(!oFileDiv) return;
+		    var iWidth=parseInt(oFileDiv.all(uniqueID+"_oProcessOuter").style.width,10);
+		    oFileDiv.all(uniqueID+"_oProcess").style.width = (iWidth*percent/100)+ "px";
+	   },
+	   createUpdater:function(file,serverData,oSetting)
+	   {
+		    if(allowHistory)
+		    {
+			    getFielDiv(file).all(uniqueID+"_oUpdate").style.display="";
+		   		getFielDiv(file).all(file.id+"_oUpdate").style.display="";
+		   		var oSingleUploadAdapter=new SingleSwfUploaderAdapter(file);
+		   		copySetting(oSingleUploadAdapter,gFlashSetting);
+		   		oSingleUploadAdapter.setCustomSetting(oSetting);
+		   		var singleSwfUploader = new SWFUpload(oSingleUploadAdapter);
+		   		oSingleUploadAdapter.setUploader(singleSwfUploader);
+		   		gFileUploaded[file.id].updater=singleSwfUploader;
+		    }
+	   		execHook(oFileAdd,{file:file,serverData:serverData,link:getFielDiv(file).all(uniqueID+"_oLink")});
+	   },
+	   hideProcess:function(file, serverData)
+	   {
+		   	if(!file) return;
+		   	getFielDiv(file).all(uniqueID+"_oProcessOuter").style.display="none";
+		   	gFileUploaded[file.id]={name:file.name,size:file.size};
+		   	this.createUpdater(file,serverData,this);
+	   },
+	   showError:function (file,errorCode,msg,msgCn)
+	   {
+		   	if(file.filestatus==window.SWFUpload.FILE_STATUS.CANCELLED) return;
+		   	var oFileDiv=getFielDiv(file);
+		   	var oFail=oFileDiv.all(uniqueID+"_oFail");
+		   	var oRetry=oFileDiv.all(uniqueID+"_oRetry");
+		   	var oProcessOuter=oFileDiv.all(uniqueID+"_oProcessOuter");
+		   	oProcessOuter.style.display="none";
+		   	oFail.style.display="inline";
+		   	oFail.title="错误代码:"+errorCode+'\n错误描述:'+msgCn+"\n错误消息:"+msg;
+		   	oRetry.style.display="";
+			oFileDiv.all(uniqueID+"_oUpdate").style.display="none";
+			delete gFileUploaded[file.id];
+	   },
+	   doUploadFinish:function (file,uploader)
+	   {
+		   	var oFileDiv=getFielDiv(file);
+		   	if(!oFileDiv) return;
+		   	var oRetry=oFileDiv.all(uniqueID+"_oRetry");
+		   	if(!oRetry) return;
+		   	oRetry.onclick=function()
+		   	{
+		   		var oFail=oFileDiv.all(uniqueID+"_oFail");
+		   		oFail.style.display="none";
+		   		this.style.display="none";
+		   		uploader.requeueUpload(file.id);
+		   		uploader.startUpload(file.id);
+		   	}
+	   },
+	   showUploader:function()
+	   {
+		   if(swfUploader.settings.file_queue_limit==1)
+		   {
+			   showUploader();
+		   }
+	   },
+	   hiddenUploader:function()
+	   {
+		   if(swfUploader.settings.file_queue_limit==1)
+		   {
+			   hideUploader();
+		   }
+	   }
+    }
+};
+SwfUploaderAdapter.prototype =
+{
+	swfupload_preload_handler : function()
+	{
+		//由于这边的this会变成指向swfupload的对象，直接使用swfobject来判断if (!this.support.loading) return false;
+	},
+    swfupload_load_failed_handler : function()
+	{
+		alert(getUploadHtcLan("loadFlashCtrlError"));
+	},
+	file_queued_handler :function(file)
+	{
+	    try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		this.customSettings.render(file);
+	},
+	file_queue_error_handler :function(file, errorCode, message)
+	{		
+		if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED)
+		{
+			  alert(formatResource(getUploadHtcLan("onlyUploadAttach"),message));
+		      return;
+		}
+		try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		var aMsg={};
+		aMsg[SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT]=formatResource(getUploadHtcLan("fileSizeLimitExceeded")
+																,file.name,file.size,this.file_size_limit);
+		aMsg[SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE]=formatResource(getUploadHtcLan("fileSizeZero"),file.name);
+		aMsg[SWFUpload.QUEUE_ERROR.INVALID_FILETYPE]=formatResource(getUploadHtcLan("fileTypeLllegal"),file.name);
+		if(aMsg[errorCode])
+		{
+		     this.customSettings.queueError.push(aMsg[errorCode]);
+		     return;
+		}
+		this.queueError.push(formatResource(getUploadHtcLan("fileUploadFailUnknownError"),file.name));
+	},
+	file_dialog_complete_handler : function(numFilesSelected, numFilesQueued)
+	{
+		if(this.customSettings.queueError.length)
+		{
+		     alert(this.customSettings.queueError.join("\n"));
+		     this.customSettings.queueError=[];
+		}
+		if (numFilesQueued > 0)
+	   	{
+	   		this.startUpload();
+	   	}
+	},
+	upload_start_handler : function(file)
+	{
+		try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		this.customSettings.hiddenUploader();
+		this.customSettings.displayProcess(file);
+		return true;
+	},
+	upload_progress_handler : function(file, bytesLoaded, bytesTotal)
+	{
+		try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		this.customSettings.startProcess(file, bytesLoaded, bytesTotal);
+	},
+	upload_success_handler : function(file, serverData)
+	{
+	    try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		this.customSettings.hideProcess(file, serverData);
+	},
+	upload_error_handler : function(file, errorCode, message)
+	{
+	    try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}
+		var aMsg={};
+		aMsg[SWFUpload.UPLOAD_ERROR.HTTP_ERROR]="尝试上传给服务器，但服务器没有返回200状态码";
+		aMsg[SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL]="没有设置上传地址";
+		aMsg[SWFUpload.UPLOAD_ERROR.IO_ERROR]="当读取和发送文件时出现了IO错误";
+		aMsg[SWFUpload.UPLOAD_ERROR.SECURITY_ERROR]="安全错误，上传违反了安全约束";
+		aMsg[SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED]="用户尝试上传比预设数多的文件";
+		aMsg[SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED]="尝试初始化上传时出现了错误";
+		aMsg[SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND]="文件开始上传，但没有找到这个文件";
+		aMsg[SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED]="当上传(uploadStart event)开始时传回了某错误";
+		aMsg[SWFUpload.UPLOAD_ERROR.FILE_CANCELLED]="取消了上传（调用了cancelUpload函数）";
+		aMsg[SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED]="暂停了上传（调用了stopUpload函数）";
+		aMsg[SWFUpload.UPLOAD_ERROR.RESIZE]="当调整图像大小时出现了某错误";
+		var errMsg = aMsg[errorCode]||'未知错误';
+		if(message==403)
+			errMsg = "上传的文件违反服务器安全设置";
+		this.customSettings.showError(file, errorCode, message,errMsg);
+	},
+	upload_complete_handler : function(file)
+	{
+	    try{ //解决附件名称中包含有%
+			file.name=decodeURIComponent(file.name);
+		}catch(e){}	
+		this.customSettings.doUploadFinish(file,this);
+	},
+	queue_complete_handler : function(numFilesUploaded){},
+	mouse_over_handler : function()
+	{
+		var oOverlay=this.getMovieElement().nextSibling;
+		oOverlay.className="attach_add_button_hover";
+		oOverlay.style.textDecoration="underline";
+    },
+    mouse_out_handler : function()
+    {
+		var oOverlay=this.getMovieElement().nextSibling;
+		oOverlay.className="attach_add_button";
+		oOverlay.style.textDecoration="none";
+    }
+}
+
+function SingleSwfUploaderAdapter(oldFile)
+{
+	var swfUploader=null;
+
+	this.setUploader=function(uploader)
+	{
+		swfUploader=uploader;
+	}
+	this.custom_settings=
+	{
+	   oldFile:	oldFile,
+	   cssStyle:" class='swfupload' style='position: absolute;z-index: 1'",
+	   genHTML:function(file)
+	   {
+	      var oldFileDiv=getFielDiv(this.oldFile);
+	      oldFileDiv.all(uniqueID+"_oLink").innerText=file.name;
+	      oldFileDiv.all(uniqueID+"_oSize").innerText="("+formatBytes(file.size)+")";
+	      oldFileDiv.id=uniqueID+'_'+file.id;
+	      delete gFileUploaded[this.oldFile.id];
+	   },
+	   createUpdater:function(file,serverData,oSetting)
+	   {
+     	   execHook(oFileUpdate,{file:file,serverData:serverData,link:getFielDiv(file).all(uniqueID+"_oLink"),oldFile:this.oldFile});
+		   this.oldFile=file;
+	   },
+	   hiddenUploader:function(){}
+	}
+	this.setCustomSetting=function(oSettingFrom)
+	{
+		for (var key in oSettingFrom)
+		{
+			if(this.custom_settings[key]===undefined)
+			{
+				this.custom_settings[key]=oSettingFrom[key];
+			}
+		}
+	}
+	this.button_placeholder_id = oldFile.id+"_oUpdate";
+	this.file_queue_limit = 1;
+	this.button_text = '';
+	this.button_text_style ='',
+	this.button_image_url = "";
+    this.button_width = 32;
+    this.button_height = 18;
+    this.button_text_top_padding = 3;
+    this.button_text_left_padding =0;
+    this.button_cursor=SWFUpload.CURSOR.HAND;
+    this.button_window_mode=SWFUpload.WINDOW_MODE.TRANSPARENT;
+};
+SingleSwfUploaderAdapter.extend(SwfUploaderAdapter,{
+	mouse_over_handler : function()
+	{
+		var oOverlay=this.getMovieElement().nextSibling;
+		oOverlay.className="attach_update_button_hover";
+		oOverlay.style.textDecoration="underline";
+    },
+    mouse_out_handler : function()
+    {
+    	var oOverlay=this.getMovieElement().nextSibling;
+    	oOverlay.className="attach_update_button";
+    	oOverlay.style.textDecoration="none";
+    }
+});
+</SCRIPT>
+</component>

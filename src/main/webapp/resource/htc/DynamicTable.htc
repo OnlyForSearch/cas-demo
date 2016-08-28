@@ -1,0 +1,1161 @@
+<PUBLIC:COMPONENT tagname="DTable" literalcontent="true">
+	<PUBLIC:PROPERTY NAME="width"/>
+	<PUBLIC:PROPERTY NAME="height"/>
+	<PUBLIC:PROPERTY NAME="dataSource" PUT="setDataSource" get="getDataSource"/>
+	<PUBLIC:PROPERTY NAME="dataSourceType" value="url"/>
+	<PUBLIC:PROPERTY NAME="rows" get="getRows"/>
+	<PUBLIC:PROPERTY NAME="selectedList" get="getSelectedList"/>
+	<PUBLIC:PROPERTY NAME="isMultiple" value="true"/>
+	<PUBLIC:METHOD NAME="addRow"/>
+	<PUBLIC:METHOD NAME="clearData"/>
+	<PUBLIC:METHOD NAME="reload"/>
+	<PUBLIC:METHOD NAME="getDataXML"/>
+	<PUBLIC:METHOD NAME="getCellsByName"/>
+	<PUBLIC:METHOD NAME="getSelectedRows"/>
+	<PUBLIC:METHOD NAME="up"/>
+	<PUBLIC:METHOD NAME="down"/>
+	<PUBLIC:METHOD NAME="getRowByKey"/>
+	<PUBLIC:METHOD NAME="getRowsByName"/>
+	<PUBLIC:METHOD NAME="del"/>
+	<PUBLIC:METHOD NAME="delRowByNode"/>
+	<PUBLIC:METHOD NAME="delRowByKey"/>
+	<PUBLIC:METHOD NAME="delRowsByName"/>
+	<PUBLIC:METHOD NAME="getCellByNode"/>
+	<PUBLIC:METHOD NAME="setCellByNode"/>
+	<PUBLIC:METHOD NAME="optionOver"/>
+	<PUBLIC:METHOD NAME="optionSelect"/>
+	<PUBLIC:ATTACH event="oncontentready" onevent="init()" />
+	<PUBLIC:EVENT NAME="oncontextmenu" ID="rightId"/>
+</PUBLIC:COMPONENT>
+<STYLE>
+    span
+    {
+    	font-size: 9pt;
+    	cursor:default;
+    }
+    
+    DIV,TEXTAREA
+    {
+    	scrollbar-3dlight-color = '#D6D2C2';
+		scrollbar-highlight-color = '#FFFFFF';
+		scrollbar-face-color =  '#EBEADB';
+		scrollbar-shadow-color = '#FFFFFF';
+		scrollbar-darkshadow-color = '#D6D2C2';
+    }
+    
+	div.table	
+	{
+		position:relative;
+		height:100%;
+		width:100%;
+		overflow:hidden;
+	}
+	
+	div.head
+	{
+		position:absolute;
+		width:100%;
+		overflow:hidden;
+		border-bottom:1px solid #CBC7B8;
+		z-index:2;
+	}
+
+	div.titlesRowBorder
+	{
+		width:100%;
+		height:100%;
+		border-bottom:1px solid #D6D2C2;
+	}
+
+	div.titles
+	{
+		width:100%;
+		height:100%;
+		white-space:nowrap;
+		background:#EBEADB;
+		border-bottom:1px solid #E2DECD;
+		padding-top:1px;
+	}
+
+	span.title
+	{
+		height:100%;
+		text-align:center;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		padding:5px 5px 0px 5px;
+	}
+
+	span.titleColBorder
+	{
+		border-left:1px solid #ACA899;
+		border-right:1px solid white;
+		height:100%;
+	}
+
+	div.body
+	{
+		position:absolute;
+		width:100%;
+		overflow:hidden;
+		background:white;
+		z-index:2;
+	}
+	
+	div.row
+	{
+		border-bottom:1px solid #D4D0C8;
+		width:100%;
+		white-space:nowrap;
+		overflow-y:hidden;
+	}
+
+	span.cell
+	{
+		overflow:hidden;
+		height:100%;
+		padding:0px 3px 0px 3px;
+	}
+	
+	span.cellText
+	{
+		overflow:hidden;
+		height:100%;
+		padding-top:4px;
+		text-overflow:ellipsis;
+	}
+	
+	span.cellInputSpan
+	{
+		height:100%;
+		overflow:hidden;
+		padding-right:3px;
+	}
+
+	span.cellColBorder
+	{
+		border-left:1px solid #D4D0C8;
+		width:2px;
+		height:100%;
+	}
+
+	div.scroll
+	{
+		position:relative;
+		width:100%;
+		height:100%;
+		overflow:auto;
+		z-index:1;
+	}
+	
+	span.btn
+	{
+		position:relative;
+		height:100%;
+		width:12px;
+	}
+		
+	span.btnBg
+	{
+		position:relative;
+		top:4px;
+		width:100%;
+		height:12px;
+		overflow:hidden;
+		background:#D4D0C8;
+	}
+	
+	span.btnArrow
+	{
+		position:relative;
+		top:-2px;
+		left:2px;
+		font-family:webdings;
+		font-size:9px;
+	}
+	
+	span.btnMore
+	{
+		position:relative;
+		top:-2px;
+		left:1px;
+		letter-spacing:-3;
+	}
+	
+	div.overlay
+	{
+		position:absolute;
+		top:0;
+		left:0;
+		z-index:3;
+		background:white;
+		filter:progid:DXImageTransform.Microsoft.Alpha(opacity=36);
+		z-Index:-1;
+	}
+	
+	div.input
+	{
+		position:absolute;
+		background:white;
+		border:buttonhighlight 2px outset;
+		z-Index:-1;
+	}
+</STYLE>
+<BODY>
+    <div class="table">
+		<div class="head" id="oHead">
+			<div class="titlesRowBorder">
+				<div class="titles" id="oTitle"></div>
+			</div>
+		</div>
+		<div class="body" id="oBody" onmousewheel="scrollCtrl()">
+			<div id="oData"></div>
+		</div>
+		<div class="scroll" id="oScrollDiv" onscroll="scrollData()">
+			<div id="oAddScrollDiv" style="visibility:hidden"></div>
+		</div>
+	</div>
+</BODY>
+<SCRIPT language="JScript">
+var TITLE_HEIGHT = 25;
+var ROW_HEIGHT = 21;
+var BORDER_WIDTH = 2;
+var SCROLL_WIDTH = 16;
+var HEAD_BORDER = '<span class="titleColBorder"></span>';
+var CELL_BORDER = '<span class="cellColBorder"></span>';
+var SELECT_OPTION_HEIGHT = 20;
+var MAX_SELECT_HEIGHT = 5*SELECT_OPTION_HEIGHT+BORDER_WIDTH;
+var SELECTED_ROW_BACKGROUND = "#F1F1A6";
+
+var p_dataSource;
+
+var isDocumentFinish = false;
+var oFieldRootNode;
+var iDataHeight = TITLE_HEIGHT;
+var iDataWidth = 0;
+var iTableHeight = 0;
+var iTableWidth = 0;
+var oMap;
+var oSelectedCell;
+var oShowPopup;
+var oOverlayDiv;
+var oInputDiv;
+var oDataXML;
+var oSelectedRowList;
+var oLastSelectedRow;
+var key = new Array();
+function init()
+{
+	oMap = new Object();
+	oSelectedRowList = new Array();
+	doFields();
+	if(!element.width)
+	{
+		element.width = iDataWidth + BORDER_WIDTH + SCROLL_WIDTH;
+	}
+	element.style.width = element.width;
+	element.style.height= element.height;
+	//iTableHeight = element.clientHeight - BORDER_WIDTH;
+	//iTableWidth = element.clientWidth - BORDER_WIDTH;
+	iTableHeight = parseInt(element.height,10) - BORDER_WIDTH;
+	iTableWidth = parseInt(element.width,10) - BORDER_WIDTH;
+	oHead.style.height = TITLE_HEIGHT;
+	oBody.style.top = TITLE_HEIGHT;
+	oBody.style.height = iTableHeight - TITLE_HEIGHT;
+	addFileds();
+	setInitDataXML();
+	activeDs();
+	defaults.viewLink = document;
+	isDocumentFinish = true;
+}
+
+function doFields()
+{
+	iDataHeight = TITLE_HEIGHT;
+	var oFieldDoc = new ActiveXObject("Microsoft.XMLDOM");
+    oFieldDoc.async = false;
+  	oFieldDoc.loadXML("<Fields>"+element.innerHTML+"</Fields>");
+	oFieldRootNode = oFieldDoc.documentElement;
+	var filedList = getDisplayFieldList();
+	for(var i=0;i<filedList.length;i++)
+	{
+		var oFileldNode = filedList[i];
+		var fieldType = oFileldNode.getAttribute("type");
+		var isKey = oFileldNode.getAttribute("isKey");
+		if(isKey == "true")
+		{
+			key.push(oFileldNode.getAttribute("name"));
+		}
+		if(fieldType)
+		{
+			if(fieldType.toLowerCase() == "select")
+			{
+				addSelectField(oFileldNode);
+			}
+		}
+		iDataWidth += parseInt(oFileldNode.getAttribute("width")) + BORDER_WIDTH;
+	}
+	iDataWidth = iDataWidth - BORDER_WIDTH;
+}
+
+function getDisplayFieldList()
+{
+	return oFieldRootNode.selectNodes('Field[not(@display) or @display!="hidden"]');
+}
+
+function getAllFieldList()
+{
+	return oFieldRootNode.selectNodes('Field');
+}
+
+function hasKey()
+{
+	return key.length>0;
+}
+
+function addSelectField(oNode)
+{
+	if(oMap[oNode.getAttribute("name")+"_select"] == null)
+	{
+		var oPopup = document.parentWindow.createPopup();
+		oMap[oNode.getAttribute("name")+"_select"] = oPopup;
+		var oDiv = oPopup.document.createElement('div');
+		oDiv.style.border = "1px solid black";
+		oDiv.style.width = "100%";
+		oDiv.style.overflow = "auto";
+		oDiv.attachEvent("onselectstart",cancel);
+		var optionHtml = "";
+		var iSelectHeight = 0;
+		var optionList = oNode.selectNodes('option');
+		for(var i=0;i<optionList.length;i++)
+		{
+			var value = optionList[i].getAttribute("value");
+			var text = optionList[i].text;
+			optionHtml += '<span style="display:block;width:100%;height:20px;padding:4px 0px 0px 3px;font-size: 9pt;cursor:default"'
+			            +   ' value='+value
+			            +   ' onmouseover="parent.'+element.uniqueID+'.optionOver(event)"'
+			            +   ' onclick="parent.'+element.uniqueID+'.optionSelect(event)"'
+			            +   ' >'
+						+   text
+						+ '</span>';
+			iSelectHeight += SELECT_OPTION_HEIGHT;
+		}
+		iSelectHeight += BORDER_WIDTH;
+		if(iSelectHeight>MAX_SELECT_HEIGHT)
+		{
+			iSelectHeight = MAX_SELECT_HEIGHT;
+		}
+		oDiv.style.height = iSelectHeight;
+		oMap[oNode.getAttribute("name")+"_select_height"] = iSelectHeight;
+		oDiv.innerHTML = optionHtml;
+		oPopup.document.body.appendChild(oDiv);
+	}
+}
+
+function cancel()
+{
+	return false;
+}
+
+function optionOver(oEvent)
+{
+	var overElement = oEvent.srcElement;
+	var outItemId = overElement.parentElement.selectedItem;
+	var outItem = overElement.ownerDocument.getElementById(outItemId);
+	if(outItem)
+	{
+		optionOut(outItem);
+	}
+	overElement.runtimeStyle.background = '#808080';
+	overElement.runtimeStyle.color = 'white';
+	overElement.parentElement.selectedItem = overElement.uniqueID
+}
+
+function optionOut(oOption)
+{
+	oOption.runtimeStyle.background = '';
+	oOption.runtimeStyle.color = '';
+}
+
+function optionSelect(oEvent)
+{
+	var oTextSpan = getTextSpan(oSelectedCell);
+	oTextSpan.innerText = oEvent.srcElement.innerText;
+	setCellVal(oSelectedCell.id,oEvent.srcElement.value);
+	oShowPopup.hide();
+}
+
+function addFileds()
+{
+	var filedList = getDisplayFieldList();
+	var fieldList = new Array(filedList.length);
+	for(var i=0;i<filedList.length;i++)
+	{
+		var oFileldNode = filedList[i];
+		var label = oFileldNode.getAttribute("label");
+		var width = oFileldNode.getAttribute("width");
+		fieldList[i] = '<span class="title" style="width:'+width+'">'
+		              +   label
+					  + '</span>';
+	}
+	oTitle.innerHTML = fieldList.join(HEAD_BORDER);
+	setXScrollSpan();
+}
+
+function rightClick()
+{
+	var oRow = getElement(event.srcElement,"div");
+	if(!oRow.selected)
+	{
+		oRow.fireEvent("onclick");
+	}
+	rightId.fire();
+	return false;
+}
+
+function addData(oRowNode)
+{
+	iDataHeight += ROW_HEIGHT;
+	var elementId = document.uniqueID;
+	var oRow = document.createElement("div");
+	oRow.className = "row";
+	oRow.id = elementId;
+	oRow.style.height = ROW_HEIGHT;
+	oRow.selected = false;
+	oRow.selectedIndex = -1;
+	oRow.attachEvent("onclick",selectRow);
+	oRow.attachEvent("oncontextmenu",rightClick);
+	oRowNode.setAttribute("elementId",elementId);
+	var filedList = getDisplayFieldList();
+	var rowList = new Array(filedList.length);
+	for(var i=0;i<filedList.length;i++)
+	{
+		elementId = document.uniqueID;
+		var oFileldNode = filedList[i];
+		var fieldWidth = parseInt(oFileldNode.getAttribute("width"));
+		var fieldName = oFileldNode.getAttribute("name");
+		var fieldType = oFileldNode.getAttribute("type");
+		var fieldVal = "";
+		var oCellNode = oRowNode.selectSingleNode(fieldName);
+		if(oCellNode)
+		{
+			oCellNode.setAttribute("elementId",elementId);
+			fieldVal = oCellNode.text;
+		}
+		rowList[i] = '<span class="cell" style="width:'+fieldWidth+'"'
+				   +   ' id='+elementId
+	               +   ' fieldName='+fieldName
+	               +   ' >'
+		if(fieldType)
+		{
+			if(fieldType.toLowerCase() == "select")
+			{
+				var cellTextNode = oFileldNode.selectSingleNode("option[@value='"+fieldVal+"']");
+				fieldVal = (cellTextNode)?cellTextNode.text:"";
+				rowList[i] += addCellSelect(elementId,fieldWidth,fieldVal);
+			}
+			else if (fieldType.toLowerCase() == "input")
+			{
+				rowList[i] += addCellInput(elementId,fieldWidth,fieldVal);
+			}
+		}
+		else
+		{
+			rowList[i] += addCellText(fieldVal)
+		}
+		rowList[i] += '</span>';
+	}
+	oRow.innerHTML = rowList.join(CELL_BORDER);
+	oData.appendChild(oRow);
+	return oRow;
+}
+
+function addCellSelect(id,fieldWidth,fieldVal)
+{
+	//减去前面空的3个像素,按钮的12个像素,按钮离右的2个像素
+	var iWidth = fieldWidth-3-12-2;
+	var cellHtml = '<span class="cellText" style="width:'+iWidth+'">'
+	             +   fieldVal
+	             + '</span>'
+	             + '<span class="btn" onselectstart="return false">'
+	             +   '<span class="btnBg"'
+	             +     ' onmousedown="downBtn('+id+')"'
+	             +     ' onmouseup="upBtn('+id+')"'
+	             +     ' onmouseout="outBtn('+id+')"'
+	             +     ' onclick="showSelect('+id+')"'
+	             +     ' >'
+	             +     '<span class="btnArrow">6</span>'
+	             +   '</span>'
+	             + '</span>'
+	return cellHtml;
+}
+
+function addCellInput(id,fieldWidth,fieldVal)
+{
+	//减去前面空的3个像素,与按钮间3个像素,按钮的12个像素,按钮离右的2个像素
+	var iWidth = fieldWidth-3-3-12-2;
+	var cellHtml = '<span class="cellText" style="width:'+iWidth+';margin-right:3px;"'
+				 +   ' contentEditable="true" onblur="blurInput('+id+')"'
+				 +   ' >'
+				 +   fieldVal
+				 + '</span>'
+	             + '<span class="btn" onselectstart="return false">'
+	             +   '<span class="btnBg"'
+	             +     ' onmousedown="downBtn('+id+')"'
+	             +     ' onmouseup="upBtn('+id+')"'
+	             +     ' onmouseout="outBtn('+id+')"'
+	             +     ' onclick="inputVal('+id+')"'
+	             +     ' >'
+	             +     '<span class="btnMore">...</span>'
+	             +   '</span>'
+	             + '</span>'
+	return cellHtml;
+}
+
+function addCellText(value)
+{
+	var cellHtml = '<span class="cellText" style="width:100%;text-align:center" title="'+value+'">'
+				 +   value
+				 + '</span>';
+	return cellHtml;
+}
+
+function activeDs()
+{
+	if(oDataXML)
+	{
+		var rowList = oDataXML.selectNodes('/root/rowSet');
+		for(var i=0;i<rowList.length;i++)
+		{
+			addData(rowList[i]);
+		}
+	}
+	setYScrollSpan();
+}
+
+function isExists(newData)
+{
+	var result = false;
+	if(hasKey())
+	{
+		var keyValList = new Array(key.length)
+		for(var i=0;i<key.length;i++)
+		{
+			keyValList[i] = newData[key[i]];
+		}
+		if(getRowByKey(keyValList))
+		{
+			result = true;
+		}
+	}
+	return result;
+}
+
+function addRow(newData,isForceAdd)
+{
+	if(isForceAdd || !isExists(newData))
+	{
+		var oNewRowNode = oDataXML.createElement("rowSet");
+		var oFileldNode,fieldName,oNewCellNode,value;
+		var filedList = getAllFieldList();
+		for(var i=0;i<filedList.length;i++)
+		{
+			oFileldNode = filedList[i];
+			fieldName = oFileldNode.getAttribute("name");
+			value = newData[fieldName];
+			if(!value)
+			{
+				value = "";
+			}
+			oNewCellNode = oDataXML.createElement(fieldName);
+			oNewCellNode.text = value
+			oNewRowNode.appendChild(oNewCellNode);
+		}
+		oDataXML.documentElement.appendChild(oNewRowNode);
+		oNewRow = addData(oNewRowNode);
+		setYScrollSpan();
+		scrollRowIntoView(oNewRow);
+	}
+}
+
+function scrollRowIntoView(oRow)
+{
+	oRow.scrollIntoView();
+	oScrollDiv.scrollTop = oBody.scrollTop;
+}
+
+function setXScrollSpan()
+{
+	oAddScrollDiv.style.width = iDataWidth;
+	if(iDataWidth>iTableWidth)
+	{
+		iTableHeight = iTableHeight - SCROLL_WIDTH;
+		oBody.style.height = iTableHeight - TITLE_HEIGHT;
+	}
+}
+
+function setYScrollSpan()
+{
+	oAddScrollDiv.style.height = iDataHeight;
+	if(iDataHeight>iTableHeight)
+	{
+		var iWidth = iTableWidth - SCROLL_WIDTH;
+		oHead.style.width = iWidth;
+		oBody.style.width = iWidth;
+	}
+	else
+	{
+		oHead.style.width = iTableWidth;
+		oBody.style.width = iTableWidth;
+	}
+}
+
+function scrollData()
+{
+	oBody.scrollTop = event.srcElement.scrollTop;
+	oBody.scrollLeft = event.srcElement.scrollLeft;
+	oHead.scrollLeft = event.srcElement.scrollLeft;
+}
+
+function scrollCtrl()
+{
+	if(event.wheelDelta>=120)
+	{
+		oScrollDiv.doScroll("scrollbarUp");
+	}
+	else if(event.wheelDelta <= -120)
+	{
+		oScrollDiv.doScroll("scrollbarDown");
+	}
+}
+
+function getCellVal(elementId)
+{
+	var value = ""
+	if(oDataXML)
+	{
+		var oNode = oDataXML.selectSingleNode('/root/rowSet/node()[@elementId="'+elementId+'"]');
+		if(oNode)
+		{
+			value = oNode.text;
+		}
+	}
+	return value;
+}
+
+function setCellVal(elementId,value)
+{
+	if(oDataXML)
+	{
+		var oNode = oDataXML.selectSingleNode('/root/rowSet/node()[@elementId="'+elementId+'"]');
+		if(oNode)
+		{
+			oNode.text = value;
+		}
+	}
+}
+
+function showSelect(oCell)
+{
+	oSelectedCell = oCell;
+	var fieldName = oSelectedCell.fieldName;
+	var iHeight = oMap[fieldName+"_select_height"];
+	oShowPopup = oMap[fieldName+"_select"];
+	oShowPopup.show(0,ROW_HEIGHT,oSelectedCell.offsetWidth,iHeight,oCell);
+	setSelectVal(oShowPopup,getCellVal(oSelectedCell.id));
+}
+
+function getRowSpan(oCell)
+{
+	return oCell.parentElement;
+}
+
+function getBtnSpan(oCell)
+{
+	return oCell.lastChild.firstChild;
+}
+
+function getArrowSpan(oCell)
+{
+	return getBtnSpan(oCell).firstChild;
+}
+
+function getTextSpan(oCell)
+{
+	return oCell.firstChild;
+}
+
+function downBtn(oCell)
+{
+	if(event.button == 1)
+	{
+		var oBtn = getBtnSpan(oCell);
+		oBtn.runtimeStyle.border = '1px inset';
+	}
+}
+
+function upBtn(oCell)
+{
+	if(event.button == 1)
+	{
+		var oBtn = getBtnSpan(oCell);
+		oBtn.runtimeStyle.border = '';
+	}
+}
+
+function outBtn(oCell)
+{
+	var oBtn = getBtnSpan(oCell);
+	oBtn.runtimeStyle.border = '';
+}
+
+function setSelectVal(oPopup,value)
+{
+	var oOptions = oPopup.document.body.firstChild.childNodes;
+	for(var i=0;i<oOptions.length;i++)
+	{
+		if(oOptions[i].value == value)
+		{
+			oOptions[i].fireEvent('onmouseover');
+			oOptions[i].scrollIntoView();
+		}
+		else
+		{
+			optionOut(oOptions[i]);
+		}
+	}
+}
+
+function blurInput(oCell)
+{
+	event.srcElement.scrollLeft = 0;
+	setCellVal(oCell.id,getTextSpan(oCell).innerText);
+}
+
+function inputVal(oCell)
+{
+	oSelectedCell = oCell;
+	if(!oInputDiv)
+	{
+		createInputDiv();
+	}
+	showInput();
+	getInput().value = getCellVal(oSelectedCell.id);
+	getInput().focus();
+}
+
+function createInputDiv()
+{	
+	if(!oOverlayDiv)
+	{
+		createOverlayDiv();
+	}
+	var WIDTH = 268;
+	var HEIGHT = 126;
+	var PADDING = 3;
+	var BTN_HEIGHT = 30
+	oInputDiv = document.createElement("div");
+	oInputDiv.className = "input";
+	if(HEIGHT-4>element.clientHeight)
+	{
+		HEIGHT = element.clientHeight-4;
+	}
+	if(WIDTH-4>element.clientWidth)
+	{
+		WIDTH = element.clientWidth-4;
+	}
+	
+	oInputDiv.style.height = HEIGHT;
+	oInputDiv.style.width = WIDTH;
+	oInputDiv.style.top = (element.clientHeight - HEIGHT)/2;
+	oInputDiv.style.left = (element.clientWidth - WIDTH)/2;
+	oInputDiv.style.paddingTop = PADDING;
+	oInputDiv.style.paddingLeft = PADDING;
+	oInputDiv.style.paddingRight = PADDING;
+	var iWidth = WIDTH - BORDER_WIDTH*2 - PADDING*2;
+	var iHeight = HEIGHT - BORDER_WIDTH*2 - PADDING*2 - 3 - BTN_HEIGHT;
+	var btnStyle = "border:1px solid #ABACA9;font-size:9pt;background:#E6E4DF;padding-top:2;width:48";
+	oInputDiv.innerHTML = '<TEXTAREA style="'
+						+   'border:0px;'
+						+   'width:'+iWidth+';'
+						+   'height:'+iHeight+';'
+						+   'overflow:auto"></TEXTAREA>'
+						+ '<div style="width:100%;height:1px;overflow:hidden;background:#C0C0C0;margin-top:2px"></div>'
+						+ '<div style="height:'+BTN_HEIGHT+';width:100%;text-align:right;overflow:hidden;padding:3px 3px 0px 0px">'
+						+   '<input type="button" style="'+btnStyle+'" hidefocus="true" value="确 定" onclick="input()">'
+						+   '<span style="width:10px;overflow:hidden"></span>'
+						+   '<input type="button" style="'+btnStyle+'" hidefocus="true" value="取 消" onclick="closeInput()">'
+						+ '</div>'; 
+	document.appendChild(oInputDiv);
+}
+
+function createOverlayDiv()
+{
+	oOverlayDiv = document.createElement("div");
+	oOverlayDiv.className = "overlay";
+	oOverlayDiv.style.height = element.clientHeight;
+	oOverlayDiv.style.width = element.clientWidth;
+	document.appendChild(oOverlayDiv);
+}
+
+function getInput()
+{
+	return oInputDiv.firstChild;
+}
+
+function showInput()
+{
+	oOverlayDiv.style.zIndex = 3;
+	oInputDiv.style.zIndex = 4;
+}
+
+function input()
+{
+	if(oSelectedCell)
+	{
+		getTextSpan(oSelectedCell).innerHTML = getInput().value;
+		setCellVal(oSelectedCell.id,getInput().value);
+	}
+	closeInput();
+}
+
+function closeInput()
+{
+	oInputDiv.style.zIndex = -1;
+	oOverlayDiv.style.zIndex = -1;
+}
+
+function reload()
+{
+	element.dataSource = p_dataSource;
+}
+
+function clearData()
+{
+	oData.innerHTML = "";
+	setInitDataXML();	
+	iDataHeight = TITLE_HEIGHT;
+	setYScrollSpan();
+	oLastSelectedRow = null;
+	clearSelectedRow();
+}
+
+function setDataSource(ds)
+{
+	p_dataSource = ds;
+	if(isDocumentFinish)
+	{
+		clearData();
+		setDataXML();
+		activeDs();
+	}
+	else
+	{
+		setDataXML();
+	}
+}
+
+function getDataSource()
+{
+	return p_dataSource;
+}
+
+function setInitDataXML()
+{
+	oDataXML = new ActiveXObject("Microsoft.XMLDOM");
+	var root = oDataXML.createElement("root");
+	oDataXML.appendChild(root);
+}
+
+function setDataXML()
+{
+	oDataXML = new ActiveXObject("Microsoft.XMLDOM"); 
+	oDataXML.async = false;
+	if(element.dataSourceType == "url")
+	{
+		var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp.Open("POST",p_dataSource,false);
+		xmlhttp.send();
+		if(isSuccess(xmlhttp))
+		{
+			oDataXML.load(xmlhttp.responseXML);
+		}
+		xmlhttp.abort();
+		xmlhttp = null;
+	}
+	else if(element.dataSourceType == "dom")
+	{
+		oDataXML.load(p_dataSource);
+	}
+}
+
+function getDataXML()
+{
+	return oDataXML;
+}
+
+function getCellsByName(name)
+{
+	list = oDataXML.selectNodes('/root/rowSet/'+name)
+	var returnList = new Array(list.length);
+	for(var i=0;i<list.length;i++)
+	{
+		returnList[i] = list[i].text;
+	}
+	return returnList;
+}
+
+function selectRow()
+{
+	var oRow = getElement(event.srcElement,"div");
+	if(element.isMultiple == "true")
+	{
+		if(event.shiftKey)
+		{
+			clearSelectedRow();
+			var startSelectRow;
+			if(!oLastSelectedRow)
+			{
+				oLastSelectedRow = oData.childNodes[0];
+			}
+			var startSelectRow = oLastSelectedRow;
+			var isNext = oRow.offsetTop>startSelectRow.offsetTop;
+			while(startSelectRow!=oRow)
+			{
+				addSelectedRow(startSelectRow);
+				startSelectRow=(isNext)?startSelectRow.nextSibling:startSelectRow.previousSibling
+			}
+		}
+		else
+		{
+			if(!event.ctrlKey)
+			{
+				clearSelectedRow();
+			}
+			oLastSelectedRow = oRow;
+		}
+	}
+	else
+	{
+		clearSelectedRow();
+	}
+	addSelectedRow(oRow);
+}
+
+function addSelectedRow(oRow)
+{
+	if(!oRow.selected)
+	{
+		oRow.runtimeStyle.background = SELECTED_ROW_BACKGROUND;
+		oRow.selected = true;
+		oRow.selectedIndex = oSelectedRowList.length;
+		oSelectedRowList.push(oRow);
+	}
+}
+
+function delSelectedRow(oRow)
+{
+	oRow.runtimeStyle.background = '';
+	oRow.selected = false;
+	oRow.selectedIndex = -1;
+}
+
+function clearSelectedRow()
+{
+	while(oSelectedRowList.length>0)
+	{
+		delSelectedRow(oSelectedRowList.shift());
+	}
+}
+
+function getSelectedRows()
+{
+	return oSelectedRowList;
+}
+
+function move(oSource,oTarget,action)
+{
+	oSource.swapNode(oTarget);
+	
+	var root = oDataXML.documentElement;
+	var oSourceNode = root.selectSingleNode('rowSet[@elementId="'+oSource.id+'"]');
+	var oTargetNode = root.selectSingleNode('rowSet[@elementId="'+oTarget.id+'"]');
+	if(action == "up")
+	{
+		root.insertBefore(oSourceNode,oTargetNode);
+	}
+	else
+	{
+		root.insertBefore(oTargetNode,oSourceNode);
+	}
+}
+
+function up()
+{
+	var isMove = true;
+	for(var i=0;i<oData.childNodes.length&&isMove;i++)
+	{
+		var oRow = oData.childNodes[i]
+		if(oRow.selected)
+		{
+			var oSwapRow = oRow.previousSibling;
+			if(oSwapRow)
+			{
+				move(oRow,oSwapRow,"up");
+			}
+			else
+			{
+				isMove =false;
+			}
+		}
+	}
+}
+
+function down()
+{
+	var isMove = true;
+	for(var i=oData.childNodes.length-1;i>=0&isMove;i--)
+	{
+		var oRow = oData.childNodes[i]
+		if(oRow.selected)
+		{
+			var oSwapRow = oRow.nextSibling;
+			if(oSwapRow)
+			{
+				move(oRow,oSwapRow,"down");
+			}
+			else
+			{
+				isMove =false;
+			}
+		}
+	}
+}
+
+function getRowsByName(name,value)
+{
+	return oDataXML.selectNodes('/root/rowSet['+name+'="'+value+'"]');
+}
+
+function getRowByKey(value)
+{
+	var oRow;
+	if(hasKey())
+	{
+		var xPath;
+		if(key.length==1)
+		{
+			xPath = '/root/rowSet['+key+'="'+value+'"]'
+		}
+		else
+		{
+			var keyPathList = new Array(key.length);
+			for(var i=0;i<key.length;i++)
+			{
+				keyPathList[i] = key[i]+'="'+value[i]+'"'
+			}
+			xPath = '/root/rowSet['+keyPathList.join(" and ")+']'
+		}
+		oRow = oDataXML.selectSingleNode(xPath);
+	}
+	return oRow;
+}
+
+function delRowElement(oRow)
+{
+	if(oRow.selected)
+	{
+		if(oLastSelectedRow == oRow)
+		{
+			oLastSelectedRow = null;
+		}
+		oSelectedRowList.splice(oRow.selectedIndex,1);
+		for(var i=oRow.selectedIndex;i<oSelectedRowList.length;i++)
+		{
+			oSelectedRowList[i].selectedIndex = i;
+		}
+	}
+	oRow.removeNode(true);
+	iDataHeight -= ROW_HEIGHT;
+	setYScrollSpan();
+}
+
+function del()
+{
+	var root = oDataXML.documentElement;
+	while(oSelectedRowList.length>0)
+	{
+		var oRow = oSelectedRowList[0];
+		root.removeChild(root.selectSingleNode('rowSet[@elementId="'+oRow.id+'"]'));
+		delRowElement(oRow);
+	}
+}
+
+function getElementByNode(oNode)
+{
+	return document.getElementById(oNode.getAttribute("elementId"));
+}
+
+function getNodeByElement(oElement)
+{
+	return oDataXML.selectSingleNode('/root/rowSet[@elementId="'+oElement.id+'"]');
+}
+
+function delRowByNode(oNode)
+{
+	var oRemoveRow = getElementByNode(oNode);
+	delRowElement(oRemoveRow);
+	var root = oDataXML.documentElement;
+	root.removeChild(oNode);
+}
+
+function delRowByKey(value)
+{
+	var oRemoveNode = getRowByKey(value);
+	if(oRemoveNode)
+	{
+		delRowByNode(oRemoveNode);
+	}
+}
+
+function delRowsByName(name,value)
+{
+	var removeNodeList = getRowsByName(name,value)
+	var oRemoveRow;
+	for(var i=0;i<removeNodeList.length;i++)
+	{
+		oRemoveRow = getElementByNode(removeNodeList[i]);
+		delRowElement(oRemoveRow);
+	}
+	removeNodeList.removeAll();
+}
+
+function getCellByNode(oNode,name)
+{
+	return oNode.selectSingleNode(name).text;
+}
+
+function setCellByNode(oNode,name,value)
+{
+	var oCellNode = oNode.selectSingleNode(name);
+	var oCellSpan = getElementByNode(oCellNode);
+	oCellNode.text = value;
+	getTextSpan(oCellSpan).innerText = value;
+	getTextSpan(oCellSpan).title = value;
+}
+
+function getRows()
+{
+	return oData.childNodes.length;
+}
+
+function getSelectedList()
+{
+	var oSelectedNodeList = new Array(oSelectedRowList.length);
+	for(var i=0;i<oSelectedRowList.length;i++)
+	{
+		oSelectedNodeList[i] = getNodeByElement(oSelectedRowList[i]);
+	}
+	return oSelectedNodeList;
+}
+</SCRIPT>

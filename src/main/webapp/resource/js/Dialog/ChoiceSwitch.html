@@ -1,0 +1,598 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择类型</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto;
+	min-height: 100%;
+}
+
+</STYLE>
+<style type="text/css">
+div#searchDiv {position: relative;}
+div#listDiv ul {border: 1px solid #d9d6c3;text-align: left;background-color: #FFFFFF;}
+div#listDiv li {
+position: relative;
+width: 100%;
+cursor: default;
+line-height: 18px;
+text-indent: 2px;
+}
+div#listDiv li.hov {background-color: #6666FF;color: #FFFFFF;}
+div#listDiv li.hov span {color: #99FFFF;}
+div#listDiv li span {color: #009900;}
+UL {list-style-type: none;}
+.ellipsis_row{   
+  overflow:hidden;   
+  text-overflow:ellipsis;   
+  white-space:nowrap;   
+  }
+.TreeDIV{
+	WIDTH:200px;HEIGHT:300px;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+	}
+</style>
+
+</head>
+<body onLoad="iniPage();">
+
+<fieldset style="margin-top:5px">
+<legend>工单类型选择</legend>
+
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+
+  <tr height="20">
+     <td ALIGN="center">系&nbsp;统&nbsp;所&nbsp;属&nbsp;域</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">系&nbsp;统&nbsp;名&nbsp;称</td>
+  	<!--  <td>&nbsp;</td>
+  	<td ALIGN="center">系&nbsp;统&nbsp;角&nbsp;色</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">用&nbsp;户&nbsp;权&nbsp;限</td>  -->
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;类&nbsp;型</td>
+  </tr>
+  <tr>
+    <td align="center" valign="top"><IE:XmlSelect id="purviewDomain" size="20" width="147" xmlsrc = "/servlet/flowActionZJ.do?method=getTpTreeSwitch&parentTypeCode=-1&domainType=PURVIEW_DOMAIN&type=2" onchange="showSystem()"/></td>
+    <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="purviewSystem" size="20" width="147" onchange="showRole()" onOptionDblClick="addBtn.click()"/>
+    <!--<select id="staffByOrgList" size="11"  style=" width:160px;" ondblclick="addBtn.click()"/>-->
+    </td>
+   <!-- <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="purviewRole" size="20" width="177" onchange="showPeopedom()"/>
+    
+    </td>
+    <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="purviewPopedom" size="20" width="177" onchange="showPeopedomRemark()" onOptionDblClick="addBtn.click()"/>
+    
+    </td> -->
+    <td width="33">
+    	<table border="0" cellspacing="2" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="addSelect()" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="delSelect();" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="addAllSelect();"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="delAllSelect();"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="20" width="157" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:5px">
+<legend>类型描述</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr>
+  	<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  		<tr>
+		    <TD colspan="7" width="655">
+				<TEXTAREA id="oReamrk" style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid;WIDTH: 100%; height: 100;" readonly="readonly"></TEXTAREA>
+			</TD>
+		  </tr>
+  	</table>
+  </tr>
+  
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<!-- <IE:button value="添&nbsp;&nbsp;加" width="33" onclick="add()"/>&nbsp; -->
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/staff_manage?tag=36&id=';
+var defaultOrg= '../../../servlet/staff_manage?tag=43';
+var isMultiple;
+var isReturn = false;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var isSetRoot;
+var orgId;
+var oAction;
+var parWin;
+
+var sendRequest;
+var searchDiv;
+var listDiv;
+var searchStaffName;
+var searchUrl = '../../../servlet/staff_manage?tag=78';
+var filters;
+var isRead = false;
+var sendXml;
+
+var isKeyToDo = false;       //是否键盘操作
+var isLiOnclick = false;     //是否是Li点击操作
+
+var keyControlClass = null;  //键盘操作类
+var isChange = false;        //查询内容是否重新加载过
+
+var orgTree;
+
+
+
+var element = {
+	DomainName : "",
+	SystemName : "",
+	roleName :"",
+	popedomName :""
+}
+
+var resultArray = new Array();
+
+var requireIdTemp = "";
+function iniPage()
+{
+	isMultiple = true;
+	purviewDomain.selectedIndex = 1
+	
+}
+
+function showSystem(){
+	var domainObj = purviewDomain.getObject();
+	var domainSelectId = "";
+	var domainSelectText = "";
+	for(i=0;i<domainObj.options.length;i++)
+    {
+        if(domainObj.options[i].selected)
+        {
+            domainSelectId = domainObj.options[i].value;
+            domainSelectText = domainObj.options[i].innerHTML;
+            var str = setRemark('PURVIEW_DOMAIN',domainSelectId);
+            if(str){
+            	oReamrk.value= str;
+            }
+            break;
+        }
+    }
+    clearElement();
+    purviewSystem.delAllOption();  //清空需求涉及系统数据
+    //purviewRole.delAllOption();  //清空需求涉及系统
+    //purviewPopedom.delAllOption();  //清除选入框
+    purviewSystem.xmlsrc = "/servlet/flowActionZJ.do?method=getTpTreeSwitch&parentTypeCode="+domainSelectId+"&domainType=PURVIEW_SYSTEM&type=2";
+    element.DomainName = domainSelectText;
+}
+
+
+
+function setRemark(domainType,typeCode){
+	var str = "";
+	xmlhttp.Open("POST","/servlet/flowActionZJ.do?method=getOtherTpTreeDescription&domainType="+domainType+"&typeCode="+typeCode,false);
+ 	xmlhttp.send();
+ 	var dataXML = new ActiveXObject("Microsoft.XMLDOM");
+    dataXML.load(xmlhttp.responseXML);
+    var oMsgList = dataXML.selectNodes("/root/rowSet");
+    if(oMsgList.length>0){
+    	str = oMsgList[0].selectSingleNode('DESCRIPTION').text;
+    }
+    return str;
+}
+function clearElement(){
+	element = {
+		DomainName : "",
+		SystemName : ""
+		//roleName :"",
+		//popedomName :""
+	}
+}
+
+function showRole(){
+	var systemObj = purviewSystem.getObject();
+	var systemSelectId = "";
+	var systemSelectText = "";
+	for(i=0;i<systemObj.options.length;i++)
+    {
+        if(systemObj.options[i].selected)
+        {
+            systemSelectId = systemObj.options[i].value;
+            systemSelectText = systemObj.options[i].text;
+            var str = setRemark('PURVIEW_SYSTEM',systemSelectId);
+            if(str){
+            	oReamrk.value= str;
+            }
+            
+            break;
+        }
+    }
+    
+	element.SystemName = ""
+	//element.roleName = "",
+	//element.popedomName = ""
+    
+    //purviewRole.delAllOption();  //清空需求涉及系统
+    //purviewPopedom.delAllOption();  //清除选入框
+    //purviewRole.xmlsrc = "/servlet/flowActionZJ.do?method=getTpTreeSwitch&parentTypeCode="+systemSelectId+"&domainType=PURVIEW_ROLE&type=2";
+    element.SystemName = systemSelectText;
+}
+
+
+/*function showPeopedom(){
+	var roleObj = purviewRole.getObject();
+	var roleSelectId = "";
+	var roleSelectText = "";
+	for(i=0;i<roleObj.options.length;i++)
+    {
+        if(roleObj.options[i].selected)
+        {
+            roleSelectId = roleObj.options[i].value;
+            roleSelectText = roleObj.options[i].text;
+            var str = setRemark('PURVIEW_ROLE',roleSelectId);
+            if(str){
+            	oReamrk.value= str;
+            }
+            
+            break;
+        }
+    }
+    
+    element.roleName = "",
+	element.popedomName = ""
+    
+    purviewPopedom.delAllOption();  //清空需求涉及系统
+    //purviewPopedom.selectedIndex = 0;
+    purviewPopedom.xmlsrc = "/servlet/flowActionZJ.do?method=getTpTreeSwitch&parentTypeCode="+roleSelectId+"&domainType=PURVIEW_POPEDOM&type=2";
+    element.roleName = roleSelectText;
+    
+    
+    if(!purviewPopedom.isNull()){
+    	automaticAdd();
+    }
+}
+
+function showPeopedomRemark(){
+	var peopedomObj = purviewPopedom.getObject();
+	var peopedomSelectId = "";
+	for(i=0;i<peopedomObj.options.length;i++)
+    {
+        if(peopedomObj.options[i].selected)
+        {
+            peopedomSelectId = peopedomObj.options[i].value;
+            var str = setRemark('PURVIEW_POPEDOM',peopedomSelectId);
+            if(str){
+            	oReamrk.value= str;
+            }
+            
+            break;
+        }
+    }
+}
+
+function automaticAdd(){
+	var obj = purviewPopedom.getObject();
+	if(obj){
+		addSelect();
+		return ;
+	}
+	else {
+		setTimeout(function(){automaticAdd()},2000);
+	}
+}*/
+
+function addSelect(){
+	if(element.DomainName){
+		
+		var obj = purviewSystem.getObject();
+		for(i=0;i<obj.options.length;i++)
+	    {	
+	        if(obj.options[i].selected)
+	        {
+	        	/*resultArray[element.DomainName+'@@'+element.SystemName+'@@'+element.roleName+'@@'+obj.options[i].text+'@@'+obj.options[i].value] = 
+				element.DomainName+"@@"+element.SystemName+"@@"+element.roleName+"@@"+obj.options[i].text+'@@'+obj.options[i].value;*/
+				
+				resultArray[element.DomainName+'@@'+element.SystemName+'@@'+obj.options[i].text+'@@'+obj.options[i].value] = 
+				element.DomainName+"@@"+element.SystemName+"@@"+obj.options[i].text+'@@'+obj.options[i].value;
+				
+	        }
+	    }
+		purviewSystem.addSelectedTo(selectedStaffList,true);
+	}
+}
+
+function addAllSelect(){
+	if(element.DomainName){
+		var obj = purviewSystem.getObject();
+		for(i=0;i<obj.options.length;i++)
+	    {
+	        if(obj.options[i])
+	        {
+	        	//resultArray[element.DomainName+'@@'+element.SystemName+'@@'+element.roleName+'@@'+obj.options[i].text+'@@'+obj.options[i].value] = 
+				//element.DomainName+"@@"+element.SystemName+"@@"+element.roleName+"@@"+obj.options[i].text+'@@'+obj.options[i].value;
+				
+				resultArray[element.DomainName+'@@'+element.SystemName+'@@'+obj.options[i].text+'@@'+obj.options[i].value] = 
+				element.DomainName+"@@"+element.SystemName+"@@"+obj.options[i].text+'@@'+obj.options[i].value;
+				
+	        }
+	    }
+		purviewSystem.addAllTo(selectedStaffList,true)
+	}
+}
+
+
+function delSelect(){
+	selectedStaffList.delSelectedOption();
+	for(var props in resultArray) {
+		if(props!='indexOf'&&props!='remove'){
+			if(resultArray[props]){
+				var popedomId =resultArray[props].split('@@')[4];
+				var obj = selectedStaffList.getObject();
+				var flag = true;
+				for(i=0;i<obj.options.length;i++)
+			    {
+			        if(obj.options[i].value == popedomId)
+			        {
+			        	flag = false; 
+			        	break;
+			        }
+			    }
+			    if(flag){
+			    	delete resultArray[props];
+			    }
+			}
+		}
+	}
+	
+	if(selectedStaffList.getObject().options.length==0){
+		resultArray = new Array();
+		requireIdTemp = "";
+	}
+}
+
+function delAllSelect(){
+	resultArray = new Array();
+	selectedStaffList.delAllOption();
+}
+
+function initTree(oDoc)
+{
+	if(isSetRoot && orgId)
+	{
+		var menuRoot = oDoc.selectSingleNode('/root/Menu');
+		var vaOrg = orgId.split(','),xpath = [];
+		for(var i = 0;i< vaOrg.length;i++)
+		{
+			menuRoot.appendChild(oDoc.selectSingleNode('//MenuItem[@id='+vaOrg[i]+']'));
+			xpath[i] = "@id!=" + vaOrg[i];
+		}
+		
+		oDoc.selectNodes("/root/Menu/MenuItem["+xpath.join(" and ")+"]").removeAll();
+	}
+	if(!isNull(oAction))
+	{
+		oAction.pretreatment(oDoc);
+	}
+}
+
+function treeChangeEvent(oItem)
+{
+	if(!oItem || isRead) return;
+	var selectedValue = oItem.id;
+	if(selectedValue!="")
+	{
+		var url = actionURL+selectedValue;
+		if(!isNull(oAction))
+		{
+			var _url = oAction.change(event);
+			if(oAction.isReplace)
+			{
+				url = getXMLSrc(parWin.document.URL,_url);
+			}
+		}
+		getStaffList(url);
+	}
+	else
+	{
+		staffByOrgList.xmlsrc = "";
+	}
+}
+
+//如果以","分隔返回第一个","前面的数据,否则直接返回。
+function getOrgId(orgId)
+{
+	if(!orgId) return orgId;
+	var index = orgId.indexOf(',');
+	if(index < 0)
+		return orgId;
+	else
+		return orgId.substring(0,index);
+}
+
+function ClickAction()
+{
+	this.parent = new XMLTree_onClick_Action;;
+	this.parent.click = function(oItem)
+	{
+		treeChangeEvent(oItem);
+	}
+
+	return this.parent
+}
+
+function newTree()
+{
+	this.parent = new XMLTree_onBeforeXMLTrans_Action
+	this.parent.pretreatment = function(oDoc)
+	{
+		initTree(oDoc);		
+		return oDoc;
+	}
+	return this.parent;
+}
+
+function LoadAction() 
+{
+	this.parent = new XMLTree_onLoad_Action;
+	this.parent.load = function() 
+	{
+		if(orgId)
+		{
+			//默认选中某个组织
+			var rootOrgId;
+			if(isSetRoot && orgId)
+				rootOrgId = getOrgId(orgId);
+			else
+				rootOrgId = 0;
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var url = "../../../servlet/staff_manage?tag=82&orgId="+getOrgId(orgId)+"&rootOrgId="+rootOrgId;
+			xmlhttp.open("POST",url,false);
+			xmlhttp.send();
+			var path = xmlhttp.responseXML.selectSingleNode('//PATH');
+			if(path)			
+				orgTree.selectItemByPath(path.text.replace(/^\//g, ""));
+			else
+			{
+				var oItem = document.getElementById(getOrgId(orgId));
+				if(oItem) oItem.click();
+			}
+		}
+		
+		if(isRead)
+		{
+			orgTree.isReadOnly = true;
+			orgTreeDiv.disabled = true;			
+		}
+	}
+	
+	return this.parent;
+}
+
+function getStaffList(_url)
+{
+	staffByOrgList.xmlsrc = _url;
+}
+
+function moveIn()
+{
+	if(!isMultiple)
+	{
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter()
+{	
+	if(setElement()){
+		//if(window.dialogArguments.isExistOther(element.requireId+"@@"+element.involveDomainId+"@@"+element.involveSystemId))
+		//{
+		//	EMsg("该需求类型已经存在，请重新选择！");
+		//	return;
+		//}
+		window.returnValue = resultArray;
+		window.close();
+	}
+}
+
+function setElement(){
+	var staffObj = new Object();
+	var oSelect = selectedStaffList.getObject();
+	if(selectedStaffList.getLength()==0){
+		EMsg("请选择指定的数据！");
+		return false;
+	}
+	//if(purviewSystem.getLength()==0||purviewRole.getLength()==0||purviewPopedom.getLength()==0)
+	if(purviewSystem.getLength())
+	{
+		element.popedomName = "";
+	}
+	else{
+		element.popedomName = oSelect.options[0].text;
+	}
+	return true;
+}
+function add(){
+	if(setElement()){
+		if(window.dialogArguments.isExistOther(element.requireId+"@@"+element.involveDomainId+"@@"+element.involveSystemId))
+		{
+			EMsg("该需求类型已经存在，请重新选择！");
+			return;
+		}
+		if(window.dialogArguments.isSameRequire(element.requireId))
+		{
+			EMsg("一个需求表单只能指定一个需求类型，请重新选择！");
+			return;
+		}
+		window.dialogArguments.addRowOther(element.requireId,element.requireName,element.involveDomainId,element.involveDomainName,element.involveSystemId,element.involveSystemName);
+	}
+}
+
+function getXMLSrc(documentURL,xmlSrc)
+{
+	var re = /(.*\/)(.*)/g;
+	return  documentURL.replace(re, "$1"+xmlSrc);
+}
+
+function isNull(value)
+{
+    return (typeof value == "undefined" || value==null);
+}
+
+//判断是否已经存在option后再添加option
+function addSelectOption(selectOjb,option)
+{
+	var flag = true;
+	for(var j=0;j<selectOjb.options.length;j++)
+	{
+		if(selectOjb.options[j].value==option.value)
+		{
+			flag = false;
+			break;
+		}
+	}
+	if(flag)
+	{
+		selectOjb.add(option);
+	}
+}
+
+</SCRIPT>
+
+</body>
+</html>

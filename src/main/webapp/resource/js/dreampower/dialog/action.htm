@@ -1,0 +1,169 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>鼠标动作图像</title>
+
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		listImage(myEditor.designer.document,document.all('sltUpImage'))
+		listImage(myEditor.designer.document,document.all('sltOverImage'))
+		listImage(myEditor.designer.document,document.all('sltDownImage'))
+		listLink(myEditor.designer.document,document.all('sltURL'))
+		listTarget(myEditor.designer.document,document.all('sltTarget'))
+	}
+}
+function doOK(){
+	objectTag()
+}
+function objectTag(){
+	var elts=myEditor.formElements
+	var html	='<a onFocus="this.blur()"'
+				+'href=			"'+(getSelectValue(elts('sltURL'))!=''?getSelectValue(elts('sltURL')):'javascript:void (0)' )+'" '
+				+''+(getSelectValue(elts('sltTarget'))!=''?'target=	"'+getSelectValue(elts('sltTarget'))+'"':'')+'>'
+				+'<img border=0 '
+				+(elts('tfName').value!=''
+					?'name=			"'+elts('tfName').value+'" '
+					:'')
+				+(elts('tfAlt').value!=''
+					?'alt=			"'+elts('tfAlt').value+'" '
+					:'')
+				+(elts('tfUpStyle').value!=''
+					?'style=			"'+elts('tfUpStyle').value+'" '
+					:'')
+				+'src=			"'+getSelectValue(elts('sltUpImage'))+'" '
+				+(elts('tfOverStyle').value!=''||getSelectValue(elts('sltOverImage'))!=''
+					?'onmouseover="'+(getSelectValue(elts('sltOverImage'))!=''?'this.src=\''+getSelectValue(elts('sltOverImage'))+'\';':'')
+									+(elts('tfOverStyle').value!=''?'this.style.cssText=\''+elts('tfOverStyle').value+'\'':'')+'" '
+					:'')
+				+(elts('tfDownStyle').value!=''||getSelectValue(elts('sltDownImage'))!=''
+					?'onmousedown="'+(getSelectValue(elts('sltDownImage'))!=''?'this.src=\''+getSelectValue(elts('sltDownImage'))+'\';':'')
+									+(elts('tfDownStyle').value!=''?'this.style.cssText=\''+elts('tfDownStyle').value+'\'':'')+'" '
+					:'')
+				+(elts('tfOverStyle').value!=''||getSelectValue(elts('sltOverImage'))!=''
+					?'onmouseup="'+(getSelectValue(elts('sltOverImage'))!=''?'this.src=\''+getSelectValue(elts('sltOverImage'))+'\';':'')
+									+(elts('tfOverStyle').value!=''?'this.style.cssText=\''+elts('tfOverStyle').value+'\'':'')+'" '
+					:'')
+				+(elts('tfUpStyle').value!=''||getSelectValue(elts('sltUpImage'))!=''
+					?'onmouseout="'+(getSelectValue(elts('sltUpImage'))!=''?'this.src=\''+getSelectValue(elts('sltUpImage'))+'\';':'')
+									+(elts('tfUpStyle').value!=''?'this.style.cssText=\''+elts('tfUpStyle').value+'\'':'')+'" '
+					:'')
+				+'></a>'
+	myEditor.window.insert(html)
+	window.close()
+}
+</script>
+
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+  <tr>
+      <td height="25" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="28">常规</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">名称:</td>
+      <td><script>writeTextfield('Name')</script></td>
+  </tr>
+  <tr>
+      <td height="22" align="right">替代:</td>
+      <td><script>writeTextfield('Alt','','l')</script></td>
+  </tr>
+    <tr>
+      <td height="25" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="52">鼠标向上</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">图像:</td>
+      <td><script>writeUrlSelector('UpImage')</script></td>
+  </tr>
+  <tr>
+      <td height="22" align="right">样式:</td>
+      <td><script>writeTextfield('UpStyle','','l')</script>
+	  <input type="button" value="编辑" style="height:20px" onClick="showStyleEditor(null,null,this.form.tfUpStyle)"></td>
+  </tr>
+     <tr>
+      <td height="18" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="52">鼠标经过</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">图像:</td>
+      <td><script>writeUrlSelector('OverImage')</script></td>
+  </tr>
+  <tr>
+      <td height="22" align="right">样式:</td>
+      <td><script>writeTextfield('OverStyle','','l')</script>
+	  <input type="button" value="编辑" style="height:20px" onClick="showStyleEditor(null,null,this.form.tfOverStyle)"></td>
+  </tr>
+      <tr>
+      <td height="18" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="52">鼠标按下</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">图像:</td>
+      <td><script>writeUrlSelector('DownImage')</script></td>
+  </tr>
+  <tr>
+      <td height="22" align="right">样式:</td>
+      <td><script>writeTextfield('DownStyle','','l')</script>
+	  <input type="button" value="编辑" style="height:20px" onClick="showStyleEditor(null,null,this.form.tfDownStyle)"></td>
+  </tr>
+      <tr>
+      <td height="18" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="110">鼠标点击时,跳转到</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">URL地址:</td>
+      <td><script>writeUrlSelector('URL')</script></td>
+  </tr>
+  <tr>
+      <td height="22" align="right">目标:</td>
+      <td><script>writeEditableSelect('Target','120')</script></td>
+  </tr>
+	    </table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">	  <script>writeButtonsRight()</script>
+	  </td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,38 @@
+.select-data {
+    display: none;
+    background-color: #fff;
+    width: 127px;
+    border: 1px solid #dad7d7;
+	/*
+    border-top: none;
+	*/
+	position: absolute;
+	z-index: 10000;
+}
+.select-data li {
+    list-style: none;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 19px;
+    line-height: 19px;
+    font-size: 14px;
+    border-bottom: 1px dashed #dad7d7;
+    cursor: pointer;
+}
+.select-data li:last-child {
+    border-bottom: none;
+}
+
+.select-data li:hover {
+    background-color: #3ca5ff;
+}
+.select-data li.selected {
+    background-color: #a1d3ff;
+    color: #fff;
+}
+
+.select-data-down {
+	background-image: url(sel-down.png); 
+	background-repeat: no-repeat;
+}

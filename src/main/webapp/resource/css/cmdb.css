@@ -1,0 +1,79 @@
+.x-itsm-disabled-2
+{
+	filter:alpha(opacity=30);
+}
+.imgButton
+{
+	behavior:url(/resource/htc/imgButton.htc);
+	cursor:hand;
+}
+.xmlTable
+{
+	behavior:url(/resource/htc/table.htc);
+	cursor:hand;
+}
+.required
+{
+  color:red;
+}
+body
+{
+  margin:10px 8px 0px 8px;
+}
+.keyValues
+{
+    behavior:url(/resource/htc/keyValues.htc);
+    display:inline;
+    cursor:hand;
+    width:200px;    
+}
+.divDisplay
+{
+    background:#EDEDED;
+    border: 1px solid #C3CFEE;
+    height:20px;
+    width: 100%;
+    padding-top:2px;
+    padding-left:2px;
+    max-height: 80px;
+    min-height:20px; 
+    _height:expression(this.scrollHeight > 80 ? "80px" : ( this.scrollHeight < 20 ? "20px" : "auto")); 
+    overflow-y:auto; 
+    word-break:break-all;
+}
+.espeicalDiv
+{
+    width:100%;
+    margin-top:8px;
+    margin-left:10px;
+    margin-right:10px
+}
+.table
+{
+	width:100%;
+	height:23px;
+	color:#0068FF;
+	background-color:#ECE9D8;
+	border: #919B9C 1 solid;
+}
+
+.delImg
+{
+	cursor: hand;
+}
+
+.alarmTableTitle {
+	background-color:#99CC99;
+	font-weight: bold;
+	font-size: 16px;
+}
+.alarmTableTr1 {
+	background-color:#ffffff;
+	font-size: 14px;
+	height:24;
+}
+.alarmTableTr2 {
+	background-color:#f1f6f9;
+	font-size: 14px;
+	height:24;
+}

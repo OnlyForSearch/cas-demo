@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="gbk"?>
+<root>
+	<ITEM id="249" name="接发球考核" default="false">
+		<COLINFO maxcol="4" groupby="0,1,3" where="2=合计(2分)@@2=合计(3分)" mer="0,1" result="4.5,4.5,4">
+			<COL_NAME level="0" mer="y">省份</COL_NAME>
+			<COL_NAME level="1" mer="y" namein="合计(2分)@@合计(3分)">接/发球</COL_NAME>
+			<COL_NAME level="2" mer="y">业务</COL_NAME>
+			<COL_NAME level="3">指标</COL_NAME>
+		</COLINFO>
+	</ITEM>
+	<ITEM id="250" name="月考核" default="true">
+		<COLINFO maxcol="5" groupby="0,1,2" where="" mer="0,1" result="90,75,60">
+			<COL_NAME level="0" mer="y">省份</COL_NAME>
+			<COL_NAME level="1" mer="y">一级指标</COL_NAME>
+			<COL_NAME level="2" mer="y">二级指标</COL_NAME>
+			<COL_NAME level="3">三级指标</COL_NAME>
+			<COL_NAME level="4">四级指标</COL_NAME>
+		</COLINFO>
+	</ITEM>
+	<ITEM id="251" name="移动业务计费全网运营考核报表" default="false">
+		<COLINFO maxcol="5" groupby="0,1,2" where="" mer="0,1" result="90,75,60">
+			<COL_NAME level="0" mer="y">省份</COL_NAME>
+			<COL_NAME level="1" mer="y">一级指标</COL_NAME>
+			<COL_NAME level="2" mer="y">二级指标</COL_NAME>
+			<COL_NAME level="3" mer="y">三级指标</COL_NAME>
+			<COL_NAME level="4">四级指标</COL_NAME>
+		</COLINFO>
+	</ITEM>
+</root>

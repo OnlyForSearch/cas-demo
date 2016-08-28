@@ -1,0 +1,257 @@
+<!-- ---------------------------------------------------------------------
+//  AUTHOR：WUQING
+//  DATE:   2012-07-27
+//  NAME:   可伸缩fieldSet
+//  FILE:   fieldSetExtent.htc
+//  DESC:   fieldSet可伸缩控件
+//          可引用CSS：‘/resource/css/publicCss.css’
+//   BUG：   流程表单要改为手动加载，但是附件显示不了，所以附件控件不能包含在div里面。。。
+//----------------------------------------------------------------------->
+<public:component tagName=fieldSetExtend >
+<PROPERTY NAME="legendTitle"      put="setLegendTitle"  get="getLegendTitle"/>/*标题*/
+<PROPERTY NAME="legendCss"        put="setLegendCss"/>/*样式class:publicCss.css中可用fieldsetCss和fieldsetTopDashedCss，默认为fieldsetCss*/
+<PROPERTY NAME="hideShowDivId"    put="setHideShowDivId"/>/*收缩时展示的div，默认为‘······’*/
+<PROPERTY NAME="state"            get="getState"/>/*获得div的状态：T展开，F收缩*/
+<PROPERTY NAME="onAfterShow"      put="setOnAfterShow"/>/*展开后事件*/
+<PROPERTY NAME="onAfterHide"      put="setOnAfterHide"/>/*收缩后事件*/
+<PROPERTY NAME="autoLoad"  value="true"    />/*是否自动加载*/
+<METHOD   NAME="toggle"                    />/*展开或收缩*/
+<METHOD   NAME="show"                      />/*展开*/
+<METHOD   NAME="hide"                      />/*收缩*/
+<METHOD   NAME="initFieldSet"              />/*手动初始化DIV*/
+<PUBLIC:ATTACH   EVENT="ondocumentready" HANDLER="DoInit" />
+</public:component>
+<style>
+.fieldsetHideDiv {
+    margin-top: 0px;
+    font: 15px;
+    maring-bottom: 5px;
+    cursor: hand;
+    color:#4068AA;
+}            
+</style>
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var fieldSetExtendHtcDefaultLang = {
+	legendTitle : '展开/收缩',
+	contentTitle : '查看'
+};
+//获取语言资源
+function getFieldSetExtendHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('fieldSetExtendHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.fieldSetExtendHtc.' + code);
+	}
+}
+
+var v_title;
+var v_fieldsetCss;
+var fieldSetDiv = "fieldset_"+uniqueID;
+var infoDiv = 'fieldset_'+uniqueID+'_Info';
+var btnDiv = 'fieldset_'+uniqueID+'_Btn';
+var hideDiv = 'fieldset_'+uniqueID+'_Hide';
+var titleDiv = 'fieldset_'+uniqueID+'_title';
+var v_setHideShowDivId = '';
+var v_onAfterShow = "";
+var v_onAfterHide = "";
+//+----------------------------------------------------------------------------
+//
+//  函数名:    DoInit
+//
+//  说  明:    初始化控件,设置初始化参数
+//
+//  参  数:    none
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function DoInit()
+{
+   if(autoLoad == "true"){
+	   initFieldSet();
+   }
+}
+
+function initFieldSet(){
+       if(v_fieldsetCss == '' || v_fieldsetCss == undefined || v_fieldsetCss == 'undefined'){
+            v_fieldsetCss = "fieldsetCss";
+       }
+       
+       var hideShowHtml = "";
+       if(v_setHideShowDivId == '' || v_setHideShowDivId == undefined || v_setHideShowDivId == 'undefined'){
+            hideShowHtml = "······";
+       }else{
+            if(window.document.getElementById(v_setHideShowDivId) != null){
+                hideShowHtml = window.document.getElementById(v_setHideShowDivId).innerHTML;
+            }
+       }
+       
+       var innerInfoHtml = '<div id="'+infoDiv+'" style="padding: 10px">' + this.innerHTML + '</div>';
+       var str  = '<fieldset id="'+fieldSetDiv+'" class="'+v_fieldsetCss+'" align="center" style="margin-top: 0;">'; 
+       str += "<legend title=\"" + getFieldSetExtendHtcLan('legendTitle') + "\" style=\"color:#4068AA\" class='fieldsetLegend' onclick=\"window."+uniqueID+".toggle()\""+
+               " onMouseOver='this.style.textDecoration=\"none\";this.style.color=\"#ff0000\"'"+
+               " onMouseOut='this.style.textDecoration=\"none\";this.style.color=\"#4068AA\"'" +           
+               " >"+
+               " <font id='"+btnDiv+"' style='font-family: Webdings;'>6</font><span id=\""+titleDiv+"\">" +
+               this.legendTitle+"</span></legend>";
+       str += "<div title=\"" + getFieldSetExtendHtcLan('contentTitle') + "\" id=\""+hideDiv+"\" align=\"center\" onclick=\"window."+uniqueID+".toggle()\""
+            + " style=\"cursor:hand;display: none;color:#4068AA;\" "
+            +  ">"+hideShowHtml+"</div>";      
+               
+       str += innerInfoHtml;
+       str += "</fieldset>";
+       this.innerHTML = str;
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    setLegendTitle
+//
+//  说  明:    设置legend标题
+//
+//  参  数:    title
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function setLegendTitle(title){
+    v_title = title;
+    if(window.document.getElementById(titleDiv) != null){
+        window.document.getElementById(titleDiv).innerHTML = title;
+    }
+}
+
+function getLegendTitle(){
+    return v_title;
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    setLegendCss
+//
+//  说  明:    设置fieldSet样式
+//
+//  参  数:    className
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function setLegendCss(className){
+    v_fieldsetCss = className;
+    if(window.document.getElementById(fieldSetDiv) != null){
+        window.document.getElementById(fieldSetDiv).className = className;
+    }
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    toggle
+//
+//  说  明:    收缩或者展开DIV
+//
+//  参  数:    none
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function toggle(){
+    if(window.document.getElementById(btnDiv).innerHTML=='4'){
+        show();   
+    }else{
+        hide();
+    }
+}
+
+function show(){
+    window.document.getElementById(infoDiv).style.display = "";
+    window.document.getElementById(hideDiv).style.display = "none";
+    window.document.getElementById(btnDiv).innerHTML='6';
+    if(v_onAfterShow != ""){
+       eval(v_onAfterShow);
+    }       
+}
+
+function hide(){
+    window.document.getElementById(infoDiv).style.display = "none";
+    window.document.getElementById(hideDiv).style.display = "";
+    window.document.getElementById(btnDiv).innerHTML='4';
+    if(v_onAfterHide != ""){
+       eval(v_onAfterHide);    
+    }
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    setHideShowDivId
+//
+//  说  明:    收缩时展示的DIV
+//
+//  参  数:    divId，指向的DIV的ID
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function setHideShowDivId(divId){
+    v_setHideShowDivId = divId;
+    if(window.document.getElementById(hideDiv) != null){
+        window.document.getElementById(hideDiv).innerHTML = window.document.getElementById(divId).innerHTML;
+    }
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    getShowState
+//
+//  说  明:    收缩状态
+//
+//  参  数:    none
+//
+//  返回值:    T-->展开，F-->收缩
+//
+//-----------------------------------------------------------------------------
+function getState(){
+    if(window.document.getElementById(btnDiv).innerHTML=='4'){
+       return 'F';
+    }else{
+       return 'T'; 
+    }
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    setOnAfterShow
+//
+//  说  明:    设置展开后事件
+//
+//  参  数:    fName
+//
+//  返回值:    none
+//
+//-----------------------------------------------------------------------------
+function setOnAfterShow(fName){
+    v_onAfterShow = fName;
+}
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    setOnAfterHide
+//
+//  说  明:    设置收缩后事件
+//
+//  参  数:    fName
+//
+//  返回值:    none
+//
+//-----------------------------------------------------------------------------
+function setOnAfterHide(fName){
+    v_onAfterHide = fName;
+}
+</SCRIPT>
+<body>
+
+</body>

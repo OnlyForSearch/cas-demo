@@ -1,0 +1,162 @@
+<script language="JavaScript" type="text/JavaScript" src="dreampower/includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="dreampower/includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="dreampower/includes/toolbar.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="dreampower/includes/table.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="dreampower/includes/editor.js"></script>
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>Unlimited Dreampower</title>
+<SCRIPT src="Common.js"></SCRIPT>
+<SCRIPT src="Dialog.js"></SCRIPT>
+<SCRIPT src="Error.js"></SCRIPT>
+<script>document.write('<link href="'+myEditor.baseURL+'/includes/style.css" rel="stylesheet" type="text/css">')</script>
+<script>document.write('<link href="'+myEditor.baseURL+'/includes/editor.css" rel="stylesheet" type="text/css">')</script>
+</head>
+<body>
+<SCRIPT language="javascript">
+var xmlToolbarValue = myEditor.baseURL+"/includes/toolbar.xml";
+try{
+    var arrayUrl=getURLSearch();
+    if(arrayUrl!=null)
+    {
+	    //xmlToolbar = decodeURIComponent(arrayUrl.xmlToolbar);
+	    xmlToolbarValue = arrayUrl.xmlToolbar;
+    }
+    else
+    {
+	    xmlToolbarValue = defaultXmlToolbar;
+    }
+}catch(e){}
+document.write('<xml id="xmlToolbar" src="'+xmlToolbarValue+'"></xml>');
+</SCRIPT>
+<div id="divTemp" style="width:0px;height:0px;position:absolute;overflow: hidden;"></div>
+<script>document.write('<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="'+myEditor.baseURL+'/colorPicker/colorPicker.htm"  class="dropdown"></iframe>')</script>
+<table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+    <td height="1" id="tdMenu"></td>
+  </tr>
+  <tr>
+    <td id="tdInsertbarTop" height="3"><img height=3></td>
+  </tr>
+  <tr>
+    <td height="26" id="tdInsertbar" style="padding-left:6px"></td>
+  </tr>
+  <tr>
+    <td id="tdInsertbarBottom" height="4"><img height=4></td>
+  </tr>
+  <tr>
+  <td height="100%">
+  <table id="tblMain" width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="1" rowspan="5" id="tdLeftPanel"></td>
+	<td width="1" rowspan="5" id="tdLeftBar"></td>
+    <td class="tdLeftTop"></td>
+    <td class="tdTopBorder"></td>
+    <td  class="tdRightTop"></td>
+	<td width="1" rowspan="5" id="tdRightBar"></td>
+    <td width="1" rowspan="5" id="tdRightPanel"></td>
+  </tr>
+  <tr>
+    <td id="tdEditor" class="tdLeftBorder"></td>
+    <td><table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="1" id="tdStandardbar" class="toolbar"></td>
+      </tr>
+      <tr>
+        <td>
+		<table id='tblEditor' width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+          <tr bgcolor="#9D9DA1" style="display:none">
+            <td id="tdCode" width="100%" height="50%">
+				<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td width=1  height="100%"><textarea  readonly wrap='off' id='taLine'></textarea></td>
+                    <td  height="100%"><textarea   wrap='off' id='taCode' onactivate="changeEditWin(this)" onbeforedeactivate="saveSelection(true);"></textarea></td>
+                  </tr>
+              </table>
+			</td>
+          </tr>
+          <tr>
+            <td height="7" id="tdViewSeparator"><div id="divViewSeparator"><img width="1" height="1"></div></td>
+          </tr>
+          <tr>
+            <td id="tdDesign"><iframe frameborder="0" scrolling="yes" id="ifrmDesign" 
+							onactivate="changeEditWin(this)"  onbeforedeactivate="saveSelection(true);"></iframe></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td height="1" id="tdTagPath"><div id="divTagPath"></div></td>
+      </tr>
+    </table></td>
+    <td class="tdRightBorder"></td>
+    </tr>
+  <tr>
+    <td class="tdLeftBottom"></td>
+    <td class="tdBottomBorder"></td>
+    <td class="tdRightBottom"></td>
+    </tr>
+  <tr>
+    <td class="tdLeftBorder"></td>
+    <td height="1" id="tdBottomPanel">
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="display:none">
+  <tr>
+	<td height="20">
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	<td class="tdPanelTitle">
+	<table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+	  <tr>
+		<td width="1"><script>document.write('<img src="'+myEditor.baseURL+'/images/panelHandle.gif">')</script></td>
+		<td width="1" onClick="showPropertiesBody(this.nextSibling)"><script>document.write('<img id=imgRightArrow src="'+myEditor.baseURL+'/images/arrowRight.gif"><img id=imgBottomArrow src="'+myEditor.baseURL+'/images/arrowDown.gif" style="display:none">')</script></td>
+		<td width="30" id=tdShowPropertiesBody  onClick="showPropertiesBody(this)" class="commandButton">属性</td>
+		<td>&nbsp;</td>
+		<td width="50" align="right" class="commandButton" id="tdAdvancedProperties" onClick="try{myEditor.tag=this.obj;showDialog('tagEditor.htm',616,404)}catch(e){}">高级</td>
+	  </tr>
+	</table></td>
+	  </tr>
+	<tr style="display:none">
+	  <td height=80><div id="divPropertiesBody"></div></td>
+	</tr>
+	</table>
+	</td>
+  </tr>
+	</table>	
+	</td>
+    <td class="tdRightBorder"></td>
+    </tr>
+  <tr>
+    <td class="tdLeftBorder"></td>
+    <td id="tdStatusbar"><table width="100%"  border="0" cellpadding="0" cellspacing="3">
+      <tr>
+	  	<script language="JavaScript" type="text/JavaScript">
+			var arrView=['Code','代码','codeView_0.gif','Design','设计','textView_0.gif','Preview','预览','previewView_0.gif']
+			for(var i=0;i<arrView.length;i=i+3){
+				document.write('<td width="1"><input id="bt'+arrView[i]+'" mygroup="view" myselect="this.className=\'btDown\';this.style.backgroundColor=\'#FFFFFF\'" myunselect="this.className=\'btOver\';this.style.backgroundColor=\'#E2E1DA\'"  onClick="doRadioGroup(this.mygroup,this.id);changeView(\''+arrView[i]+'\');" type="button" hideFocus class="btOver" value="'+arrView[i+1]+'" style="padding-left:16px;padding-top:2px;width:50px;height:20px;background:#E2E1DA url('+myEditor.baseURL+'/images/'+arrView[i+2]+') no-repeat;" onFocus="this.blur()"></td>');
+			}
+		</script>
+        <td width=1 style="visibility:hidden"><select id="sltCodeWinHeight" onChange="tdCode.height=this.value;this.selectedIndex=0">
+		<option>代码视窗高度</option>
+		<script>for(var i=5;i<100;i+=5){
+					document.write('<option value="'+i+'%">'+i+'%</option>')
+		}</script>
+		</select></td>
+		<td width=150 style="visibility:hidden"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+		<td width=1 ><input type=checkbox id=chkBR ></td>
+		<td  class="paddingTop">小回车 Shift+Enter</td>
+  </tr>
+</table>
+</td>
+		<td>&nbsp;</td>
+        <td width="1" style="visibility:hidden"><script>document.write('<img title="增大编辑区" src="'+myEditor.baseURL+'/images/sizePlus.gif" width="20" height="20" onclick="setEditorSize(200)">')</script></td>
+        <td width="1" style="visibility:hidden"><script>document.write('<img title="减小编辑区"  src="'+myEditor.baseURL+'/images/sizeMinus.gif" width="20" height="20" onclick="setEditorSize(-200)">')</script></td>
+      </tr>
+    </table></td>
+    <td class="tdRightBorder"></td>
+  </tr>
+</table>  </td>
+  </tr> 
+</table>
+</body>
+</html>

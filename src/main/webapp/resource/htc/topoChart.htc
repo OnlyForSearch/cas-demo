@@ -1,0 +1,2230 @@
+<public:component>
+<public:attach event="onclick"         for="element" onevent="doClick()"               />
+<public:attach event="onmousedown"     for="element" onevent="doMouseDown()"           />
+<public:attach event="onmousemove"     for="element" onevent="doMouseMove()"           />
+<public:attach event="onmouseup"       for="element" onevent="doMouseUp()"             />
+<public:attach event="oncontextmenu"   for="element" onevent="doRightClick()"          />
+<public:attach event="onkeydown"       for="element" onevent="doKeyDown()"             />
+<public:attach event="onselectstart"   for="element" onevent="doSelectStart()"         />
+<public:attach event="ondblclick"      for="element" onevent="doDblclick()"            />
+<public:attach event="onmouseover"     for="element" onevent="doMouseover()"           />
+
+<public:property  get ="getNodeMenuId"   put="setNodeMenuId" name="nodeMenuId"           />
+<public:property  get ="getLineMenuId"   put="setLineMenuId" name="lineMenuId"           />
+<public:property  get ="getAction"       put="setAction"     name="action"               />
+<public:property  get ="getXMLDoc"       put="setXMLDoc"     name="XMLDoc"               />
+<public:property  get ="getNodeSeqURL"   put="setNodeSeqURL" name="nodeSeqURL"           />
+<public:property  get ="getChartId"      put="setChartId"    name="chartId"              />
+<public:property  get ="getSaveURL"      put="setSaveURL"    name="saveURL"              />
+<public:property  get ="getReadOnly"     put="setReadOnly"   name="readOnly"             />
+<public:property                                             name ="nodeObjectType"      />
+<public:property                                             name ="loadCtrlurl"         />
+<public:property  get="getNodes"                             name ="nodes"               />
+<public:method name="removeSelectedGraph" />
+<public:method name="createNode"          />
+<public:method name="replaceNodeVmlDoc"   />
+<public:method name="replaceLinkVmlDoc"   />
+<public:method name="getSelectedObj"      />
+<public:method name="getSelectedObjXMLDoc"/>
+<public:method name="getGraphXMLDoc"      />
+<public:method name="getNodeById"         />
+<public:method name="getNodeByDataId"     />
+<public:method name="initTopoChart"       />
+<public:method name="doSave"              />
+<public:method name="isDirty"             />
+<public:method name="selectNode"          />
+<public:method name="isLine"              />
+<public:method name="connectionNode"      />
+<public:method name="removeGraphSelection"/>
+<public:method name="doReloadChart"       />
+<public:method name="getXMLDocByNodeId"   />
+
+
+<PUBLIC:EVENT NAME="onDoubleClick" ID="oDbClick"/>
+<PUBLIC:EVENT NAME="onGraphOver" ID="oGraphOver"/>
+<PUBLIC:EVENT NAME="onNodeRightClick" ID="oNodeRightClick"/>
+<PUBLIC:EVENT NAME="onTopoRightClick" ID="oTopoRightClick"/>
+<PUBLIC:EVENT NAME="onAfterload" ID="oAfterload"/>
+<PUBLIC:EVENT NAME="onAfterNodeRemove" ID="oRemove"/>
+<PUBLIC:EVENT NAME="onAfterChilck" ID="oAfterClick"/>
+
+<script language="javascript"              >
+var htcName='topoChart.htc'       //定义htc的名称
+var sImagePath="../../resource/image/topoPic/";//定义图标路径
+var NODE_ZINDEX=8;                //定义环节图形3D高度
+var HIDDEN_LINE_ZINDEX=10;        //定义隐藏线的3D高度
+var LINK_ZINDEX=9;                //定义连接线的3D高度
+var MOVE_NODE_ZINDEX=11;          //定义移动时图形的3D高度
+var SELECT_ZINDEX=13;             //定义选择框图形的3D高度
+var HIDDEN_RECT_ZINDEX=7;         //定义隐藏矩形的3D高度
+var DRAW_NODE='1';                //画环节
+var NODE_MOVE='M';                //移动环节
+var DRAW_LINK='L';                //画连接线
+var DRAW_LINE='DL';               //画线
+var DRAW_RECT='R';                //画矩形
+var IS_NEW="1";                   //定义是否为新增对象（真）
+var IS_NOT_NEW="0";               //定义是否为新增对象（假）
+var UPDATE_STATE="M";             //定义修改的状态
+var DEL_STATE="D";                //定义删除的状态
+var DEL_KEY_CODE=46;              //DELETE键的键值
+var CTRL_KEY_CODE=17;             //CTRL键的键值
+var S_KEY_CODE=83;                //S键的键值
+var gAction;                      //动作属性
+var gNodeMenuId;                  //节点右键菜单ID
+var gLineMenuId;                  //线右键菜单ID
+var gStartX=0;                    //画线时鼠标的开始x轴位置
+var gStartY=0;                    //画线时鼠标的开始y轴位置
+var gFromNode;                    //画线时的鼠标开始指向环节
+var gSelectedGraph=null;          //定义选中的图形
+var	iOffsetX;                     //移动图形时鼠标开始偏移x位置
+var	iOffsetY;                     //移动图形时鼠标开始偏移y位置
+var bResize=false;                //是否正在调整图形大小
+var iResizeNodeLeft=0;            //调整大小时被调整环节的左边矩
+var iResizeNodeWidth=0;           //调整大小时被调整环节的宽度
+var iResizeNodeTop=0;             //调整大小时被调整环节的上边矩
+var iResizeNodeHeight=0;          //调整大小时被调整环节的高度
+var aResizeLinePos                //调整线大小时的线的位置
+var oCopyline;
+var gXMLDoc=null;                 //xml文档流对象
+var gNodeSeqURL;                  //取环节的唯一标识的servlet地址
+var gChartId;                     //图形Id
+var gSaveURL;                     //保存图形的URL
+var gXMLSrc                       //载入图形的URL
+var gReadOnly=true;               //是否只读
+
+//定义选择环节框的八个矩形的鼠标样式，相对位置及鼠标移动动作函数，数组的排列按矩形的左，中，右顺序
+var aSelectRect=new Array(new Array("nw-resize","w-resize","sw-resize","n-resize",
+	                                 "s-resize","ne-resize","e-resize","se-resize"),
+					      new Array("-3","-3","-3","width/2-3",
+	                                 "width/2-3","width-3","width-3","width-3"),
+					      new Array("-3","height/2-2","height-3","-3",
+	                                 "height-3","-3","height/2-2","height-3"),
+						  new Array("doLTRectMove()","doLMRectMove()","doLBRectMove()","doMTRectMove()",
+	                                 "doMBRectMove()","doRTRectMove()","doRMRectMove()","doRBRectMove()"));
+
+//定义选择环节框的四条线的起点和终点
+var aSelectNodeLine=new Array(new Array("0,0","0,0","width,height","width,height"),
+					          new Array("0,height","width,0","0,height","width,0"));
+//定义环节的属性数组
+var aNodeProp=[["NODE_OBJECT_TYPE","LINK_URL","CHILD_CHART_ID",
+               "NODE_SHOW_ATTRS","NODE_SHOW_PERFS","ATTR_CONTRAST_NODE_ID","DR_ID"
+               ,"URL_OPEN_TYPE","CUSTOM_JS","NODE_ALARM_CLASS","NODE_KPIS","NODE_REGIONS"
+               ,"ON_CLICK","IS_SHOW_IMPACT","HINT","DOM_ID"],
+			   [element.nodeObjectType,"","0","","","","0","newWin","","","","","","0",""]];
+
+//定义选择连接线三个矩形的位置(转换pt为px)
+var aSelectLine=new Array(new Array("-3","(endLeft*12/9-beginLeft)/2-2","endLeft*12/9-beginLeft-3"),
+					          new Array("-3","(endTop*12/9-beginTop)/2-2","endTop*12/9-beginTop-3"),
+					          new Array("doResizeLine(true)","","doResizeLine(false)"));
+
+//定义流向的属性数组（与数据库字段名称相同）
+var aLinkProp=new Array(new Array("RELATION_TYPE"),
+                        new Array("20"));                    
+createHiddenLine();
+getXMLDoc();
+createHiddenRect();
+// **********************************************************************
+//                       画板初始化
+// **********************************************************************
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    createHiddenLine
+//  说明:    初始化一个隐藏的线用来控制画线时根据鼠标移动画虚线
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+
+function createHiddenLine()
+{
+    var lineHTML;
+    lineHTML="<v:line id=oHiddenLine"+uniqueID+" style='position:absolute;display:none'>"
+            +   "<v:Stroke dashstyle='shortdot' endarrow='classic'/>"
+            +"</v:line>";
+    window.document.body.insertAdjacentHTML("beforeEnd",lineHTML);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    createHiddenRect
+//  说明:    初始化一个隐藏的矩形用来控制画矩形线时根据鼠标移动矩形边框
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+function createHiddenRect()
+{
+    var rectHTML;
+    rectHTML="<v:rect fillcolor='#f8f8f8' id=oHiddenRect"+uniqueID+" style='position:absolute;width:1px;height:1px;display:none'>"
+            +   "<v:Stroke dashstyle='shortdot' endarrow='classic'/>"
+            +"</v:rect>";
+    window.document.body.insertAdjacentHTML("beforeEnd",rectHTML);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    loadVmlDoc
+//  说明:    从xml文档流中加载vml
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function loadVmlDoc()
+{
+    var oVmlDoc=gXMLDoc.selectNodes("//vmldoc/comment()");
+	var aVmlHTML=new Array();
+	var aItems;
+	for(var i=0;i<oVmlDoc.length;i++)
+	{
+	   aVmlHTML[i]=oVmlDoc[i].data;
+	}
+	element.innerHTML=aVmlHTML.join("");
+    var aItems = element.childNodes;
+	var j=0;
+	if(aItems!=null)
+	{
+		 for(var i=0;i<aItems.length;i++)
+		 {
+		     var oGraph=aItems[i];
+             oGraph.attachEvent("onclick",function(){doGraphClick()});
+			 if(oGraph.tagName=="textBox")
+			 {
+			      var sImgSrc=sImagePath+"plus.gif";
+			      var sPath="/root/nodes/node[@NODE_ID='"+oGraph.id+"']";
+			      var oGraphXML=gXMLDoc.selectSingleNode(sPath);
+			      var childChartId=oGraphXML.getAttribute("CHILD_CHART_ID");
+			      var sLinkURL=oGraphXML.getAttribute("LINK_URL");
+			      var sOnClick=oGraphXML.getAttribute("ON_CLICK")
+			      if(childChartId!="0")
+			      {
+					   var iTop=oGraph.getBoundingClientRect().top+oGraph.style.pixelHeight;
+					   var iLeft=oGraph.getBoundingClientRect().left+oGraph.style.pixelWidth/2-4;
+					   var sHTML='<IMG src="'+sImgSrc+'" style="position:absolute;top:'
+					               +iTop+';left:'+iLeft+'" id="img_Node_'+oGraph.id+'">'
+					   element.insertAdjacentHTML("beforeEnd", sHTML);
+			      }
+			      if(sLinkURL || sOnClick)
+			      {
+			         oGraph.getElementsByTagName("DIV")[0].runtimeStyle.color="blue";
+			      }
+			 }
+		 }
+	}
+}
+
+
+// **********************************************************************
+//                       画板属性 GET/SET 函数
+// **********************************************************************
+
+
+
+//------------------------------------------------------------------------
+//
+//  函数:    getAction / setAction
+//  说明:    用来设置画板的动作属性，比如画开始环节，中间环节，或者移动图形等。
+//  参数:    set 方法传入一个标志字符串。
+//  返回:    get 返回一个标志字符串。
+//
+//------------------------------------------------------------------------
+
+function getAction()
+{
+    return gAction;
+}
+
+
+function setAction(pAction)
+{
+    gAction=pAction;
+    //控制鼠标显示的图片
+    var aCursor={'1':'auto','M':'auto','L':'hand','DL':'hand'};
+    element.runtimeStyle.cursor=aCursor[gAction];
+}
+
+//------------------------------------------------------------------------
+//
+//  函数:    getChartId / setChartId
+//  说明:    引入画板所属的拓扑图
+//  参数:    set 方法传入一个拓扑图的ID。
+//  返回:    get 返回一个拓扑图的ID。
+//
+//------------------------------------------------------------------------
+
+function getChartId()
+{
+   return gChartId;
+} 
+
+function setChartId(pChartId)
+{
+    gChartId=pChartId;
+}
+
+
+//------------------------------------------------------------------------
+//
+//  函数:    getSaveURL / setSaveURL
+//  说明:    引入画板保存的url
+//  参数:    set 方法传入一个保存的url。
+//  返回:    get 返回一个保存的url。
+//
+//------------------------------------------------------------------------
+
+function getSaveURL()
+{
+   return gSaveURL;
+} 
+
+function setSaveURL(pSaveURL)
+{
+    gSaveURL=pSaveURL;
+}
+
+//------------------------------------------------------------------------
+//
+//  函数:    getNodeMenuId,getLineMenuId / setLineMenuId,setNodeMenuId
+//  说明:    引入画板的右键菜单
+//  参数:    set 方法传入一个右键菜单的ID。
+//  返回:    get 返回一个右键菜单的ID。
+//
+//------------------------------------------------------------------------
+
+function getNodeMenuId()
+{
+   return gNodeMenuId;
+} 
+
+function setNodeMenuId(pNodeMenuId)
+{
+    gNodeMenuId=pNodeMenuId;
+}
+
+function getLineMenuId()
+{
+   return gLineMenuId;
+} 
+
+function setLineMenuId(pLineMenuId)
+{
+    gLineMenuId=pLineMenuId;
+}
+//------------------------------------------------------------------------
+//
+//  函数:    getXMLSrc / setXMLSrc
+//  说明:    引入画板的xml文档路径
+//  参数:    set 方法传入xml文档路径。
+//  返回:    get 返回xml文档流。
+//
+//------------------------------------------------------------------------
+
+function getXMLDoc()
+{
+
+    var sXML;
+    if(gXMLDoc==null)
+    {
+       gXMLDoc=new ActiveXObject("Microsoft.XMLDOM");
+	   sXML="<?xml version='1.0' encoding='gb2312'?>"
+            +  "<root>"
+            +     "<nodes></nodes>"
+	        +     "<links></links>"
+            +  "</root>";
+	   gXMLDoc.loadXML(sXML);
+    }
+    return gXMLDoc;
+} 
+
+function setXMLDoc(pXMLSrc)
+{
+	gXMLDoc = new ActiveXObject("Microsoft.XMLDOM");
+    var oXMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+    gXMLSrc=pXMLSrc;
+    oXMLHTTP.open("POST",pXMLSrc,false);
+    oXMLHTTP.send("");
+	if(isSuccess(oXMLHTTP))
+    {
+        initTopoChart(oXMLHTTP.responseXML)
+    }
+}
+
+function initTopoChart(oXML)
+{
+     gXMLDoc=oXML;
+     loadVmlDoc();
+	 doOnAfterload()
+}
+
+function doOnAfterload()
+{
+	var oEvent = createEventObject();
+	oAfterload.fire(oEvent);
+}
+//------------------------------------------------------------------------
+//
+//  函数:    getNodeSeqURL
+//  说明:    引入画板的取环节ID的servlet路径
+//  参数:    set 方法传入servlet路径。
+//  返回:    get 返回servlet路径。
+//
+//------------------------------------------------------------------------
+
+function getNodeSeqURL()
+{
+    return gNodeSeqURL;
+} 
+
+function setNodeSeqURL(pNodeSeqURL)
+{
+    gNodeSeqURL=pNodeSeqURL;
+}
+
+//------------------------------------------------------------------------
+//
+//  函数:    getReadOnly/setReadOnly
+//  说明:    引入画板是否只读的属性
+//  参数:    
+//  返回:    
+//
+//------------------------------------------------------------------------
+
+function getReadOnly()
+{
+   return gReadOnly;
+}
+
+function setReadOnly(pReadOnly)
+{
+   gReadOnly=(pReadOnly.toLowerCase()=="false")?false:true;
+}
+
+function getNodes()
+{
+   return getElementsByTagName("textbox");
+}
+// **********************************************************************
+//                      画板功能函数
+// **********************************************************************
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    drawNode
+//  说明:    根据鼠标位置画环节
+//  参数:    sShape            图形形状
+//           sId              图形ID
+//           sInitName        图形初始名字
+//  返回:    
+//-----------------------------------------------------------------------------------------------
+
+function drawNode(sShape,sId,sInitName,sImageName,sNeId,iX,iY,iWidth,sTopoTemplateId,sSubjectId)
+{
+    var sShapeHTML,shadowHTML,textBoxHTML,strokeHTML,sNodeVML,imageHTML
+	var oShape,oShadow,oTextBox,oStroke,oImage;	     
+	var sImageSrc=(sImageName=="")?sImagePath+"mid32.gif":sImageName;
+	//var sImageSrc=document.URL.replace(htcName,sImagePath+sImageName);
+    //定义环节图形的样式
+    var aNodeStyle={
+	                  width:iWidth,
+				      height:47,
+				      fillcolor:'white',
+				      strokeweight:1,
+                      strokecolor:'white',
+				      linestyle:'single',
+				      dathstyle:'solid'
+			       };
+	var y=window.document.body.scrollTop+iY-aNodeStyle.height/2;
+    var x=window.document.body.scrollLeft+iX-aNodeStyle.width/2;
+    sShapeHTML="<v:"+sShape+" style='position:absolute;text-align:center;z-index:"
+            +     NODE_ZINDEX+";width:"+aNodeStyle.width+";height:"+aNodeStyle.height+";left:"+x
+	        +     ";top:"+y+";' typeName='node'>"
+            +"</v:"+sShape+">";
+    imageHTML="<img src='"+sImageSrc+"' typeName='node_child'/>"
+	textBoxHTML="<div style='font-size:9pt;width:100%;text-align:center;text-overflow:ellipsis;white-space:nowrap;overflow:hidden' typeName='node_child'></div>";
+    oShape=window.document.createElement(sShapeHTML);
+	oTextBox=window.document.createElement(textBoxHTML);
+	oTextBox.innerHTML=sInitName;
+	oImage=window.document.createElement(imageHTML);
+    oShape.appendChild(oImage);
+	oShape.appendChild(oTextBox);
+	oShape.id='n'+sId;
+	appendChild(oShape);
+	oShape.attachEvent("onclick",function(){doGraphClick()});
+	sNodeVML=oShape.outerHTML.replace("<?xml:namespace prefix = v />","");
+	createXMLNode(oShape.id,sNeId,sNodeVML,sTopoTemplateId,sSubjectId); 
+}
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    drawRect
+//  说明:    根据鼠标位置画矩形
+//  参数:    
+//  返回:    
+//-----------------------------------------------------------------------------------------------
+
+function drawRect(sId,iX,iY)
+{
+	var iWidth = Math.abs(event.clientX-iOffsetX);
+	var iHeight = Math.abs(event.clientY-iOffsetY);
+    var sShapeHTML,shadowHTML,textBoxHTML,strokeHTML,sNodeVML,imageHTML;
+	var oShape,oShadow,oTextBox,oStroke,oImage;
+	var y=window.document.body.scrollTop+iY;
+    var x=window.document.body.scrollLeft+iX;
+    sShapeHTML="<v:textBox baseBorder='border:1pt solid black;' style='position:absolute;border:1pt solid black;text-align:center;z-index:"
+            +     NODE_ZINDEX+";width:"+iWidth+";height:"+iHeight+";left:"+x
+	        +     ";top:"+y+";' typeName='node'>"
+            +"</v:textBox>";
+	textBoxHTML="<div style='font-size:9pt;width:100%;text-align:center;text-overflow:ellipsis;white-space:nowrap;overflow:hidden' typeName='node_child'></div>";
+    oShape=window.document.createElement(sShapeHTML);    
+	oTextBox=window.document.createElement(textBoxHTML);
+	oShape.appendChild(oTextBox);
+	oShape.id='n'+sId;
+	appendChild(oShape);
+	oShape.attachEvent("onclick",function(){doGraphClick()});
+	sNodeVML=oShape.outerHTML.replace("<?xml:namespace prefix = v />","");
+	createXMLNode(oShape.id,"",sNodeVML,"","");
+}
+
+//-----------------------------------------------------------------------------------------------------------
+//
+//  函数:    drawLine
+//  说明:    根据两点坐标画线
+//  参数:    传入两点的坐标，连接线颜色(默认黑色)
+//  返回:    连接线对象
+//----------------------------------------------------------------------------------------------------------
+
+function drawLine(sId,x1,y1,x2,y2,lineColor)
+{
+	 var vColor = 'black';
+	 if(lineColor) vColor = lineColor;
+     var lineHTML,strokeHTML,oLine,oStroke,sLinkVML;
+	 lineHTML="<v:line style='position:absolute;z-index:"+LINK_ZINDEX+";left:"+x1
+		      +    ";top:"+y1+";' to='"+x2+","+y2+"' strokecolor='"+vColor+"' strokeweight=1 "
+	          +     "typeName='link'>" 
+	          +"</v:line>"
+     strokeHTML="<v:Stroke typeName='link_child' endarrow='classic'/>";
+     oLine=window.document.createElement(lineHTML);
+	 oStroke=window.document.createElement(strokeHTML);
+     oLine.appendChild(oStroke);
+	 oLine.id=sId;
+     appendChild(oLine);
+	 oLine.attachEvent("onclick",function(){doGraphClick()});
+	 sLinkVML=oLine.outerHTML.replace("<?xml:namespace prefix = v />","");
+	 createXMLLink(oLine,sLinkVML);
+     return oLine;
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//  函数:    getNodeSeq
+//  说明:    获得环节的唯一标识ID
+//  参数:    
+//  返回:    
+//-------------------------------------------------------------------------------------------------------
+
+function getNodeSeq(seqName)
+{
+	 var sId=0;
+	 var iErrCode;
+	 var oXMLDoc=new ActiveXObject("Microsoft.XMLDOM");
+	 var oXMLHTTP=new ActiveXObject("Microsoft.XMLHTTP");
+	 try
+	 {
+	     oXMLHTTP.open("POST",gNodeSeqURL+"&seqName="+seqName,false);
+	     oXMLHTTP.send();
+		 oXMLDoc.load(oXMLHTTP.responseXML);
+		 iErrCode=oXMLDoc.selectSingleNode("//error_code").text;
+		 if(iErrCode==0)
+		 {
+			 sId=oXMLDoc.selectSingleNode("//nodeSeq").text;
+		 }
+		 else{}
+	 }
+	 catch(e)
+	 {
+	     EMsg("读取XML出错！");
+	 }
+	 return sId;
+	 
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//  函数:    connectionNode
+//  说明:    连接两个环节
+//  参数:    传入前趋环节和后继环节对象、连接线颜色
+//  返回:    
+//-------------------------------------------------------------------------------------------------------
+
+function connectionNode(oNodePre,oNodeNext,lineColor)
+{
+     var x1,y1,x2,y2;
+	 var oLine,sLineId;
+  /*	x1=oNodePre.style.pixelLeft+oNodePre.style.pixelWidth;
+	 y1=oNodePre.style.pixelTop+oNodePre.style.pixelHeight/2;
+	 x2=oNodeNext.style.pixelLeft;
+	 y2=oNodeNext.style.pixelTop+oNodeNext.style.pixelHeight/2;*/
+     var aArray=getLinkPos(oNodePre,oNodeNext);
+     x1=aArray[0];
+	 y1=aArray[1];
+	 x2=aArray[2];
+	 y2=aArray[3];
+
+	 sLineId=oNodePre.id+"_"+oNodeNext.id;
+	 sLineIdNext=oNodeNext.id+"_"+oNodePre.id;
+	 oLine=element.all.item(sLineId);
+	 oLineNext=element.all.item(sLineIdNext);
+	 if(null==oLine && null==oLineNext)             //如果没有连接线则创建一条连接线
+	 {
+         oLine=drawLine(sLineId,x1,y1,x2-x1,y2-y1,lineColor); //画连接线
+	 }
+	 else                                           //如果已经有连接线，则改变坐标（保证只有一条连接线）
+	 {
+	 	 oLine.style.left=x1;
+		 oLine.style.top=y1;
+         oLine.to=(x2-x1)+","+(y2-y1); 
+		 replaceLinkVmlDoc(oLine);
+	 }
+	 return oLine;
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//  函数:    getLinkPos
+//  说明:    获得连接两个图形的两个连接点的四个坐标
+//  参数:    传入前趋环节和后继环节对象
+//  返回:    一个数组（分别是前趋环节的连接点的两个坐标，和后继环节的两个坐标）
+//------------------------------------------------------------------------------------------
+
+function  getLinkPos(oNodePre,oNodeNext)
+{
+	 var sPreTagName,sNextTagName;
+	 var x1,x2,y1,y2;
+	 var iWidth,iHeight;
+     var iArc,iPreXOff,iPreYOff,iNextXOff,iNextYOff;
+	 var iX1,iY1,iW1,iH1;
+	 var iX2,iY2,iW2,iH2;
+	 var iCoordX1,iCoordY1,iCoordX2,iCoordY2;
+	 var aOvalPreLink,aOvalNextLink;
+     if(!oNodePre || !oNodeNext) return;
+	 var sPreTagName=oNodePre.tagName;
+	 var sNextTagName=oNodeNext.tagName;
+	 var aArray=new Array(4);
+
+	 iX1=oNodePre.style.pixelLeft;
+	 iY1=oNodePre.style.pixelTop;
+	 iW1=oNodePre.style.pixelWidth;
+	 iH1=oNodePre.style.pixelHeight;
+
+     iX2=oNodeNext.style.pixelLeft;  
+	 iY2=oNodeNext.style.pixelTop;   
+	 iW2=oNodeNext.style.pixelWidth; 
+	 iH2=oNodeNext.style.pixelHeight;
+
+     x1=iX1+iW1/2;
+	 y1=iY1+iH1/2;
+	 x2=iX2+iW2/2;
+	 y2=iY2+iH2/2;
+
+	 iWidth=x2-x1;
+	 iHeight=y2-y1;
+	 if(iHeight==0) 
+	 {
+	     aArray[0]=(x2-x1>0)?(iX1+iW1):iX1;
+		 aArray[1]=iY1+iH1/2;
+		 aArray[2]=(x2-x1>0)?iX2:(iX2+iW2);
+		 aArray[3]=iY2+iH2/2;
+ 	 }
+	 else
+	 {
+		 iArc=Math.atan2(iHeight,iWidth);
+	     iCoordX1=Math.abs(iH1/(Math.tan(iArc)*2));
+		 if(iCoordX1>iW1/2) iCoordX1=iW1/2;
+		 iCoordY1=Math.abs(Math.tan(iArc)*iW1/2);
+		 if(iCoordY1>iH1/2) iCoordY1=iH1/2;
+		 aArray[0]=(iArc<Math.PI/2 && iArc>-Math.PI/2)?(iX1+iW1/2+iCoordX1):(iX1+iW1/2-iCoordX1);
+         aArray[1]=(iArc>0 && iArc<Math.PI)?(iY1+iH1/2+iCoordY1):(iY1+iH1/2-iCoordY1);
+	     iCoordX2=Math.abs(iH2/(Math.tan(iArc)*2));
+		 if(iCoordX2>iW2/2) iCoordX2=iW2/2;
+		 iCoordY2=Math.abs(Math.tan(iArc)*iW2/2);
+		 if(iCoordY2>iH2/2) iCoordY2=iH2/2;
+		 aArray[2]=(iArc<Math.PI/2 && iArc>-Math.PI/2)?(iX2+iW2/2-iCoordX2):(iX2+iW2/2+iCoordX2);
+         aArray[3]=(iArc>0 && iArc<Math.PI)?(iY2+iH2/2-iCoordY2):(iY2+iH2/2+iCoordY2);
+      }
+	 return aArray;
+
+}
+
+function fireAfterClickEvent(oSelectedObj)
+{
+	var oEvent = createEventObject();
+	var oSrcElm=getActiveGraph(event.srcElement);
+	oEvent.selectedObjXml  = getGraphXMLDoc(oSelectedObj);
+	oEvent.srcGraph=oSrcElm;
+	oAfterClick.fire(oEvent);
+}
+
+
+// **********************************************************************
+//                      事件处理函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//  函数:    doClick
+//  说明:    当鼠标单击的时候触发
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+
+function doClick()
+{
+	 removeGraphSelection(gSelectedGraph);
+	 gSelectedGraph=null;
+}
+//--------------------------------------------------------------------------------------
+
+//  函数:    initoHiddenLine
+//  说明:    初始化隐藏线
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------
+
+function initoHiddenLine()
+{
+    var oHiddenLine=eval("window.oHiddenLine"+uniqueID);
+	gStartX=window.document.body.scrollLeft+event.clientX;           //记住开始位置
+	gStartY=window.document.body.scrollTop+event.clientY;
+	oHiddenLine.style.left=gStartX;
+	oHiddenLine.style.top=gStartY;
+	oHiddenLine.style.zIndex=HIDDEN_LINE_ZINDEX;
+}
+
+function hiddenLine()
+{
+	oHiddenLine=eval("window.oHiddenLine"+uniqueID);
+	oHiddenLine.style.display="none";
+}
+
+//--------------------------------------------------------------------------------------
+
+//  函数:    initoHiddenRect
+//  说明:    初始化隐藏矩形
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------
+
+function initoHiddenRect()
+{
+    var oHiddenRect = eval("window.oHiddenRect" + uniqueID);
+	oHiddenRect.style.left = iOffsetX;
+	oHiddenRect.style.top = iOffsetY;
+	oHiddenRect.style.zIndex = HIDDEN_RECT_ZINDEX;
+}
+
+
+function hiddenRect()
+{
+	oHiddenRect = eval("window.oHiddenRect" + uniqueID);
+	oHiddenRect.style.display = "none";
+}
+//--------------------------------------------------------------------------------------
+
+//  函数:    doMouseDown
+//  说明:    当鼠标按下的时候触发，和doMouseMove，doMouseUp联合起来做画线,移动功能
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------
+function doMouseDown()
+{
+    element.setCapture();                                              //捕获鼠标事件
+    var oNode=getActiveGraph(event.srcElement);                        //获得当前对象
+    if(element.action==DRAW_LINE && event.button==1 && !bResize)
+    {
+         initoHiddenLine();
+    }
+    else
+    {		
+		if(oNode==null) return;
+	    var sTypeName=oNode.typeName;
+		if(sTypeName=="node" && element.action==DRAW_LINK && event.button==1 && !bResize)   //画连接线
+		{				
+				gFromNode=getActiveGraph(event.srcElement);                //记住开始的图形
+                initoHiddenLine();
+		}
+		if(element.action==NODE_MOVE && event.button==1 && !bResize)   //移动图形
+		{
+		    if(sTypeName=="node" ||isLine(oNode))
+		    {
+	            oNode.click();
+	            iOffsetX = event.clientX-oNode.style.pixelLeft;
+				iOffsetY = event.clientY-oNode.style.pixelTop;
+	            var oMoveGroup=copyGraphToGroup(gSelectedGraph);
+	        }
+		}
+		if(element.action==DRAW_RECT && event.button==1 && !bResize)  //画矩形
+		{
+			iOffsetX = event.clientX;
+			iOffsetY = event.clientY;
+			initoHiddenRect();
+		}
+	}
+	fireAfterClickEvent(oNode);
+}
+
+
+//--------------------------------------------------------------------------------------
+
+//  函数:    doMouseMove
+//  说明:    当鼠标移动时候触发，和doMouseDown，doMouseUp联合起来做画线,移动功能
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------
+
+function doMouseMove()
+{
+	var x=window.document.body.scrollLeft+event.clientX;    
+    var y=window.document.body.scrollTop+event.clientY;
+	var iRuntimeX,iRuntimeY
+	if((element.action==DRAW_LINK || element.action==DRAW_LINE) && event.button==1 && !bResize) //按左键时才触发
+	{
+		var oHiddenLine=eval("window.oHiddenLine"+uniqueID);
+	    oHiddenLine.to=(x-gStartX)+","+(y-gStartY);
+		oHiddenLine.style.display="";
+	}
+	if(element.action==NODE_MOVE && event.button==1 && !bResize)
+	{
+		 var oMoveGroup;
+		 if(null!=gSelectedGraph)
+		    oMoveGroup=element.all.item("m_"+gSelectedGraph.uniqueID);
+		 if(oMoveGroup!=null)
+		 {
+			 iRuntimeX=(event.clientX-iOffsetX)<=0?0:event.clientX-iOffsetX;
+			 iRuntimeY=(event.clientY-iOffsetY)<=0?0:event.clientY-iOffsetY;
+			 oMoveGroup.style.top = iRuntimeY;
+			 oMoveGroup.style.left = iRuntimeX;
+		 }
+	}
+	if(element.action==DRAW_RECT && event.button==1 && !bResize)
+	{
+		var oHiddenRect = eval("window.oHiddenRect" + uniqueID);
+		var iWidth = Math.abs(iOffsetX - event.clientX);
+		var iHeight = Math.abs(iOffsetY - event.clientY);
+	    oHiddenRect.style.width = iWidth;
+	    oHiddenRect.style.height = iHeight;
+		oHiddenRect.style.display = "";
+	}
+}
+
+//-------------------------------------------------------------------------------------
+
+//  函数:    doMouseUp
+//  说明:    当鼠标松开的时候触发，和doMouseOver，doMouseMove联合起来做画线,移动功能
+//  参数:    
+//  返回:    
+//-------------------------------------------------------------------------------------
+
+function doMouseUp()
+{
+	var x=window.document.body.scrollLeft+event.clientX;    
+    var y=window.document.body.scrollTop+event.clientY;
+	var oToNode,oHiddenLine;
+	element.releaseCapture();                                           //释放鼠标
+    if((element.action==DRAW_LINK || element.action==DRAW_LINE) && event.button==1 && !bResize)
+	{
+		hiddenLine();
+		if(element.action==DRAW_LINK)
+		{
+           oToNode=getActiveGraph(window.document.elementFromPoint(event.clientX,event.clientY));        
+		   if(oToNode==null || oToNode.typeName!="node" ||gFromNode==null ||gFromNode.typeName!="node") return; 
+	       if(gFromNode==oToNode) return;                                   //在环节内部不能画线（暂时不支持自循环）
+		   connectionNode(gFromNode,oToNode);		                        //连接两个环节
+		}
+		else
+		{
+		    var lineSeq=getNodeSeq("TOPO_NODE_JOIN_ID_SEQ");
+		    var iLineLen=Math.sqrt((Math.pow(x-gStartX,2)+Math.pow(y-gStartY,2)))
+		    if(iLineLen<6)
+		    {
+		       return;
+		    }
+		    drawLine("L"+lineSeq,gStartX,gStartY,x-gStartX,y-gStartY);
+		}                              
+	}
+	if(element.action==NODE_MOVE && event.button==1 && !bResize)
+	{
+		var oMoveGraph;
+		if(null!=gSelectedGraph)
+		    oMoveGraph=element.all.item('m_'+gSelectedGraph.uniqueID);   //获得移动的图形对象
+		if(null!=gSelectedGraph && null!=oMoveGraph) 
+		{
+			gSelectedGraph.style.top=oMoveGraph.style.top;
+			gSelectedGraph.style.left=oMoveGraph.style.left;            
+			gSelectedGraph.click();                                     //选中移动后的目标图形
+			if(gSelectedGraph.typeName=="node")
+			{
+			   plusMoveWithNode(gSelectedGraph);
+			   linkMoveWithNode(gSelectedGraph);                         //连接线跟随环节移动
+			   replaceNodeVmlDoc(gSelectedGraph);                        //改变xml文档流里vml结构
+			}
+			else
+			{
+			   replaceLinkVmlDoc(gSelectedGraph);
+			}              
+		}
+	}
+	if(element.action==DRAW_RECT && event.button==1 && !bResize)
+	{
+		hiddenRect();
+		if(Math.abs(iOffsetX - event.clientX) < 8 || Math.abs(iOffsetY - event.clientY) < 8)
+	    {
+	       return;
+	    }
+	    var sId = getNodeSeq("TOPO_NODE_ID_SEQ");
+	    if(sId == 0)
+	    {
+	        return;
+	    }
+		drawRect(sId,iOffsetX,iOffsetY);
+		element.action=NODE_MOVE;
+	}
+	element.setActive();                                                //激活画板
+}
+
+function plusMoveWithNode(oGraph)
+{
+	var oPlus=window.document.getElementById("img_Node_"+oGraph.id);
+	if(oPlus!=null)
+	{
+	    var iTop=oGraph.getBoundingClientRect().top+oGraph.style.pixelHeight;
+	    var iLeft=oGraph.getBoundingClientRect().left+oGraph.style.pixelWidth/2-4;
+	    oPlus.style.top=iTop;
+	    oPlus.style.left=iLeft;
+	}
+}
+//-------------------------------------------------------------------------------------
+
+//  函数:    doKeyDown
+//  说明:    当按下键盘的时候触发
+//  参数:    
+//  返回:    
+//-------------------------------------------------------------------------------------
+
+function doKeyDown()
+{
+    if(gReadOnly) return;
+	var iKeyCode=event.keyCode;
+	switch (iKeyCode)
+	{
+	    case DEL_KEY_CODE:                          //按下delete键时删除所选对象和选择容器对象
+             removeSelectedGraph();
+			 break;
+	    case CTRL_KEY_CODE && S_KEY_CODE:
+	         doSave();
+	         break;
+	}
+}
+
+//-------------------------------------------------------------------------------------
+
+//  函数:    doRightClick
+//  说明:    当鼠标右击时触发
+//  参数:    
+//  返回:    
+//------------------------------------------------------------------------------------------------------------
+
+function doRightClick()
+{
+      event.returnValue=false;
+      var oSrcElm=getActiveGraph(event.srcElement);
+      var typeName=oSrcElm.typeName;
+      var oRightMenu,sNodeType,oNode;
+      if(typeof(typeName)!="undefined")
+      {
+      	 oSrcElm.isRightClick = true;
+         oSrcElm.click();
+		 if(typeName=="node")
+		 {
+			if(gNodeMenuId!=null && gNodeMenuId!="")
+			{
+				var nodeMenu=window.document.getElementById(gNodeMenuId);
+				doOnNodeRightClick("rightMenu",nodeMenu);
+				//disableRightItem(nodeMenu);
+			}
+		 }
+		 if(typeName=="link")
+		 {
+			var lineMenu=window.document.getElementById(gLineMenuId);
+			if(lineMenu!=null)
+			{
+				lineMenu.show();
+			}
+		 }
+      }
+      else
+      {
+		doOnTopoRightClick("rightMenu","topoChartMain");
+      }
+}
+
+function doOnNodeRightClick(sName,sValue)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute(sName,sValue);
+	oNodeRightClick.fire(oEvent);
+}
+
+function doOnTopoRightClick(sName,sValue)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute(sName,sValue);
+	oTopoRightClick.fire(oEvent);
+}
+
+//------------------------------------------------------------------------------------------------------------
+
+//  函数:    doSelectStart
+//  说明:    当用户选择时触发
+//  参数:    
+//  返回:    
+//-----------------------------------------------------------------------------------------------------------
+
+function doSelectStart()
+{
+    return false;
+}
+//------------------------------------------------------------------------------------------------------------
+
+//  函数:    doDblclick
+//  说明:    当用户双击时发生
+//  参数:    
+//  返回:    
+//-----------------------------------------------------------------------------------------------------------
+
+function doDblclick()
+{
+    var oSrcElm=getActiveGraph(event.srcElement);
+    doOnDblClick("srcGraph",oSrcElm);
+}
+//创建双击事件
+function doOnDblClick(sName,sValue)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute(sName,sValue);
+	oDbClick.fire(oEvent);
+}
+//------------------------------------------------------------------------------------------------------------
+
+//  函数:    doMouseover
+//  说明:    当鼠标移到图形节点上时触发
+//  参数:    
+//  返回:    
+//-----------------------------------------------------------------------------------------------------------
+
+function doMouseover()
+{
+    var oSrcElm=getActiveGraph(event.srcElement);
+    doOnMouseover("srcGraph",oSrcElm);
+}
+//创建事件
+function doOnMouseover(sName,sValue)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute(sName,sValue);
+	oGraphOver.fire(oEvent);
+}
+
+//--------------------------------------------------------------------------------------------
+
+//  函数:    doGraphClick
+//  说明:    当鼠标单击环节的时候触发
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------------
+
+function doGraphClick()
+{
+	event.cancelBubble=true;
+	var oSrcElm=getActiveGraph(event.srcElement);
+    if(null!=gSelectedGraph)
+	{
+         removeGraphSelection(gSelectedGraph);
+	}
+ 	gSelectedGraph=oSrcElm;
+	createSelection(oSrcElm);
+}
+
+//--------------------------------------------------------------------------------------------
+
+//  函数:    selectNode
+//  说明:    选中某图形
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------------
+
+
+function selectNode(oGraph)
+{
+   if(null!=gSelectedGraph)
+   {
+       removeGraphSelection(gSelectedGraph);
+   }
+   gSelectedGraph=oGraph;
+   createSelection(oGraph);
+}
+
+//--------------------------------------------------------------------------------------------
+
+//  函数:    createSelection
+//  说明:    为某个图形产生选择框。
+//  参数:    
+//  返回:    
+//--------------------------------------------------------------------------------------------
+
+
+function createSelection(oGraph)
+{
+    if(typeof(oGraph.typeName)!="undefined")
+	{
+	    if(oGraph.typeName=="node")
+           createNodeSelection(oGraph);
+		if(oGraph.typeName=="link")
+		   createLineSelection(oGraph);
+	}    
+}
+
+//---------------------------------------------------------------------------------------------------------
+//
+//  函数:    getActiveGraph
+//  说明:    获得当前event对应的图形
+//  参数:    当前事件对应的对象(event.srcElement)
+//  返回:    
+//---------------------------------------------------------------------------------------------------------
+
+function getActiveGraph(oElem)
+{    
+    if(oElem!=null && typeof(oElem.typeName)!="undefined")
+    {
+		if (oElem.typeName.toLowerCase()== "node_child" 
+			   || oElem.typeName.toLowerCase()=="link_child") 
+				return oElem.parentElement;
+    }
+	return oElem;
+}
+
+
+//---------------------------------------------------------------------------------------------------------
+//
+//  函数:    createNodeSelection
+//  说明:    创建选择框(对象Id为"s_"+选中的图形的uniqueID)
+//  参数:    当前被选中的环节图形
+//  返回:    
+//
+//--------------------------------------------------------------------------------------------------------
+
+function createNodeSelection(oGraph)
+{
+    var rectHTML,oRect,oGroup;
+    var left=oGraph.style.pixelLeft;
+	var top=oGraph.style.pixelTop;
+	var width=oGraph.style.pixelWidth;
+	var height=oGraph.style.pixelHeight; 
+	var id='s_'+oGraph.uniqueID;
+    oGroup=createNodeGroup(oGraph,id);//定义一个容器
+	for(var i=0;i<8;i++)                                                             //画出八个矩形
+	{
+	     rectHTML="<v:rect style='LEFT:"+eval(aSelectRect[1][i])+";TOP:"+eval(aSelectRect[2][i])
+	               +  ";OVERFLOW:hidden;WIDTH:6px;POSITION:absolute;HEIGHT: 6px;"
+			       +  "cursor:"+aSelectRect[0][i]+";' UNSELECTABLE='on' title='调整大小'"
+				   +   " fillcolor='#00ff00' strokecolor='black' strokeweight='1px'>"
+	               +"</v:rect>";
+		 oSelect=window.document.createElement(rectHTML);
+		 oSelect.onclick=function(){window.event.cancelBubble=true;};
+		 oSelect.onmousedown=function(){doResizeObjDown(this);};
+         oSelect.onmousemove=new Function(aSelectRect[3][i]);
+		 oSelect.onmouseup=function(){doResizeObjUp();};
+		 oGroup.appendChild(oSelect);
+	}
+}
+
+//---------------------------------------------------------------------------------------------------------
+//
+//  函数:    createLineSelection
+//  说明:    创建选择框(对象Id为"s_"+选中的图形的Id)
+//  参数:    当前被选中的连接线图形
+//  返回:    
+//
+//--------------------------------------------------------------------------------------------------------
+
+function createLineSelection(oLine)
+{
+	 var id="s_"+oLine.uniqueID;
+	 var oPos=getLinePos(oLine);	 
+	 var beginLeft=oPos.beginLeft;
+	 var beginTop=oPos.beginTop;
+	 var endLeft=oPos.endLeft;
+	 var endTop=oPos.endTop;
+	 var zIndex=SELECT_ZINDEX;
+     var oGroup=createLineGroup(oLine,id);
+     for (var i=0;i<3;i++)                            
+ 	 {
+		rectHTML="<v:rect style='LEFT:"+eval(aSelectLine[0][i])+";TOP:"
+		         + eval(aSelectLine[1][i])+";WIDTH:6px;HEIGHT:6px;position:absolute;'"
+		         + " fillcolor='#00ff00' strokecolor='black' strokeweight='1px'/>"
+		oRect=window.document.createElement(rectHTML);
+		oRect.onclick=function(){window.event.cancelBubble=true;};
+		if(isLine(oLine))
+		{
+			oRect.onmousedown=function(){doResizeLineDown(this);};
+			if(aSelectLine[2][i]!="")
+			{
+	           oRect.onmousemove=new Function(aSelectLine[2][i]);
+	        }
+			oRect.onmouseup=function(){doResizeLineUp();};
+		}
+	    oGroup.appendChild(oRect);
+	 }
+}
+
+
+//-------------------------------------------------------------------------------------------
+//
+//  函数:    doResizeObjDown
+//  说明:    调整环节大小时鼠标按下的动作
+//  参数:    传入正在拖动的小矩形
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doResizeLineDown(oRect)
+{
+	var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID); //获得被选中的图形
+	window.event.cancelBubble = true;
+	bResize=true;                                               //标记正在调整大小
+    oRect.setCapture();                                         //捕获鼠标
+	aResizeLinePos=getLinePos(gSelectedGraph);                  //记住被选中线的位置
+	oCopyline=copyLine(gSelectedGraph);
+}
+
+
+function doResizeLineUp()
+{
+	document.releaseCapture();
+	window.event.cancelBubble = true;
+	bResize=false;
+    var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	gSelectedGraph.style.left=oCopyline.style.left;
+	gSelectedGraph.style.top=oCopyline.style.top;
+	var aCopyLinePos=getLinePos(oCopyline);
+	gSelectedGraph.to=(aCopyLinePos.endLeft*12/9-aCopyLinePos.beginLeft)+","
+	                  +(aCopyLinePos.endTop*12/9-aCopyLinePos.beginTop);
+	gSelectedGraph.click();
+	replaceLinkVmlDoc(gSelectedGraph);
+}
+
+function doResizeLine(isBegin)
+{
+    window.event.cancelBubble = true;
+	var iWidth,iHeight,sTo;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+	if(isBegin)
+	{
+	   oCopyline.style.left=x;
+	   oCopyline.style.top=y;
+	   sTo=(aResizeLinePos.endLeft*12/9-x)+","+(aResizeLinePos.endTop*12/9-y);
+	}
+	else
+	{
+	   sTo=(x-aResizeLinePos.beginLeft)+","+(y-aResizeLinePos.beginTop);
+	}
+    oCopyline.to=sTo;
+	
+}
+//----------------------------------------------------------------------------------
+//
+//  函数:    removeGraphSelection
+//  说明:    销毁选择框
+//  参数:    当前选择的图形
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function removeGraphSelection(oGraph)
+{
+	if(oGraph!=null)
+	{
+		var oSelect=element.all.item('s_'+oGraph.uniqueID);
+		var oMove=element.all.item('m_'+oGraph.uniqueID);
+		var oCopy=element.all.item('c_'+oGraph.uniqueID);
+	    if(null!=oSelect)
+	       removeChild(oSelect);
+	    if(null!=oMove)
+           removeChild(oMove);
+        if(null!=oCopy)
+           removeChild(oCopy);
+	}
+}
+
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doOnRemoveLine
+//  说明:    销毁连接线
+//  参数:    连接线图形对象
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doOnRemoveLine(oGraph)
+{ 
+	  if(null!=oGraph) 
+	  {
+		   removeGraphSelection(oGraph);                //同时删除图形选择框容器
+		   gSelectedGraph=null;
+		   removeLinkXml(oGraph);                       //删除对应的xml节点
+		   removeChild(oGraph);                         //删除图形
+	  }
+
+}
+
+//------------------------------------------------------------------------------------------
+//
+//  函数:    doOnRemoveNode
+//  说明:    销毁环节
+//  参数:    环节图形对象
+//  返回:    
+//
+//-----------------------------------------------------------------------------------------
+
+function doOnRemoveNode(oGraph)
+{ 
+	  if(null==oGraph)  return;
+	  var sPath,iLength,oLinksDoc,linkId,oLine;
+      var sNodeId=oGraph.id;
+	  sPath="/root/links/link[@PREV_NODE_ID='"+sNodeId+"' or @NEXT_NODE_ID='"+sNodeId+"']";
+	  if(gXMLDoc!=null)                         
+	  {
+          oLinksDoc=gXMLDoc.selectNodes(sPath);                 //从xml文档结构中找后继和前趋连接线
+		  iLength=oLinksDoc.length;
+		  for(var i=0;i<iLength;i++)
+		  {
+               linkId=oLinksDoc[i].getAttribute("LINK_ID");
+			   oLine=element.all.item(linkId);
+			   doOnRemoveLine(oLine);                           //删除后继和前趋连接线
+		  }
+	  }
+      removeGraphSelection(oGraph);                             //同时删除图形选择框容器
+	  gSelectedGraph=null;
+	  removeNodeXml(oGraph);                                    //删除对应的xml节点
+	  removeChild(oGraph);                                      //删除图形
+}
+
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    createNodeGroup
+//  说明:    创建一个环节图形容器
+//  参数:    id       容器的ID值
+//          left     容器的左边矩
+//          top      容器的上边矩
+//          width    容器宽度
+//          height   容器高度
+//          zIndex   容器3D高度
+//  返回:    图形容器对象
+//
+//-----------------------------------------------------------------------------------
+
+function createNodeGroup(oGraph,id)
+{
+    var oExitGroup=element.all.item(id);
+    if(oExitGroup!=null) return oExitGroup;
+    var left=oGraph.style.pixelLeft;
+	var top=oGraph.style.pixelTop;
+	var width=oGraph.style.pixelWidth;
+	var height=oGraph.style.pixelHeight;
+    var groupHTML,lineHTML,strokeHTML,oGroup,oLine,oStroke;
+	var sFrom,sTo;
+	var groupHTML="<v:group id='"+id+"' style='position:absolute;left:"+left
+	              +  ";top:"+top+";z-index:"+SELECT_ZINDEX+";width:100;height:100'"
+	              +  " coordsize='100,100'/>";
+    oGroup=window.document.createElement(groupHTML); //定义一个容器
+	for (var j=0;j<4;j++)                            //画出四条线
+	{
+        sFrom=aSelectNodeLine[0][j].replace("width",width);
+		sFrom=sFrom.replace("height",height);
+		sTo=aSelectNodeLine[1][j].replace("width",width);
+		sTo=sTo.replace("height",height);
+		lineHTML="<v:line style='position:absolute;left:0;top:0;z-index:15'"
+		         + " from='"+sFrom+"' to='"+sTo+"' strokecolor='#00ff00'"
+				 + " strokeweight=1/>";
+		strokeHTML="<v:Stroke dashstyle='Dash'/>";
+		oLine=window.document.createElement(lineHTML);
+        oStroke=window.document.createElement(strokeHTML);
+		oLine.appendChild(oStroke);
+	    oGroup.appendChild(oLine);
+	}
+	appendChild(oGroup);
+	return oGroup;
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    createLineGroup
+//  说明:    创建一个连接线图形容器
+//  参数:    id             容器的ID值
+//           beginLeft     容器的上左边矩
+//           beginTop      容器的上边矩
+//           endLeft       容器的下左边矩
+//           endTop        容器的下边矩
+//           zIndex        容器3D高度
+//  返回:    图形容器对象
+//
+//-----------------------------------------------------------------------------------
+
+function createLineGroup(oLine,id)
+{
+	 var beginLeft=parseInt(oLine.style.left);
+	 var beginTop=parseInt(oLine.style.top);
+	 var zIndex=SELECT_ZINDEX;
+     var rectHTML,oRect,groupHTML,oGroup;
+	 var groupHTML="<v:group id='"+id+"' style='position:absolute;left:"+beginLeft
+	              +  ";top:"+beginTop+";z-index:"+zIndex+";width:100;height:100'"
+	              +  " coordsize='100,100'/>";
+     oGroup=window.document.createElement(groupHTML); //定义一个容器
+	 appendChild(oGroup);
+	 return oGroup;
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    copyGraphToGroup
+//  说明:    拷贝一个环节图形到容器,移动时用(容器对象Id为"m_"+选中的图形的uniqueID)
+//  参数:    要拷贝的图形对象
+//  返回:    图形容器
+//
+//-----------------------------------------------------------------------------------
+
+function copyGraphToGroup(oSource)
+{
+	var oCopyHTML=oSource.outerHTML;
+	var oGroup;
+	if(isLine(oSource))
+	{
+	    var oCloneLine=copyLine(oSource);
+	    oGroup=oCloneLine;
+	}
+	else
+	{
+	    oGroup=createNodeGroup(oSource,'m_'+oSource.uniqueID);
+	}
+	if(!isLine(oSource))
+	{
+	    oGroup.insertAdjacentHTML("afterBegin",oCopyHTML);	
+	    oGroup.childNodes[0].style.top=0;
+	    oGroup.childNodes[0].style.left=0;
+	}	
+	return oGroup;
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    copyLine
+//  说明:    拷贝一条线
+//  参数:    要拷贝的线对象
+//  返回:    图形拷贝的线
+//
+//-----------------------------------------------------------------------------------
+
+function copyLine(oLine)
+{
+     var id="s_"+oLine.uniqueID;
+     var oPos=getLinePos(oLine);	 
+	 var beginLeft=oPos.beginLeft;
+	 var beginTop=oPos.beginTop;
+	 var endLeft=oPos.endLeft;
+	 var endTop=oPos.endTop;
+     var id="m_"+oLine.uniqueID;
+     var lineHTML="<v:line id="+id+" style='position:absolute;display:none' from='0,0'>"
+               +   "<v:Stroke dashstyle='shortdot' endarrow='classic'/>"
+               +"</v:line>";
+     insertAdjacentHTML("beforeEnd",lineHTML);
+     var oCopyLine=element.all.item(id);
+     var oStroke=oLine.getElementsByTagName("stroke")[0];
+     var oCopyStroke=oCopyLine.getElementsByTagName("stroke")[0];
+	 oCopyStroke.startarrow=oStroke.startarrow;
+	 oCopyStroke.dashstyle=oStroke.dashstyle;
+	 oCopyStroke.endarrow=oStroke.endarrow;
+	 oCopyStroke.weight=oStroke.weight;
+	 oCopyStroke.startarrowwidth=oStroke.startarrowwidth;
+	 oCopyStroke.startarrowlength=oStroke.startarrowlength;
+	 oCopyStroke.endarrowwidth=oStroke.endarrowwidth;
+	 oCopyStroke.endarrowlength=oStroke.endarrowlength;
+	 oCopyStroke.color=oStroke.color;
+	 oCopyLine.style.left=oLine.style.left;
+	 oCopyLine.style.top=oLine.style.top;
+	 var sCopyTo=(endLeft*12/9-beginLeft)+","+(endTop*12/9-beginTop);
+	 oCopyLine.to=sCopyTo;
+	 oCopyLine.style.display="";
+	 return oCopyLine;
+}
+
+function getLinePos(oLine)
+{
+     var oPos={beginLeft:"",beginTop:"",endLeft:"",endTop:""};
+     var sTo=oLine.to+"";
+	 var aTo=sTo.split(",");
+	 var id="s_"+oLine.uniqueID;
+	 oPos.beginLeft=parseInt(oLine.style.left);
+	 oPos.beginTop=parseInt(oLine.style.top);
+	 var endLeft=parseFloat(aTo[0]);
+	 var endTop=parseFloat(aTo[1]);
+     if(aTo[0].indexOf("in")!=-1) endLeft=72*endLeft;//转化in为pt
+     if(aTo[1].indexOf("in")!=-1) endTop=72*endTop;
+	 oPos.endLeft=endLeft;
+	 oPos.endTop=endTop;
+	 return oPos
+}
+//----------------------------------------------------------------------------------
+//
+//  函数:    linkMoveWithNode
+//  说明:    连接线跟随环节移动
+//  参数:    传入移动的环节对象
+//  返回:    
+//
+//---------------------------------------------------------------------------------------------
+
+function linkMoveWithNode(oNode)
+{
+	if(null==oNode || oNode.typeName!="node") return;
+	var sPrevPath,sNextPath,oPrevLines,oNextLines,sLinkNodeId,oLinkNode
+    var sNodeId=oNode.id;
+	sPrevPath="/root/links/link[@PREV_NODE_ID='"+sNodeId+"' and @STATE!='"+DEL_STATE+"']";
+	sNextPath="/root/links/link[@NEXT_NODE_ID='"+sNodeId+"' and @STATE!='"+DEL_STATE+"']";
+	if(gXMLDoc!=null)                         
+	{
+          oPrevLines=gXMLDoc.selectNodes(sPrevPath);              //从xml文档结构中找前趋连接线
+		  for(var i=0;i<oPrevLines.length;i++)
+		  {
+			   sLinkNodeId=oPrevLines[i].getAttribute("NEXT_NODE_ID");
+			   oLinkNode=element.all.item(sLinkNodeId);
+			   connectionNode(oNode,oLinkNode);
+		  }
+          oNextLines=gXMLDoc.selectNodes(sNextPath);              //从xml文档结构中找后继连接线
+		  for(var i=0;i<oNextLines.length;i++)
+		  {
+			   sLinkNodeId=oNextLines[i].getAttribute("PREV_NODE_ID");
+			   oLinkNode=element.all.item(sLinkNodeId);
+			   connectionNode(oLinkNode,oNode);
+		  }
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+//
+//  函数:    doResizeObjDown
+//  说明:    调整环节大小时鼠标按下的动作
+//  参数:    传入正在拖动的小矩形
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doResizeObjDown(oRect)
+{
+	var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID); //获得被选中的图形
+	window.event.cancelBubble = true;
+	bResize=true;                                              //标记正在调整大小
+    oRect.setCapture();                                        //捕获鼠标
+	iResizeNodeLeft=gSelectedGraph.style.pixelLeft;            //记住被选中图形的左边矩
+	iResizeNodeWidth=gSelectedGraph.style.pixelWidth;          //记住被选中图形的宽度
+	iResizeNodeTop=gSelectedGraph.style.pixelTop;              //记住被选中图形的上边矩
+	iResizeNodeHeight=gSelectedGraph.style.pixelHeight;        //记住被选中图形的高度
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doLTRectMove
+//  说明:    调整环节大小时选择框左上位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doLTRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth,iHeight;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+	if(x>iResizeNodeLeft)
+	{
+	    iWidth=iResizeNodeWidth-(x-iResizeNodeLeft);
+	    iWidth=(iWidth>0)?iWidth:0;
+	    if(iWidth==0) return;
+	    gSelectedGraph.style.width=iWidth;
+	}
+	else
+        gSelectedGraph.style.width=iResizeNodeWidth+(iResizeNodeLeft-x);
+    if(y>iResizeNodeTop)
+	{
+	    iHeight=iResizeNodeHeight-(y-iResizeNodeTop);
+		iHeight=(iHeight>0)?iHeight:0;
+		if(iHeight==0) return;
+		gSelectedGraph.style.height=iHeight;
+	}
+	else
+	{
+		gSelectedGraph.style.height=iResizeNodeHeight+(iResizeNodeTop-y);
+	}
+	gSelectedGraph.style.left=x;
+	gSelectedGraph.style.top=y;
+	oSelection.style.left=x;
+	oSelection.style.top=y;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doLMRectMove
+//  说明:    调整环节大小时选择框左中位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doLMRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+	if(gSelectedGraph==null || !bResize) return;
+	if(x>iResizeNodeLeft)
+	{
+	    iWidth=iResizeNodeWidth-(x-iResizeNodeLeft);
+	    iWidth=(iWidth>0)?iWidth:0;
+	    if(iWidth==0) return;
+	    gSelectedGraph.style.width=iWidth;
+	}
+	else
+	{
+	    gSelectedGraph.style.width=iResizeNodeWidth+(iResizeNodeLeft-x);
+	}
+	gSelectedGraph.style.left=x;
+	oSelection.style.left=x;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doLBRectMove
+//  说明:    调整环节大小时选择框左下位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doLBRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth,iHeight;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+	if(x>iResizeNodeLeft)
+	{
+	    iWidth=iResizeNodeWidth-(x-iResizeNodeLeft);
+	    iWidth=(iWidth>0)?iWidth:0;
+	    if(iWidth==0) return;
+	    gSelectedGraph.style.width=iWidth;
+	}
+	else
+	{
+        gSelectedGraph.style.width=iResizeNodeWidth+(iResizeNodeLeft-x);
+	}
+	iHeight=y-iResizeNodeTop;
+	iHeight=(iHeight>0)?iHeight:0;
+	if(iHeight==0) return;
+	gSelectedGraph.style.height=iHeight;
+	gSelectedGraph.style.left=x;
+	oSelection.style.left=x;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doMTRectMove
+//  说明:    调整环节大小时选择框中上位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doMTRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth,iHeight;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+    if(y>iResizeNodeTop)
+	{
+	    iHeight=iResizeNodeHeight-(y-iResizeNodeTop);
+		iHeight=(iHeight>0)?iHeight:0;
+		if(iHeight==0) return;
+		gSelectedGraph.style.height=iHeight;
+	}
+	else
+	{
+		gSelectedGraph.style.height=iResizeNodeHeight+(iResizeNodeTop-y);
+	}
+	gSelectedGraph.style.top=y;
+	oSelection.style.top=y;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doMBRectMove
+//  说明:    调整环节大小时选择框中下位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doMBRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth,iHeight;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+	iHeight=y-iResizeNodeTop;
+	iHeight=(iHeight>0)?iHeight:0;
+	if(iHeight==0) return;
+	gSelectedGraph.style.height=iHeight;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doRTRectMove
+//  说明:    调整环节大小时选择框右上位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doRTRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth,iHeight;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+    var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+    if(y>iResizeNodeTop)
+	{
+	    iHeight=iResizeNodeHeight-(y-iResizeNodeTop);
+		iHeight=(iHeight>0)?iHeight:0;
+		if(iHeight==0) return;
+		gSelectedGraph.style.height=iHeight;
+	}
+	else
+	{
+		gSelectedGraph.style.height=iResizeNodeHeight+(iResizeNodeTop-y);
+	}
+	iWidth=x-iResizeNodeLeft
+	iWidth=(iWidth>0)?iWidth:0;
+	if(iWidth==0) return;
+	gSelectedGraph.style.width=iWidth;
+	gSelectedGraph.style.top=y;
+	oSelection.style.top=y;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doRMRectMove
+//  说明:    调整环节大小时选择框右中位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doRMRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+	if(gSelectedGraph==null || !bResize) return;
+    iWidth=x-iResizeNodeLeft;
+	iWidth=(iWidth>0)?iWidth:0;
+	if(iWidth==0) return;
+	gSelectedGraph.style.width=x-iResizeNodeLeft;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doRBRectMove
+//  说明:    调整环节大小时选择框右下位置矩形的移动动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doRBRectMove()
+{
+	window.event.cancelBubble = true;
+	var iWidth;
+    var oSelection=element.all.item("s_"+gSelectedGraph.uniqueID);
+	var x=window.document.body.scrollLeft+event.clientX;
+	var y=window.document.body.scrollTop+event.clientY;
+	if(gSelectedGraph==null || !bResize) return;
+    iWidth=x-iResizeNodeLeft;
+	iWidth=(iWidth>0)?iWidth:0;
+	if(iWidth==0) return;
+    iHeight=y-iResizeNodeTop;
+	iHeight=(iHeight>0)?iHeight:0;
+	if(iHeight==0) return;
+    gSelectedGraph.style.width=iWidth;
+	gSelectedGraph.style.height=iHeight;
+	doSelectionOnResize(oSelection,gSelectedGraph);
+}
+//----------------------------------------------------------------------------------
+//
+//  函数:    doResizeObjUp
+//  说明:    调整环节大小时鼠标松开的动作
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doResizeObjUp()
+{
+	document.releaseCapture();
+	window.event.cancelBubble = true;
+	bResize=false;
+	linkMoveWithNode(gSelectedGraph); 
+	replaceNodeVmlDoc(gSelectedGraph);
+	gSelectedGraph.click();
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    doSelectionOnResize
+//  说明:    调整环节大小选择容器的位置和大小控制
+//  参数:    oSelection     选择框的容器
+//          oSelectNode    被选中的图形
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function doSelectionOnResize(oSelection,oSelectNode)
+{
+	var sFrom,sTo;
+    var left=oSelectNode.style.pixelLeft;
+	var top=oSelectNode.style.pixelTop;
+	var width=oSelectNode.style.pixelWidth;
+	var height=oSelectNode.style.pixelHeight;
+    for (var j=0;j<4;j++)                                       //控制线的位置
+	{
+        sFrom=aSelectNodeLine[0][j].replace("width",width);
+		sFrom=sFrom.replace("height",height);
+		sTo=aSelectNodeLine[1][j].replace("width",width);
+		sTo=sTo.replace("height",height);
+	    oSelection.getElementsByTagName("line")[j].from=sFrom;
+		oSelection.getElementsByTagName("line")[j].to=sTo;
+	}
+    for (var i=0;i<8;i++)                                      //控制小矩形的位置
+	{
+	    oSelection.getElementsByTagName("rect")[i].style.left=eval(aSelectRect[1][i]);
+		oSelection.getElementsByTagName("rect")[i].style.top=eval(aSelectRect[2][i]);
+	}
+}
+
+// **********************************************************************
+//                      画板方法(对外接口)
+// **********************************************************************
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    createNode
+//  说明:    创建网元节点
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function createNode(id,name,x,y,iWidth,sTopoTemplateId,sDefaultImg,sSubjectId)
+{
+	 var sId=getNodeSeq("TOPO_NODE_ID_SEQ");
+	 if(sId==0) return;
+     drawNode("textBox",sId,name,sDefaultImg,id,x,y,iWidth,sTopoTemplateId,sSubjectId);
+}
+
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doSave
+//  说明:    保存图
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doSave(isPromptSucceed)
+{
+	var oXMLDom = new ActiveXObject("Microsoft.XMLDOM");
+    var oXMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+	var sSaveURL=gSaveURL+"&chartId="+gChartId;
+    oXMLHTTP.open("POST",sSaveURL,false);
+    oXMLHTTP.send(gXMLDoc);
+	if(isSuccess(oXMLHTTP))
+	{
+		oXMLDom.load(oXMLHTTP.responseXML);
+        doReloadChart(isPromptSucceed);
+    }
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    doReloadChart
+//  说明:    刷新图
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function doReloadChart(isPromptSucceed)
+{
+      var isRequirePrompt=(typeof(isPromptSucceed)=="undefined")?true:isPromptSucceed;
+      if(isRequirePrompt)
+      {
+          MMsg("保存成功");
+      }
+	  setXMLDoc(gXMLSrc);
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getSelectedObj
+//  说明:    获得当前选中的对象
+//  参数:    返回当前选中的对象
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function getSelectedObj()
+{
+    return gSelectedGraph;
+}
+
+//----------------------------------------------------------------------------------
+//
+//  函数:    removeSelectedGraph
+//  说明:    销毁所选图行
+//  参数:    
+//  返回:    
+//
+//-----------------------------------------------------------------------------------
+
+function removeSelectedGraph()
+{
+      if(null==gSelectedGraph) return;      
+	  if(QMsg("确认删除？")==MSG_YES)
+	  {
+		  var sTypeName=gSelectedGraph.typeName;
+		  doOnNodeRemove(gSelectedGraph);
+		  if(sTypeName=="link")
+			  doOnRemoveLine(gSelectedGraph);
+		  if(sTypeName=="node")
+			  doOnRemoveNode(gSelectedGraph);
+	  }
+}
+
+function doOnNodeRemove(oGraph)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute("srcGraph",oGraph);
+	oRemove.fire(oEvent);
+}
+//--------------------------------------------------------------------------------------------
+//
+//  函数:    getSelectedObjXMLDoc
+//  说明:    得到选中对象对应的xml文档节点
+//  参数:    
+//  返回:    xml文档节点
+//
+//---------------------------------------------------------------------------------------------
+
+function getSelectedObjXMLDoc()
+{
+	  if(gSelectedGraph==null) return null;
+	  var sTypeName=gSelectedGraph.typeName;
+	  var sPath,sId;
+	  if(sTypeName=="node")
+		  sPath="/root/nodes/node[@NODE_ID='"+gSelectedGraph.id+"']";
+	  if(sTypeName=="link")
+		  sPath="/root/links/link[@LINK_ID='"+gSelectedGraph.id+"']";
+	  return gXMLDoc.selectSingleNode(sPath);
+		 
+}
+
+function getGraphXMLDoc(oGraph)
+{    
+      var oReturn=null;	  
+	  if(oGraph!=null)
+	  {
+	      var sTypeName=oGraph.typeName;
+	      var sPath,sId;
+		  if(sTypeName=="node")
+			  sPath="/root/nodes/node[@NODE_ID='"+oGraph.id+"']";
+		  else if(sTypeName=="link")
+			  sPath="/root/links/link[@LINK_ID='"+oGraph.id+"']";
+		  if(sPath)
+		  {
+		  	oReturn = gXMLDoc.selectSingleNode(sPath);
+		  }
+	  }
+	  return oReturn;
+}
+function isDirty()
+{
+   var bDirty=false;
+   var sPath="/root//*[@STATE!='' or @IS_NEW='1']";
+   var iDirtyNodeLen=gXMLDoc.selectNodes(sPath).length;
+   if(iDirtyNodeLen!=0) bDirty=true;
+   return bDirty;
+}
+//--------------------------------------------------------------------------------------------
+//
+//  函数:    getXMLDocByNodeId
+//  说明:    根据Id获取xml文档节点
+//  参数:    sId 	节点ID
+//  返回:    xml文档节点
+//
+//---------------------------------------------------------------------------------------------
+
+function getXMLDocByNodeId(sId)
+{
+	  if(sId==null) return null;
+	  sPath="/root/nodes/node[@NODE_ID='"+sId+"']";
+	  return gXMLDoc.selectSingleNode(sPath);
+		 
+}
+//--------------------------------------------------------------------------------------------
+//
+//  函数:    getNodeById
+//  说明:    根据Id获得节点对象
+//  参数:    
+//  返回:    vml节点对象
+//
+//---------------------------------------------------------------------------------------------
+
+function getNodeById(sId)
+{
+   return window.document.getElementById(sId);
+}
+
+function getNodeByDataId(sId)
+{
+   return getNodeById("n"+sId);
+}
+// **********************************************************************
+//                      画板xml相关函数
+// **********************************************************************
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    createXMLNode
+//  说明:    创建并初始化环节节点至xml文档流
+//  参数:    sId          环节id
+//          sName        环节名称
+//          sType        环节类型
+//          sNodeVML     环节图形vml
+//  返回:    
+//-------------------------------------------------------------------------------------------------
+
+function createXMLNode(sId,sNeId,sNodeVML,sTopoTemplateId,sSubjectId)
+{
+	var oXMLNodes,oXMLNode,oVMLDoc,oComment;
+	var iLength;
+    if(gXMLDoc!=null)
+	{
+	    oXMLNodes=gXMLDoc.selectSingleNode("/root/nodes");
+		oXMLNode=gXMLDoc.createElement("node");
+		oVMLDoc=gXMLDoc.createElement("vmldoc");            //加入vml节点
+		oComment=gXMLDoc.createComment(sNodeVML);
+		oVMLDoc.appendChild(oComment);   
+		oXMLNode.appendChild(oVMLDoc);        
+    	oXMLNode.setAttribute("NODE_ID",sId);
+		oXMLNode.setAttribute("IS_NEW",IS_NEW);            //新增环节
+		oXMLNode.setAttribute("STATE","");
+        oXMLNode.setAttribute("NE_ID",sNeId);
+        oXMLNode.setAttribute("TOPO_TEMPLATE_ID",sTopoTemplateId); 
+        oXMLNode.setAttribute("SUBJECT_ID",sSubjectId); 
+		iLength=aNodeProp[0].length;
+        for(var i=0;i<iLength;i++)
+		{
+		    oXMLNode.setAttribute(aNodeProp[0][i],aNodeProp[1][i]);        //初始化属性值为空
+		}
+		oXMLNodes.appendChild(oXMLNode);
+	}
+}
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    createXMLLink
+//  说明:    创建并初始化连接线节点至xml文档流
+//  参数:    sId           连接线Id
+//          sLinkVML      连接线图形vml
+//  返回:   
+//-------------------------------------------------------------------------------------------------
+
+function createXMLLink(oLine,sLinkVML)
+{
+	var oXMLLinks,oXMLLink,oVMLDoc,oComment;
+	var sId=oLine.id;
+	var sPrev_id=(isLine(oLine))?"n0":sId.substring(0,sId.indexOf("_"));
+	var sNext_id=(isLine(oLine))?"n0":sId.substring(sId.indexOf("_")+1,sId.length);
+	var iLength;
+    if(gXMLDoc!=null)
+	{
+	    oXMLLinks=gXMLDoc.selectSingleNode("/root/links");
+		oXMLLink=gXMLDoc.createElement("link");
+		oVMLDoc=gXMLDoc.createElement("vmldoc");            //加入vml节点
+		oComment=gXMLDoc.createComment(sLinkVML);
+		oVMLDoc.appendChild(oComment);   
+		oXMLLink.appendChild(oVMLDoc);        
+    	oXMLLink.setAttribute("LINK_ID",oLine.id);
+        oXMLLink.setAttribute("PREV_NODE_ID",sPrev_id);
+		oXMLLink.setAttribute("NEXT_NODE_ID",sNext_id);
+		oXMLLink.setAttribute("IS_NEW",IS_NEW);            //新增连接线
+		oXMLLink.setAttribute("STATE","");
+	    iLength=aLinkProp[0].length;
+        for(var i=0;i<iLength;i++)
+		{
+		    oXMLLink.setAttribute(aLinkProp[0][i],aLinkProp[1][i]);    //初始化属性值
+		}
+		if(isLine(oLine))
+		{
+		    oXMLLink.setAttribute("RELATION_TYPE","");
+		}
+		oXMLLinks.appendChild(oXMLLink);
+	}
+}
+
+function isLine(oLine)
+{
+   var sId=oLine.id;
+   return (sId.indexOf("L")==0);
+}
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    replaceNodeVmlDoc
+//  说明:    替换xml文档流里面对应环节的vml结构（如果不是新增环节，则把状态置为修改）
+//  参数:    环节图形对象
+//  返回:     
+//-------------------------------------------------------------------------------------------------
+
+function replaceNodeVmlDoc(oNode)
+{
+      var sNodeId,oNodeDoc,oVMLDoc,sPath;
+	  sNodeId=oNode.id;
+	  if(gXMLDoc!=null)
+	  {
+		 sPath="/root/nodes/node[@NODE_ID='"+sNodeId+"']/vmldoc/comment()";
+	     oVMLDoc=gXMLDoc.selectSingleNode(sPath);
+	     var sHTML=oNode.outerHTML.replace("<?xml:namespace prefix = v />","");
+	     sHTML=sHTML.replace("http://"+location.host,"../..")
+	     oVMLDoc.data=sHTML;
+		 oNodeDoc=gXMLDoc.selectSingleNode("/root/nodes/node[@NODE_ID='"+sNodeId+"']");
+		 if(oNodeDoc.getAttribute("IS_NEW")==IS_NOT_NEW)  //如果不是新增的环节，把state置为修改
+		     oNodeDoc.setAttribute("STATE",UPDATE_STATE);
+      }
+}
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    replaceLinkVmlDoc
+//  说明:    替换xml文档流里面对应连接线的vml结构（如果不是新增连接线，则把状态置为修改）
+//  参数:    连接线图形对象
+//  返回:     
+//-------------------------------------------------------------------------------------------------
+
+function replaceLinkVmlDoc(oLink)
+{
+      var sId,oLinkDoc,oVMLDoc,sPath;
+	  sId=oLink.id;
+	  if(gXMLDoc!=null)
+	  {
+		 sPath="/root/links/link[@LINK_ID='"+sId+"']/vmldoc/comment()";
+	     oVMLDoc=gXMLDoc.selectSingleNode(sPath);
+	     oVMLDoc.data=oLink.outerHTML.replace("<?xml:namespace prefix = v />","");
+		 oLinkDoc=gXMLDoc.selectSingleNode("/root/links/link[@LINK_ID='"+sId+"']");
+		 if(oLinkDoc.getAttribute("IS_NEW")==IS_NOT_NEW)  //如果不是新增的连接线，把state置为修改
+		     oLinkDoc.setAttribute("STATE",UPDATE_STATE);
+      }
+}
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    removeNodeXml
+//  说明:    删除xml文档流里面对应的环节节点（如果不是新增环节，则把状态置为删除）
+//  参数:    环节图形对象
+//  返回:     
+//-------------------------------------------------------------------------------------------------
+
+function removeNodeXml(oNode)
+{
+      var sNodeId,oNodesDoc,oNodeDoc,sPath;
+	  sNodeId=oNode.id;
+      if(gXMLDoc!=null)
+	  {
+		 sPath="/root/nodes/node[@NODE_ID='"+sNodeId+"']";
+		 oNodesDoc=gXMLDoc.selectSingleNode("/root/nodes");
+	     oNodeDoc=gXMLDoc.selectSingleNode(sPath);
+		 if(oNodeDoc.getAttribute("IS_NEW")==IS_NOT_NEW)
+		     oNodeDoc.setAttribute("STATE",DEL_STATE);
+		 else
+			 oNodesDoc.removeChild(oNodeDoc);
+
+      }
+}
+
+//----------------------------------------------------------------------------------------------
+//
+//  函数:    removeLinkXml
+//  说明:    删除xml文档流里面对应的连接线节点（如果不是新增连接线，则把状态置为删除）
+//  参数:    连接线图形对象
+//  返回:     
+//-------------------------------------------------------------------------------------------------
+
+function removeLinkXml(oLink)
+{
+      var sId,oLinksDoc,oLinkDoc,sPathNew,sPathOld;
+	  sId=oLink.id;
+	  if(gXMLDoc!=null)
+	  {
+		 sPathOld="/root/links/link[@LINK_ID='"+sId+"' and @IS_NEW='"+IS_NOT_NEW+"']";
+		 sPathNew="/root/links/link[@LINK_ID='"+sId+"' and @IS_NEW='"+IS_NEW+"']";
+		 oLinksDoc=gXMLDoc.selectSingleNode("/root/links");
+	     oLinkOldDoc=gXMLDoc.selectSingleNode(sPathOld);
+		 oLinkNewDoc=gXMLDoc.selectSingleNode(sPathNew);
+		 if(oLinkOldDoc!=null)
+		    oLinkOldDoc.setAttribute("STATE",DEL_STATE);
+		 if(oLinkNewDoc!=null)
+		    oLinksDoc.removeChild(oLinkNewDoc);
+      }
+}
+</script>
+</component>

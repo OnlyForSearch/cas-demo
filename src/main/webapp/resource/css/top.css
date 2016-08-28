@@ -1,0 +1,48 @@
+/* CSS Document */
+
+body,td,th {
+	font-size: 12px;
+	line-height: 150%;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	scrollbar-face-color:#3A6EA5;
+	scrollbar-arrow-color:#FFFF00;
+	scrollbar-highlight-color:#808080;
+	scrollbar-3dlight-color:#000000;
+	scrollbar-shadow-color:#FFFFFF;
+	scrollbar-darkshadow-color: #FFFFFF;
+}
+
+span.menu {
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+	text-align:center;
+	padding:0px 10px 0px 3px;
+	cursor:hand;
+}
+
+a.menu:link {
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+a.menu:visited {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+a.menu:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+a.menu:active {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.white {
+	color:#FFFFFF;
+	}

@@ -1,0 +1,130 @@
+.titleText
+{
+    font: 12px;
+    letter-spacing:2px;
+    padding-left:3;
+}
+.normalDiv
+{
+    
+    padding:2 2 2 2;
+    margin:10 5 10 5;
+}
+.noBorderDiv
+{
+    border:0px;
+    padding:2 2 2 2;
+    margin:2 5 2 5; 
+}
+.x-bon-head
+{
+    font:bold 12px;
+    padding-left:5;
+    padding-top:5;
+    vertical-align:middle;
+    background-color: #F6F7F7;
+}
+
+.x-grid-back-orange {   
+           background: orange;   
+}
+.x-grid-back-red {   
+     background: red;   
+} 
+.x-grid-back-green {   
+     background: green;   
+}
+.x-grid-back-yellow {   
+     background: yellow;   
+}        
+ 
+.a{
+     background-color:#F4F4F4;
+     width:332px;
+
+ }
+ .b{
+     height:1px;
+     overflow:hidden;
+     border-left:1px #333 solid;
+     border-right:1px #333 solid;
+ }
+ 
+ .menuCss_3{
+    float:left;
+    margin-left:5px;
+    width:62px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    background-image:url(../../../workshop/bon/proviceSubnet/resource/image/menu.png);
+ }
+ 
+ .flatBut{
+    float:left;
+    margin-left:5px;
+    margin-top:5px;
+    width:65px;
+    height:20px; 
+    line-height:20px;
+    cursor: hand; 
+    color:#000;
+    text-align:center;
+    filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#EFF4FE, endcolorstr=#C4D4F4);
+    border-top:1px solid #FFFFFF;
+    border-left:1px solid #FFFFFF;
+    border-right:1px solid #4068AA;
+    border-bottom:1px solid #4068AA;
+    background-color:#C8D9FB;
+ }
+ 
+ .flatButOver{
+    float:left;
+    margin-left:5px;
+    margin-top:5px;
+    width:65px;
+    height:20px; 
+    line-height:20px;
+    color:red;
+    cursor: hand; 
+    text-align:center;
+    filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#C4D4F4, endcolorstr=#EFF4FE);
+    border-top:1px solid #FFFFFF;
+    border-left:1px solid #FFFFFF;
+    border-right:1px solid #4068AA;
+    border-bottom:1px solid #4068AA;
+    background-color:#D2E0FC;
+ }
+ 
+ .flatButDown{
+    float:left;
+    margin-left:5px;
+    margin-top:5px;
+    width:65px;
+    height:20px; 
+    line-height:20px;
+    cursor: hand; 
+    color:blue;
+    text-align:center;
+    filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#C4D4F4, endcolorstr=#EFF4FE);
+    border-top:1px solid #4068AA;
+    border-left:1px solid #4068AA;
+    border-right:1px solid #FFFFFF;
+    border-bottom:1px solid #FFFFFF;
+    background-color:#DBE5FA;
+}
+
+.searchWin{
+    border-left:1px solid #4068AA;
+    border-right:1px solid #4068AA;
+    background-color:#DBE5FA;
+}
+.menuCss_2{
+    float:left;
+    margin-left:5px;
+    width:78px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    background-image:url(../../../workshop/bon/proviceSubnet/resource/image/menu2.png);
+ }

@@ -1,0 +1,188 @@
+<public:component>
+<public:PROPERTY NAME="AllowNull" put="setAllowNull"    get="getAllowNull"/>
+<public:PROPERTY NAME="NullLabel" put="setNullLabel"    get="getNullLabel"/>
+<public:PROPERTY NAME="width" put="setWidth"    get="getWidth"/>
+<public:PROPERTY NAME="textIndex" put="setTextIndex"    get="getTextIndex"/>
+<public:PROPERTY NAME="fldValue"         PUT="setFldValue"                                     />
+<public:PROPERTY NAME="xmlSrc"           PUT="setXmlSrc"         get="getXML"                  />
+<public:PROPERTY NAME="sValue"           PUT="setValue"          get="getValue"                />
+<public:property name="selectIndex"      put="setIndex"                                        />
+<public:method   name="addOption"	                                                           />
+<public:method   name="getTextByValue"                                                         />
+<SCRIPT LANGUAGE="jscript">
+//定义默认语言资源
+var normalSelectHtcDefaultLang = {
+	sNullLabel : '请选择...'
+};
+//获取语言资源
+function getNormalSelectHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('normalSelectHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.normalSelectHtc.' + code);
+	}
+}
+
+var gXmlDoc=null;
+var gSelectedIndex=0;
+var gValue="";
+var gFldValue="id"
+var gHashData = new Object();
+var bAllowNull = 'false';
+var sNullLabel = getNormalSelectHtcLan('sNullLabel');
+var sWidth = "";
+var sTextIndex = 0;
+
+function setAllowNull(bAllow)
+{
+     bAllowNull = bAllow;
+}
+
+function getAllowNull()
+{
+     return bAllowNull;
+}
+
+function setNullLabel(label)
+{
+     sNullLabel = label;
+}
+
+function getNullLabel()
+{
+     return sNullLabel;
+}
+
+function setTextIndex(textIndex)
+{
+	sTextIndex = textIndex;
+}
+
+function getTextIndex()
+{
+     return sTextIndex;
+}
+
+
+function setWidth(width)
+{
+     sWidth = width;
+}
+
+function getWidth()
+{
+     return sWidth;
+}
+
+function setFldValue(pFldValue)
+{
+   gFldValue=pFldValue;
+}
+
+function getFldValue()
+{
+   return gFldValue;
+}
+
+function setValue(pValue)
+{
+    //if(element.readyState!="complete") return;
+    var iIndex=0;
+    if(gHashData[pValue]!=null)
+    {
+        iIndex=gHashData[pValue].index;
+    }
+    gSelectedIndex=iIndex;
+    selectedIndex=gSelectedIndex;
+}
+
+function getValue()
+{
+   return element.options[element.selectedIndex].value;
+}
+
+function setIndex(pIndex)
+{
+    selectedIndex=pIndex;
+    gSelectedIndex=pIndex;
+}
+
+function setXmlSrc(pXMLSrc)
+{
+    if(pXMLSrc=="" || pXMLSrc==null) return;
+    removeAll(element);   
+    if(bAllowNull=='true'||bAllowNull==1) addOption(sNullLabel,'',false);
+    gXmlDoc=new ActiveXObject("MSXML.DOMDocument");
+    gXmlDoc.async = false;
+    gXmlDoc.load(pXMLSrc);
+    if(gXmlDoc!=null)
+    {
+        var oRows=gXmlDoc.selectNodes("//rowSet");
+        var iLen=oRows.length;
+        var value,text,sSelected;
+        for(i=0;i<iLen;i++)
+        {
+            value=oRows[i].getAttribute(gFldValue);
+            if(value==null){
+            	value = oRows[i].selectSingleNode(gFldValue.toUpperCase()).text;
+            }
+            sSelected=oRows[i].getAttribute("SELECTED");            
+            text=oRows[i].childNodes[textIndex].text;
+            (sSelected!=null && sSelected=="true")?addOption(text,value,true):addOption(text,value,false);            
+            gHashData[value]={index:i,text:text};
+        }
+        style.width=sWidth;
+    }
+}
+function getXml()
+{
+    return gXmlDoc;
+}
+
+function removeAll(oSelect)
+{     
+	for(var i=oSelect.length-1;i>=0;i--)
+	{
+	    oSelect.options.remove(i);
+	}
+}
+
+function getTextByValue(value)
+{
+    var sValue="";
+    if(gHashData[value]!=null)
+    {
+        sValue=gHashData[value].text;
+    }
+    return sValue;
+}
+
+function removeOption()
+{
+
+}
+
+function addOption(sText,sValue,isSelected,index)
+{
+      //如果index不在末尾,需要重新排列HashData(需要修改)
+      var oOption = document.createElement("OPTION");
+      var iIndex=length;
+      oOption.value =sValue;
+      oOption.text = sText;
+      if(typeof(isSelected)!="undefined")
+      {
+          oOption.selected=isSelected;
+      }
+      if(typeof(index)!="undefined")
+      {
+          iIndex=index;
+      }
+      add(oOption,iIndex);
+      gHashData[sValue]={index:length,text:sText};
+}
+</SCRIPT>
+</component>

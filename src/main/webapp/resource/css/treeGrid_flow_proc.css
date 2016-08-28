@@ -1,0 +1,91 @@
+.gridbox 
+{
+     OVERFLOW-y: hidden;
+     OVERFLOW-x: auto;
+     BORDER-RIGHT: #c2d5dc 1px solid; 
+     BORDER-TOP: #c2d5dc 1px solid; 
+     BORDER-LEFT: #c2d5dc 1px solid; 
+     BORDER-BOTTOM: #c2d5dc 1px solid;
+     cursor:hand;
+}
+.xhdr 
+{
+     BACKGROUND-COLOR: #CAE8EA;
+}
+
+TABLE.hdr 
+{
+     
+}
+
+TABLE.hdr TD
+{
+     BORDER-RIGHT: #93afba 1px solid; 
+     BORDER-TOP: #fdfdfd 1px solid;
+     FONT-WEIGHT: bold; 
+     FONT-SIZE: 11px; 
+     BORDER-LEFT: #fdfdfd 1px solid; 
+     COLOR: #055a78; 
+     BORDER-BOTTOM: #93afba 1px solid;
+     FONT-FAMILY: Tahoma;
+     BACKGROUND-COLOR: transparent; 
+     TEXT-ALIGN: center;
+}
+
+TABLE.hdr TD DIV.hdrcell 
+{
+     PADDING-LEFT: 1px;
+     height:28px;
+     padding-top:8px;
+     color:#2F5579;
+     font-size:14px;
+}
+.objbox 
+{
+     BACKGROUND-COLOR: white;
+     overflow:auto;
+     TOP:-170px !important;
+}
+
+TABLE.obj 
+{
+     BORDER-BOTTOM: #d6d6d6 1px solid
+}
+
+TABLE.obj TD 
+{
+    BORDER-RIGHT: gray 1px solid; 
+    BORDER-TOP: white 0px solid; 
+    FONT-SIZE: 12px; 
+    PADDING-BOTTOM: 0px;
+    OVERFLOW: hidden; 
+    BORDER-LEFT: white 0px solid;
+    PADDING-TOP: 0px; 
+    BORDER-BOTTOM: gray 1px solid;
+    FONT-FAMILY: ËÎÌו; 
+    moz-user-select: none;
+    text-align:center;
+}
+
+TABLE.row20px TR TD 
+{
+    PADDING-RIGHT: 0px; 
+    PADDING-LEFT: 0px;
+    PADDING-TOP: 0px;
+    text-align:center;
+}
+.data_cell
+{
+	OVERFLOW: visible !important; 
+	WHITE-SPACE: normal !important;
+	vertical-align:middle;
+}
+.state
+{
+   font-weight:bold;
+   border:solid 1px black;
+   font-size:12px;
+   text-align:center;
+   width:10px;
+   font-family: ËÎÌו;
+}

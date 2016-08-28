@@ -1,0 +1,776 @@
+<PUBLIC:COMPONENT tagname="bar" literalcontent="true">
+    <PUBLIC:PROPERTY name="icoUrl"/>
+    <PUBLIC:METHOD name="reload"/>
+    <PUBLIC:METHOD name="hide"/>
+    <PUBLIC:METHOD name="show"/>
+    <PUBLIC:METHOD name="getElementById"/>
+    <PUBLIC:METHOD name="setItemDisabled"/>
+    <PUBLIC:METHOD name="setItemHidden"/>
+    <PUBLIC:METHOD name="getHeight"/>
+    <PUBLIC:EVENT NAME="onMouseOver" ID="mouseOverId" />
+    <PUBLIC:EVENT NAME="onMouseOut" ID="mouseOutId" />
+	<PUBLIC:ATTACH event="oncontentready" onevent="init()" />
+</PUBLIC:COMPONENT>
+<SCRIPT language="JScript">
+var oBarCfg,oBarElement;
+var sBarStyle,sBarPrefixStyle,sPrefixItemStyle;
+var sItemStyle,sItemIcoStyle,sItemTextStyle,sIptStyle,sItemBtnStyle;
+var sBorderItemStyle,sBorderStyle,sBgStyle;
+var sPopupContentStyle,sCoverBorderStyle,sIcoDivStyle,sChildItemStyle,sChildIcoStyle,sChildTextStyle,sChildBgStyle;
+var sChildLineItemStyle,sChildLineStyle;
+var oCssCls,oBarHeight;
+
+var groups = new Object();
+
+var TOP_POPUP = 0;
+var STANDARD_WIDTH = 165;
+
+function init()
+{
+	iniProperty();
+	iniStyle();
+	createBar();
+	loadCfg();
+	loadBar();
+}
+
+function reload()
+{
+	loadCfg();
+	loadBar();
+}
+
+function hide()
+{
+	oBarElement.style.display = 'none';
+}
+
+function show()
+{
+	oBarElement.style.display = '';
+}
+
+function getElementById(elementId)
+{
+	return oBarCfg.all.namedItem(elementId);
+}
+
+function setItemHidden(elementId,value)
+{
+	var oCfgItem = getElementById(elementId);
+	value = (value===false)?'':'none';
+	if(oCfgItem)
+	{
+		var oBarItem = oCfgItem.barItem;
+		if(oBarItem)
+		{
+			oBarItem.style.display = value;
+		}
+	}
+}
+
+function setItemDisabled(elementId,value)
+{
+	var oCfgItem = getElementById(elementId);
+	if(oCfgItem)
+	{
+		oCfgItem.disabled = value;
+		var oBarItem = oCfgItem.barItem;
+		if(oBarItem)
+		{
+			oBarItem.disabled = value;
+			if(value)
+			{
+				oBarItem.style.filter="progid:DXImageTransform.Microsoft.BasicImage(grayScale=1)";
+			}
+			else
+			{
+				oBarItem.style.filter="progid:DXImageTransform.Microsoft.BasicImage(grayScale=0)";
+			}
+		}
+	}
+}
+
+function getHeight()
+{
+	return oBarElement.offsetHeight
+}
+
+function iniProperty()
+{
+	if(!element.icoUrl)
+	{
+		element.icoUrl = getRealPath("../image/ico/");
+	}
+}
+
+function iniStyle()
+{
+	sBarStyle = 'overflow:hidden;'
+			  + 'height:26;'
+			  + 'padding:0 5 0 5;'
+			  + 'white-space:nowrap;'
+			  + 'filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#F5F4F2,endcolorstr=#DBD8D1,gradientType=0);'
+	
+	sBarPrefixStyle = 'width:5;'
+	                + 'height:100%;'
+	                + 'padding-top:6;'
+	                + 'overflow:hidden;'
+	                + 'float:left;'
+	                + 'vertical-align:top;'
+	                
+	sPrefixItemStyle = 'width:2;'
+					 + 'height:2;'
+					 + 'background:#A0A0A0;'
+					 + 'overflow:hidden;'
+					 + 'margin-top:1;'
+					 + 'filter:progid:DXImageTransform.Microsoft.DropShadow(color=#FFFFFF,offX=1,offY=1,positives=true);'
+	
+	sItemStyle = 'height:100%;'
+			   + 'position:relative;'
+			   + 'overflow:hidden;'
+			   + 'cursor:default;'
+			   + 'padding:0 3 0 3;'
+			   + 'float:left;'
+			   + 'vertical-align:top;'
+			   
+	sItemIcoStyle = 'height:100%;'
+	              + 'padding-top:5;'
+	              + 'overflow:hidden;'
+	              + 'vertical-align:top;'
+	               
+	sItemTextStyle = 'height:100%;'
+	               + 'padding-top:7;'
+	               + 'vertical-align:top;'
+	                
+	sIptStyle = 'height:100%;'
+	          + 'padding-top:3;'
+              + 'overflow:hidden;'
+              + 'vertical-align:top;'
+	
+    sItemBtnStyle = 'vertical-align:top;'
+                  + 'height:19;'
+                  + 'background:#FAE8B1;'
+                  + 'border:1px solid #BA9963;'
+                  + 'cursor:hand;'
+                  +	'float:left;'
+                  + 'padding:3 6 0 6;'
+                  + 'margin:3 0 0 0;'
+                  
+   	sBorderItemStyle = 'width:6;'
+	             	 + 'height:100%;'
+	             	 + 'overflow:hidden;'
+	             	 + 'padding:6 0 6 0;'
+	             	 + 'float:left;'
+	             	 + 'vertical-align:top;'
+	             	 + 'text-align:center;'
+	             	 
+   	sBorderStyle = 'width:1;'
+	             + 'height:100%;'
+	             + 'overflow:hidden;'
+	             + 'background:#A6A6A6;'
+	             + 'filter:progid:DXImageTransform.Microsoft.DropShadow(color=#FFFFFF,offX=1,offY=1,positives=true);'
+	             
+	sBgStyle = 'position:absolute;'
+			 + 'left:0;'
+			 + 'top:2;'
+			 + 'height:22;'
+			 + 'overflow:hidden;'
+			 + 'z-index:-1;'
+			 
+	sPopupContentStyle = 'position:relative;'
+	                   + 'width:100%;'
+	                   + 'height:100%;'
+	                   + 'overflow:hidden;'
+	                   + 'border:1px solid #666666;'
+	                   + 'background:#F9F8F7;'
+	                   + 'padding:1 0 1 0;'
+	                   
+	sCoverBorderStyle = 'position:absolute;'
+	                  + 'left:1;'
+	                  + 'top:0;'
+	                  + 'height:1;'
+	                  + 'overflow:hidden;'
+	                  + 'z-index:1;'
+	                  + 'background:#F9F8F7;'
+	                  
+	sIcoDivStyle = 'position:absolute;'
+				 + 'left:0;'
+				 + 'top:0;'
+				 + 'width:22;'
+				 + 'height:100%;'
+				 + 'z-index:-1;'
+				 + 'filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#F9F8F7,endcolorstr=#D7D4CC,gradientType=1);'
+	
+	sChildItemStyle = 'position:relative;'
+	                + 'width:100%;'
+					+ 'height:22;'
+					+ 'padding:0 1 0 1;'
+					+ 'overflow:hidden;'
+					
+	sChildIcoStyle = 'position:absolute;'
+	               + 'top:0;'
+	               + 'left:0;'
+	               + 'width:22;'
+	               + 'height:100%;'
+	               + 'overflow:hidden;'
+	               + 'padding:3 0 0 3;'
+	               + 'vertical-align:top;'
+	               
+	sChildTextStyle = 'position:absolute;'
+					+ 'top:0;'
+					+ 'left:22;'
+	                + 'height:100%;'
+					+ 'font-size: 9pt;'
+					+ 'padding:5 0 0 8;'
+					+ 'vertical-align:top;'
+					+ 'cursor:default;'
+	
+	sChildBgStyle = 'position:absolute;'
+			 	  + 'left:1;'
+			 	  + 'top:0;'
+			      + 'height:100%;'
+			      + 'width:100%;'
+			      + 'overflow:hidden;'
+			      + 'z-index:-1;'
+			      
+	sChildLineItemStyle = 'position:relative;'
+						+ 'width:100%;'
+						+ 'height:3;'
+						+ 'overflow:hidden;'
+						+ 'padding:1 0 0 30;'
+	
+	sChildLineStyle = 'width:100%;'
+	                + 'height:1;'
+	                + 'overflow:hidden;'
+	                + 'background:#A6A6A6;'
+	                
+	oCssCls = {
+		bar 		: 'comp-tool-bar',
+		barPrefix	: 'comp-tool-bar-prefix',
+		barItem		: 'comp-tool-bar-item',
+		barText		: 'comp-tool-bar-text',
+		barIco		: 'comp-tool-bar-ico',
+		barItemBg	: 'comp-tool-bar-itm-bg',
+		barItemTag	: 'comp-tool-bar-itm-tag',
+		barItemOver	: 'comp-tool-bar-itm-over'
+	}
+}
+
+function loadCfg()
+{
+	oBarCfg = document.createElement("div");
+	oBarCfg.innerHTML = element.innerHTML;
+	oBarCfg.mergeAttributes(element);
+	oBarCfg.style.display = 'block';
+}
+
+function createBar()
+{
+	oBarElement = document.createElement('div');
+	oBarElement.attachEvent('onmouseover',barMouseOver);
+	oBarElement.attachEvent('onmouseout',barMouseOut);
+	oBarElement.style.cssText = sBarStyle;
+	oBarElement.className = oCssCls.bar;
+	element.insertAdjacentElement('afterEnd',oBarElement);
+	element.style.display = 'none';
+	oBarHeight = oBarElement.clientHeight;
+}
+
+function barMouseOver()
+{
+	var oEvent = createEventObject();
+	mouseOverId.fire(oEvent);
+}
+
+function barMouseOut()
+{
+	var oEvent = createEventObject();
+	mouseOutId.fire(oEvent); 
+}
+
+function loadBar()
+{
+	oBarElement.mergeAttributes(oBarCfg);
+	oBarElement.innerHTML = '<span style="'+sBarPrefixStyle+'" class="' + oCssCls.barPrefix + '">'
+				          +   '<div style="'+sPrefixItemStyle+'"></div>'
+				          +   '<div style="'+sPrefixItemStyle+'"></div>'
+				          +   '<div style="'+sPrefixItemStyle+'"></div>'
+				          +   '<div style="'+sPrefixItemStyle+'"></div>'
+				          + '</span>'
+	for(var i=0;i<oBarCfg.children.length;i++)
+	{
+		var barItem = oBarCfg.children[i];
+		var barItemPrefix = barItem.scopeName.toLowerCase();
+		if(barItemPrefix == "bar")
+		{
+			var barItemType = barItem.tagName.toLowerCase();
+			switch(barItemType)
+			{
+				case 'input':
+					createInput(barItem);
+					break;
+				case 'line':
+					createLine(barItem);
+					break;
+				case 'btn':
+					createBtn(barItem);
+					break;
+				case 'item':
+					createItem(barItem);
+					break;
+			}
+		}
+	}
+}
+
+function getBarItemNode(oItem)
+{
+	var oBarDiv = document.createElement('div');
+	oBarDiv.mergeAttributes(oItem);
+	oBarDiv.cfgElement = oItem;
+	oItem.barItem = oBarDiv;
+	var sAlign = oItem.align || 'left';
+	sItemStyle+=';float:'+sAlign;
+	oBarDiv.style.cssText = sItemStyle+";"+oBarDiv.style.cssText;
+	oBarDiv.className = oCssCls.barItem;
+	oBarElement.appendChild(oBarDiv);
+	return oBarDiv;
+}
+
+function createInput(oItem)
+{
+	var oBarIpt = getBarItemNode(oItem);
+	var sHtml = '';
+	var sCssText = '';
+	if(oItem.ico)
+	{
+		sHtml += '<span style="'+sItemIcoStyle+'" class="'+ oCssCls.barIco +'">'
+		       +   '<img src="'+element.icoUrl+oItem.ico+'" WIDTH="16" HEIGHT="16">'
+		       + '</span>'
+	}
+	if(oItem.label)
+	{
+		sCssText = (sHtml == '')?sItemTextStyle:sItemTextStyle+'padding-left:3';
+		sHtml += '<span style="'+sCssText+'" class="'+oCssCls.barText+'">'+oItem.label+'</span>';
+	}
+	if(oItem.innerHTML)
+	{
+		sCssText = (sHtml == '')?sIptStyle:sIptStyle+'padding-left:3';
+		sHtml += '<span style="'+sCssText+'">'+oItem.innerHTML+'</span>';
+	}
+	oBarIpt.innerHTML = sHtml;
+}
+
+function createLine(oItem)
+{
+	var sAlign = oItem.align || 'left';
+	sBorderItemStyle+=";float:"+sAlign;
+	var sHtml = '<span style="'+sBorderItemStyle+'">'
+	          +   '<span style="'+sBorderStyle+'"></span>'
+	          + '</span>'
+	oBarElement.insertAdjacentHTML('beforeEnd',sHtml);
+}
+
+function createBtn(oItem)
+{
+	var oBarBtn = getBarItemNode(oItem);
+	var sLable = (oItem.label)?oItem.label:"";
+	oBarBtn.innerHTML = '<span style="'+sItemBtnStyle+'">'+sLable+'</span>';
+}
+
+function addChildBar(oItem)
+{
+	var hasDynamicLoad = false;
+	var sDynamicLoadEvent = oItem.DynamicLoadEvent;
+	if(sDynamicLoadEvent)
+	{
+		var sHtml = "";
+		var oAddObj = eval(sDynamicLoadEvent);
+		if(typeof oAddObj == "object")
+		{
+			if(typeof oAddObj.length == "number")
+			{
+				for(var i=0,n;n=oAddObj[i];i++)
+				{
+					sHtml += n.xml;
+				}
+			}
+			else
+			{
+				sHtml = oAddObj.xml;
+			}
+		}
+		else
+		{
+			sHtml = oAddObj;
+		}
+		oItem.innerHTML = sHtml;
+		hasDynamicLoad = true;
+	}
+	return hasDynamicLoad;
+}
+
+function createItem(oItem)
+{
+	var oBarItem = getBarItemNode(oItem);
+	if(oBarItem.disabled)
+	{
+		oBarItem.style.filter="progid:DXImageTransform.Microsoft.BasicImage(grayScale=1)";
+	}
+	oBarItem.layer = TOP_POPUP;
+	oBarItem.attachEvent('onmouseenter',itemOver);
+	oBarItem.attachEvent('onmouseleave',itemOut);
+	var sHtml = '<span style="'+sBgStyle+'" class="'+ oCssCls.barItemBg +'"></span>';
+	var sCssText = '';
+	if(oItem.ico)
+	{
+		sHtml += '<span style="'+sItemIcoStyle+'" class="'+ oCssCls.barIco +'">'
+		       +   '<img src="'+element.icoUrl+oItem.ico+'" WIDTH="16" HEIGHT="16">'
+		       + '</span>'
+	}
+	if(oItem.label)
+	{
+		sCssText = (sHtml == '')?sItemTextStyle:sItemTextStyle+'padding-left:3';
+		sHtml += '<span style="'+sCssText+'" class="'+oCssCls.barText+'">'+oItem.label+'</span>';
+	}
+	if(oItem.hasChildNodes() || oItem.DynamicLoadEvent)
+	{
+		sHtml += '<span style="height:100%;width:16;overflow:hidden;">'
+		       +   '<span style="position:absolute;left:7;top:2;font:8pt Webdings;" class="'+ oCssCls.barItemTag +'">6</span>'
+		       + '</span>'
+		oItem.onclick = null;
+		oBarItem.onclick = null;
+		oBarItem.attachEvent('onclick',showChildByTop);
+	}
+	else
+	{
+		oBarItem.attachEvent('onmousedown',itemDown);
+		oBarItem.attachEvent('onmouseup',itemUp);
+	}
+	oBarItem.innerHTML = sHtml;
+	oBarItem.firstChild.style.width = oBarItem.offsetWidth;
+}
+
+function itemDown()
+{
+	var oItem = getElement(event.srcElement,'div');
+	setItemDownStyle(oItem);
+	var sBarGroupName = oItem.groupName;
+	if(sBarGroupName)
+	{
+		if(sBarGroupName in groups)
+		{
+			var oSelectedGroupItem = groups[sBarGroupName]
+			oSelectedGroupItem.selectedGroupItem = false;
+			oSelectedGroupItem.fireEvent('onmouseleave');
+		}
+		oItem.selectedGroupItem = true;
+		groups[sBarGroupName] = oItem;
+	}
+}
+
+function setItemDownStyle(oItem)
+{
+	var oItemBg = oItem.firstChild;
+	oItemBg.runtimeStyle.border = '1px solid #0A246A';
+	oItemBg.runtimeStyle.background = '#8592B5';
+}
+
+function itemUp()
+{
+	var oItem = getElement(event.srcElement,'div');
+	if(!oItem.disabled && !oItem.selectedGroupItem)
+	{
+		setItemOverStyle(oItem);
+	}
+}
+
+function showChildByTop()
+{
+	var oItem = getElement(event.srcElement,'div');
+	var hasDynamicLoad = addChildBar(oItem.cfgElement);
+	var oItemBg = oItem.firstChild;
+	var oPopup = oItem.showPopup;
+	var oPopupArea = oItem.popupArea;
+	if(hasDynamicLoad || !oPopup)
+	{
+		oPopup = getPopup(window,oBarElement);
+		oItem.showPopup = oPopup;
+		oPopupArea = fillPopup(oItem);
+		var iWidth = oItemBg.offsetWidth+30;
+		if(iWidth>oPopupArea.width)
+		{
+			oPopupContent.width = iWidth;
+		}
+		oPopupArea.left = 0;
+		oPopupArea.top = oItemBg.offsetHeight-1;
+		oItem.popupArea = oPopupArea;
+	}
+	oPopup.show(oPopupArea.left,oPopupArea.top,oPopupArea.width,oPopupArea.height,oItemBg);
+	
+	oBarElement.showChildItem = oItem;
+	oItemBg.runtimeStyle.border = '1px solid #666666';
+	oItemBg.runtimeStyle.borderBottom = '';
+	oItemBg.runtimeStyle.background = '#F9F8F7';
+}
+
+function fillPopup(oParent)
+{
+	var oPopup = oParent.showPopup;
+	var oCfgElement = oParent.cfgElement;
+	var layer = oParent.layer;
+	var oPopupArea = new Object();
+	var iHeight = 4;
+	var iWidth = STANDARD_WIDTH;
+	var iTmpWidth;
+	var oPopupDocument = oPopup.document;
+	var oContent = oPopupDocument.createElement('div');
+	oContent.style.cssText = sPopupContentStyle;
+	oPopupDocument.body.appendChild(oContent);
+	if(layer == TOP_POPUP)
+	{
+		var iCoverBorderWidth = oParent.firstChild.offsetWidth - 2;
+		var oCoverBorder = oPopupDocument.createElement('div');
+		oCoverBorder.style.cssText = sCoverBorderStyle+'width:'+iCoverBorderWidth;
+		oPopupDocument.body.appendChild(oCoverBorder);
+	}
+	var oIcoDiv = oPopupDocument.createElement('div');
+	oIcoDiv.style.cssText = sIcoDivStyle;
+	oContent.appendChild(oIcoDiv);
+	
+	layer++;
+	for(var i=0;i<oCfgElement.children.length;i++)
+	{
+		var barItem = oCfgElement.children[i];
+		var barItemPrefix = barItem.scopeName.toLowerCase();
+		if(barItemPrefix == "bar")
+		{
+			var barItemType = barItem.tagName.toLowerCase();
+			switch(barItemType)
+			{
+				case 'item':
+					iTmpWidth = createChildItem(oPopupDocument,oContent,barItem,layer);
+					if(iTmpWidth>iWidth)
+					{
+						iWidth = iTmpWidth;
+					}
+					iHeight += 22;
+					break;
+				case 'line':
+					createChildLine(oPopupDocument,oContent);
+					iHeight += 3;
+					break;
+			}
+		}
+	}
+	oPopupArea.width = iWidth + 2;
+	oPopupArea.height = iHeight;
+	return oPopupArea;
+}
+
+function createChildLine(oPopupDocument,oParent)
+{
+	var oItemDiv = oPopupDocument.createElement('div');
+	oParent.appendChild(oItemDiv);
+	oItemDiv.style.cssText = sChildLineItemStyle;
+	oItemDiv.innerHTML = '<div style="'+sChildLineStyle+'"></div>';
+}
+
+function createChildItem(oPopupDocument,oParent,oBarItem,layer)
+{
+	var iWidth = 22+8+30; // 分别是ico区域22,字符前端距ico8,字符后端20
+	var oItemDiv = oPopupDocument.createElement('div');
+	oParent.appendChild(oItemDiv);
+	oItemDiv.disabled = oBarItem.disabled;
+	oItemDiv.cfgElement = oBarItem;
+	oBarItem.barItem = oItemDiv;
+	oItemDiv.layer = layer;
+	var sCssText = sChildItemStyle;
+	if(oItemDiv.disabled)
+	{
+		sCssText += 'filter:progid:DXImageTransform.Microsoft.BasicImage(grayScale=1)';
+	}
+	oItemDiv.style.cssText = sCssText;
+	var sHtml = '<span style="'+sChildBgStyle+'"></span>';
+	if(oBarItem.ico)
+	{
+		sHtml += '<span style="'+sChildIcoStyle+'">'
+			   +   '<img src="'+element.icoUrl+oBarItem.ico+'" WIDTH="16" HEIGHT="16">'
+			   + '</span>'
+	}
+	if(oBarItem.label)
+	{
+		sHtml += '<span style="'+sChildTextStyle+'">'
+		       +   oBarItem.label
+		       + '</span>'
+		iWidth += getWidth(oBarItem.label);
+	}
+	if(oBarItem.hasChildNodes() || oBarItem.DynamicLoadEvent)
+	{
+		oBarItem.onclick = null;
+		sHtml += '<span style="position:absolute;right:3;top:2;font:9pt Webdings;cursor:default;">4</span>';
+	}
+	oItemDiv.innerHTML = sHtml;
+	oItemDiv.onclick = function ()
+	{
+		if(oBarItem.hasChildNodes())
+		{
+			oItemDiv.fireEvent('onmouseenter');
+		}
+		else
+		{
+			oBarElement.showChildItem.showPopup.hide();
+			oBarItem.fireEvent('onClick');
+		}
+	}
+	oItemDiv.onmouseenter = function()
+	{
+		var hasDynamicLoad = addChildBar(oBarItem);
+		var oShowChildItem = oParent.showChildItem;
+		if(oShowChildItem)
+		{
+			if(oBarItem.hasChildNodes())
+			{
+				setItemOutStyle(oShowChildItem);
+				showChild(oItemDiv,oPopupDocument,hasDynamicLoad);
+				setItemOverStyle(oItemDiv);
+			}
+			else
+			{
+				oShowChildItem.showPopup.hide();
+				setItemOverStyle(oItemDiv);
+			}
+		}
+		else
+		{
+			if(oBarItem.hasChildNodes())
+			{
+				showChild(oItemDiv,oPopupDocument,hasDynamicLoad);
+			}
+			setItemOverStyle(oItemDiv);
+		}
+	}
+	oItemDiv.onmouseleave = function()
+	{
+		if(oItemDiv != oParent.showChildItem)
+		{
+			setItemOutStyle(oItemDiv);
+		}
+	}
+	return iWidth;
+}
+
+function getWidth(oValue)
+{
+	var arr=oValue.match(/[^\x00-\xff]/ig);
+    var length = oValue.length+(arr==null?0:arr.length);
+    return length*6;// 因为9pt每个字节的宽度为6
+}
+
+function showChild(oParent,oParentDocument,isCreateNewPopup)
+{
+	var oContent = oParent.parentElement;
+	var oPopup = oParent.showPopup;
+	var oPopupArea = oParent.popupArea;
+	if(isCreateNewPopup || !oPopup)
+	{
+		oPopup = getPopup(oParentDocument.parentWindow,oContent);
+		oParent.showPopup = oPopup;
+		oPopupArea = fillPopup(oParent);
+		oPopupArea.left = oParent.offsetWidth;
+		oPopupArea.top = 0;
+		oParent.popupArea = oPopupArea;
+	}
+	oPopup.show(oPopupArea.left,oPopupArea.top,oPopupArea.width,oPopupArea.height,oParent);
+	oContent.showChildItem = oParent;
+}
+
+function getPopup(oWin,oParent)
+{
+	var oPopup = oWin.createPopup();
+	oPopup.document.body.onunload = function ()
+	{
+		var oShowChildItem = oParent.showChildItem;
+		if(oShowChildItem)
+		{
+			oParent.showChildItem = null;
+			setItemOutStyle(oShowChildItem);
+		}
+		var oOverItem = oPopup.document.body.firstChild.overItem;
+		if(oOverItem)
+		{
+			setItemOutStyle(oOverItem);
+		}
+	}
+	return oPopup;
+}
+
+function itemOver()
+{
+	var oBarItem = event.srcElement;
+	var oShowChildItem = oBarElement.showChildItem;
+	if(oShowChildItem)
+	{
+		if(oBarItem != oShowChildItem)
+		{
+			if(oBarItem.cfgElement.hasChildNodes())
+			{
+				setItemOutStyle(oShowChildItem);
+				oBarItem.click();
+			}
+			else
+			{
+				oShowChildItem.showPopup.hide();
+				setItemOverStyle(oBarItem);
+			}
+		}
+	}
+	else
+	{
+		setItemOverStyle(oBarItem);
+	}
+}
+
+function setItemOverStyle(oBarItem)
+{
+	oBarItem.parentElement.overItem = oBarItem;
+	var oItemBg = oBarItem.firstChild;
+	//oItemBg.runtimeStyle.border = '1px solid #0A246A';
+	//oItemBg.runtimeStyle.background = '#B6BDD2';
+	//alert(oItemBg.outerHTML);
+	oItemBg.runtimeStyle.cssText='border:1px solid #0A246A;background:#B6BDD2;';
+	//alert(oItemBg.outerHTML);
+	oItemBg.className = oItemBg.className + " "+oCssCls.barItemOver;
+}
+
+function itemOut()
+{
+	var oBarItem = event.srcElement;
+	if(oBarItem.selectedGroupItem)
+	{
+		setItemDownStyle(oBarItem);
+	}
+	else if(oBarItem != oBarElement.showChildItem)
+	{
+		setItemOutStyle(oBarItem);
+	}
+}
+
+function setItemOutStyle(oBarItem)
+{
+	oBarItem.parentElement.overItem = null;
+	var oItemBg = oBarItem.firstChild;
+	oItemBg.runtimeStyle.border = '';
+	oItemBg.runtimeStyle.background = '';
+	oItemBg.className=oCssCls.barItemBg;
+}
+
+function getRealPath(fileName)
+{
+	var re = /<\?IMPORT.*?IMPLEMENTATION.*?"(.*?)"/i;
+	re.exec(element.outerHTML);
+	var path=RegExp.$1+"/../"+fileName;
+	return path.replace(/\Sv=\d+/,"")
+}
+</SCRIPT>

@@ -1,0 +1,455 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>多选菜单</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../XML.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+   IE\:XmlSelect {behavior:    url(../../htc/XmlSelect.htc);}
+}
+BODY
+{
+	margin:5px 10px 0px 16px;
+	background:white;
+}
+.TreeDIV
+{
+	WIDTH:300px;HEIGHT:93%;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+}
+.CfgDiv
+{
+	WIDTH:300px;HEIGHT:98%;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+}
+.cfgItemNobr
+{
+	height:100%;
+	margin-left:2px;
+	padding:4px 2px 0px 2px;
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onunload="winUnLoad()">
+<table width="468" border="0" cellpadding="0" cellspacing="0">
+	<TR height="26" valign="bottom" style="padding-bottom:3px">
+		<TD width="200" align="center">待选信息</TD>
+		<TD>&nbsp;</TD>
+		<TD width="200" align="center">已选信息</TD>
+	</TR>
+	<TR height="380">
+		<TD valign="top">
+			<IE:XmlSelect id="custViewList" width="300px" onchange="selectSysView()"/><br/>
+			<div id="treeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;"></div>
+		</TD>
+		<TD align="center">
+			<div><IE:button value=">" width="33" onclick="addCfgItemFromChoice(oTree.getSelectedItem())"/></div>
+			<div style="height:10px"></div>
+			<div><IE:button value="<" width="33" onclick="delCfgItemFromChoice()"/></div>
+			<div style="height:10px"></div>
+			<div><IE:button value="<<" width="33" onclick="delCfgItemFromChoiceAll()"/></div>
+		</TD>
+		<TD valign="top"><div id="cfgDiv" class='CfgDiv'></div></TD>
+	</TR>
+	<TR height="30">
+		<TD align="right" COLSPAN="3" valign="bottom">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="enter()"/>&nbsp;
+		  	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()"/>
+		</TD>
+	</TR>
+</table>
+<SCRIPT language="javascript">
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var actionUrl = "/servlet/NECustomViewAction?";
+var ne_TreeURL = "/servlet/ne_tree?";
+var oTree;
+var oClickedCfgItem;
+var selectedPrefix = 'choice_';
+var returnObjs = null;
+var initSelectedId;
+var neIds;
+var neNames;
+var defaultViewId;
+var viewId;
+var viewType;
+
+function iniPage()
+{	
+	parentHandel = window.dialogArguments;
+    neIds = parentHandel.paramArray[0];
+    neNames = parentHandel.paramArray[1];
+    defaultViewId = parentHandel.paramArray[2];
+    
+	custViewList.xmlsrc = actionUrl + "action=18";
+	
+    if (!neIds)
+    {
+		//选择用户原来设置的自定义视图,默认是系统视图
+		xmlhttp.Open("POST", actionUrl+"action=17", false);
+		xmlhttp.send();
+		if(isSuccess(xmlhttp))
+		{
+			defaultViewId=xmlhttp.responseXML.selectSingleNode("root/Msg/VIEW_ID").text;
+		}
+    }
+	custViewList.getObject().value=defaultViewId;
+	showDefaultView(1);
+}
+
+function selectSysView()
+{
+	if (cfgDiv.innerHTML)
+	{
+		if(QMsg("只能选一种树来配置规则,<br>是否删除已选的节点?")==MSG_YES)
+        {
+        	cfgDiv.innerText="";
+        	showDefaultView();
+        }
+        else
+        {
+        	custViewList.getObject().value=defaultViewId;
+        }
+	}
+	else
+    	showDefaultView();
+}
+
+function showDefaultView(isInit)
+{
+	viewId = custViewList.getObject().value;
+	if(viewId==-1)
+	{
+	    xmlhttp.open("POST",ne_TreeURL+"action=0",false);
+	    xmlhttp.send();
+	   	var aa = xmlhttp.responseXML.selectNodes("//MenuItem[@tag=3 or @tag=4 or @id=4]");
+	   	aa.removeAll();
+	   	
+		oTree = new XMLTree();
+		oTree.xmlObj = xmlhttp.responseXML;
+		oTree.isOpenChildAtferClick = true;
+		oTree.isDragOnTree = true;
+		oTree.isDragOnTreeBySelf = false;
+		oTree.isDynamicLoad = true;
+		oTree.setDblClickAction(new DblClickAction());
+		oTree.setEndDragAction(new DragEndAction());
+		oTree.setLoadAction(new LoadAction(isInit));
+		oTree.setDynamicLoadAction(new DynamicLoadAction());
+		oTree.showAt(treeDiv);
+	}
+	else
+	{
+		var sendParams = new Array("action="+21,"id="+viewId);
+		xmlhttp.Open("POST", getSendUrl(actionUrl,sendParams), false);
+		xmlhttp.send();
+		if(isSuccess(xmlhttp))
+		{
+			viewType=xmlhttp.responseXML.selectSingleNode("root/Msg/VIEW_TYPE").text;
+			var action;
+			//视图类型1是系统视图
+			if (viewType==1)
+				action=20;
+			else
+				action=14;
+			var sendParams = new Array("action="+action,"id="+viewId);
+			oTree = new XMLTree();
+			oTree.isOpenChildAtferClick = true;
+			oTree.isDynamicLoad = true;
+			oTree.isDragOnTree = true;
+			oTree.isDragOnTreeBySelf = false;
+			oTree.xmlUrl = getSendUrl(actionUrl,sendParams);
+			oTree.setDynamicLoadAction(new DLoadNEViewTreeAction());
+			oTree.setClickAction(new ClickAction());
+			oTree.setDblClickAction(new DblClickAction());
+			oTree.setEndDragAction(new DragEndAction());
+			oTree.setLoadAction(new LoadAction(isInit));
+			oTree.showAt(treeDiv);
+		}
+	}
+}
+//展开子节点事件
+function DynamicLoadAction()
+{
+	this.parent = new XMLTree_onDynamicLoad_Action;
+	this.parent.dynamicLoad = function(oItem)
+	{
+		var xmlUrl = ne_TreeURL+"action=1&id="+oItem.id;
+		return xmlUrl;
+	}
+	
+	return this.parent;
+}
+
+function DLoadNEViewTreeAction()
+{
+	this.parent = new XMLTree_onDynamicLoad_Action;
+	this.parent.dynamicLoad = function(oItem)
+	{
+		if(oItem.ITEM_TYPE == "INPUT" || oItem.ITEM_TYPE == "FROM_DUMMY_NE")
+		{
+			//如果是系统视图,则第二节点查询的是根据自定义视图配置表配置的节点
+			if (viewType==1)
+				return getChildFromNode(oItem);
+			else
+				return getChildFromView(oItem);
+		}
+		//如果是选择区域、网元类型，展开的子节点查询的是根据自定义视图配置表配置的节点
+		else if(oItem.ITEM_TYPE == "FROM_REGION" || oItem.ITEM_TYPE == "FROM_NE_TYPE")
+		{
+			return getChildFromNode(oItem);
+		}
+		//如果是选择业务系统，展开的子节点查询的是根据自定义视图配置表配置的节点,同时还虚拟一个子业务系统节点,如:计费系统,虚拟子业务系统节点名为计费系统应用,该节点下展现的是网元表的数据
+		else if(oItem.ITEM_TYPE == "FROM_BUSI")
+		{
+			return getChildFromNode(oItem);
+		}
+	}
+	
+	function getChildFromView(oItem)
+	{
+		var sendParams = new Array(3);
+		sendParams[0] = "action=5";
+		sendParams[1] = "viewId="+viewId;
+		sendParams[2] = "itemId="+oItem.id;
+		return getSendUrl(actionUrl,sendParams);
+	}
+	
+	function getChildFromNode(oItem)
+	{
+		var sendParams = new Array(3);
+		sendParams[0] = "action=22";
+		sendParams[1] = "viewId="+viewId;
+		sendParams[2] = "itemId="+oItem.id;
+		sendParams[3] = "regionId="+oItem.REGION_ID;
+		sendParams[4] = "itemType="+oItem.ITEM_TYPE;
+		return getSendUrl(actionUrl,sendParams);
+	}
+	
+	return this.parent;
+}
+
+function ClickAction()
+{
+	this.parent = new XMLTree_onClick_Action;
+	this.parent.click = function(oItem)
+	{
+	}
+	return this.parent;
+}	
+	
+	
+function loadInitSelectedNode(initIds)
+{
+	if(initIds)
+	{
+		var initIdArrays = initIds.split(",");
+		for(var i=0;i<initIdArrays.length;i++)
+		{
+			if(initIds)
+			addCfgItem(document.getElementById(initIdArrays[i]));
+		}
+	}
+}
+
+function DblClickAction()
+{
+	this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		addCfgItemFromChoice(oItem);
+	}
+	return this.parent;
+}
+
+function LoadAction(isInit)
+{
+	if(isInit)
+	{
+		this.parent = new XMLTree_onLoad_Action;
+		this.parent.load = function()
+		{
+			//loadInitSelectedNode(neIds);
+			loadSelectedNode();
+		}
+		return this.parent;
+	}
+}
+
+function DragEndAction()
+{
+	this.parent = new XMLTree_onDragEnd_Action;
+	this.parent.endDrag = function(oDragItem,oOverItem)
+	{
+		var endDragItem = document.elementFromPoint(this.iX,this.iY);
+		if(cfgDiv.contains(endDragItem))
+		{
+			addCfgItemFromChoice(oDragItem);
+		}
+	}
+	return this.parent;
+}
+
+function addCfgItemFromChoice(oItem)
+{
+	if(oItem)
+	{
+		var assignId = oItem.id;
+		addCfgItem(oItem,true)
+	}
+}
+
+function addCfgItem(oItem,isClick)
+{
+	if(oItem)
+	{
+		var addItem = isCfgItemExist(oItem);
+		if(!addItem)
+		{
+	        defaultViewId = custViewList.getObject().value;
+			var itemPath = getItemPath(oItem,oItem.innerText);
+			var icoName = (oItem.ico)?oItem.ico:'folder.gif'
+			var outHTML = '<div id="'+selectedPrefix+oItem.id+'" style="height:20px;PADDING-left:3px;white-space:nowrap" '
+						+		'onclick="cfgItemClick()" '
+						+		'ondblclick="delCfgItemFromChoice()">'
+						+   '<img width="16" height="16" src="../../image/ico/'+icoName+'" align="absmiddle">'
+						+	'<nobr class="cfgItemNobr">'+itemPath+'</nobr>'
+						+ '</div>'
+			cfgDiv.insertAdjacentHTML("beforeEnd",outHTML);
+			addItem = cfgDiv.lastChild;
+		}
+		if(isClick)
+		{
+			addItem.click();
+			addItem.scrollIntoView();
+		}
+	}
+}
+
+//获取节点路径
+function getItemPath(oItem,path)
+{
+	if(oItem)
+	{
+		var itemPath=path;
+		var parentItem = oTree._getParent(oItem);
+		if(!isNull(parentItem))
+		{
+			if(oTree._isTop(parentItem))
+			{
+				return itemPath;
+			}
+			else
+			{
+				itemPath = itemPath+"/"+parentItem.innerText;
+				return getItemPath(parentItem,itemPath);
+			}
+		}
+		else
+			return itemPath;
+	}
+}
+
+function loadSelectedNode()
+{
+	if (neIds)
+	{
+		var initIdArrays = neIds.split(",");
+		var initNameArrays = neNames.split(",");
+		for(var i=0;i<initNameArrays.length;i++)
+		{
+			addCfgName(initIdArrays[i], initNameArrays[i]);
+		}
+	}
+}
+
+function addCfgName(cfgNeId,cfgNeName)
+{
+			var icoName = 'folder.gif';
+			var outHTML = '<div id="'+selectedPrefix+cfgNeId+'" style="height:20px;PADDING-left:3px;white-space:nowrap" '
+						+		'onclick="cfgItemClick()" '
+						+		'ondblclick="delCfgItemFromChoice()">'
+						+   '<img width="16" height="16" src="../../image/ico/'+icoName+'" align="absmiddle">'
+						+	'<nobr class="cfgItemNobr">'+cfgNeName+'</nobr>'
+						+ '</div>';
+			cfgDiv.insertAdjacentHTML("beforeEnd",outHTML);
+}
+
+function isCfgItemExist(oItem)
+{
+	var oFindItem = document.getElementById(selectedPrefix+oItem.id);
+	return oFindItem;
+}
+
+function delCfgItemFromChoice()
+{
+	if(oClickedCfgItem)
+	{
+		var oNextCfgItem = oClickedCfgItem.nextSibling;
+		oClickedCfgItem.removeNode(true);
+		oClickedCfgItem = null;
+		if(!oNextCfgItem)
+		{
+			oNextCfgItem = cfgDiv.firstChild;
+		}
+		if(oNextCfgItem)
+		{
+			oNextCfgItem.click();
+			oNextCfgItem.scrollIntoView();
+		}
+	}
+}
+
+function delCfgItemFromChoiceAll()
+{
+	cfgDiv.innerText="";
+}
+
+function cfgItemClick()
+{
+	if(oClickedCfgItem)
+	{
+		oClickedCfgItem.runtimeStyle.backgroundColor = '';
+		oClickedCfgItem.runtimeStyle.color = '';
+	}
+	oClickedCfgItem = getElement(event.srcElement,'div');
+	oClickedCfgItem.runtimeStyle.backgroundColor = '#808080';
+	oClickedCfgItem.runtimeStyle.color = 'white';
+}
+
+function enter()
+{
+	var oSelectedNodes = cfgDiv.childNodes;
+	var oSelectedObj;
+	returnObjs = new Array();
+	for(var i=0;i<oSelectedNodes.length;i++)
+	{
+		oSelectedObj = new Object();
+		oSelectedObj.value = getSelectedVal(oSelectedNodes[i]);
+		oSelectedObj.text = oSelectedNodes[i].lastChild.innerHTML;
+		returnObjs.push(oSelectedObj);
+	}
+	parentHandel.VIEW_ID.value=custViewList.getObject().value;
+	window.close();
+}
+
+function winUnLoad()
+{
+	window.returnValue = returnObjs;
+}
+
+function getSelectedVal(oSelectedNode)
+{
+	return oSelectedNode.id.replace(selectedPrefix,"");
+}
+
+</SCRIPT>
+</body>
+</html>

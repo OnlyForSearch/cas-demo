@@ -1,0 +1,156 @@
+body {
+	background-color: #ffffff;
+}
+
+.cloud_center_detail {
+	color: #000000;
+	margin-left: 1%;
+}
+
+.table_cloud_center_template {
+	font-size: 14px;
+	border-collapse: collapse;
+	border: none;
+	width: 98%;
+}
+
+.table_cloud_center_template thead {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+	font-size: 14px;
+	font-weight:bold;
+	color: #000000;
+	background-color: #EFF3F7;
+}
+
+.table_cloud_center_template td {
+	border: solid #999999 1px;
+	
+	text-align: center;
+	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: hand;
+}
+
+.detail_title {
+	color: #ffffff;
+	top: 10px;
+	font-size: 14px;
+	line-height: 40px;
+	width: 100%;
+	height: 40px;
+	background-color: #3176B1;
+}
+
+.detail_control_div {
+	margin-left: 20px;
+	margin-right: 20px;
+	/* 	border-left:1px #999999 solid;
+	border-right:1px #999999 solid; */
+	margin-top: 3px;
+	margin-bottom: 2px;
+	width: 100%;
+}
+
+.search_img {
+	width: 25px;
+	height: 25px;
+	cursor: hand;
+	background: url(/resource/image/jtitsm_cloud/users/search-gray.png) no-repeat;
+}
+
+.contition_text {
+	color: #999999; 
+	line-height : 25px;
+	height: 30px;
+	width: 300px;
+	line-height: 25px;
+}
+
+.detail_search_div {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.exportDivClass {
+	margin-right: 20px;
+	margin-top: 5px;
+	width: 105px;
+	height: 30px;
+}
+
+.page_div {
+	margin-left: 35%;
+	margin-top: 10px;
+	height: 25px;;
+	text-align: center;
+	color: #999999;
+	font-size: 14px;
+}
+
+.page_btn {
+	line-height: 25px;
+}
+
+.pageSpan {
+	display: block;
+	float: left;
+	padding: 1px 5px;
+	border-bottom: 1px solid #999999;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	color: #999999;
+	cursor: pointer;
+}
+.pageSpaned{
+	background-color: #f3f3f3;
+}
+.pageInput {
+	line-height: 25px;
+	width: 100px;
+	height: 29px;
+	display: block;
+	float: left;
+	color: #999999;
+	text-align: center;
+}
+
+.page_search {
+	display: block;
+	float: left;
+	padding: 1px 5px;
+	border: 1px solid #999999;
+	background-color: #74BA11;
+	color: #ffffff;
+	cursor: hand;
+}
+
+.page_search:hover {
+	color: #ff0;
+}
+
+.pageNum {
+	color: red;
+}
+
+.borderRight {
+	border-right: 1px solid #999999;
+}
+.page_info {
+	padding-right: 20px;
+	margin-top: 10px;
+	font-size : 12px;
+	color: #000000;
+	font-size: 12px;
+}
+
+.page_info a {
+	color: #ff0000;
+}
+.link_a:link {color: #479BEF; text-decoration: none}
+.link_a:active {color: #DB594B; text-decoration: none}
+.link_a:visited {color: #479BEF; text-decoration: none}
+.link_a:hover {color: #DB594B; text-decoration: none;position:relative;left:1px;top:1px}

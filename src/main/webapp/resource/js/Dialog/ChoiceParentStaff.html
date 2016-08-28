@@ -1,0 +1,122 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择员工</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onunload="winClose()">
+<fieldset>
+<legend>选择员工</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:10px">
+  <tr height="20">
+  	<td ALIGN="center">待&nbsp;选&nbsp;员&nbsp;工</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;员&nbsp;工</td>
+  </tr>
+  <tr>
+    <td><IE:XmlSelect id="staffByOrgList" size="15" width="160" onOptionDblClick="addBtn.click()" multiple/></td>
+    <td width="80">
+    	<table border="0" cellspacing="5" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="staffByOrgList.moveSelectedTo(selectedStaffList)" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="selectedStaffList.moveSelectedTo(staffByOrgList)" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="staffByOrgList.moveAllTo(selectedStaffList)"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="selectedStaffList.moveAllTo(staffByOrgList)"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="15" width="160" 
+    		onOptionDblClick="delBtn.click()" multiple/></td>
+  </tr>
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/staff_manage?tag=40&id=';
+var isMultiple;
+var isReturn = false;
+
+function iniPage()
+{
+	var params = window.dialogArguments;
+	var urlParam = getUrlParam();
+	if(params.length==1)
+	{
+		if(params[0]!=null)
+		{
+			staffByOrgList.filter = params[0];
+		}
+		staffByOrgList.xmlsrc = '../../../servlet/staff_manage?tag=41&action='+urlParam.action;
+	}
+	else
+	{
+		if(params[1]!=null)
+		{
+			staffByOrgList.filter = params[1];
+		}
+		staffByOrgList.xmlsrc = '../../../servlet/staff_manage?tag=40&id='+params[0]
+			+'&action='+urlParam.action;
+	}
+}
+
+function enter()
+{
+	isReturn = true;
+	window.close();
+}
+
+function winClose()
+{
+	if(isReturn)
+	{
+		var staffObj = new Object();
+		var oSelect = selectedStaffList.getObject();
+		if(selectedStaffList.getLength()==0)
+		{
+			staffObj.id = "";
+			staffObj.name = "";
+		}
+		else
+		{
+			var idArray = new Array();
+			var nameArray = new Array();
+			for(i=0;i<oSelect.options.length;i++)
+			{
+				idArray.push(oSelect.options[i].value);
+				nameArray.push(oSelect.options[i].text);
+			}
+			staffObj.id = idArray.join(",");
+			staffObj.name = nameArray.join(",");
+		}
+		window.returnValue = staffObj;
+	}
+}
+</SCRIPT>
+</body>
+</html>

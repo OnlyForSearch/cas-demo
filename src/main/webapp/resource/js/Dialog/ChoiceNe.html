@@ -1,0 +1,213 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择收藏的报表主题</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<?IMPORT namespace="IE" implementation="../../htc/dbTree.htc" />
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onunload="winClose()">
+<fieldset>
+<legend>选择网元</legend>
+<table border="0" cellpadding="1" cellspacing="8" width="100%">
+	<tr>
+		<td width=60>网元:</td>
+		<td><ie:dbtree id="neId" cfg="ne_no_cfg" onResultChange="treeChangeEvent()" /></td>
+	</tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:10px">
+<legend>报表主题</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:10px">
+  <tr height="20">
+  	<td ALIGN="center">待&nbsp;选&nbsp;主&nbsp;题</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">收&nbsp;藏&nbsp;主&nbsp;题</td>
+  </tr>
+  <tr>
+    <td><IE:XmlSelect id="staffByOrgList" size="11" width="350" onOptionDblClick="addBtn.click()"/></td>
+    <td width="80">
+    	<table border="0" cellspacing="5" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="staffByOrgList.addSelectedTo(selectedStaffList,true)" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="selectedStaffList.delSelectedOption()" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn" style="display:none">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="staffByOrgList.addAllTo(selectedStaffList,true)"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn" style="display:none">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="selectedStaffList.delAllOption()"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="11" width="350" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/staff_manage?tag=36&id=';
+var actionCollectionURL = '../../../servlet/staff_manage?tag=72&id=';
+var insertCollectionURL = '../../../servlet/staff_manage?tag=70&id=';
+var initCollectionURL   = '../../../servlet/staff_manage?tag=71';
+
+var defaultOrg= '../../../servlet/staff_manage?tag=43';
+var isMultiple;
+var isReturn = false;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var isSetRoot;
+var orgId;
+var oAction;
+var parWin;
+
+function iniPage()
+{
+	var params = window.dialogArguments;
+	isMultiple = params[0];
+	orgId = params[1];
+	var orgText = params[2];
+	var isReadOnly = params[3];
+	var filter = params[4];
+	var iniName = params[5];
+	var iniId = params[6];
+	isSetRoot = params[7];
+	oAction = params[8];
+	parWin = params[9];
+	staffByOrgList.multiple = true;
+	selectedStaffList.multiple = true;
+	selectedStaffList.addOptions(iniName,iniId);
+	selectedStaffList.xmlsrc = initCollectionURL;
+}
+
+function initTree()
+{
+	var oXML = event.xmlDom;
+	if(isSetRoot && orgId)
+	{
+		var root = oXML.selectSingleNode('//MenuItem[@id='+orgId+']');
+		var menuRoot = oXML.selectSingleNode('/root/Menu');
+		menuRoot.appendChild(root);
+		oXML.selectNodes("/root/Menu/MenuItem[@id!="+orgId+"]").removeAll();
+	}
+	if(!isNull(oAction))
+	{
+		oAction.pretreatment(oXML);
+	}
+}
+
+function treeChangeEvent()
+{
+	var selectedValue = event.selectedValue;
+	if(selectedValue!="")
+	{
+		var url = actionCollectionURL+event.selectedValue;
+		getStaffList(url);
+	}else
+	{
+		staffByOrgList.xmlsrc = "";
+	}
+	
+}
+
+function getStaffList(_url)
+{
+	staffByOrgList.xmlsrc = _url;
+}
+
+function moveIn()
+{
+	if(!isMultiple)
+	{
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter()
+{
+	isReturn = true;
+	window.close();
+}
+
+function winClose()
+{
+	/*if(bClosed) {
+		parentHandle.oData.doRefresh(false);
+		window.close();
+	}*/
+	if(isReturn)
+	{
+		var staffObj = new Object();
+		var oSelect = selectedStaffList.getObject();
+		if(selectedStaffList.getLength()==0)
+		{
+			staffObj.id = "";
+			staffObj.name = "";
+		}
+		else
+		{
+			if(isMultiple)
+			{
+				var idArray = new Array();
+				var nameArray = new Array();
+				for(i=0;i<oSelect.options.length;i++)
+				{
+					idArray.push(oSelect.options[i].value);
+					nameArray.push(oSelect.options[i].text);
+				}
+				staffObj.id = idArray.join(",");
+				staffObj.name = nameArray.join(",");
+			}
+			else
+			{
+				staffObj.id = oSelect.options[0].value;
+				staffObj.name = oSelect.options[0].text;
+			}
+		}
+		var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp.Open("POST",insertCollectionURL+staffObj.id,false);
+    	xmlhttp.send();
+		if(isSuccess(xmlhttp)) {
+		MMsg("收藏成功!");
+		}else{
+		MMsg("收藏失败!");
+		}
+		//window.returnValue = staffObj;
+	}
+}
+
+function getXMLSrc(documentURL,xmlSrc)
+{
+	var re = /(.*\/)(.*)/g;
+	return  documentURL.replace(re, "$1"+xmlSrc);
+}
+
+function isNull(value)
+{
+    return (typeof value == "undefined" || value==null);
+}
+</SCRIPT>
+</body>
+</html>

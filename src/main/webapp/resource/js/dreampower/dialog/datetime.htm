@@ -1,0 +1,232 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>日期和时间</title>
+
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="date.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+var whichTd
+function init(){
+	initDialog()
+	initDocument()
+	createTableDays()
+	updateTable()
+	initGlobals(sltDateFormats,sltTimeFormats,sltDayFormats)
+	populateUI(); 
+	GlistDateFormats.selectedIndex=1 
+}
+function doOK(){
+	insertDate()
+}
+function insertDate(){
+	if(whichTd && whichTd.innerText!='' && whichTd.innerText!=' '){
+		var dtTemp=new Date(tfYear.value,parseInt(tfMonth.value)-1,parseInt(whichTd.innerText),new Date().getHours(),new Date().getMinutes())
+		var	dateStr = createDayStr(dtTemp,sltDayFormats.value,sltDateFormats.value,false,true);
+			dateStr += createDateStr(dtTemp,sltDateFormats.value,true);
+			dateStr += createTimeStr(dtTemp,sltTimeFormats.value);
+			myEditor.window.insert(dateStr)
+			window.close()
+	}else{
+		alert('没有选中日期')
+	}
+}
+function createTableDays(){
+	var  strTemp='<table width="100%" height="120"  border="0" cellpadding="0" cellspacing="0" id="tblDays">'
+  				+'<tr><td class="hightLight" align=center>日</td> <td align=center>一</td><td align=center>二</td><td align=center>三</td><td align=center>四</td align=center><td align=center>五</td align=center><td class="hightLight" align=center>六</td> </tr><tr>'
+	for(var i=0;i<6;i++){
+		strTemp+='<tr>'
+		for(var j=0;j<7;j++){
+			strTemp+='<td style="padding-top:2px" align=center onMouseOver="if(this.innerText!=\' \'&&whichTd!=this){this.bgColor=\'#EEEEEE\'}" onMouseOut="if(whichTd!=this){this.bgColor=\'\'}" onClick="if(this.innerText!=\' \'){if(whichTd){whichTd.bgColor=\'\'};whichTd=this;this.bgColor=\'#DDDDDD\'}">&nbsp;</td>'
+		}
+    	strTemp+='</tr>'
+	}
+	spnTableDays.innerHTML=strTemp+'</table>'
+}
+function updateTable(year,month){
+	var dtNow=new Date()
+	if(year==null)year=dtNow.getYear()
+	if(month==null)month=dtNow.getMonth()
+	year=parseInt(year)
+	month=parseInt(month)
+	tfYear.value=year
+	tfMonth.value=month+1
+	var dtTemp=new Date(year,month,1)
+	var firstDayOfWeek=dtTemp.getDay()
+	var daysInTheMonth=getDaysInMonth(year,month)
+	for(var i=7;i<49;i++){
+		with(tblDays.cells[i]){
+			bgColor=''
+			innerText=' '
+			className=''
+		}
+	}
+	whichTd=null
+	for(var i=1;i<=daysInTheMonth;i++){
+		with(tblDays.cells[i+6+firstDayOfWeek]){
+			innerText=(i<10) ? (' '+i) : i
+			if(year==dtNow.getYear()&&month==dtNow.getMonth()&&i==dtNow.getDate()){
+				className='hightLight'
+				bgColor='#DDDDDD'
+				whichTd=tblDays.cells[i+6+firstDayOfWeek]
+			}
+		}
+	}
+}
+function getDaysInMonth(year,month){
+	var daysOfFed=28
+	if ((year%4 == 0) && (year%100!=0) || (year%400 == 0)) {
+		daysOfFed=29
+	} 
+	var daysInMonth=[31, daysOfFed, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	return daysInMonth[month]
+}
+
+
+var ARR_FullMonths= new Array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月");
+var ARR_AbbrMonths= new Array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月");
+var ARR_FullDays= new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+var ARR_AbbrDays= new Array("Sun","Mon","Tue","Wed","Thu","Fri","Sat");
+
+var ARR_WestAbbrDays = new Array("Sun","Mon","Tue","Wed","Thu","Fri","Sat");
+var ARR_WestFullDays = new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+var ARR_WestAbbrMonths = new Array("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
+var ARR_WestFullMonths= new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+
+var yearChinese = "年";
+var yearKorean= "";
+var monthChinese = "月";
+var dayChinese = "日";
+var dayKorean= "";
+var yearJapanese= "";
+var dayJapanese= "";
+var monthJapanese= "";
+
+var westSeparator= ", ";
+
+var AM = "AM";
+var PM = "PM";
+var OPTION_NoDay  = "不要星期";
+var OPTION_NoTime = "不要时间";
+
+var CHAR_PreDay = "";
+var CHAR_PostDay = ", ";
+
+
+var	LIST_DateFormats = new Array(	"Chinese1",
+									"Chinese2",
+									"American3",
+									"American2",
+									"ISO8601",
+									"Spanish1",
+									"French1",
+									"German1",
+									"Brazilian1",
+									"Italian1"
+								);
+
+var	LIST_DayFormats = new Array(	"NoDay",
+									"FullDayComma",
+									"FullDay",
+									"WestFullDayComma",
+									"WestAbbrDayComma"
+								);
+
+
+var	LIST_TimeFormats = new Array(	"NoTime",
+									"AMPMTime",
+									"MilitaryTime"
+								);
+</script>
+
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm"></form>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+  <tr>
+      <td height="25" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="28">日期</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">&nbsp;</td>
+      <td height="153" valign="top">
+<table width="200"  border="0" cellpadding="0" cellspacing="4" bgcolor="#FFFFFF" class="longWidth" style="border:1px inset">
+  <tr>
+    <td><table width="100%" height="21"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="35" align="right"><input name="tfYear" type="text" class="input" id="tfYear" style="width:35px" value="2099" maxlength="4" readonly></td>
+    <td width="12"><table width="100%" height="20"  border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><input name="btYearUp" type="button" class="bt" id="btYearUp" value="5" onfocus="this.blur()" onmousedown="this.handle=setInterval('tfYear.value++;if(tfYear.value==2100){tfYear.value=1900};updateTable(tfYear.value,tfMonth.value-1)',100);" onmouseup="clearInterval(this.handle)" onmouseout="clearInterval(this.handle)"></td>
+      </tr>
+      <tr>
+        <td><input name="btYearDown" type="button" class="bt" id="btYearDown" value="6" onfocus="this.blur()" onmousedown="this.handle=setInterval('tfYear.value--;if(tfYear.value==1899){tfYear.value=2099};updateTable(tfYear.value,tfMonth.value-1)',100);" onmouseup="clearInterval(this.handle)" onmouseout="clearInterval(this.handle)"></td>
+      </tr>
+    </table></td>
+	<td width="30">年</td>
+    <td width="18" align="right"><input name="tfMonth" type="text" class="input" id="tfMonth"  style="width:18px" value="12" maxlength="4" readonly></td>
+    <td width="12"><table width="100%" height="20"  border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><input name="btMonthUp" type="button" class="bt" id="btYearUp" value="5" onfocus="this.blur()"  onmousedown="this.handle=setInterval('tfMonth.value++;if(tfMonth.value==13){tfMonth.value=1};updateTable(tfYear.value,tfMonth.value-1)',100);" onmouseup="clearInterval(this.handle)" onmouseout="clearInterval(this.handle)"></td>
+      </tr>
+      <tr>
+        <td><input name="btMonthDown" type="button" class="bt" id="btYearDown" value="6" onfocus="this.blur()" onmousedown="this.handle=setInterval('tfMonth.value--;if(tfMonth.value==0){tfMonth.value=12};updateTable(tfYear.value,tfMonth.value-1)',100);" onmouseup="clearInterval(this.handle)" onmouseout="clearInterval(this.handle)"></td>
+      </tr>
+    </table></td>
+    <td>月</td>
+  </tr>
+</table>
+<span id=spnTableDays></span>
+</td>
+  </tr>
+</table>
+	  </td>
+  </tr>
+  <tr>
+      <td height="25" colspan="2">
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="28">格式</td>
+      <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+    </tr>
+  </table></td>
+    </tr>
+  <tr>
+      <td width="80" height="22" align="right">星期格式:</td>
+      <td><select class="normalWidth" id="sltDayFormats">
+      </select></td>
+  </tr>
+  <tr>
+      <td width="80" height="22" align="right">日期格式:</td>
+      <td><select class="normalWidth" id="sltDateFormats">
+      </select></td>
+  </tr>
+  <tr>
+      <td width="80" height="22" align="right">时间格式:</td>
+      <td><select class="normalWidth" id="sltTimeFormats">
+      </select></td>
+  </tr>
+
+	    </table>
+	
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">	  <script>writeButtonsRight()</script>
+	  </td>
+</tr>
+</table>
+</body>
+</html>

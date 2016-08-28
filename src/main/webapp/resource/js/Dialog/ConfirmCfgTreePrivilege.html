@@ -1,0 +1,78 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>确认权限修改</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@media all
+{
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8 6 0 6;
+}
+.tdRadio
+{
+	padding-left:16
+}
+.spanText
+{
+	height:100%;
+	padding:3 0 0 5;
+}
+</STYLE>
+</head>
+<body>
+<table border=0 cellpadding="2" cellspacing="1">
+	<tr>
+		<td><IMG src="../../image/form_cell_item.gif" align="absmiddle"><span class="spanText">只将该权限更改应用于该节点,还是同时应用于所有的子节点</span></td>
+	</tr>
+	<tr>
+		<td class="tdRadio">
+			<INPUT type=radio name="isInherit" hideFocus="true" onclick="setInheritType()">仅将更改应用于该节点
+		</td>
+	</tr>
+	<tr>
+		<td class="tdRadio">
+			<INPUT type=radio name="isInherit" hideFocus="true" CHECKED onclick="setInheritType()">将更改应用于该节点和所有子节点
+		</td>
+	</tr>
+	<tr id="oClearTypeTR">
+		<td height="30"><IMG src="../../image/form_cell_item.gif" align="absmiddle"><span style="height:100%;padding:7 5 0 5">子节点应用方式:</span><select id="oClearTypeSelect">
+			<option value="1" selected>继承此次修改权限</option>
+			<option value="0">继承全部权限</option>
+		</select></td>
+	</tr>
+</table>
+<div class="btnArea"">
+	<IE:button value="确&nbsp;&nbsp;定" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()"/>&nbsp;
+</div>
+<script type="text/javascript">
+function setInheritType()
+{
+	if(document.getElementsByName("isInherit")[1].checked)
+	{
+		oClearTypeTR.style.visibility = 'inherit';
+	}
+	else
+	{
+		oClearTypeTR.style.visibility = 'hidden';
+	}
+}
+
+function enter()
+{
+	var params = new Array(2);
+	params[0] = document.getElementsByName("isInherit")[1].checked;
+	params[1] = oClearTypeSelect.options[oClearTypeSelect.selectedIndex].value;
+	window.returnValue = params;
+	window.close();
+}
+</script>
+</body>
+</html>

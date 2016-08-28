@@ -1,0 +1,724 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择配置</title>
+<script src="../ext/adapter/ext/ext-base.js"></script>
+<script src="../ext/ext-all.js"></script>
+<script src="../ext/build/locale/ext-lang-zh_CN.js" charset="utf-8"></script>
+<script src="../ext_extend/XmlTreeNode.js"></script>
+<script src="../ext_extend/MultiSelect/MultiSelect.js"></script>
+<script src="../ext_extend/MultiSelect/ItemSelector.js"></script>
+<script type='text/javascript'>//<![CDATA[
+	Ext.BLANK_IMAGE_URL = '../ext/resources/images/default/s.gif';
+//]]></script>
+<link rel="stylesheet" type="text/css" href="../../css/default.css" />
+<link rel="stylesheet" type="text/css"
+	href="../ext/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="../../css/icon.css" />
+<style>
+.ux-mselect {
+	overflow: auto;
+	background: white;
+	position: relative; /* for calculating scroll offsets */
+	zoom: 1;
+	overflow: auto;
+}
+
+.x-list-body {
+	overflow-x: auto;
+	height: 380;
+}
+
+.x-list-body DT {
+	overflow-x: visible;
+	text-overflow: clip;
+}
+
+.x-list-body DT EM {
+	overflow-x: visible;
+	text-overflow: clip;
+	padding: 2 2 2 5;
+}
+
+DL {
+	padding: 2 2 2 2;
+	font: normal 12px tahoma, arial, helvetica, sans-serif;
+}
+
+.ux-mselect-item {
+	font: normal 12px tahoma, arial, helvetica, sans-serif;
+	border: 1px solid #fff;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.ux-mselect-selected {
+	border: 1px dotted #a3bae9 !important;
+	background: #DFE8F6;
+	cursor: pointer;
+}
+
+.x-view-drag-insert-above {
+	border-top: 1px dotted #3366cc;
+}
+
+.x-view-drag-insert-below {
+	border-bottom: 1px dotted #3366cc;
+}
+
+.x-list-body {
+	overflow: auto;
+	width: 100%;
+	zoom: 1;
+	float: left;
+}
+</style>
+<script>
+	Ext.apply(Ext.ux.ItemSelector.prototype, {
+		chooseAll: function(){
+			var fromRange = this.fromMultiselect.store.getRange();
+			var toRange = this.toMultiselect.store.getRange();
+			var range = [], flag;
+			for(var i=0; i<fromRange.length; i++){
+				flag = true;
+				for(var j=0; j<toRange.length; j++){
+					if(fromRange[i].id == toRange[j].id){
+						flag = false;
+						break;
+					}
+				}
+				if(flag){
+					range.push(fromRange[i]);
+				}
+			}
+	        this.fromMultiselect.store.removeAll();
+	        this.toMultiselect.store.add(range);	        
+	        var si = this.toMultiselect.store.sortInfo;
+	        if (si && this.isSort){
+	            this.toMultiselect.store.sort(si.field, si.direction);
+	        }
+	        this.valueChanged(this.toMultiselect.store);
+	        
+		}
+	})
+	var alarmRuleUrl = "/servlet/AlarmRuleAction.do?";
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");		
+	var Global = {
+		rownum : 101
+	};
+	//window.dialogArguments = {isRelationId:1,neConfigId:'',neConfigName:'',neId:2173,use:2};
+	//获取参数
+	var neId = window.dialogArguments.neId;	
+	if(neId=='' || neId==null)neId=-1;
+	var isRelationId = window.dialogArguments.isRelationId || '';
+	var neConfigId;
+	var neConfigName;
+	var type = window.dialogArguments.type;   //性能阀值配置项需要标识是否已被引用过
+	var use = window.dialogArguments.use || 1; //标识规则/模版	
+	var params=null;//返回参数	
+	function initPage(){
+		//父窗口传进参数
+	    var dialogArgObj = window.dialogArguments;
+	    if(dialogArgObj!=null)
+	    {
+			neConfigId=dialogArgObj.neConfigId;
+			neConfigName=dialogArgObj.neConfigName;			
+			if(neConfigId)initSelectedNes(neConfigId,neConfigName);
+	    }
+	}
+	//初始化已选择网元配置项
+	function initSelectedNes(nes,neNames){
+		var selectRecord = Ext.data.Record.create([
+		   	{name:'text',type:'string'},
+		   	{name:'value',type:'int'}
+		]);
+		var nesArray=nes.split(",");
+		var neNamesArray=neNames.split(",");
+		var selectedStore = Ext.getCmp("selected").store;
+		for(var i=0;i<nesArray.length;i++){
+			selectedStore.add(new selectRecord({
+				value: nesArray[i],
+				text: neNamesArray[i],
+				icon: "/resource/image/ico/rules/1.jpg"
+			},nesArray[i]));
+		}
+	}		
+	//生成树根节点
+	function getRoot(){
+		var url = alarmRuleUrl+"method=getConfigByNeId&id="+neId+"&use="+use+"&isRelationId="+isRelationId;			
+		xmlhttp.open("post", url, false);
+		xmlhttp.send();				
+		//Global.instanceId = neId;
+		if(xmlhttp.responseText){						
+			var rootNodeJson = Ext.decode(xmlhttp.responseText);				
+			var rootNode = new Ext.tree.AsyncTreeNode({  
+				id			: rootNodeJson.id,
+				text		: rootNodeJson.text,
+				IS_CONFIG   : rootNodeJson.IS_CONFIG,
+				type        : rootNodeJson.type,
+				itemType    : rootNodeJson.itemType,
+				relationId  : rootNodeJson.relationId,
+				PARENT_NE_ID: rootNodeJson.PARENT_NE_ID,
+				icon		: rootNodeJson.icon,	
+				instanceId  : rootNodeJson.instanceId,			
+				expanded	: rootNodeJson.expanded,
+				leaf		: rootNodeJson.leaf,
+				checked		: rootNodeJson.checked
+			});
+		}else{
+			Ext.Msg.alert('系统提示', "对不起，您没有网元权限！");
+			var rootNode = new Ext.tree.AsyncTreeNode({
+				text		: "没有网元权限"
+			});
+		}
+		return rootNode;
+	}
+	//构建树
+	function createTree(){
+		//触发加载子节点
+		var beforeLoadTreeNode = function(node){
+			if(node){
+				if (!node.leaf) {	
+					//alert( alarmRuleUrl+"method=getChildConfigByNeId&id="+node.attributes.id+"&type="+node.attributes.type );	
+					//var id;
+					//if(node.attributes.itemType == "FROM_ENTITY_NE"){
+					//	id = node.attributes.relationId;
+					//}else{
+					//	id = node.attributes.id;							
+					//}
+					var instanceId,classId;
+					instanceId = node.attributes.instanceId; 	
+					if(node.attributes.type == "class"){						
+						classId = node.attributes.id
+					} else if(node.attributes.type == "config"){								
+						instanceId = node.attributes.id;		 
+					}
+					if(use == 2 && node.attributes.type == "root"){
+						instanceId = node.attributes.id;								
+					}											
+					//alert(instanceId+","+classId);
+					//alert(alarmRuleUrl+"method=getChildConfigByNeId&instanceId="+instanceId+"&classId="+classId+"&type="+node.attributes.type+"&itemType="+node.attributes.itemType+"&use="+use);
+																						
+					if(type == "threshold"){															
+						Global.tree.loader.dataUrl = alarmRuleUrl+"method=getChildConfigByNeId&instanceId="+instanceId+"&classId="+classId+"&parentId="+neId+"&type="+node.attributes.type+"&itemType="+node.attributes.itemType+"&use="+use;
+					}else{
+						Global.tree.loader.dataUrl = alarmRuleUrl+"method=getChildConfigByNeId&instanceId="+instanceId+"&classId="+classId+"&type="+node.attributes.type+"&itemType="+node.attributes.itemType+"&use="+use;
+					}										
+				}
+			}
+		}		
+		Global.tree = new Ext.tree.TreePanel({
+			iconCls		: "icon-accordian",
+			autoScroll 	: true,
+			height      : 380,
+			width       : 338,
+			id          : 'treePanel',
+			bodyStyle   : 'border:0px',
+			root		: getRoot(),
+			loader: new Ext.tree.TreeLoader({
+				timeout :100000
+			}),			
+			listeners 	: {
+				beforeload 	: beforeLoadTreeNode,
+				load    : function(){
+					filterTree();
+				},
+				beforedblclick : function(){return false;}
+			}
+		});					
+	}
+	//遍历搜索树 
+	function traverseTree(node,v,str){
+		if(node.attributes.type == 'config'){						
+			if(node.text.indexOf(v)!=-1){			
+				var searchStore = Ext.getCmp("search").store;						
+				var searchRecord = Ext.data.Record.create([
+				   	{name:'text',type:'string'},
+				   	{name:'value',type:'int'}
+				]);
+				if(searchStore.find("value",node.id)==-1){
+					searchStore.add(new searchRecord({
+						value: node.id,
+						text: str+"→"+node.text
+					},node.id));	
+				}								
+			}
+		}else{
+			if(!node.isLeaf()){					
+				if(!node.expanded){
+					node.on("expand",function(){
+						concatStr();
+					});		
+					node.expand();					
+				}else{			
+					concatStr();	
+				}													
+			}
+		}
+		function concatStr(){
+			for(var i=0; i<node.childNodes.length; i++){
+				var top='';				
+				if(node.id != neId){
+					if(str){
+						top = str+"."+node.text;
+					}else{
+						top = node.text;				
+					}
+				}
+				traverseTree(node.childNodes[i],v,top)
+			}
+		}	
+	}
+	/*
+	//删除节点
+	function deleteNode(node,id){
+		if(node.attributes.type == 'config'){
+			if(node.id == id){				
+				node.remove();
+				node.destroy();
+				return true;
+			}
+		}else{
+			if(!node.isLeaf()){
+				for(var i=0;i<node.childNodes.length;i++){
+					if(deleteNode(node.childNodes[i],id))return;
+				}				
+			}
+		}
+	}
+	*/
+	//设置节点选择框为 可用/不可用
+	function setNodeChecked(node,id,flag,all){		
+		if(node.attributes.type == 'config'){
+			if(all || node.id == id){	
+				node.getUI().toggleCheck(false);
+				if(!flag){
+					node.disable();		
+				}else{
+					node.enable();
+				}
+			}
+		}
+		if(!node.isLeaf()){			
+			for(var i=0;i<node.childNodes.length;i++){
+				if(setNodeChecked(node.childNodes[i],id,flag,all))return;
+			}				
+		}
+	}
+	//过滤树，已选的从树上剔除
+	function filterTree(){
+		var selectedStore = Ext.getCmp("selected").store;			
+		if(selectedStore.getCount() > 0){			
+			selectedStore.each(function(record){
+				setNodeChecked(Global.tree.getRootNode(),record.data.value);		
+			})
+		}else{			
+			setNodeChecked(Global.tree.getRootNode(),'',true,true);	
+		}	
+		
+		//var selectedStore = Ext.getCmp("selected").store;
+		//selectedStore.each(function(record){
+		//	deleteNode(Global.tree.getRootNode(),record.data.value);		
+		//})
+	}
+	//搜索库
+	function searchConfig(text){
+		var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"搜索中,请稍后..."});
+		myMask.show();//显示加载等待提示	
+		var searchCmp = Ext.getCmp("search");	
+		var isLike = Ext.getCmp("isLike").checked;				
+		var url = alarmRuleUrl+"method=searchConfig&id="+neId+"&text="+text+"&rownum="+Global.rownum+"&use="+use+"&isRelationId="+isRelationId+"&isLike="+isLike;				
+		(function(){
+			xmlhttp.open("post", url, false);			
+			xmlhttp.send();
+			if(xmlhttp.responseText){
+				var data = Ext.decode(xmlhttp.responseText);				
+				var searchStore = searchCmp.store;						
+				var searchRecord = Ext.data.Record.create([
+				   	{name:'text',type:'string'},
+				   	{name:'value',type:'int'},
+				   	{name:'icon',type:'string'}
+				]);
+				var count = data.length;
+				for(var i=0;i<data.length;i++){
+					var name;
+					if(use == 1){
+						name = (data[i].text).substring((data[i].text).indexOf("→")+1)
+   					}else{
+						name = data[i].text;
+	   				}
+					if(data[i].icon=='/resource/image/ico/rules/1.jpg'){
+						name = "*"+name;
+	               	}
+					searchStore.add(new searchRecord({
+						value : data[i].value,
+						text  : name,
+						icon  : data[i].icon
+					},data[i].value));
+				}
+				myMask.hide();	
+			}else{
+				myMask.hide();	
+			}		
+		}).defer(100);
+	}
+	//树》已选框
+	function selectByTree(){
+		var treePanel = Ext.getCmp("treePanel");
+		var treeNodes = treePanel.getChecked(),arr=[];
+		for(var i=0; i<treeNodes.length; i++){
+			if(treeNodes[i].attributes.type == 'config'){
+				arr.push(treeNodes[i]);
+			}
+		}
+		if(arr.length > 0){	
+			var selectedStore = Ext.getCmp("selected").store;				
+			selectedStore.each(function(record){
+				for(var i=0; i<arr.length; i++){
+					var dataId = record.data.value;
+					if(record.data.value.indexOf("_")!=-1)dataId = record.data.value.substring(0,record.data.value.indexOf("_"))
+					if(arr[i].attributes.id.substring(0,arr[i].attributes.id.indexOf("_")) == dataId){												
+						arr.splice(i,1);
+					}
+				}
+			})																		
+			for(var i=0;i<arr.length;i++){									
+				var temp = [];
+				var text = arr[i].text,flag = arr[i].parentNode.id!=neId;
+				var parentNode = arr[i].parentNode;
+				while(flag){					
+					text = parentNode.text+"→"+text;
+					parentNode = parentNode.parentNode;
+					if(use == 1){
+						flag = parentNode.id!=neId;
+					}else{
+						if(parentNode!=null){
+							if(parentNode.id!=neId){
+								flag = parentNode.attributes.itemType != "FROM_CI_VIEW_CLASS"; // == "FROM_ENTITY_NE";
+							}else{
+								flag = false;
+							}
+						}else{
+							flag = false;
+						}
+					}					
+				}
+				var selectRecord = Ext.data.Record.create([
+           		   	{name:'text',type:'string'},
+           		   	{name:'value',type:'int'},
+           		   	{name:'icon',type:'string'}
+           		]);
+           		if(arr[i].attributes.icon=='/resource/image/ico/rules/1.jpg'){
+					text = "*"+text;
+               	}
+				selectedStore.add(new selectRecord({
+					value: arr[i].attributes.id,
+					text: text,
+					icon: arr[i].attributes.icon
+				},arr[i].id));
+			}						
+		}
+	}
+	Ext.onReady(function(){		
+		createTree();
+		Global.tree.root.expand();		
+		var btn = new Ext.Button({
+			text : " 搜 索 ",
+			icon : "../../image/ico/search2.gif",
+			handler : function(){					
+				var value = Ext.getCmp("searchText").getValue();
+				var tree = Ext.getCmp("tree");
+				var search = Ext.getCmp("search");
+				if(value==""){
+					Global.searchText = "";
+					filterTree();
+					tree.show();				
+					search.hide();
+				}else{
+					Global.searchText = value;						
+					var restr = [];
+					var searchStore = Ext.getCmp("search").store;
+					searchStore.removeAll();
+					searchConfig(value);
+					//traverseTree(Ext.getCmp("treePanel").getRootNode(),value);		
+					tree.hide();
+					search.show();											
+				} 
+				
+			}			
+		});
+		
+		var checkbox = new Ext.form.Checkbox({  
+                    boxLabel : '模糊匹配',  
+                    id : 'isLike',  
+                    checked : true  
+                });
+		
+	    var searchText = new Ext.Panel({
+			anchor : '100%',
+			layout : "column",
+			bodyStyle   : "border:0px;padding:5,0,0,10;",
+			items: [{
+				layout : "form",
+				width  : 520,
+				bodyStyle   : "border:1px;",
+				items : [{
+					fieldLabel : "名称",
+					id     : 'searchText',
+					width  : 400,
+					xtype  : "textfield",
+					mode   : "local"
+				},checkbox]
+			},btn]
+		});
+		
+	    var isForm = new Ext.form.FormPanel({
+	        //title: '选择配置项',
+	        width:1100,
+	        bodyStyle: 'padding:10px;border:0px;',
+	        layout  :'column',
+	        items:[searchText,
+	   	        {
+       			  xtype:'fieldset',
+       			  title:'待选择',
+	              style:'width:340px;height:450px',
+	              id:'tree',	              
+	              items:[
+					Global.tree
+	              ],
+	              tbar:[{
+	                    text: '展开',
+	                    icon: '../ext/resources/images/default/grid/group-collapse.gif',
+	                    handler:function(){
+		                    Global.tree.expandAll();
+		                }
+	               },{
+	                    text: '折叠',
+	                    icon: '../ext/resources/images/default/grid/group-expand.gif',
+	                    handler:function(){
+		                    Global.tree.collapseAll();
+		                }
+	               },{
+	                    text: '刷新',
+	                    icon: '../../image/ico/refresh.gif',
+	                    handler:function(){
+	            	   		Ext.getCmp("treePanel").setRootNode(getRoot());
+		                }
+	               },{
+	                    text: '全选',
+	                    icon: '../../image/ico/add3.gif',
+	                    handler:function(){	                    		                    	
+	            	   		var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"执行操作中,请稍后..."});
+	            	   		myMask.show();
+	            	   		isForm.getForm().findField('itemselector').reset();
+	            	   		(function(){
+	            	   			var selectedCmp = Ext.getCmp("selected");		
+	            	   			var url = alarmRuleUrl+"method=getAllConfig&id="+neId+"&use="+use+"&isRelationId="+isRelationId;		            	   					           
+            	   				xmlhttp.open("post", url, false);
+            	   				xmlhttp.send();
+            	   				if(xmlhttp.responseText){
+            	   					var data = Ext.decode(xmlhttp.responseText);				
+            	   					var selectedStore = selectedCmp.store;						
+            	   					var selectedRecord = Ext.data.Record.create([
+            	   					   	{name:'text',type:'string'},
+            	   					   	{name:'value',type:'int'},
+            	   					 	{name:'icon',type:'string'}
+            	   					]);
+            	   					var count = data.length;            	   					
+            	   					for(var i=0;i<data.length;i++){
+            	   						var name;
+            	   						if(use == 1){
+            	   							name = (data[i].text).substring((data[i].text).indexOf("→")+1)
+                	   					}else{
+        									name = data[i].text;
+                    	   				}
+            	   						if(data[i].icon=='/resource/image/ico/rules/1.jpg'){
+            	   							name = "*"+name;
+            	   		               	}
+            	   						selectedStore.add(new selectedRecord({
+            	   							value : data[i].value,
+            	   							text  : name,
+            	   							icon  : data[i].icon
+            	   						},data[i].value));
+            	   					}            	   					
+            	   				}			              	   			            	   				            	   			
+	            	   			myMask.hide();
+		            	   	}).defer(100);
+		            	   		
+		                }
+	                }]
+	        	},{
+	            xtype: 'itemselector',
+	            name: 'itemselector',
+	            drawUpIcon:false,
+	            drawDownIcon:false,
+	            drawTopIcon:false,
+	            drawBotIcon:false,
+	            isSort:false,
+		        imagePath: '../ext_extend/MultiSelect/images/',
+		        listeners:{
+					"beforeAdd":function(){						
+						if(Ext.getCmp("tree").isVisible() == true){							
+							selectByTree();													
+							return false;
+						}
+						return true;
+					},
+					"beforeDelete":function(selectCmb,id){				
+						var selectionsArray = selectCmb.toMultiselect.view.getSelectedIndexes();						
+						var records = [],record;						
+						for (var i=0; i<selectionsArray.length; i++) {							
+			                record = selectCmb.toMultiselect.view.store.getAt(selectionsArray[i]);
+			                if(record)setNodeChecked(Global.tree.getRootNode(),record.data.value,true);
+			            }	
+						//Ext.getCmp("treePanel").setRootNode(getRoot());				
+						//setNodeChecked(Global.tree.getRootNode(),id,true);												
+						return true;						
+					},
+					"change":function(){
+						filterTree();
+					}
+			    },
+	            multiselects: [{
+	                width: 340,
+	                height: 440,
+	                tbar:[{
+	                    text: '显示树',
+	                    icon: '../../image/ico/changeView.gif',
+	                    handler:function(){
+		                	Global.searchText = "";
+							filterTree();
+							Ext.getCmp("tree").show();				
+							Ext.getCmp("search").hide();
+		                }
+	                },
+	                {
+	                    text: '全选',
+	                    icon: '../../image/ico/add3.gif',
+	                    handler:function(){
+	                		isForm.getForm().findField('itemselector').chooseAll();
+		                }
+	                },
+	                {
+	                    text: '更多..',
+	                    style: 'margin:0,0,0,170',
+	                    handler:function(){
+		                	Global.rownum = 10001;
+		                	var searchStore = Ext.getCmp("search").store;
+							searchStore.removeAll();
+		                	searchConfig(Global.searchText);
+		                }
+	                }],	
+	                id:'search',
+	                legend:'待选择',
+	                store: new Ext.data.ArrayStore({
+	        	        data: [],
+	        	        fields: ['value','text'],
+	        	        sortInfo: {
+	        	            field: 'value',
+	        	            direction: 'ASC'
+	        	        }
+	        	    }),	                
+	                displayField: 'text',
+	                valueField: 'value'
+	            },{
+	                width: 340,
+	                height: 440,                
+	                id:'selected',
+	                legend:'已选择',
+	                store: new Ext.data.ArrayStore({
+	        	        data: [],
+	        	        fields: ['value','text'],
+	        	        sortInfo: {
+	        	            field: 'value',
+	        	            direction: 'ASC'
+	        	        }
+	        	    }),
+	        	    tbar:[{
+	                    text: '清空列表',
+	                    icon: '../../image/ico/delete.gif',
+	                    handler:function(){
+	        	    		//Ext.getCmp("treePanel").setRootNode(getRoot());
+		                    isForm.getForm().findField('itemselector').reset();
+		                    //filterTree();
+		                }
+	                }],	                
+	                displayField: 'text',
+	                valueField: 'value'
+	            }]
+	        }]
+	    });
+	    var btns = new Ext.Panel({
+			anchor    : "100%",
+			layout    : "column",
+			bodyStyle : "border:0px;paddingLeft:295px",
+			items     : [{
+				xtype : "button",
+				text  : "确 定",
+				style: "marginRight:10px",
+				icon  : "../../image/ico/apply.gif",
+				handler:function(){
+					var selectedStore = Ext.getCmp("selected").store;
+					var configId=[],configName=[],iconArr=[];
+					selectedStore.each(function(record){
+						configId.push(record.data.value);
+						configName.push(record.data.text);
+						iconArr.push(record.data.icon);
+					})
+					params = {};
+					params.neConfigId = configId.join(",");
+					params.neConfigName = configName.join(",");
+					if(type == "threshold"){
+						var clash = [];
+						var neArr = neConfigId.split(",");
+						for(var i=0;i<iconArr.length;i++){											
+							if(iconArr[i] == "/resource/image/ico/rules/1.jpg"){
+								if(neArr.length > 0){
+									if(neArr.indexOf(configId[i])==-1){
+										clash.push(configName[i]);
+									}
+								}else{
+									clash.push(configName[i]);
+								}
+							}
+						}						
+						if(clash.length > 0){
+							Ext.Msg.show({
+								title:"系统提示",
+								msg:"已选配置项中存在已被其他性能阀值规则引用过的配置项,请重新选择",
+								buttons: Ext.Msg.OK,
+								icon:Ext.MessageBox.ERROR
+							});
+							return;
+						}
+						
+					}
+					window.returnValue = params;
+					window.close();
+				}
+			},{
+				xtype : "button",
+				text  : "取 消",
+				icon  : "../../image/ico/del2.gif",
+				handler: function(){
+					window.close();
+				}			
+			}]
+		 })
+		
+		new Ext.Panel({
+			anchor   : "100%",
+			bodyStyle : "border:0px",
+			renderTo : Ext.getBody(),
+			items    : [isForm,btns]
+			
+		});
+		Ext.getCmp("search").hide();
+		initPage();
+	})
+
+</script>
+</head>
+<body>
+</body>
+</html>

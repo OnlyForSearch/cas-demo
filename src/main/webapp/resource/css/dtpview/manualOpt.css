@@ -1,0 +1,128 @@
+.flow_info{
+	margin-bottom: 10px;
+	font-weight:bold;
+	color:#666;
+}
+.flow_process {
+    /*height: 50px;*/
+    padding-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.flow_process > div {
+    margin-bottom: 25px; 
+}
+.line_exec {
+	float: left;
+    width: 108px;
+    height: 78px;
+    background: url('../../image/channelBusiness/timer_line_green.png') 50px repeat-x;
+}
+.line_wait {
+	float: left;
+    width: 108px;
+    height: 78px;
+    background: url('../../image/channelBusiness/timer_line_gray.png') 10px repeat-x;
+}
+.item_exec {
+	float: left;
+    background: url('../../image/channelBusiness/mb_green.png') no-repeat;
+    width: 65px;
+    height: 78px;
+}
+.item_wait {
+	float: left;
+    background: url('../../image/channelBusiness/mb_red.png') no-repeat;
+    width: 65px;
+    height: 78px;
+}
+.item_name {
+    position:relative;
+    text-align:center;
+    top:60px;
+    left:-85px;
+    width:200px;
+}
+
+.item_exec .item_time{
+	color:#14AB8A;
+}
+
+.item_exec .item_name{
+	color:#14AB8A;
+}
+
+.item_wait .item_time{
+	color:#f35958;
+}
+
+.item_wait .item_name{
+	color:#f35958;
+}
+
+.item_time {
+	font-size:8px;
+	text-align:center;
+	position: relative;
+	top:36px;
+	width: 65px;
+}
+.item_cnt{
+	position: relative;
+	float: right;
+	top:-45px;
+	left:3px;
+	font-size:9px !important;
+	color: #FFFFFF;
+	background-color: #FF5353;
+	padding-top: 0px;
+	padding-right: 2px;
+	padding-bottom: 0px;
+	padding-left: 2px;
+}
+.filler_height {
+	padding-bottom:20px;
+}
+.font_blue {
+	color:blue;
+}
+.cursor_pointer {
+	cursor:pointer;
+}
+.grid-title .dial-tools {
+  display: inline-block; 
+  padding: 0; 
+  margin: 0; 
+  margin-top: 6px; 
+  float: right; 
+}
+.tools-icon-size {
+	font-size:17px;
+	color:#000;
+}
+.bottom_border{
+	border-bottom:0px solid #eee !important;
+}
+.popover{
+	max-width:480px !important;
+}
+.btnClose{
+	font-size:12px;
+}
+.p_link_list{
+	margin-left: 68px;
+	display:block;
+	margin-top:3px;
+}
+.div_param_list_panel{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.fail_desc {
+
+}
+.table-bordered th{
+	background-color:white !important;
+	border-left-style:solid !important;
+	order-left-width:1px !important;
+}

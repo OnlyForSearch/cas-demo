@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <bgcolor id="color" red="77" green="93" blue="237" />
+    <areaNameColor value="0xffffff"/>
+	<area id="beijing" regionId="10" title="北京" value="北京" centre_offset_x="0" centre_offset_y="0"/>
+	<area id="tianjin" regionId="22" title="天津" value="天津"  centre_offset_x="0" centre_offset_y="0"/>
+	<area id="xinjiang" regionId="99" title="新疆" value="新疆" centre_offset_x="5" centre_offset_y="20"/>
+	<area id="xizang" regionId="891" title="西藏" value="西藏"  centre_offset_x="10" centre_offset_y="5"/>
+	<area id="qinghai" regionId="971" title="青海" value="青海"  centre_offset_x="15" centre_offset_y="5"/>
+	<area id="gansu" regionId="931" title="甘肃" value="甘肃"  centre_offset_x="-30" centre_offset_y="-30"/>
+	<area id="neimenggu" regionId="471" title="内蒙古" value="内蒙古"  centre_offset_x="5" centre_offset_y="60"/>
+	<area id="ningxia" regionId="95" title="宁夏" value="宁夏"  centre_offset_x="5" centre_offset_y="17"/>
+	<area id="shanxi" regionId="351" title="山西" value="山西"  centre_offset_x="-2" centre_offset_y="15"/>
+	<area id="liaoning" regionId="24" title="辽宁" value="辽宁"  centre_offset_x="-8" centre_offset_y="-5"/>
+	<area id="jilin" regionId="431" title="吉林" value="吉林" centre_offset_x="5" centre_offset_y="8"/>
+	<area id="heilongjiang" regionId="451" title="黑龙江" value="黑龙江"  centre_offset_x="10" centre_offset_y="25"/>
+	<area id="hebei" regionId="311" title="河北" value="河北"  centre_offset_x="22" centre_offset_y="18"/>
+	<area id="shandong" regionId="531" title="山东" value="山东" centre_offset_x="-10" centre_offset_y="10"/>
+	<area id="henan" regionId="371" title="河南" value="河南"  centre_offset_x="3" centre_offset_y="-12"/>
+	<area id="shannxi" regionId="29" title="陕西" value="陕西"  centre_offset_x="8" centre_offset_y="0"/>
+	<area id="sichuan" regionId="28" title="四川" value="四川"  centre_offset_x="3" centre_offset_y="-15"/>
+	<area id="chongqing" regionId="23" title="重庆" value="重庆" centre_offset_x="-10" centre_offset_y="8"/>
+	<area id="hubei" regionId="27" title="湖北" value="湖北" centre_offset_x="0" centre_offset_y="-8"/>
+	<area id="anhui" regionId="55" title="安徽" value="安徽" centre_offset_x="0" centre_offset_y="-10"/>
+	<area id="jiangsu" regionId="25" title="江苏" value="江苏" centre_offset_x="0" centre_offset_y="-10"/>
+	<area id="shanghai" regionId="21" title="上海" value="上海" centre_offset_x="0" centre_offset_y="0"/>
+	<area id="zhejiang" regionId="571" title="浙江" value="浙江" centre_offset_x="-8" centre_offset_y="0"/>
+	<area id="fujian" regionId="59" title="福建" value="福建" centre_offset_x="-8" centre_offset_y="0"/>
+	<area id="jiangxi" regionId="79" title="江西" value="江西" centre_offset_x="-3" centre_offset_y="-23"/>
+	<area id="hunan" regionId="73" title="湖南" value="湖南" centre_offset_x="0" centre_offset_y="-15"/>
+	<area id="guizhou" regionId="851" title="贵州" value="贵州"  centre_offset_x="3" centre_offset_y="-5"/>
+	<area id="guangxi" regionId="77" title="广西" value="广西"  centre_offset_x="3" centre_offset_y="-5"/>
+	<area id="guangdong" regionId="20" title="广东" value="广东" centre_offset_x="0" centre_offset_y="-20"/>
+	<area id="xianggang" regionId="852" title="香港" value="香港" centre_offset_x="0" centre_offset_y="0"/>
+	<area id="taiwan" title="台湾" value="台湾" centre_offset_x="0" centre_offset_y="0"/>
+	<area id="hainan" regionId="898" title="海南" value="海南" centre_offset_x="0" centre_offset_y="-5"/>
+	<area id="yunnan" regionId="871" title="云南" value="云南" centre_offset_x="0" centre_offset_y="-3"/>
+</data>

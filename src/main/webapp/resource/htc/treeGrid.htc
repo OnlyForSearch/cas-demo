@@ -1,0 +1,874 @@
+<HEAD>
+<public:component literalcontent="true"  tagName=treeGrid             >
+<public:ATTACH   EVENT="ondocumentready" HANDLER="doInit"            />
+<public:PROPERTY NAME="initXML"    get="getInitXML" put="setInitXML" />	
+<public:PROPERTY NAME="value"      get="GetValue" put="SetValue"     />
+<public:PROPERTY NAME="skin"                       put="setSkin"     />
+<public:PROPERTY NAME="deepExpand"           put="setDeepExpand"     />
+<public:PROPERTY NAME="getRowStyle"                                  />
+<public:PROPERTY NAME="editableCellIndex"                            />
+<public:METHOD   NAME="getChangeRow"                                 />
+<public:METHOD   NAME="loadChild"                                    />
+<public:METHOD   NAME="showDelay"                                    />
+<public:METHOD   NAME="hideDelay"                                    />
+<public:METHOD   NAME="getSelected"                                  />
+<public:METHOD   NAME="expandNode"                                   />
+<public:METHOD   NAME="expandAll"                                    />
+<public:METHOD   NAME="getCurrentMaxLevel"                           />
+<public:METHOD   NAME="setColWidth"                                  />
+<public:METHOD   NAME="getColWidth"                                  />
+<public:METHOD   NAME="getRealHeight"                                />
+<public:METHOD   NAME="resetDataHeight"                              />
+<public:METHOD   NAME="getRowByObj"                                  />
+<public:EVENT    NAME="onExpandNode"    ID="oExpandNode"             />
+<public:EVENT    NAME="onRowClick"      ID="oRowClick"               />
+<public:EVENT    NAME="onRowDblClick"   ID="oRowDblClick"            />
+</public:component>
+<LINK REL=stylesheet id="oSkin"/>
+<SCRIPT LANGUAGE="javascript">
+//var iHeadHeight=24;// 表头高度
+var iScollWidth=20;// 滚动条宽度
+var iDefaultHeadWidth=50;// 默认表头宽度
+var iInitX;        // 鼠标在表头按下时的X坐标
+var iCurCellWidth; // 当前表头数据格的宽度
+var oCurHeadCell;  // 当前改变大小的表头
+var iMinCellWidth=10;
+var oInitXML=null;
+var iInitScrollHeight=0;
+var isFullWidth=false;
+var sPlusPic="/resource/image/ico/plus.gif";
+var sMiusPic="/resource/image/ico/minus.gif";
+var blankPic="/resource/image/ico/blank.gif";
+var sWaitPic="/resource/image/ico/spinner.gif"
+var selectedRow;
+var fieldNames = [];
+var isDeepExpand = false;
+var oChangeValueRow=[] ;
+var oWholeRows = [];
+var maxLevel=0;
+var gAwidths;
+function doInit()
+{
+   defaults.viewLink = document;
+   oSkin.href = oSkin.href || "/resource/css/treeGrid_Normal.css";
+   document.body.className="gridbox";
+   setContainerStyle();
+   setCopyFunc();
+}
+
+//解决viewLink在iframe下无法拷贝文字的问题 ,ie的bug  
+function setCopyFunc()
+{
+   if(element.document == top.document) return;
+   setCopyMenu();
+   document.onkeydown=function()
+   {
+      var cKey=67;
+      if(window.event.keyCode==cKey && window.event.ctrlKey)
+      {
+    	  document.selection.createRange().execCommand("Copy");
+      }
+   }
+   function setCopyMenu()
+   {
+	   document.onmouseup=function()
+	   {
+	   	   var range = document.selection.createRange().text;
+	   	   if(range.length > 0)
+	   	   {	   		 
+	   	      oCopy.style.display="";
+	   	      var eTop=element.offsetHeight;
+	   	      var eLeft=element.offsetWidth;
+	   	      var iTop=(event.clientY+oCopy.offsetHeight)>eTop?eTop-oCopy.offsetHeight:event.clientY;
+	   	      var iLeft=(event.clientX+oCopy.offsetWidth)>eLeft?eLeft-oCopy.offsetWidth:event.clientX;
+	   	      oCopy.style.posLeft=iLeft-2;
+	   	      oCopy.style.posTop=iTop;
+	   	      oCopy.setActive();
+	   	      oCopy.onclick=function()
+		      {
+			     event.cancelBubble=true;
+			     clipboardData.setData('Text',range);
+			     oCopy.style.display="none";
+		      }
+	   	      oCopy.onbeforedeactivate=function(){oCopy.style.display="none";}
+	   	   }
+	   	   
+	   }
+   }   
+}
+
+function getRealHeight()
+{
+	return (oDataScrollDiv.scrollHeight+oHeadTbody.rows[1].clientHeight);
+}
+
+function getCurrentMaxLevel()
+{
+   return maxLevel+1;
+}
+
+function getColWidth(colIndex)
+{
+   if(!gAwidths) return null;
+   return gAwidths[colIndex];
+}
+
+function setColWidth(colIndex,iWidth)
+{
+    var oHeadFirstRow=oHeadTbody.rows[0];
+    var oDataFirstRow=oDataTbody.rows[0];
+    oHeadFirstRow.cells[colIndex].style.width=iWidth;
+    oHeadFirstRow.cells[colIndex].style.height=0;
+    oDataFirstRow.cells[colIndex].style.width=iWidth;
+    oDataFirstRow.cells[colIndex].style.height=0; 
+}
+
+function setDeepExpand(isDeep)
+{
+	isDeepExpand = (isDeep=='true');
+}
+
+function setSkin(pCssPath)
+{
+    oSkin.href=pCssPath;
+}
+
+function getInitXML()
+{
+   return oInitXML;
+}
+
+function setInitXML(pInitXML)
+{
+	maxLevel=0;
+    iInitScrollHeight=oDataScrollDiv.scrollHeight;
+    oInitXML=pInitXML;
+    doClearData();
+    buildHead(oInitXML);
+    showData(oInitXML,null);
+    setTimeout(function(){fullCellWidth();},1);
+}
+
+function fullCellWidth()
+{	
+	//var hasYScroll=((oDataScrollDiv.scrollHeight-oDataScrollDiv.offsetHeight)>0);
+    var hasYScroll=isScroll(oDataScrollDiv)["scrollY"];
+    var oHeadLastCell=oHeadTbody.rows[0].lastChild;
+    var oDataLastCell=oDataTbody.rows[0].lastChild;
+	if(isFullWidth && hasYScroll)
+	{
+	    var iWidth=gAwidths[gAwidths.length-1]-iScollWidth+2;
+	    oHeadLastCell.style.width=iWidth;
+        oDataLastCell.style.width=iWidth;
+    }
+	else
+    {
+		oHeadLastCell.style.width=gAwidths[gAwidths.length-1]+'px';
+        oDataLastCell.style.width=gAwidths[gAwidths.length-1]+'px';
+    }
+}
+
+function isScroll(el)
+{
+	  var elems = el ? [el] : [document.documentElement, document.body];
+	  var scrollX = false, scrollY = false;
+	  for (var i = 0; i < elems.length; i++)
+	  {
+		  var o = elems[i];
+		  var sl = o.scrollLeft;
+		  o.scrollLeft += (sl > 0) ? -1 : 1;
+		  o.scrollLeft !== sl && (scrollX = scrollX || true);
+		  o.scrollLeft = sl;
+		  var st = o.scrollTop;
+		  o.scrollTop += (st > 0) ? -1 : 1;
+		  o.scrollTop !== st && (scrollY = scrollY || true);
+		  o.scrollTop = st;
+	 }
+	 return{scrollX:scrollX,scrollY:scrollY};
+}
+function doClearData()
+{
+    var iRowLen=oDataTbody.rows.length;
+    for(var i=iRowLen-1;i>=1;i--)
+    {
+        oDataTbody.deleteRow(i);
+    }
+    var oDataFirstRow=oDataTbody.rows[0];
+    deleteAllCell(oDataFirstRow);
+    if(oHeadTbody.rows.length==2)
+        oHeadTbody.deleteRow(1);
+    var oHeadFirstRow=oHeadTbody.rows[0];
+    deleteAllCell(oHeadFirstRow);
+}
+
+function deleteAllCell(oRow)
+{
+    var oCells=oRow.cells;
+    var iCellLen=oCells.length;
+    for(var j=iCellLen-1;j>=0;j--)
+    {
+        oRow.deleteCell(j);
+    }
+}
+/* 设置容器的表头和数据高度和宽度 */
+function setContainerStyle()
+{
+   var iContainerHeight=element.offsetHeight;
+   var iHeadHeight=parseInt(oHeadDiv.style.height,10)+parseInt(oDataScrollDiv.currentStyle.top,10)+2;
+   var iDataContainerHeight=iContainerHeight-iHeadHeight+1;
+   oDataScrollDiv.style.height=(iDataContainerHeight>0)?iDataContainerHeight:0;
+}
+
+function resetDataHeight()
+{
+	setContainerStyle();
+	fullCellWidth();
+	
+}
+/* 显示表头 */
+function buildHead(xmlDoc)
+{
+    var oFieldNode=xmlDoc.selectSingleNode("/root/Fields");
+    if(!oFieldNode)
+    {
+        alert("无法取到表头数据");
+	    return;
+    }
+    var oFields=oFieldNode.childNodes;
+    var aWidth=getAFieldWidth(oFields);
+    gAwidths=aWidth;
+    var iLen=oFields.length;
+    var oRow=oHeadTbody.insertRow();
+    for(var i=0;i<iLen;i++)
+    {
+       var oField = oFields[i];
+       var iWidth=aWidth[i];
+       if(!iWidth) iWidth=iDefaultHeadWidth;
+       setGridWidth(iWidth,oHeadTbody);
+       setGridWidth(iWidth,oDataTbody);
+       showHead(oField,oRow);
+    }
+}
+
+
+function getAFieldWidth(oFields)
+{
+     var iTotal=element.offsetWidth-2;
+     var iLen=oFields.length;
+     var aWidth=[];
+     var iTmpTotal=0;
+     var autoWidthCount = 0;
+     for(var i=0;i<iLen;i++)
+     {
+     	var oField = oFields[i];
+     	fieldNames[i] = oField.getAttribute("NAME");
+        var sWidth = oField.getAttribute("WIDTH");
+        if(sWidth=="*")
+		{
+		   aWidth[i]=sWidth;
+		   autoWidthCount++;
+		}
+		else
+		{
+		   aWidth[i]=parseInt(sWidth,10);
+		   iTmpTotal+=parseInt(sWidth,10);
+		}
+     }
+     if(iTmpTotal<iTotal)
+     {
+     	if(autoWidthCount == 0)
+     	{
+     		aWidth[aWidth.length-1] += iTotal-iTmpTotal;
+     	}
+     	else
+     	{
+	     	var _iDefaultHeadWidth = parseInt((iTotal-iTmpTotal)/autoWidthCount,10);
+	     	iDefaultHeadWidth = (_iDefaultHeadWidth>iDefaultHeadWidth)?_iDefaultHeadWidth:iDefaultHeadWidth;
+     	}
+     }
+     if((iTmpTotal+iDefaultHeadWidth*autoWidthCount)<=iTotal)
+     {
+     	isFullWidth = true;
+     }
+	for(var i=0,len=aWidth.length;i<len;i++)
+	{
+		if(aWidth[i] == "*")
+		{
+			aWidth[i] = iDefaultHeadWidth;
+		}
+	}
+    return aWidth;
+}
+
+/* 设置数据格宽度 */
+function setGridWidth(iWidth,oTbody)
+{
+     var oFirstRow=oTbody.rows[0];
+     var oCell=oFirstRow.insertCell();
+     oCell.style.width=iWidth;
+     oCell.style.height=0;     
+}
+
+/* 显示表头数据 */
+function showHead(oField,oRow)
+{
+	 var sLabel=oField.getAttribute("LABEL");
+     var oCell=oRow.insertCell();
+     oCell.innerHTML="<DIV class='hdrcell' style='OVERFLOW: hidden; WHITE-SPACE: nowrap;'"
+                      +" onmousedown='doHeadMousedown(this)'"
+		              +" onmousemove='doHeadMouseMove(this)'"
+		              +" onmouseup='doHeadMouseUp(this)'>"
+		              +sLabel+"</DIV>"
+}
+
+/* 显示数据 */
+function showData(xmlDoc,oParentRow)
+{
+    var oRowNodes=xmlDoc.selectNodes("/root/rowSet");
+    var iLen=oRowNodes.length;
+    // var aTag=assortTag(xmlDoc);
+    var iStartIndex=(oParentRow)?oParentRow.rowIndex+1:1;// 由于有定位的隐藏行，所以初始为1
+    var iLevel=(oParentRow)?parseInt(oParentRow.getAttribute("level"),10)+1:0;
+    var sRowUniqueIDs="";
+    for(var i=0;i<iLen;i++)
+    {
+        var oRow=oDataTbody.insertRow(iStartIndex+i);
+		var oRowXMLNode=oRowNodes[i];
+		setRowAttr(oRowXMLNode,oRow,["STYLE"]);
+		var data = {level:iLevel};
+		for(var j=0,n;n=oRowXMLNode.childNodes[j];j++)
+		{
+			data[n.nodeName] = n.text;
+		}
+		oRow.data = data;
+		oRow.setAttribute("level",iLevel);
+		oRow.setAttribute("parentRow",oParentRow);
+		oRow.onclick=function(){doRowClick(this);};
+		oRow.onmouseover = function(){doRowOver(this)};
+		oRow.onmouseout = function(){doRowOut(this)};
+		oRow.ondblclick = function(){doRowDblClick(this)};
+		if(element.getRowStyle)
+		{
+			element.getRowStyle.call(window,oRow,data);
+		}
+		var iTxtLen=fieldNames.length;
+		for(var j=0;j<iTxtLen;j++)
+		{
+		    var sTagName=fieldNames[j];
+		    var sText=oRowXMLNode.selectSingleNode(sTagName).text;
+		    var oCell=oRow.insertCell();
+		    if (sTagName == 'TASTER'){
+			oCell.height="100%";
+			oCell.align="center";
+			oCell.vAlign="middle";
+		    }
+		    setCellAttr(xmlDoc,sTagName,oCell)
+	        var sHTML="";
+	        //如果有设置编辑行属性则单元格内容改为文本框
+	        if(element.editableCellIndex && element.editableCellIndex==j)
+	        {
+	      	   sHTML= getCellHTML((j==0),oRowXMLNode,sText,iLevel,true,sTagName);
+	        }
+	        else
+	        {
+	      	   sHTML= getCellHTML((j==0),oRowXMLNode,sText,iLevel,'',sTagName);
+	        }
+		    oCell.innerHTML=sHTML;
+		}
+		if(oParentRow)
+		   sRowUniqueIDs+=oRow.uniqueID+",";
+    }
+    if(oParentRow)
+    {
+        oParentRow.setAttribute("childIds",sRowUniqueIDs.slice(0,-1));
+    }
+    //debugger;
+    //alert(oDataScrollDiv.scrollHeight)
+    oWholeRows.push(oRow);
+    
+}
+
+/* 设置数据行属性 */
+function setRowAttr(oRowNode,oRow,aAttr)
+{
+    var iLen=aAttr.length;
+    for(var i=0;i<iLen;i++)
+    {
+        var sTagName=aAttr[i].toUpperCase();
+        var node = oRowNode.selectSingleNode(sTagName);
+		var sAttrValue=(node)?node.text:"";
+		var isStyle=(sTagName=="STYLE");
+		if(isStyle)
+		{
+		     oRow.style.cssText=sAttrValue;
+		}
+		else
+		{
+		    // if(sTagName!="IMAGE")
+		       oRow.setAttribute(sTagName,sAttrValue)
+		}
+    }
+}
+
+
+/* 设置数据格属性 */
+function setCellAttr(xmlDoc,sFieldName,oCell)
+{
+    var oFieldNode=xmlDoc.selectSingleNode("/root/Fields/rowSet[@NAME='"+sFieldName+"']")
+    if(oFieldNode!=null)
+    {
+         var aFiledAttrs=oFieldNode.attributes;
+		 var iLen=aFiledAttrs.length;
+		 for(var i=0;i<iLen;i++)
+		 {
+		     var aFiledAttr=aFiledAttrs[i];
+		     var sAttrValue=aFiledAttr.value;
+		     var sAttrName=aFiledAttr.name.toUpperCase();
+		     var isStyle=(sAttrName=="STYLE");
+		     if(isStyle)
+		     {
+			     oCell.style.cssText=sAttrValue;
+		     }
+		     else
+		     {
+			    if(sAttrName=="NAME" && sAttrName=="WIDTH" && sAttrName=="LABEL")
+			       oCell.setAttribute(sAttrName,sAttrValue)
+		     }
+		 }
+    }
+}
+
+function editCell(obj){
+	if(obj.children.length>0){
+		var inputField= obj.children[1];
+		if(inputField.style.display=='none'){
+				obj.children[0].style.display='none';
+				inputField.style.display='';
+				inputField.select();
+		}
+		else{ 
+				obj.children[0].innerText = inputField.value;
+				obj.children[0].style.display='';
+				inputField.style.display='none';
+		}
+	}
+}
+
+function setChangeAttr(){
+	var sControl = event.srcElement;
+		sControl.isChange =true;
+	
+}
+
+/* 得到节点的HTML */
+function getCellHTML(isTreeNode,oRowXMLNode,sText,iLevel,cellEditable,tagName)
+{
+    if (tagName == 'TASTER'){
+	var sHTML="<DIV style='OVERFLOW: hidden; WHITE-SPACE: nowrap; HEIGHT: 100%;' class='data_cell'>";
+    }else if(tagName == 'RESULT_DESC'){
+    	sText = sText.replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/&lt;br&gt;/g,'<br/>');
+    	var sHTML="<DIV style='OVERFLOW: hidden; word-break: break-all; HEIGHT: 20px;' class='data_cell'>";
+    }else{
+		var sHTML="<DIV style='OVERFLOW: hidden; WHITE-SPACE: nowrap; HEIGHT: 20px;' class='data_cell'>";
+    }
+    var editAble = oRowXMLNode.selectSingleNode("EDITABLE"); 
+    var oBgColor =  oRowXMLNode.selectSingleNode("BG_COLOR"); 
+    var oColor =   oRowXMLNode.selectSingleNode("COLOR"); 
+    var vColor='',fColor  =  '';
+    if(oBgColor) vColor = oBgColor.text+";";// background-color:#D7FAC0
+	if(oColor)	fColor = oColor.text;// color:red
+    if(isTreeNode)
+    {
+		 var oIsParent=oRowXMLNode.selectSingleNode("IS_PARENT");
+		 var oImage=oRowXMLNode.selectSingleNode("IMAGE");
+		 var isParent=(oIsParent && parseInt(oIsParent.text))
+		 for(var i=0;i<iLevel;i++)
+		 {
+		     sHTML+="<IMG src='"+blankPic+"' align='absMiddle'/>"
+		 }
+		 if(isParent)
+		 {
+		     sHTML+="<IMG src='"+sPlusPic
+		          +"' align=absMiddle id='oExpandFlagImage' "
+			  +"onclick='doExpandNode(this.parentElement.parentElement.parentElement)'/>";
+		 }
+		 else
+		 {
+		     sHTML+="<IMG src='"+blankPic+"' align='absMiddle'/>";
+		 }
+		 if(oImage)
+		 {
+		     sHTML+="<IMG src='"+oImage.text+"' align=absMiddle/>";
+		 }		  
+		 if(cellEditable && editAble!=null && editAble.text=='1')
+		 {
+		 	  sHTML+="<div style='height:100%;"+vColor+"' onclick='editCell(this)'><div style='height:100%;"+vColor+fColor+"'>"+sText+
+		 	  "</div><input style='display:none;width:99%;"+vColor+fColor+"' type='text' onclick='javascript:this.select()' onchange='setChangeAttr()' value='"+sText+
+		 	  "'/></div>"
+		 }
+		 else
+		 {
+		 	sHTML+="<span style='height:100%;padding-top:5;'>"+sText+"</span>"
+		 }
+    }
+    else
+    {
+	     if(cellEditable && editAble!=null && editAble.text=='1')
+	     {
+			  sHTML+="<div style='height:100%;"+vColor+"' onclick='editCell(this)'><div style='height:100%;"+vColor+fColor+"'>"+sText+
+		 	  "</div><input style='display:none;width:99%;"+vColor+fColor+"' type='text' onclick='javascript:this.select()'  onchange='setChangeAttr()' value='"+sText+
+		 	  "'/></div>"
+		 }
+		 else
+		 {
+			  sHTML+="<span style='height:100%;'>"+sText+"</span>"
+		 }
+     
+    }
+    sHTML+="</DIV>";
+    return sHTML;
+}
+
+/* 把数据节点、属性节点、特殊节点归类 */
+function assortTag(xmlDoc)
+{
+    var aXML={text:fieldNames,attr:[]};
+    var oFirstRow=xmlDoc.selectSingleNode("/root/rowSet");
+    if(oFirstRow!=null)
+    {
+         var oChildNodes=oFirstRow.childNodes;
+		 var iLen=oChildNodes.length;
+		 for(var i=0;i<iLen;i++)
+		 {
+		     var sTagName=oChildNodes[i].tagName;
+		     var isShowNode=(xmlDoc.selectSingleNode("/root/Fields/rowSet[@NAME='"+sTagName+"']")!=null);
+		     if(isShowNode)
+		     {
+		         aXML.text.push(sTagName);
+		     }
+		     else
+		     {
+		         if(sTagName!="IMAGE")
+			     {
+	                 aXML.attr.push(sTagName)
+			     }
+		     }
+		 }    
+    }
+    return aXML;
+}
+
+/* 鼠标按下时，开始改变表头大小 */
+function doHeadMousedown(oHeadCellDiv)
+{
+     var iCellIndex=oHeadCellDiv.parentElement.cellIndex;
+     var oHeadHiddenCell=oHeadTbody.rows[0].cells[iCellIndex];
+     if(isBorder(oHeadHiddenCell))
+     {
+		  iInitX=event.x;
+		  var iCellIndex=oHeadCellDiv.parentElement.cellIndex;
+		  oCurHeadCell=oHeadHiddenCell;
+		  iCurCellWidth=parseInt(oCurHeadCell.style.width,10);
+		  oHeadCellDiv.setCapture();
+     }
+}
+
+/* 鼠标移动时，改变表头大小 */
+function doHeadMouseMove(oHeadCellDiv)
+{
+     var iCellIndex=oHeadCellDiv.parentElement.cellIndex;
+     var oHeadHiddenCell=oHeadTbody.rows[0].cells[iCellIndex];
+     if (oCurHeadCell && event.button == 1)
+     {
+		 var iOffsetX=event.x-iInitX;
+		 var iWidth=iCurCellWidth+iOffsetX;
+		 if(iWidth<iMinCellWidth) return;
+		 oCurHeadCell.style.width =iWidth;
+		 var oDataHiddenCell=oDataTbody.rows[0].cells[iCellIndex]
+		 oDataHiddenCell.style.width=iWidth;
+		 oHeadDiv.scrollLeft=oDataScrollDiv.scrollLeft;
+     }
+     else
+     {
+         oHeadCellDiv.style.cursor =(isBorder(oHeadHiddenCell))?"E-resize":"default";
+     }
+}
+
+function isBorder(oHeadCell)
+{
+    var iWidth=parseInt(oHeadCell.style.width,10);
+    return (iWidth-parseInt(event.offsetX,10)<10);
+}
+
+
+/* 鼠标释放时 */
+function doHeadMouseUp(oHeadCellDiv)
+{
+    if(oCurHeadCell!=null)
+       oHeadCellDiv.releaseCapture();
+    oCurHeadCell=null;
+}
+
+/* 下面滚动条拖动时同步表头div的滚动条 */
+function doDivScroll(oScrollDiv)
+{
+     oHeadDiv.scrollLeft=oScrollDiv.scrollLeft;
+}
+
+/* 限制控件body向下拖动 */
+function doOnScroll()
+{
+     document.body.doScroll("scrollbarUp");
+}
+
+
+/* 控制子节点的申缩 */
+function ctrlChildNode(oRow,isChickNode)
+{
+    var isOpen=oRow.getAttribute("open");
+    var oExpandImage=oRow.cells[0].children[0].all("oExpandFlagImage");
+    var sChildIds=oRow.getAttribute("childIds");
+    if(!sChildIds) return;
+    var aChild=sChildIds.split(",");
+    var childs=oRow.getAttribute("childIds").split(",");
+    for(var i=0,c;c=childs[i];i++)
+    {
+    	c = eval(c);
+    	if(c.getAttribute("open")==isOpen)
+    	{
+    		ctrlChildNode(c,isChickNode)
+    	}
+    	if(isOpen=="true")
+    	{
+    		c.style.display=(isChickNode)?"none":"";
+    	}
+    	else
+    	{
+    		c.style.display=(isChickNode)?"":"none";
+    	}
+    }
+    if(isChickNode)
+    {
+    	oRow.setAttribute("open",(isOpen=="true")?"false":"true");
+    	oExpandImage.src=(isOpen=="true")?sPlusPic:sMiusPic;
+    }
+}
+
+function doFireEvent(oEventId,name,value)
+{
+   var oEvent = createEventObject();
+   oEvent.setAttribute(name,value);
+   oEvent.grid = element;
+   oEventId.fire(oEvent)
+}
+
+
+function expandNode(index)
+{
+	doExpandNode(oDataTbody.rows[index]);
+}
+
+
+/* 定时展开所有树节点 */
+var oTreeRowSize = 0;
+var expandRow =null;
+function expandAll()
+{
+	var iLen =  oDataTbody.rows.length;
+	var oRows=[];
+	for(var i=1;i<iLen;i++)
+	{
+		var oRow = oDataTbody.rows[i];
+		if(oRow.data.IS_PARENT && oRow.data.IS_PARENT=='1')
+	    {
+			oRows.push(oRow);
+	    }
+	}
+	for (var j=0;j<oRows.length;j++)
+	{
+		doExpandNode(oRows[j]);
+	}
+}
+
+
+/* 外部加载xml的事件 */
+function doExpandNode(oRow)
+{
+	if(!oRow) return;
+	if(event)
+	{
+		event.cancelBubble=true;
+	}
+    var isAlreadyCall=oRow.getAttribute("alreadyCall");    
+    var sParent=oRow.data.IS_PARENT;
+    var oExpandImage=oRow.cells[0].children[0].all("oExpandFlagImage");
+    var isParent=(sParent && parseInt(sParent))
+    if(!isParent) return;
+    var iLevel=parseInt(oRow.getAttribute("level"),10);
+    if(iLevel>maxLevel) maxLevel=iLevel;
+    if(!isAlreadyCall)
+    {
+        showWait(oRow); 
+        doFireEvent(oExpandNode,"srcRow",oRow);
+		oExpandImage.src=sMiusPic;
+		oRow.setAttribute("open","true");
+		oRow.setAttribute("alreadyCall","true");
+    }
+    else
+    {
+        ctrlChildNode(oRow,"none")
+    }
+}
+
+function showWait(oRow)
+{
+    var iRowIndex=oRow.rowIndex;
+    var iLevel=parseInt(oRow.getAttribute("level"),10+1)
+    var oWaitRow=oDataTbody.insertRow(iRowIndex+1);
+    var oWaiteCell=oWaitRow.insertCell();
+    oWaiteCell.colSpan=oRow.cells.length;
+    var sHTML="";
+    for(var i=0;i<iLevel+1;i++)
+    {
+       sHTML+="<IMG src='"+blankPic+"' align='absMiddle'/>";
+    }
+    sHTML+="<IMG src='"+sWaitPic+"' align='absMiddle'/>"
+    oWaiteCell.innerHTML=sHTML;
+
+}
+
+function doRowOver(oRow)
+{
+	if(oRow != selectedRow)
+	{
+		oRow.runtimeStyle.backgroundColor = '#EFEFEF';
+	}
+}
+
+function doRowOut(oRow)
+{
+	if(oRow != selectedRow)
+	{
+		oRow.runtimeStyle.backgroundColor = ''
+	}
+}
+
+/* 点击表格行处触发的事件 */
+function doRowClick(oRow)
+{
+    if(selectedRow)
+    {
+    	selectedRow.runtimeStyle.backgroundColor = '';
+    }
+    selectedRow = oRow;
+    oRow.runtimeStyle.backgroundColor = '#DFE8F6';  
+    event.cancelBubble=true;
+    doFireEvent(oRowClick,"srcRow",oRow);
+    if(editableCellIndex)
+    {
+    	oChangeValueRow.push({cRow:oRow,cInput:oRow.cells[editableCellIndex].children[0].children[0].children[1]});
+    }
+}
+
+function getRowByObj(obj)
+{
+	var oTR=getElement(obj,"TR",0);
+	return oTR;
+}
+
+function doRowDblClick(oRow)
+{
+	event.cancelBubble=true;
+	doFireEvent(oRowDblClick,"srcRow",oRow);
+}
+
+/* 加载子节点 */
+function loadChild(oRow,oXMLDoc)
+{
+    /* 删除等待行 */
+    oDataTbody.deleteRow(oRow.rowIndex+1);
+    showData(oXMLDoc,oRow);
+    if(isDeepExpand===true)
+	{
+    	var childs=oRow.getAttribute("childIds").split(",");
+        for(var i=0,c;c=childs[i];i++)
+        {
+        	c = eval(c);
+        	doExpandNode(c)
+        }
+	}
+}
+
+function showDelay()
+{
+	oWait.style.pixelLeft=(document.body.clientWidth-oWait.style.pixelWidth)/2;
+	oWait.style.pixelTop=(document.body.clientHeight-oWait.style.pixelHeight)/2;
+	oWait.style.display="block";
+}
+
+function hideDelay()
+{
+	oWait.style.display="none";
+}
+
+function getSelected()
+{
+	return selectedRow;
+}
+
+function getChangeRow(){
+		return oChangeValueRow;
+}
+
+</SCRIPT>
+</head>
+<body style="margin:0px;padding:0px;" onscroll="doOnScroll()">
+<div id="oCopy" style="opacity:0.5;z-index:20000;padding:5 8;width:50px;font-size:16px;border:1px solid #0A246A;font-family: 宋体;display:none;position:absolute;background:white"
+	 onmouseover='this.style.backgroundColor="#B6BDD2"' onmouseout='this.style.backgroundColor="white"'>
+复制
+</div>
+<TABLE style="TABLE-LAYOUT: fixed" height="100%" cellSpacing=0 cellPadding=0 width="100%">
+    <TBODY>
+      <TR>
+        <TD vAlign=top>
+	  <DIV style="OVERFLOW-X: hidden; WIDTH: 100%; POSITION: relative; HEIGHT: 200px;" id="oHeadDiv">
+            <TABLE class=xhdr style="WIDTH: 100%" cellSpacing=0 cellPadding=0 >
+              <TBODY>
+                <TR>
+                  <TD><TABLE class=hdr style="BORDER-RIGHT: gray 0px solid; TABLE-LAYOUT: fixed; 
+				  BORDER-TOP: gray 0px solid; BORDER-LEFT: gray 0px solid; 
+				  BORDER-BOTTOM: gray 0px solid" cellSpacing=0 cellPadding=0 width="100%" id="oHeadTable">
+                      <TBODY id="oHeadTbody" >
+                        <TR style="POSITION: absolute">
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+		        </TD>
+                  <TD style="WIDTH: 100%" id="oScrollTD">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+                </TR>
+              </TBODY>
+            </TABLE>
+          </DIV>
+        </TD>
+      </TR>
+      <TR>
+        <TD>
+         <DIV class=objbox style="OVERFLOW: auto; WIDTH: 100%; POSITION: relative; TOP: -178px;" id="oDataScrollDiv"
+	  onscroll="doDivScroll(this)">
+            <DIV  id="oDataDiv">
+              <TABLE class="obj row20px" style="TABLE-LAYOUT: fixed;" cellSpacing=0 cellPadding=0 id="oDataTable">
+                <TBODY id="oDataTbody">
+                  <TR style="POSITION: absolute" >
+                  </TR>
+		 </TBODY>
+		</TABLE>
+		 </DIV>
+	     </DIV>
+           </TD>
+	 </TR>
+	</TBODY>
+   </TABLE>
+   <div style='z-index:1000;display:none;position:absolute;background-color:white' id='oWait'>
+	    <img src='/resource/image/ico/spinner.gif' style='float:left'/>
+	</div>   
+</body>

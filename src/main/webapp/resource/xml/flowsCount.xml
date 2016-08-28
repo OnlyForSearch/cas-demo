@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="gb2312"?>
+<flows>
+<!--此文件为 北京集团ITSM 本地化文件，
+    后续如需修改此文件，则在本地代码上做添加、删除、修改的操作，【不得以覆盖】形式投放此文件-->
+<!--ITSM首页中待办汇总-->
+	<flow>
+		<flow_name>任务派发流程</flow_name>
+		<flow_mod>11109</flow_mod>
+		<sql_id>6100001</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000400</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>申告处理流程</flow_name>
+		<flow_mod>11107</flow_mod>
+		<sql_id>6100002</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000408</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>两级事件管理流程</flow_name>
+		<flow_mod>11021</flow_mod>
+		<sql_id>6100021</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>6100021</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>事件管理流程</flow_name>
+		<flow_mod>11104</flow_mod>
+		<sql_id>6100003</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000301</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>问题管理流程</flow_name>
+		<flow_mod>11103</flow_mod>
+		<sql_id>6100004</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000602</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>总部需求管理流程</flow_name>
+		<flow_mod>11105</flow_mod>
+		<sql_id>6100005</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000011</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>MSS需求管理流程</flow_name>
+		<flow_mod>11111</flow_mod>
+		<sql_id>6100006</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000200</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>变更管理流程</flow_name>
+		<flow_mod>11117</flow_mod>
+		<sql_id>6100007</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000321</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>发布管理流程</flow_name>
+		<flow_mod>11118</flow_mod>
+		<sql_id>6100008</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000002</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>测试管理流程</flow_name>
+		<flow_mod>11115</flow_mod>
+		<sql_id>6100009</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000001</queryResultId>
+	</flow>
+	<flow>
+		<flow_name>区域MSS业务变更</flow_name>
+		<flow_mod>11083</flow_mod>
+		<sql_id>6100010</sql_id><!--SQL_CFG表对应的sql_id -->
+		<queryResultId>90000311</queryResultId>
+	</flow>
+</flows>

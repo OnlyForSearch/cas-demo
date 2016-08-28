@@ -1,0 +1,237 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>多选菜单</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../XML.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:5px 10px 0px 16px;
+	background:white;
+}
+.TreeDIV
+{
+	WIDTH:200px;HEIGHT:98%;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+}
+.cfgItemNobr
+{
+	height:100%;
+	margin-left:2px;
+	padding:4px 2px 0px 2px;
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onunload="winUnLoad()">
+<table width="468" border="0" cellpadding="0" cellspacing="0">
+	<TR height="26" valign="bottom" style="padding-bottom:3px">
+		<TD width="200" align="center">待选信息</TD>
+		<TD>&nbsp;</TD>
+		<TD width="200" align="center">已选信息</TD>
+	</TR>
+	<TR height="260">
+		<TD valign="top"><div id="treeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;"></div></TD>
+		<TD align="center">
+			<div><IE:button value=">" width="33" onclick="addCfgItemFromChoice(oTree.getSelectedItem())"/></div>
+			<div style="height:30px"></div>
+			<div><IE:button value="<" width="33" onclick="delCfgItemFromChoice()"/></div>
+		</TD>
+		<TD valign="top"><div id="cfgDiv" class='TreeDIV'></div></TD>
+	</TR>
+	<TR height="30">
+		<TD align="right" COLSPAN="3" valign="bottom">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="enter()"/>&nbsp;
+		  	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()"/>
+		</TD>
+	</TR>
+</table>
+<SCRIPT language="javascript">
+var oTree;
+var oClickedCfgItem;
+var selectedPrefix = 'choice_';
+var returnObjs = null;
+var initSelectedId;
+
+function iniPage()
+{	
+	var args = window.dialogArguments;
+	//returnObjs = new Array();
+	var action = args[0];
+	var oSendObj = args[1];
+	initSelectedId = args[2];
+	switch(action)
+	{
+		case 'BY_URL':
+			oTree = new XMLTree();
+			oTree.xmlUrl = oSendObj;
+			break;
+		case 'BY_DOC':
+			oTree = new XMLTree();
+			oTree.xmlObj = oSendObj;
+			break;
+	}
+	oTree.isOpenChildAtferClick = true;
+	oTree.isDragOnTree = true;
+	oTree.isDragOnTreeBySelf = false;
+	oTree.setDblClickAction(new DblClickAction());
+	oTree.setEndDragAction(new DragEndAction());
+	oTree.setLoadAction(new LoadAction());
+	oTree.showAt(treeDiv);
+}
+
+function loadInitSelectedNode(initIds)
+{
+	if(initIds)
+	{
+		var initIdArrays = initIds.split(",");
+		for(var i=0;i<initIdArrays.length;i++)
+		{
+			addCfgItem(document.getElementById(initIdArrays[i]));
+		}
+	}
+}
+
+function DblClickAction()
+{
+	this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		addCfgItemFromChoice(oItem);
+	}
+	return this.parent;
+}
+
+function LoadAction()
+{
+	this.parent = new XMLTree_onLoad_Action;
+	this.parent.load = function()
+	{
+		loadInitSelectedNode(initSelectedId);
+	}
+	return this.parent;
+}
+
+function DragEndAction()
+{
+	this.parent = new XMLTree_onDragEnd_Action;
+	this.parent.endDrag = function(oDragItem,oOverItem)
+	{
+		var endDragItem = document.elementFromPoint(this.iX,this.iY);
+		if(cfgDiv.contains(endDragItem))
+		{
+			addCfgItemFromChoice(oDragItem);
+		}
+	}
+	return this.parent;
+}
+
+function addCfgItemFromChoice(oItem)
+{
+	if(oItem)
+	{
+		var assignId = oItem.id;
+		addCfgItem(oItem,true)
+	}
+}
+
+function addCfgItem(oItem,isClick)
+{
+	if(oItem)
+	{
+		var addItem = isCfgItemExist(oItem);
+		if(!addItem)
+		{
+			var icoName = (oItem.ico)?oItem.ico:'folder.gif'
+			var outHTML = '<div id="'+selectedPrefix+oItem.id+'" style="height:20px;PADDING-left:3px;white-space:nowrap" '
+						+		'onclick="cfgItemClick()" '
+						+		'ondblclick="delCfgItemFromChoice()">'
+						+   '<img width="16" height="16" src="../../image/ico/'+icoName+'" align="absmiddle">'
+						+	'<nobr class="cfgItemNobr">'+oItem.innerText+'</nobr>'
+						+ '</div>'
+			cfgDiv.insertAdjacentHTML("beforeEnd",outHTML);
+			addItem = cfgDiv.lastChild;
+		}
+		if(isClick)
+		{
+			addItem.click();
+			addItem.scrollIntoView();
+		}
+	}
+}
+
+function isCfgItemExist(oItem)
+{
+	var oFindItem = document.getElementById(selectedPrefix+oItem.id);
+	return oFindItem;
+}
+
+function delCfgItemFromChoice()
+{
+	if(oClickedCfgItem)
+	{
+		var oNextCfgItem = oClickedCfgItem.nextSibling;
+		oClickedCfgItem.removeNode(true);
+		oClickedCfgItem = null;
+		if(!oNextCfgItem)
+		{
+			oNextCfgItem = cfgDiv.firstChild;
+		}
+		if(oNextCfgItem)
+		{
+			oNextCfgItem.click();
+			oNextCfgItem.scrollIntoView();
+		}
+	}
+}
+
+function cfgItemClick()
+{
+	if(oClickedCfgItem)
+	{
+		oClickedCfgItem.runtimeStyle.backgroundColor = '';
+		oClickedCfgItem.runtimeStyle.color = '';
+	}
+	oClickedCfgItem = getElement(event.srcElement,'div');
+	oClickedCfgItem.runtimeStyle.backgroundColor = '#808080';
+	oClickedCfgItem.runtimeStyle.color = 'white';
+}
+
+function enter()
+{
+	var oSelectedNodes = cfgDiv.childNodes;
+	var oSelectedObj;
+	returnObjs = new Array();
+	for(var i=0;i<oSelectedNodes.length;i++)
+	{
+		oSelectedObj = new Object();
+		oSelectedObj.value = getSelectedVal(oSelectedNodes[i]);
+		oSelectedObj.text = oSelectedNodes[i].lastChild.innerHTML;
+		returnObjs.push(oSelectedObj);
+	}
+	window.close();
+}
+
+function winUnLoad()
+{
+	window.returnValue = returnObjs;
+}
+
+function getSelectedVal(oSelectedNode)
+{
+	return oSelectedNode.id.replace(selectedPrefix,"");
+}
+</SCRIPT>
+</body>
+</html>

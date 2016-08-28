@@ -1,0 +1,60 @@
+<ATTACH   EVENT="onmouseup"       HANDLER="DoMouseUp"   />
+<ATTACH   EVENT="onmousedown"     HANDLER="DoMouseDown" />
+<ATTACH   EVENT="onmouseout"       HANDLER="DoMouseOut"   />
+<ATTACH   EVENT="onmouseover"     HANDLER="DoMouseOver" />
+<ATTACH   EVENT="onselectstart"   HANDLER="DoSelectStart" />
+<ATTACH   EVENT="ondocumentready" HANDLER="DoInit" />
+<EVENT    NAME="onerror"    ID="error"    />
+<SCRIPT LANGUAGE="jscript">
+function DoInit()
+{
+    NormalBorder();
+}
+function DoMouseOver()
+{
+    ChangeBorder();
+}
+
+function DoMouseOut()
+{
+    NormalBorder();
+}
+
+function DoMouseDown()
+{
+    style.borderColor = "ThreeDDarkShadow " +
+                        "ThreeDHighlight " +
+                        "ThreeDHighlight " +
+                        "ThreeDDarkShadow";
+}
+
+function DoMouseUp()
+{
+    NormalBorder()
+} 
+function NormalBorder()
+{
+    style.border   = "solid 1px white";
+    style.filter   =" chroma(color=white)";
+}
+function ChangeBorder()
+{
+    style.borderColor = "ThreeDHighlight " +
+                        "ThreeDDarkShadow " +
+                        "ThreeDDarkShadow " +
+                        "ThreeDHighlight";
+}
+function ReturnError(sMsg)
+{
+    var oEvent = createEventObject();
+    oEvent.setAttribute("error", sMsg);
+    error.fire(oEvent);
+}
+
+function DoSelectStart()
+{
+    window.event.returnValue = false;
+    window.event.cancelBubble = true;
+}
+
+</SCRIPT>

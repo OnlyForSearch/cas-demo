@@ -1,0 +1,350 @@
+<public:component>
+<public:PROPERTY NAME="XMLSrc"       GET="getXMLSrc"      PUT="setXMLSrc"         />
+<public:PROPERTY NAME="table"        GET="getTable"       PUT="setTable"          />
+<public:PROPERTY NAME="keyColumn"    GET="getKeyColumn"   PUT="setKeyColumn"      />
+<public:PROPERTY NAME="valueColumn"  GET="getValueColumn" PUT="setValueColumn"    />
+<public:PROPERTY NAME="value"        GET="getValues"      PUT="setValues"         />
+<public:PROPERTY NAME="text"         GET="getTexts"       PUT="setTexts"          />
+<public:PROPERTY NAME="split"        GET="getSplit"       PUT="setSplit"          />
+<public:PROPERTY NAME="order"        GET="getOrder"       PUT="setOrder"          />
+<public:PROPERTY NAME="where"        GET="getWhere"       PUT="setWhere"          />
+<public:PROPERTY NAME="hasText"      GET="getHasText"     PUT="setHasText"        />
+<public:PROPERTY NAME="iWidth"       GET="getWidth"       PUT="setWidth"          />
+<public:PROPERTY NAME="isMultiple"   GET="getMultiple"    PUT="setMultiple"       />
+<public:PROPERTY NAME="canSelect"    GET="getCanSelect"   PUT="setCanSelect"      />
+<public:PROPERTY NAME="disabledSel"  GET="isDisabledSel"  PUT="setDisabledSel"    />
+<public:attach   EVENT="ondocumentready"   HANDLER="doInit"                       />
+<METHOD   NAME="setReturnText"	                                                  />
+<METHOD   NAME="setSelectedValue"	                                              />
+<METHOD   NAME="unSelectAll"	                                                  />
+<PUBLIC:EVENT NAME="onSelectChange"        ID="oChange"                           />
+<SCRIPT LANGUAGE="javascript">
+var gXMLSrc="";
+var gTable="";
+var gKeyColumn="";
+var gValueColumn="";
+var gValues="";
+var gTexts="";
+var gSplit=",";
+var gWidth="200";
+var gOrder="";
+var gWhere="";
+var gHasText="false";
+var oText;
+var gMultiple="false";
+var gCanSelect="false";
+var gDisabledSel="false";
+
+// **********************************************************************
+//                      控件属性
+// **********************************************************************
+
+function getXMLSrc()
+{
+   return gXMLSrc;
+}
+
+function setXMLSrc(pXMLSrc)
+{
+   gXMLSrc=pXMLSrc;
+}
+
+function getTable()
+{
+   return gTable;
+}
+
+function setTable(pTable)
+{
+   gTable=pTable;
+}
+
+function getKeyColumn()
+{
+   return gKeyColumn;
+}
+
+function setKeyColumn(pKeyColumn)
+{
+   gKeyColumn=pKeyColumn;
+}
+
+function getValueColumn()
+{
+   return gValueColumn;
+}
+
+function setValueColumn(pValueColumn)
+{
+   gValueColumn=pValueColumn;
+}
+
+function getValues()
+{
+   var sValues=gValues;
+   sValues=(element.readyState=="complete")?oText.key:"";
+   return sValues;
+}
+
+function setValues(pValues)
+{
+   var prevValues=gValues;
+   gValues=pValues;
+   if(element.readyState=="complete") oText.key=gValues;
+   if(prevValues!=gValues)
+   {
+	   doOnSelectChange();
+   }   
+}
+
+function getTexts()
+{
+   var sTexts=gTexts;
+   sTexts=(element.readyState=="complete")?oText.value:"";
+   return sTexts;
+}
+
+function setTexts(pTexts)
+{
+   gTexts=pTexts;
+   if(element.readyState=="complete") 
+   {	   
+	   oText.value=gTexts;
+	   if(gMultiple=="true" && gCanSelect=="true")
+	   {
+		   oText.innerHTML=getSelectHTML(oText.value);
+	   }
+   }
+}
+
+function getSplit()
+{
+   return gSplit;
+}
+
+function setSplit(pSplit)
+{
+   gSplit=pSplit;
+}
+
+function getOrder()
+{
+   return gOrder;
+}
+
+function setOrder(pOrder)
+{
+   gOrder=pOrder;
+}
+
+function getWhere()
+{
+   return gWhere;
+}
+
+function setWhere(pWhere)
+{
+   gWhere=pWhere;
+}
+
+function getHasText()
+{
+   return gHasText;
+}
+
+function setHasText(pHasText)
+{
+   gHasText=pHasText;
+}
+
+function getMultiple()
+{
+   return gMultiple;
+}
+
+function setMultiple(pMultiple)
+{
+   gMultiple=pMultiple;
+}
+
+function isDisabledSel()
+{
+    return (gDisabledSel=="true")?true:false;
+}
+
+function setDisabledSel(pDisabled)
+{
+	gDisabledSel=pDisabled;
+	if(element.readyState=="complete")
+    {
+		var oSelects=all.item(uniqueID+"_oSelect");
+		if(oSelects)
+		{
+			 for(var i=0;i<oSelects.length;i++)
+			 {
+				 oSelects[i].childNodes[0].disabled=isDisabledSel()?true:false;
+			 }
+		}
+    }
+}
+
+function getCanSelect()
+{
+   return gCanSelect;
+}
+
+function setCanSelect(pCanSelect)
+{
+   gCanSelect=pCanSelect;
+}
+
+function setSelectedValue()
+{
+   var oSelects=window.document.all(uniqueID+"_oSelect");
+   oText.key="";
+   oText.value="";
+   if(oSelects)
+   {
+	   if(!oSelects.length)
+	   {
+		   if(oSelects.childNodes[0].checked)
+		   {
+		      oText.key=oSelects.childNodes[0].value;
+		      oText.value=oSelects.innerText;
+		   }
+	   }
+	   else
+	   {
+		   for(var i=0;i<oSelects.length;i++)
+		   {
+			    if(oSelects[i].childNodes[0].checked)
+			    {
+			    	oText.key+=oSelects[i].childNodes[0].value+gSplit;
+			    	oText.value+=oSelects[i].innerText+gSplit;
+			    }
+		   }
+		   oText.key=oText.key.slice(0,-1);
+		   oText.value=oText.value.slice(0,-1);
+	   }
+   }
+   setValues(oText.key);
+}
+
+function unSelectAll()
+{
+	var oSelects=window.document.all(uniqueID+"_oSelect");
+	if(oSelects)
+	{
+	     if(!oSelects.length)
+		 {
+			 oSelects.childNodes[0].checked=false;
+		 }
+		 else
+		 {
+			 for(var i=0;i<oSelects.length;i++)
+			 {
+				 oSelects[i].childNodes[0].checked=false;
+   			 }
+		 }
+	     var prevKey=oText.key;	     
+	     oText.key="";
+	     oText.value="";
+	     setValues("");
+	}
+}
+function doOnSelectChange()
+{
+	var oEvent = createEventObject();
+	oChange.fire(oEvent);
+}
+// ***********************************************************************************
+//                      控件初始化
+// **********************************************************************************
+
+function doInit()
+{
+    var sText=(gHasText=="false")?getReturnText():gTexts;
+    var sHTML="";
+    if(gMultiple=="false")
+    {
+       sHTML="<INPUT TYPE='text' class='key_value_text' id='oText_"+uniqueID+"' style='width:100%' "
+              +" value='"+sText+"' key=\""+gValues+"\" readonly/>";
+    }
+    else if(gMultiple=="true")
+    {
+       if(gCanSelect=="false")
+       {
+	       sHTML="<textarea class='key_value_text' id='oText_"+uniqueID+"' style='width:100%;height:100%' "
+	              +" key=\""+gValues+"\" readonly>"+sText+"</textarea>";
+       }
+       else
+       {
+    	   sHTML="<div id='oText_"+uniqueID+"' style='width:100%;height:100%;' "
+           +" key=\""+gValues+"\" value='"+sText+"'>"+getSelectHTML(sText)+"</div>";
+       }
+    }
+    element.innerHTML=sHTML;
+    oText=all("oText_"+uniqueID);
+
+}
+
+function getSelectHTML(sText)
+{
+	if(!gValues) return "";
+	var aValue=gValues.split(gSplit);
+	var aText=sText.split(gSplit);
+	var sHTML="";
+	var iLen=aValue.length;
+	var isShowSelect=(iLen==aText.length);
+	if(!isShowSelect) return sText;
+	var sDisabled=(isDisabledSel())?"disabled='true'":""
+	for(var i=0;i<iLen;i++)
+	{
+		sHTML+="<div id='"+uniqueID+"_oSelect' class='key_value_text' style='width:65px;display:inline;white-space:nowrap'>";
+		sHTML+="<input type='checkbox' checked onclick='window."+uniqueID+
+			       ".setSelectedValue()' value='"+aValue[i]+"' "+sDisabled+"/>&nbsp;"
+		sHTML+=aText[i]+"</div>";    
+	}
+	return sHTML;
+}
+
+// ***********************************************************************************
+//                      内部函数
+// **********************************************************************************
+
+function getReturnText()
+{
+    var sTexts="";
+    if(gXMLSrc=="" || gTable==""|| gKeyColumn=="" || gValueColumn=="") return;
+    var sXML='<?xml version="1.0" encoding="gb2312"?>'
+	             +  '<root><table/><keyColumn/><valueColumn/>'
+	             +  '<keys/><valuesSplit/><orderCon/><whereCon/></root>';
+	var XMLDoc=new ActiveXObject("Microsoft.XMLDOM");
+	XMLDoc.loadXML(sXML);
+	XMLDoc.selectSingleNode("/root/table").text=gTable;
+    XMLDoc.selectSingleNode("/root/keyColumn").text=gKeyColumn;
+    XMLDoc.selectSingleNode("/root/valueColumn").text=gValueColumn;
+    XMLDoc.selectSingleNode("/root/keys").text=gValues;
+    XMLDoc.selectSingleNode("/root/valuesSplit").text=gSplit;
+    XMLDoc.selectSingleNode("/root/orderCon").text=gOrder;
+    XMLDoc.selectSingleNode("/root/whereCon").text=gWhere;
+    var oXMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+	oXMLHTTP.open("POST",gXMLSrc,false);
+	oXMLHTTP.send(XMLDoc);
+	if(isSuccess(oXMLHTTP))
+	{	   
+	   sTexts=oXMLHTTP.responseXML.selectSingleNode("/root/values").text;
+	}
+	return sTexts;
+}
+
+function setReturnText()
+{
+   oText.value=getReturnText();
+   if(gMultiple=="true" && gCanSelect=="true")
+   {
+	   oText.innerHTML=getSelectHTML(oText.value);
+   }
+}
+</SCRIPT>
+</component>

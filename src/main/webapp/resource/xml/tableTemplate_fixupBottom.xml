@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="gbk"?>
+<root>
+  <TEMPLATE>
+    <![CDATA[
+     <table id="oTotalTable_%UNIQUE_ID%" cellspacing="0" cellpadding="0" style="width:100%">
+       
+       <tr>
+         <td colSpan="2">
+		     <TABLE border="0" cellpadding="1" class="table1" style="width:100%;font-size:13px;" cellspacing="0"  id="oDataTable_%UNIQUE_ID%">
+		          %TABLE_HEAD%
+		     </TABLE>
+         </td>
+       </tr>
+       <tr style="line-height:18px;">
+         <td width="40%" height="0"></td><td></td><td></td>
+       </tr>
+     </table>
+    ]]>
+  </TEMPLATE>
+</root>

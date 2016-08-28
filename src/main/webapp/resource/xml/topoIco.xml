@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='gb2312'?>
+<root>
+<images>
+<group id="1" name="主机">
+<img src='pc32.gif' title="主机"/>
+<img src='pc1.gif'/>
+<img src='pc2.gif'/>
+<img src='pc3.gif'/>
+<img src='pc4.gif'/>
+<img src='pc5.gif'/>
+<img src='pc6.gif'/>
+<img src='pc7.gif'/>
+<img src='topo_r1_c4.gif'/>
+</group>
+<group id="2" name="数据库">
+<img src='db32.gif'/>
+<img src='db1.gif'/>
+<img src='db2.gif'/>
+<img src='db3.gif'/>
+<img src='db4.gif'/>
+<img src='db5.gif'/>
+<img src='topo_r40_c73.gif'/>
+<img src='topo_r40_c81.gif'/>
+<img src='topo_r25_c85.gif'/>
+<img src='topo_r2_c14.gif'/>
+<img src='topo_r2_c48.gif'/>
+<img src='topo_r3_c40.gif'/>
+<img src='topo_r3_c55.gif'/>
+<img src='topo_r3_c66.gif'/>
+<img src='topo_r3_c73.gif'/>
+<img src='topo_r3_c80.gif'/>
+<img src='topo_r4_c21.gif'/>
+<img src='topo_r4_c29.gif'/>
+<img src='topo_r9_c15.gif'/>
+<img src='topo_r10_c6.gif'/>
+<img src='topo_r11_c23.gif'/>
+<img src='topo_r11_c41.gif'/>
+<img src='topo_r12_c31.gif'/>
+<img src='topo_r12_c53.gif'/>
+</group>
+<group id="3" name="中间件">
+<img src='mid32.gif'/>
+<img src='mid1.gif'/>
+<img src='mid2.gif'/>
+<img src='mid3.gif'/>
+<img src='topo_r56_c51.gif'/>
+<img src='topo_r56_c62.gif'/>
+<img src='topo_r56_c92.gif'/>
+<img src='topo_r57_c74.gif'/>
+<img src='topo_r57_c83.gif'/>
+<img src='topo_r65_c2.gif'/>
+<img src='topo_r66_c13.gif'/>
+<img src='topo_r67_c24.gif'/>
+<img src='topo_r68_c33.gif'/>
+<img src='topo_r68_c51.gif'/>
+<img src='topo_r68_c63.gif'/>
+<img src='topo_r68_c84.gif'/>
+<img src='topo_r69_c75.gif'/>
+<img src='topo_r70_c93.gif'/>
+<img src='topo_r71_c99.gif'/>
+<img src='topo_r51_c13.gif'/>
+<img src='topo_r52_c3.gif'/>
+<img src='topo_r54_c35.gif'/>
+<img src='topo_r55_c98.gif'/>
+<img src='topo_r24_c64.gif'/>
+<img src='topo_r25_c76.gif'/>
+</group>
+<group id="4" name="网络">
+<img src='net32.gif'/>
+<img src='net1.gif'/>
+<img src='net2.gif'/>
+<img src='net3.gif'/>
+<img src='net4.gif'/>
+<img src='net5.gif'/>
+<img src='rou1.gif'/>
+<img src='rou2.gif'/>
+<img src='rou3.gif'/>
+<img src='rou4.gif'/>
+<img src='rou5.gif'/>
+<img src='rou6.gif'/>
+<img src='topo_r89_c45.gif'/>
+<img src='topo_r90_c86.gif'/>
+<img src='topo_r91_c4.gif'/>
+<img src='topo_r34_c12.gif'/>
+<img src='topo_r35_c20.gif'/>
+<img src='topo_r36_c42.gif'/>
+<img src='topo_r37_c30.gif'/>
+<img src='topo_r38_c53.gif'/>
+<img src='topo_r38_c61.gif'/>
+<img src='topo_r39_c97.gif'/>
+<img src='topo_r33_c2.gif'/>
+<img src='topo_r14_c75.gif'/>
+</group>
+<group id="5" name="业务系统">
+<img src='bendichuanshu.gif'/>
+<img src='changtuwanguan.gif'/>
+<img src='changtuziyuan.gif'/>
+<img src='donglishenji.gif'/>
+<img src='fuwubaozhang.gif'/>
+<img src='fuwukaitong.gif'/>
+<img src='guanxianshenjizhong.gif'/>
+<img src='hefeijuguanxian.gif'/>
+<img src='jianhuandongli.gif'/>
+<img src='shenzhongxin.gif'/>
+<img src='shujuziyuan.gif'/>
+<img src='zhongheziyuan.gif'/>
+<img src='topo_r82_c93.gif'/>
+<img src='topo_r83_c99.gif'/>
+<img src='topo_r80_c50.gif'/>
+<img src='topo_r80_c62.gif'/>
+<img src='topo_r81_c75.gif'/>
+<img src='topo_r81_c84.gif'/>
+<img src='topo_r80_c28.gif'/>
+<img src='topo_r79_c34.gif'/>
+<img src='topo_r79_c1.gif'/>
+<img src='topo_r79_c15.gif'/>
+</group>
+<group id="6" name="其他">
+<img src='cpu1.gif'/>
+<img src='cpu2.gif'/>
+<img src='cpu3.gif'/>
+<img src='cpu4.gif'/>
+<img src='disk32.gif'/>
+<img src='proc5.gif'/>
+<img src='topo_r21_c5.gif'/>
+<img src='topo_r22_c14.gif'/>
+<img src='topo_r23_c22.gif'/>
+<img src='topo_r23_c32.gif'/>
+<img src='topo_r24_c43.gif'/>
+<img src='topo_r13_c60.gif'/>
+<img src='topo_r26_c54.gif'/>
+<img src='topo_r100_c1.png'/>
+<img src='topo_r101_c1.png'/>
+<img src='topo_r102_c1.png'/>
+<img src='topo_r103_c1.png'/>
+<img src='topo_r104_c1.png'/>
+<img src='topo_r105_c1.png'/>
+</group>
+</images>
+</root>
+

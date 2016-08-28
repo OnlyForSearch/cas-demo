@@ -1,0 +1,189 @@
+<html XMLNS:IE>
+<head>
+<title>选择区域</title>
+<SCRIPT src="/resource/js/Common.js"></SCRIPT>
+<SCRIPT src="/resource/js/Dialog.js"></SCRIPT>
+<SCRIPT src="/resource/js/Error.js"></SCRIPT>
+<SCRIPT src="/resource/js/XML.js"></SCRIPT>
+<SCRIPT src="/resource/js/XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="/resource/js/XMLTree/XMLTreeAction.js"></SCRIPT>
+<SCRIPT src="/resource/js/listView.js"></SCRIPT>
+<STYLE>
+@import url(/resource/css/default.css);
+@media all
+{
+   IE\:button{behavior:    url(/resource/htc/btn.htc);}
+}
+body
+{
+	margin:8 0 0 10;
+}
+td.title
+{
+	font-weight:bold;
+	font-size:10pt;
+	text-align:center;
+	color:#7A7672;
+}
+div.Tree
+{
+	border:1px solid #919B9C;
+	width:225px;
+	height:100%;
+	overflow:auto;
+	padding:3px 0px 0px 6px;
+	background:white;
+}
+div.Split
+{
+	height:6px;
+	overflow:hidden;
+}
+.imgButton
+{
+	behavior:url(/resource/htc/imgButton.htc);
+	display:block;
+	cursor:hand;
+}
+</STYLE>
+</head>
+<body onload="">
+<TABLE border="0" cellpadding="1" cellspacing="2">
+	<tr height="16">
+		<TD width="260" class="title">待选区域</TD>
+		<TD width="60">&nbsp;</TD>
+		<TD width="260" class="title">已选区域</div>
+		</TD>
+	</tr>
+	<TR height="360">
+		<TD>
+			<div id="oRegionTree" class="Tree"></div>
+		</TD>
+		<TD align="center">
+			<div><IE:button value=">" width="36" onClick="regionCtrl.add()"/></div>
+			<div class="Split"></div>
+			<div><IE:button value="<" width="36" onClick="regionCtrl.remove()"/></div>
+		</TD>
+		<TD>
+			<div id="oSelRegion" class="Tree">			
+			</div>
+		</TD>
+        <td valign="top">
+	        <IMG src="/resource/image/ico/up.gif" class="imgButton" title="上移" onClick="regionCtrl.moveUp()" />
+	        <IMG src="/resource/image/ico/down.gif" class="imgButton" title="下移" onClick="regionCtrl.moveDown()"/>
+	    </td>
+	</TR>
+	<tr height="36">
+		<td colSpan=3 align="right">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="regionCtrl.setRegionIds()" />&nbsp; 
+			<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />
+		</td>
+	</tr>
+</TABLE>
+<script type="text/javascript">
+function window.onload()
+{
+	regionCtrl.init();
+}
+var regionCtrl=
+{
+   oTree:null,
+   oListView:null,
+   regionIds:$request("regionIds"),
+   inParam:window.dialogArguments,
+   init:function()
+   {
+      this.initTree();
+      this.initSelRegion();
+   },
+   
+   add:function()
+   {
+       var oRegion = this.oTree.getSelectedItem();
+       if(!oRegion) return;
+       var sRegionId=oRegion.REGION_ID;
+       var sRegionName=oRegion.REGION_NAME;
+       if(this.oListView.hasChildAttr("REGION_ID",sRegionId)) return;
+       var oItem=this.oListView.appendItem({
+                                      text:sRegionName,
+                                      event:{ondblclick:function(){regionCtrl.oListView.removeSelectItem();}},
+                                      attr:{REGION_ID:sRegionId}
+                                     });   
+   },
+   remove:function()
+   {
+      this.oListView.removeSelectItem();
+   },
+   moveUp:function()
+   {
+      var oSelectedItem=this.oListView.getSelectedItem();
+      if(oSelectedItem)
+         oSelectedItem.moveUp();
+   },
+   moveDown:function()
+   {
+      var oSelectedItem=this.oListView.getSelectedItem();
+      if(oSelectedItem)
+         oSelectedItem.moveDown();
+   },
+   setRegionIds:function()
+   {
+      var regionIds=this.oListView.getItemAttrSplitStr()["REGION_ID"]||"";
+      var obj=this.inParam.obj||window;
+      var isRequire=this.inParam.isRequire || false;
+      if(isRequire && regionIds=="")
+      {
+          EMsg("请选择一个区域!");
+          return;
+      }
+      if(this.inParam.func)
+      {
+         this.inParam.func.call(obj,regionIds);         
+      }
+      window.close();
+   },
+   initTree:function()
+   {
+       this.oTree=new XMLTree();
+       this.oTree.xmlUrl = this.inParam.treeUrl||'/servlet/RegionTree?action=2'; 
+       this.oTree.setDblClickAction(new DblClickTopoTreeAction());
+       this.oTree.showAt(oRegionTree);
+   },
+   initSelRegion:function()  
+   {
+        this.oListView=new listView({target:oSelRegion});
+        if(!this.regionIds) return; 
+	    var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    var submitURL = "/servlet/regionOper?OperType=3&regionIds="+this.regionIds;
+	    xmlhttp.Open("POST",submitURL,false);
+	    xmlhttp.send();
+	    if(isSuccess(xmlhttp))
+	    {
+	        this.oListView.appendItemByXML(xmlhttp.responseXML.selectNodes("//rowSet"),
+			                                 {
+			                                   textTag:"REGION_NAME",
+			                                   event:{ondblclick:function(oItem)
+			                                                     {
+			                                                         regionCtrl.oListView.removeSelectItem();
+			                                                     }
+			                                         }
+			                                 });
+	    }
+   }
+}
+
+
+function DblClickTopoTreeAction()
+{
+    this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		regionCtrl.add();		    
+	}
+	return this.parent;
+	
+}
+
+</script>
+</body>
+</html>

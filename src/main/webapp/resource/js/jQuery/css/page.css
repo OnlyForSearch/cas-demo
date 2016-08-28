@@ -1,0 +1,75 @@
+/* 上一页  下一页 样式 */
+.tnt_pagination {
+display:block;
+text-align: center;
+height:24px;
+clear:both;
+padding-top:0px;
+font-size:12px;
+font-weight:normal;
+line-height:20px;
+}
+.tnt_pagination a:link, .tnt_pagination a:visited{
+padding:7px;
+padding-top:2px;
+padding-bottom:2px;
+border:1px solid #ccc;
+margin-left:5px;
+text-decoration:none;
+background-color:#f4f4f4;
+color:#444;
+width:20px;
+font-weight:normal;
+
+}
+.tnt_pagination a:hover {
+background-color:#ebf3fb;
+border:1px solid #ace;
+color:#075aad;
+}
+.tnt_pagination .active_tnt_link {
+padding:7px;
+padding-top:2px;
+padding-bottom:2px;
+border:1px solid #ace;
+margin-left:5px;
+text-decoration:none;
+background-color:#ebf3fb;
+color:#075aad;
+cursor:default;
+}
+.tnt_pagination .disabled_tnt_pagination {
+padding:7px;
+padding-top:2px;
+padding-bottom:2px;
+border:1px solid #ddd;
+margin-left:10px;
+text-decoration:none;
+background-color:#F5F5F5;
+color:#ddd;
+cursor:default;
+}
+
+.tnt_pagination .current {
+padding:7px;
+padding-top:2px;
+padding-bottom:2px;
+border:1px solid #ace;
+margin-left:5px;
+text-decoration:none;
+background-color:#ebf3fb;
+color:#075aad;
+cursor:default;
+}
+.tnt_pagination .prev, .tnt_pagination .next {
+padding:7px;
+padding-top:2px;
+padding-bottom:2px;
+border:1px solid #ddd;
+margin-left:10px;
+text-decoration:none;
+background-color:#F5F5F5;
+color:#ddd;
+cursor:default;
+}
+

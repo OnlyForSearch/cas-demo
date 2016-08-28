@@ -1,0 +1,135 @@
+BODY {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.textbox {
+	BORDER-RIGHT: #4d4d4d 1px solid; BORDER-TOP: #4d4d4d 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #4d4d4d 1px solid; COLOR: #333333; BORDER-BOTTOM: #4d4d4d 1px solid; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ffffff
+}
+.button {
+	BORDER-RIGHT: 1px outset; BORDER-TOP: 1px outset; FONT-SIZE: 9pt; BORDER-LEFT: 1px outset; COLOR: #004080; BORDER-BOTTOM: 1px outset; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #f7f7f7
+}
+SELECT {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+INPUT {
+	FONT-SIZE: 12px; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+TD {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tablebg {
+	COLOR: #333333; BACKGROUND-COLOR: #5a9ade
+}
+.header {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #eff7ff
+}
+.title {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #eff7ff
+}
+.default {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ffffff
+}
+.calbg {
+	COLOR: #333333; BACKGROUND-COLOR: #5a9ade
+}
+.calheader {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #eff7ff
+}
+.caltitle {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #eff7ff
+}
+.calvalue {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ffffff
+}
+A:link {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+A:visited {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+A:hover {
+	FONT-SIZE: 9pt; COLOR: #090e71; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+A:active {
+	FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.menu {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.menu:link {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.menu:visited {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.menu:hover {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.menu:active {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.navigation {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.navigation:link {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.navigation:visited {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.navigation:hover {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.navigation:active {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.link {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.link:link {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.link:visited {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.link:hover {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.link:active {
+	FONT-SIZE: 9pt; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.blue {
+	FONT-SIZE: 11px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.blue:link {
+	FONT-SIZE: 11px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.blue:visited {
+	FONT-SIZE: 11px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.blue:hover {
+	FONT-SIZE: 11px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.blue:active {
+	FONT-SIZE: 11px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.black {
+	FONT-SIZE: 12px; COLOR: #ffffff; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.blackb {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; COLOR: #ffffff; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.blueb {
+	FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.blueb:link {
+	FONT-SIZE: 13px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.blueb:visited {
+	FONT-SIZE: 13px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.blueb:hover {
+	FONT-SIZE: 13px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.blueb:active {
+	FONT-SIZE: 13px; COLOR: #004080; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}

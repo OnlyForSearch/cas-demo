@@ -1,0 +1,341 @@
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+<script>
+function writeTitle(){
+	var theTagName,tag=window.dialogArguments.tag
+	var strType= typeof(tag)
+	if(strType=='string' && !/[<>]+/.test(tag)){//插入标签
+		theTagName='<插入>'+tag
+	}else if(strType=='object'){//修改标签
+		theTagName='<修改>'+tag.tagName
+	}
+	document.write('<title>标签编辑器 - '+theTagName.toUpperCase()+'</title>')
+}
+writeTitle()
+</script>
+
+
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<script language="JavaScript" type="text/JavaScript">
+var objTag={}
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		var theTagName=null,tag=myEditor.tag
+		var strType= typeof(tag)
+		var elts=myEditor.formElements
+		var dom=myEditor.designer.document
+		var typ=myEditor.temp//如果是 INPUT 标签. 这值存其 type 属性
+		if(strType=='string' && !/[<>]+/.test(tag)){//插入标签
+			theTagName=tag
+		}else if(strType=='object'){//修改标签
+			theTagName=tag.tagName.toLowerCase()
+			typ=tag.type
+		}
+		if(theTagName!=null){
+			objTag.name=theTagName.toUpperCase()
+			var theNode=document.all('xmlTag').XMLDocument.documentElement.getElementsByTagName('_'+theTagName.toLowerCase())
+			if(theNode.length>1){
+				for(var i=0;i<theNode.length;i++){
+					//如果节点多个时,我们只要根节点下的第一个
+					if(theNode[i].parentNode==document.all('xmlTag').XMLDocument.documentElement){
+						theNode=theNode[i]
+						break;
+					}
+				}
+			}else{
+				theNode=theNode[0]
+			}
+			strTemp=''
+			var arrImageSelect=[],arrLinkSelect=[],arrTargetSelect=[],arrSelect=[]
+			objTag.bind=theNode.getAttribute('bind')!=null ? theNode.getAttribute('bind') : ''
+			objTag.endtag	=theNode.getAttribute('endtag')!=null&&theNode.getAttribute('endtag').toLowerCase()=='yes'
+							? true
+							:false
+			for(var i=0;theNode&&i<theNode.childNodes.length;i++){
+				with(theNode.childNodes[i]){//属性分类
+					addOption(document.all('sltAttributeCategories'),(tagName=='general'?'常规':getAttribute('label')),'tbl'+tagName)
+					strTemp+='<table width="100%" id="tbl'+tagName+'" style="display:none" border="0" cellspacing="1" cellpadding="0">'
+					for(var j=0;j<childNodes.length;j++){
+						strTemp+='<tr><td align="right" width="80" height="22"><img height=0 width=80><br><nobr>'
+						with(childNodes[j]){//属性
+							strType=getAttribute('type').toLowerCase()
+							var label=document.all('xmlLabel').XMLDocument.documentElement.getElementsByTagName(tagName)
+							//取得属性的中文名
+							label=label&&label.length>0?label[0].getAttribute('label'):tagName
+							strTemp	+=(strType=='chk'?'':label+':')+'</nobr></td><td>'
+							//存储要初始化的下接框
+							if(strType=='link'){
+								arrLinkSelect.push(tagName);
+								strType='file'
+							} else if(strType=='img'){
+								arrImageSelect.push(tagName);
+								strType='file'
+							}else if(strType=='target'){
+								arrTargetSelect.push(tagName);
+								strType='editableselect120'
+							}
+							//取得常用的HTML,并替换参数
+							if(arrHTML[strType.replace(/\d+((%|(px))?)$/i,'')]){
+								strTemp	+=arrHTML[strType.replace(/\d+((%|(px))?)$/i,'')]
+										.replace(/<NAME>/g,tagName)
+										.replace(/<VALUE>/g,strType=='chk'?'1':'')
+										.replace(/<PATH>/g,'../images/')
+										.replace(/<WIDTH>/g,strType.replace(/^\D+/,''))
+										.replace(/<EXTRASCRIPT_0>/g,'')
+										.replace(/<EXTRASCRIPT>/g,'')
+										.replace(/<OPTIONS>/g,childNodes.length?xml.replace(/^<[^<>]+>(.*)<\/[^<>]+>$/g,''):'')
+							}
+							strTemp	+=(strType=='chk'?label:'')+'</td>'
+							//如果此下拉框是可编辑的,过后我们还要对它处理
+							if(/^((file)|(editableselect))\d*((%|(px))?)$/i.test(strType)){
+								arrSelect.push(tagName)
+							}
+							strTemp+='</tr>'+(theTagName.toLowerCase()=='input'&&tagName=='type'?'<tr><td  colspan="2"><hr></td></tr>':'')
+						}
+					} 
+					strTemp+='</table>'
+				}
+			}
+			//取得 '样式表/其它' 的HTML 
+			strTemp+=arrHTML['css/other']
+			addOption(document.all('sltAttributeCategories'),'样式表/其它','tblCssOther')
+			arrSelect.push('Class')
+			theNode=document.all('xmlTagEvent').XMLDocument.documentElement.getElementsByTagName(theTagName.toUpperCase())
+			if(theNode&&theNode.length>0){
+				var x=0 
+				/*if(theTagName.toLowerCase()=='input'){
+					//事件还与 type 有关
+					for(var p=0;p<theNode.length;p++){
+						atts=theNode[p].attributes
+						if(atts[0].value.toLowerCase()==myEditor.temp.toLowerCase()){
+							x=1
+							break;
+						}
+					}
+				}else{
+					
+				}*/
+				atts=theNode[0].attributes
+				addOption(document.all('sltAttributeCategories'),'事件','ta'+atts[x].name.toLowerCase())
+				var name,value
+				for(var i=x;i<atts.length;i++){
+					name=atts[i].name.toLowerCase()
+					value=(strType=='object'?(tag.getAttribute(name)?tag.getAttribute(name):''):'')
+					strTemp+='<textarea id="ta'+name+'" wrap="OFF" style="width:334px;height:320;display:none;">'+value+'</textarea>'
+					addOption(document.all('sltAttributeCategories'),(atts.length-1==i?'└':'├')+atts[i].name,'ta'+name)
+				}
+			}
+			document.all('tdAttributeElements').innerHTML=strTemp
+			if(theTagName.toLowerCase()=='input'){
+				elts('sltType').onchange=function(){
+					var opt=this.options[this.selectedIndex]
+					for(var i=4;i<17;i++){
+						with(document.all('tdAttributeElements').firstChild.rows[i]){
+							if(i>=opt.offset && i<parseInt(opt.offset)+parseInt(opt.length)){
+								style.display=''
+							}else{
+								style.display='none'
+								//清空
+								with(lastChild.firstChild){
+									if(tagName=='INPUT'){
+										if(type.toLowerCase()=='text'){
+											value=''
+										}else{
+											checked=false
+										}
+									}else{
+										with(document.frames('ifrmsrc')){
+											tf.value=tf.hiddenValue=''
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			//处理可编辑的下拉框
+			for(var i=0;i<arrSelect.length;i++){
+				writeIframeBody(document.frames('ifrm'+arrSelect[i]),'slt'+arrSelect[i])
+			}
+			//对需要初始化的下接框进行初始化
+			listClass(dom,elts('sltClass'))
+			for(var i=0;i<arrLinkSelect.length;i++) listLink(dom,elts('slt'+arrLinkSelect[i]));
+			for(var i=0;i<arrImageSelect.length;i++) listImage(dom,elts('slt'+arrImageSelect[i]));
+			for(var i=0;i<arrTargetSelect.length;i++) listTarget(dom,elts('slt'+arrTargetSelect[i]));
+			//初始化值
+			strType= typeof(tag)
+			if(strType=='string' && !/[<>]+/.test(tag)){//插入标签
+				if(elts('tf'+objTag.bind)){
+					elts('tf'+objTag.bind).value=myEditor.selectionText
+				}else if(elts('ta'+objTag.bind)){
+					elts('ta'+objTag.bind).value=myEditor.selectionText
+				}else if(elts('slt'+objTag.bind)){
+					var elt =elts('slt'+objTag.bind)
+					var tmpValue=myEditor.selectionText
+					if(!findOption(elt,tmpValue) && elt.editable && elt.editable.toLowerCase()=='true'){
+						document.frames(elt.ifrmId).tf.hiddenValue=document.frames(elt.ifrmId).tf.value=tmpValue
+					}
+				}
+			}else if(strType=='object'){//修改标签
+				//这时此标签对象的原始属性及值,保存在 myEditor.temp
+				//点 [取消] 时,要用到它,可恢复对象的原始属性及值
+				initFormFromTag(tag,myEditor.form)
+				//给控件绑上自动更新事件
+				attachAutoUpdateEvent()
+				document.all('btCancel').onclick=function(){
+					//恢复标签对象的原始属性及值
+					for(var i in myEditor.temp){
+						var name=i=='class'?'className':i,value=myEditor.temp[i]
+						if(value){
+							if(name=='style'){
+								tag.style.cssText=value
+							}else{
+								tag.setAttribute(i,value)
+							}
+						}else{
+							if(typeof(value)=='boolean'){
+								tag.setAttribute(i,false)
+							}else{
+								tag.removeAttribute(i)
+							}
+						}
+					}
+					myEditor.window.doSameContent()
+					closeDialog()
+				}
+			}
+			if(theTagName.toLowerCase()=='input'){
+				findOption(elts('sltType'),typ)
+				elts('sltType').onchange()
+			}
+			document.all('sltAttributeCategories').selectedIndex=0
+			document.all('sltAttributeCategories').theTagName=theTagName.toCapitalize()
+			document.all('sltAttributeCategories').onchange()
+			initDialog()
+		}
+	}
+}
+function showTable(obj){
+	if(obj.whichTableDisplay){
+		obj.whichTableDisplay.style.display='none'
+	}
+	document.all(obj.value).style.display='block'
+	var txt=obj.options[obj.selectedIndex].innerText.replace(/^.{1}on/,'on')
+	if(txt=='事件')txt=obj.options[obj.selectedIndex+1].innerText.replace(/^.{1}on/,'on');
+	document.all('tdTitle').innerText=obj.theTagName+' - '+txt
+	obj.whichTableDisplay=document.all(obj.value)
+}
+function doOK(){
+	objectTag()
+	window.close()
+}
+function objectTag(){
+	var tag=myEditor.tag
+	var strType= typeof(tag)
+	var form=myEditor.form
+	var elts=myEditor.formElements
+	if(strType=='string' && !/[<>]+/.test((tag))){//插入标签
+		var html='<'+objTag.name +' '+compileAttributesString(form)+'>'
+		if(objTag.endtag){
+			html+=myEditor.selectionHTML+'</'+objTag.name+'>'
+		}
+		myEditor.window.insert(html)
+	}else if(strType=='object'){//修改标签
+		setOrRemoveAttribute(tag,form)
+		myEditor.window.doSameContent()
+	}
+}
+function attachAutoUpdateEvent(){
+	var elts=myEditor.formElements
+	for(var i=0;i<elts.length;i++){
+		if(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/.test(elts[i].id)){
+			var id=elts[i].id
+			var elt=elts[i]
+			var attributeName=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk))/,'')
+			var prefix=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/,'$1')
+			var eltUnit=elts(attributeName+'Units')
+			if(eltUnit){
+				eltUnit.originalOnchange=eltUnit.onchange
+				eltUnit.onchange=function(){
+					objectTag()
+					this.originalOnchange()
+				}
+			}
+			switch(prefix){
+				case 'slt'://下拉框
+					if(elt.editable && elt.editable.toLowerCase()=='true'){
+						var tf=document.frames(elt.ifrmId).tf
+						tf.originalOnchange=tf.onchange
+						tf.onchange=function(){
+							this.originalOnchange()
+							parent.objectTag()
+						}
+					}
+					break;
+				case 'rb'://单选框
+				case 'chk'://复选框
+					elt.originalOnclick=elt.onclick
+					elt.onclick=function(){
+						this.originalOnclick()
+						objectTag()
+					}
+					continue;
+					break;
+			}
+			if(elt.className.toLowerCase()=='tfcolor'){//颜色框
+				elt.parentNode.parentNode.firstChild.firstChild.extraScript='objectTag()'
+			}
+			elt.originalOnchange=elt.onchange
+			elt.onchange=function(){
+				this.originalOnchange()
+				objectTag()
+			}
+		}
+	}
+}
+</script>
+
+<body class="dialogBody" onLoad="init()">
+<xml id="xmlTag" src="../includes/tag.xml"></xml>
+<xml id="xmlLabel" src="../includes/label.xml"></xml>
+<xml id="xmlTagEvent" src="../includes/tagEvent.xml"></xml>
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="600"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<table width="100%" height="350"  border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="140" style="display:none"><select id="sltAttributeCategories" size="25" style="width:100%;" onChange="showTable(this)">
+    </select></td>
+	    <td width="1"><img height=1 width=8></td>
+    <td height="100%"><form name="theForm"><table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="1">
+      <tr valign="bottom">
+        <td height="25" id=tdTitle></td>
+      </tr>
+	        <tr>
+        <td height="6"><img src="../images/horizontal.gif" width="100%" height="6"></td>
+      </tr>
+      <tr>
+        <td valign="top" id="tdAttributeElements"></td>
+        </tr>
+    </table></form></td>
+  </tr>
+</table>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">	  <script>writeButtonsRight()</script>
+    </td>
+</tr>
+</table>
+</body>
+</html>

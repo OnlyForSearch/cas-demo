@@ -1,0 +1,19 @@
+/* Non-essential styles */
+
+
+
+*.positioned { height:330px;width:500px; border:2px solid black; }
+*.absolute   { padding:5px; text-align:center; 
+               border:5px solid black; background-color:gold; }
+h1   { margin:10px 0; font-size:50px;text-transform:capitalize;  }
+
+/* Essential Styles */
+
+*.positioned { position:relative; }
+*.absolute   { position:absolute; top:10px; left:10px; }
+
+#bg   { position:absolute;height:280px;width:500px;background-image:url("../image/version_bg.jpg"); top:0px; left:0px;margin:0px 0;font-family:"¡• È"; font-size:30px;text-transform:capitalize; }
+#version   { position:absolute; top:90px; left:90px;margin:10px 0; font-size:13px;text-transform:capitalize; }
+#num   { position:absolute; top:90px; left:125px;margin:10px 0; font-size:13px;text-transform:capitalize; }
+#copyright   { position:absolute; top:190px; left:40px;margin:10px 0; font-size:13px;text-transform:capitalize; }
+#content   { position:absolute; top:190px; left:110px;margin:10px 0; font-size:13px;text-transform:capitalize; }

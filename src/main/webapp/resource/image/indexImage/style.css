@@ -1,0 +1,142 @@
+SELECT {
+	FONT-SIZE: 12px
+}
+.C01 {
+	COLOR: #ffffff
+}
+.L13 {
+	LINE-HEIGHT: 130%
+}
+.L15 {
+	LINE-HEIGHT: 150%
+}
+.L17 {
+	LINE-HEIGHT: 170%
+}
+.F7 {
+	FONT-SIZE: 12px; COLOR: #555555
+}
+.F16 {
+	FONT-SIZE: 16px; COLOR: #cc6600
+}
+.bt {
+	BORDER-RIGHT: buttonshadow 2px solid; BORDER-TOP: buttonhighlight 2px solid; FONT-SIZE: 12px; BORDER-LEFT: buttonhighlight 2px solid; BORDER-BOTTOM: buttonshadow 2px solid; BACKGROUND-COLOR: #cbe1f5
+}
+.s01 {
+	BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; VERTICAL-ALIGN: text-bottom; BORDER-LEFT: 1px inset; BORDER-BOTTOM: 1px inset; BACKGROUND-COLOR: #ffffff
+}
+.s02 {
+	BORDER-RIGHT: 1px ridge; BORDER-TOP: #ffffff 1px ridge; BORDER-LEFT: #ffffff 1px ridge; BORDER-BOTTOM: 1px ridge; BACKGROUND-COLOR: #cccccc
+}
+A:link {
+	FONT-SIZE: 12px; COLOR: #000000; LINE-HEIGHT: 150%; TEXT-DECORATION: none
+}
+A:visited {
+	FONT-SIZE: 12px; COLOR: #000000; LINE-HEIGHT: 150%; TEXT-DECORATION: none
+}
+A:active {
+	FONT-SIZE: 12px; COLOR: #ff0000; LINE-HEIGHT: 150%; TEXT-DECORATION: none
+}
+A:hover {
+	FONT-SIZE: 12px; COLOR: #ff0000; LINE-HEIGHT: 150%; TEXT-DECORATION: none
+}
+A.a01:link {
+	FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.a01:visited {
+	FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.a01:active {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: none
+}
+A.a01:hover {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: underline
+}
+A.a05:link {
+	FONT-SIZE: 12px; COLOR: #006699; TEXT-DECORATION: none
+}
+A.a05:visited {
+	FONT-SIZE: 12px; COLOR: #006699; TEXT-DECORATION: none
+}
+A.a05:active {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: none
+}
+A.a05:hover {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: underline
+}
+A.a06:link {
+	FONT-SIZE: 12px; COLOR: #00007f; TEXT-DECORATION: none
+}
+A.a06:visited {
+	FONT-SIZE: 12px; COLOR: #00007f; TEXT-DECORATION: none
+}
+A.a06:active {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: none
+}
+A.a06:hover {
+	FONT-SIZE: 12px; COLOR: #ff0000; TEXT-DECORATION: underline
+}
+A.a07:link {
+	FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.a07:visited {
+	FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.a07:active {
+	FONT-SIZE: 12px; COLOR: #e1dfdf; TEXT-DECORATION: none
+}
+A.a07:hover {
+	FONT-SIZE: 12px; COLOR: #e1dfdf; TEXT-DECORATION: underline
+}
+#mydown {
+	LEFT: 0px; POSITION: relative; TOP: 0px
+}
+#mydown1 {
+	LEFT: 0px; VISIBILITY: hidden; WIDTH: 100px; POSITION: absolute; TOP: 0px; HEIGHT: 240px
+}
+.18pxmore {
+	FONT-SIZE: 18px
+}
+.14pxmore {
+	FONT-SIZE: 14px
+}
+.8pxmore {
+	FONT-SIZE: 8px
+}
+.5pxmore {
+	FONT-SIZE: 6px
+}
+.11black {
+	FONT-SIZE: 12px; COLOR: #000000
+}
+TD {
+	FONT-SIZE: 12px; COLOR: #000000
+}
+LI {
+	FONT-SIZE: 12px
+}
+P {
+	FONT-SIZE: 12px
+}
+SELECT {
+	FONT-SIZE: 12px; COLOR: red
+}
+LI {
+	FONT-SIZE: 12px
+}
+P {
+	FONT-SIZE: 12px
+}
+INPUT {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.input {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 9pt; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.input2 {
+	BORDER-RIGHT: #ffffff 2px solid; BORDER-TOP: #ffffff 2px solid; BORDER-LEFT: #ffffff 2px solid; COLOR: #000000; BORDER-BOTTOM: #000000 2px solid; size: 15 onFocus=this.select() onMouseOver=this.focus() 
+    BACKGROUND-COLOR: #ffffff
+}
+.input3 {
+	BORDER-RIGHT: #eff7ff 1px solid; BORDER-TOP: #eff7ff 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #eff7ff 1px solid; BORDER-BOTTOM: #eff7ff 1px solid; BACKGROUND-COLOR: #eff7ff
+}

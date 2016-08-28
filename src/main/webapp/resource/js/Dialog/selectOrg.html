@@ -1,0 +1,207 @@
+<html XMLNS:IE>
+<head>
+<title>选择部门</title>
+<SCRIPT src="/resource/js/Common.js"></SCRIPT>
+<SCRIPT src="/resource/js/Dialog.js"></SCRIPT>
+<SCRIPT src="/resource/js/Error.js"></SCRIPT>
+<SCRIPT src="/resource/js/XML.js"></SCRIPT>
+<SCRIPT src="/resource/js/XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="/resource/js/XMLTree/XMLTreeAction.js"></SCRIPT>
+<SCRIPT src="/resource/js/listView.js"></SCRIPT>
+<STYLE>
+@import url(/resource/css/default.css);
+@media all
+{
+   IE\:button{behavior:    url(/resource/htc/btn.htc);}
+}
+body
+{
+	margin:8 0 0 10;
+}
+td.title
+{
+	font-weight:bold;
+	font-size:10pt;
+	text-align:center;
+	color:#7A7672;
+}
+div.Tree
+{
+	border:1px solid #919B9C;
+	width:225px;
+	height:100%;
+	overflow:auto;
+	padding:3px 0px 0px 6px;
+	background:white;
+}
+div.Split
+{
+	height:6px;
+	overflow:hidden;
+}
+.imgButton
+{
+	behavior:url(/resource/htc/imgButton.htc);
+	display:block;
+	cursor:hand;
+}
+</STYLE>
+</head>
+<body onload="">
+<TABLE border="0" cellpadding="1" cellspacing="2">
+	<tr height="16">
+		<TD width="260" class="title">待选部门</TD>
+		<TD width="60">&nbsp;</TD>
+		<TD width="260" class="title">已选部门</div>
+		</TD>
+	</tr>
+	<TR height="360">
+		<TD>
+			<div id="oOrgTree" class="Tree"></div>
+		</TD>
+		<TD align="center">
+			<div><IE:button value=">" width="36" onClick="orgCtrl.add()"/></div>
+			<div class="Split"></div>
+			<div><IE:button value="<" width="36" onClick="orgCtrl.remove()"/></div>
+		</TD>
+		<TD>
+			<div id="oSelOrg" class="Tree">			
+			</div>
+		</TD>
+        <!-- td valign="top">
+	        <IMG src="/resource/image/ico/up.gif" class="imgButton" title="上移" onClick="orgCtrl.moveUp()" />
+	        <IMG src="/resource/image/ico/down.gif" class="imgButton" title="下移" onClick="orgCtrl.moveDown()"/>
+	    </td -->
+	</TR>
+	<tr height="36">
+		<td colSpan=3 align="right">
+			<IE:button value="确&nbsp;&nbsp;定" onclick="orgCtrl.setOrgIds()" />&nbsp; 
+			<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />
+		</td>
+	</tr>
+</TABLE>
+<script type="text/javascript">
+function window.onload()
+{
+	orgCtrl.init();
+}
+var orgCtrl=
+{
+   oTree:null,
+   oListView:null,
+   orgIds:$request("orgIds"),
+   inParam:window.dialogArguments,
+   init:function()
+   {
+      this.initTree();
+      this.initSelOrg();
+   },
+   
+   add:function()
+   {
+       var oOrg = this.oTree.getSelectedItem();
+       if(!oOrg) return;
+       var sOrgId=oOrg.ORG_ID;
+       var sOrgName=oOrg.ORG_NAME;
+       if(this.oListView.hasChildAttr("ORG_ID",sOrgId)) return;
+       if(!this.inParam.isMultiple){
+       		var leg = document.getElementById("oSelOrg").getElementsByTagName("div").length;
+       		for(var i=0;i<leg;i++){
+	       		this.oListView.removeItem(0);
+	       	}
+       }
+       var oItem=this.oListView.appendItem({
+                                      text:sOrgName,
+                                      event:{ondblclick:function(){orgCtrl.oListView.removeSelectItem();}},
+                                      attr:{ORG_ID:sOrgId,ORG_NAME:sOrgName}
+                                     });   
+   },
+   remove:function()
+   {
+      this.oListView.removeSelectItem();
+   },
+   moveUp:function()
+   {
+      var oSelectedItem=this.oListView.getSelectedItem();
+      if(oSelectedItem)
+         oSelectedItem.moveUp();
+   },
+   moveDown:function()
+   {
+      var oSelectedItem=this.oListView.getSelectedItem();
+      if(oSelectedItem)
+         oSelectedItem.moveDown();
+   },
+   setOrgIds:function()
+   {
+      var orgIds=this.oListView.getItemAttrSplitStr()["ORG_ID"]||"";
+      var orgNames=this.oListView.getItemAttrSplitStr()["ORG_NAME"]||"";
+      var obj=this.inParam.obj||window;
+      var isRequire=this.inParam.isRequire || false;
+      if(isRequire && orgIds=="")
+      {
+          EMsg("请选择一个部门!");
+          return;
+      }
+      if(this.inParam.func)
+      {
+         this.inParam.func.call(obj,orgIds,orgNames);         
+      }
+      window.close();
+   },
+   initTree:function(){
+       this.oTree=new XMLTree();
+       this.oTree.xmlUrl = this.inParam.treeUrl||'/servlet/staffmenu?tag=2'; 
+	   this.oTree.isOpenChildAtferClick = true;
+	   this.oTree.isDynamicLoad = true;
+	   this.oTree.showDepth = 3;
+	   this.oTree.setDynamicLoadAction(new DynamicLoadAction());
+       this.oTree.setDblClickAction(new DblClickTopoTreeAction());
+       this.oTree.showAt(oOrgTree);
+   },
+   initSelOrg:function()  
+   {
+        this.oListView=new listView({target:oSelOrg});
+        if(!this.orgIds) return; 
+	    var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    var submitURL = "/servlet/staff_manage?tag=10023&orgIds="+this.orgIds;
+	    xmlhttp.Open("POST",submitURL,false);
+	    xmlhttp.send();
+	    if(isSuccess(xmlhttp))
+	    {
+	        this.oListView.appendItemByXML(xmlhttp.responseXML.selectNodes("//rowSet"),
+			                                 {
+			                                   textTag:"ORG_NAME",
+			                                   event:{ondblclick:function(oItem)
+			                                                     {
+			                                                         orgCtrl.oListView.removeSelectItem();
+			                                                     }
+			                                         }
+			                                 });
+	    }
+   }
+}
+function DynamicLoadAction() {
+	this.parent = new XMLTree_onDynamicLoad_Action;
+	this.parent.dynamicLoad = function(oItem) {
+		if (oItem.tag == "org")
+			return "/servlet/staffmenu?action=41&id=" + oItem.id;
+	}
+
+	return this.parent;
+}
+
+function DblClickTopoTreeAction()
+{
+    this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		orgCtrl.add();		    
+	}
+	return this.parent;
+	
+}
+
+</script>
+</body>
+</html>

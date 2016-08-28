@@ -1,0 +1,141 @@
+
+
+.area-head{
+	border-bottom:1px solid #eee;
+}
+
+.area-title{
+	display:block;
+	height:28px;
+	line-height:28px;
+	font-weight:bold;
+	padding:0px 5px;
+	white-spacing:nowrap;
+	overflow-y:hidden;
+}
+
+.area-nav-wrap{
+	padding:5px 0;
+}
+
+.area-content{
+	padding:5px 0;
+}
+
+.area-nav{
+	display:inline-block;
+	background-color:#F3F4F6;
+}
+
+.nav > li{
+	padding:0px;
+}
+
+.area-nav>li.active>a, .area-nav>li.active>a:hover, .area-nav>li.active>a:focus {
+	color: #ffffff;
+	cursor: default;
+	background-color: #6AA5ED;
+}
+
+#service-index-content{
+	padding-bottom: 5px;
+	overflow-y:auto;
+}
+
+.service-index-list-wrap{
+	padding:20px 0;
+	background-color: #f3f4f6;
+}
+
+.service-index-list{
+	display:block;
+	padding-left:0px;
+	margin:0px;
+	border-right:1px solid #dadbdd;
+	text-align:center;
+}
+
+.service-index-list > li{
+	list-style:none;
+	display:block;
+	padding-left:0px;
+}
+
+.no-border{
+	border:0px;
+}
+
+.service-index-expression{
+	padding:10px 0;
+}
+
+.service-index-current-expression{
+	padding:20px 0 5px 0;
+}
+
+.service-index-val{
+	color:#68a7ec;
+	font-size:18px;
+	font-weight:bold;
+	height:22px;
+	line-height:22px;
+}
+
+.service-index-time-wrap{
+	padding-bottom:2px;
+}
+
+.service-index-time-inner{
+	background-color:#68a7ec;
+	color:#ffffff;
+	height:24px;
+	line-height:24px;
+	font-size:14px;
+}
+
+.service-index-wz-inner{
+	background-color:#68a7ec;
+	color:#ffffff;
+	height:24px;
+	line-height:24px;
+	font-size:14px;
+}
+
+.service-index-time-small-wrap{
+	padding:0px 5px 2px 0;
+}
+
+.service-index-wz-small-wrap{
+	padding:0px 5px 0px 0;
+}
+
+.service-index-time-small-inner{
+	background-color:#e1e2e6;
+	color:#949494;
+	height:24px;
+	line-height:24px;
+	font-size:13px;
+}
+
+.service-index-wz-small-inner{
+	background-color:#e1e2e6;
+	color:#949494;
+	height:24px;
+	line-height:24px;
+	font-size:13px;
+}
+
+.lr-no-padding{
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.service-index-max{
+	display:inline-block;
+	padding-left:10px;
+}
+
+.service-index-min{
+	display:inline-block;
+	padding-left:10px;
+}

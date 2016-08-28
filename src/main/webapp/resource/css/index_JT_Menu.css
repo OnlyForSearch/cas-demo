@@ -1,0 +1,73 @@
+/* Toolbars */
+
+.x-toolbar{
+    border-style:solid;
+    border-width:0 0 0 0;
+    display: block;
+	padding:2px;
+    background:repeat-x top left;
+    position:relative;
+    left:0;
+    top:0;
+    zoom:1;
+    overflow:hidden;
+}
+
+.x-btn button{
+    border:0 none;
+    background:transparent;
+    padding-left:0px;
+    padding-right:0px;
+    cursor:pointer;
+    margin:0;
+    overflow:visible;
+    width:100%;
+    -moz-outline:0 none;
+    outline:0 none;
+}
+
+.x-btn button{
+    font-family: 12px;
+	font-size: 12px;
+    color:#333;
+}
+
+.x-toolbar .x-btn-click .x-btn-tl, .x-toolbar .x-btn-menu-active .x-btn-tl, .x-toolbar .x-btn-pressed .x-btn-tl{
+	background-position: -6px 0;
+}
+
+.x-toolbar .x-btn-click .x-btn-tr, .x-toolbar .x-btn-menu-active .x-btn-tr, .x-toolbar .x-btn-pressed .x-btn-tr{
+	background-position: -9px 0;
+}
+
+.x-toolbar .x-btn-click .x-btn-tc, .x-toolbar .x-btn-menu-active .x-btn-tc, .x-toolbar .x-btn-pressed .x-btn-tc{
+	background-position: 0 -9px;
+}
+
+.x-toolbar .x-btn-click .x-btn-ml, .x-toolbar .x-btn-menu-active .x-btn-ml, .x-toolbar .x-btn-pressed .x-btn-ml{
+	background-position: -6px -24px;
+}
+
+.x-toolbar .x-btn-click .x-btn-mr, .x-toolbar .x-btn-menu-active .x-btn-mr, .x-toolbar .x-btn-pressed .x-btn-mr{
+	background-position: -9px -24px;
+}
+
+.x-toolbar .x-btn-click .x-btn-mc, .x-toolbar .x-btn-menu-active .x-btn-mc, .x-toolbar .x-btn-pressed .x-btn-mc{
+	background-position: 0 -2168px;
+}
+
+.x-toolbar .x-btn-click .x-btn-bl, .x-toolbar .x-btn-menu-active .x-btn-bl, .x-toolbar .x-btn-pressed .x-btn-bl{
+	background-position: -6px -3px;
+}
+
+.x-toolbar .x-btn-click .x-btn-br, .x-toolbar .x-btn-menu-active .x-btn-br, .x-toolbar .x-btn-pressed .x-btn-br{
+	background-position: -9px -3px;
+}
+
+.x-toolbar .x-btn-click .x-btn-bc, .x-toolbar .x-btn-menu-active .x-btn-bc, .x-toolbar .x-btn-pressed .x-btn-bc{
+	background-position: 0 -18px;
+}
+
+.x-toolbar-left-row {
+	background: #EFEFEF;
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="GB2312"?>
+<properties>
+    <category name="index_source" description="数据源配置">
+		<category name="db_source" description="数据库来源">
+			<data_processor       description="获得原始数据的存储过程">PKP_SEARCH_DATA_SOURCE.getUnimportSearchData</data_processor>
+			<attachment_processor description="获得附件数据的存储过程">PKP_SEARCH_DATA_SOURCE.getUnimportAttachment</attachment_processor>
+		</category>
+		<category name="dir_data_source" description="文件来源">
+			<!--div description="文件目录">G:\重要信息\备份信息</div-->
+		</category>
+    </category>
+	
+	<category name="modules" description="模块">
+		<category name="knowledge">
+		  <!-- 1. 表示索引到“来源库”； 2. 表示索引到“正式库”；3. 表示索引到“来源和正式库”都有 -->
+            <type           description="数据类型">3</type>
+			<module_name    description="模块名称">知识</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select catalog_id,catalog_name,level from knowledge_catalog where is_source='0BF' and CATALOG_ID IN (select catalog_id from KNOWLEDGE_CATALOG where Pkp_Tree_Privilege.hasPrivilege('KNOWLEDGE_CATALOG', CATALOG_ID, ?, 'READ') = 1) connect by prior catalog_id=parent_catalog_id start with parent_catalog_id is null]]></catalog_sql>
+ 		</category>
+ 		
+ 		<category name="knowledge_portal">
+		  <!-- 1. 表示索引到“来源库”； 2. 表示索引到“正式库”；3. 表示索引到“来源和正式库”都有 -->
+            <type           description="数据类型">3</type>
+			<module_name    description="模块名称">知识</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select catalog_id, catalog_name, level from knowledge_catalog where is_source = '0BF' and CATALOG_ID IN (select catalog_id from KNOWLEDGE_CATALOG where Pkp_Tree_Privilege.hasPrivilege('KNOWLEDGE_CATALOG', CATALOG_ID, ?, 'READ') = 1) connect by prior catalog_id = parent_catalog_id start with catalog_id =101441]]></catalog_sql>
+ 		</category>
+		
+		<category name="alarm">
+            <type           description="数据类型">1</type>
+			<module_name    description="模块名称">告警/故障</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select LIST_VALUE,LIST_LABEL,1 alarm_level from tp_domain_listvalues where domain_code = 'DOMAIN_NE_ALARM_TYPE' order by SORT_ID]]></catalog_sql>
+		</category>
+		
+		<category name="flow">
+            <type           description="数据类型">1</type>
+			<module_name    description="模块名称">流程</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select decode(node,1,' ',node) node,type_name,1 type_level from v_flow_type where state='A' order by node]]></catalog_sql>
+ 		</category>
+		
+		<category name="document">
+            <type           description="数据类型">2</type>
+			<module_name    description="模块名称">文档管理</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select doc_catalog_id,catalog_name,level from doc_catalog connect by prior doc_catalog_id=parent_doc_catalog_id start with parent_doc_catalog_id is null]]></catalog_sql>
+ 		</category>
+		
+		<category name="bill">
+            <type           description="数据类型">2</type>
+			<module_name    description="模块名称">计费动态</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[select bill_info_category_id,category_name,1 category_level from bill_info_categories where state='0SA' order by sort_id]]></catalog_sql>
+ 		</category>
+		
+		<category name="board">
+            <type           description="数据类型">2</type>
+			<module_name    description="模块名称">公告栏</module_name>
+			<catalog_sql    description="子类别SQL语句"><![CDATA[]]></catalog_sql>
+ 		</category>
+	</category>
+		
+	<category name="index_config" description="应用配置">
+        <xmlrpc_server_url description="远程服务程序URL地址">http://10.3.251.12:9001/xmlrpc</xmlrpc_server_url>
+        <xmlrpc_connection_timeout description="远程服务程序连接超时数(秒)">30</xmlrpc_connection_timeout>
+        <xmlrpc_connection_debug description="远程服务程序连接调试信息输出开关">false</xmlrpc_connection_debug>
+	</category>
+</properties>

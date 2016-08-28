@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="gb2312"?>
+<types>
+  <type name="REGION">
+    <xmlUrl>/servlet/RegionTree?action=4</xmlUrl>
+    <search>false</search>
+    <allowClear>false</allowClear>
+  </type>
+  <type name="REGION_BY_TOP">
+    <xmlUrl>/servlet/RegionTree?action=0</xmlUrl>
+  </type>
+  <type name="REGION_BY_SYSCONFIG">
+    <xmlUrl>/servlet/RegionTree?action=1</xmlUrl>
+  </type>
+  <type name="REGION_BY_NOTOP">
+    <xmlUrl>/servlet/RegionTree?action=2</xmlUrl>
+  </type>
+  <!-- ֻ��ȫ������͸�ʡ�� -->
+  <type name="REGION_BY_PROVINCE">
+    <xmlUrl>/servlet/RegionTree?action=5</xmlUrl>
+    <search>false</search>
+    <allowClear>false</allowClear>
+  </type>
+  <!-- �����Ԫʱ��ѡ������,�������ñ�MANAGE_REGION_NE_VIEW -->
+  <type name="REGION_BY_NE_VIEW">
+    <xmlUrl>/servlet/RegionTree?action=6</xmlUrl>
+  </type>
+  <type name="ORG_TREE">
+    <xmlUrl>/servlet/staffmenu?action=0</xmlUrl>
+  </type>
+  <type name="ORG_TREE_NO_TOP">
+    <xmlUrl>/servlet/staffmenu?action=6</xmlUrl>
+  </type>
+  <type name="AGENT_TREE">
+    <xmlUrl>/servlet/RegionTree?action=22</xmlUrl>
+     <search>false</search>
+    <allowClear>true</allowClear>
+  </type>
+  <type name="APPLICATION_SYSTEM_TREE">
+    <xmlUrl>/servlet/RegionTree?action=21</xmlUrl>
+    <search>false</search>
+    <allowClear>true</allowClear>
+  </type>
+  <type name="BON_NET_TREE">
+    <xmlUrl>/servlet/RegionTree?action=30</xmlUrl>
+  </type>
+  <type name="CMDB_OWNER_ORG_TREE">
+    <xmlUrl>/servlet/staffmenu?action=111</xmlUrl>
+  </type>
+  <type name="ASSET_TREE_HARDWARE">
+    <xmlUrl>/servlet/cmdbCtrl.do?method=getAssetHardwareTree</xmlUrl>
+  </type>
+  <type name="ELEMENT_TYPE_TREE">
+    <xmlUrl>/servlet/reconcileAction.do?method=getElementTypeTree</xmlUrl>
+  </type>
+</types>

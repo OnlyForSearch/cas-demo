@@ -1,0 +1,290 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<style>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@import url(../../css/DatePicker.css);
+@media all
+{
+  IE\:button{behavior:    url(../../htc/btn.htc);}
+  IE\:tree{behavior:    url(../../htc/tree.htc);}
+  IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+}
+.required{color:red;}
+.TreeDIV
+{
+	WIDTH:200px;HEIGHT:330px;OVERFLOW: scroll;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+}
+.TreeDIV SELECT{margin:-2px;}
+body{margin:10px 8px 0px 8px;}
+</style>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../stringUtil.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<title>表格列配置</title>
+</head>
+<body onUnload="winClose()" onLoad="iniPage()" oncontextmenu = "return false;">
+<table>
+	<tr>
+		<td>
+		<table border="0" cellpadding="0" cellspacing="0"
+			style="margin-top:6px">
+			<TR>
+				<TD background="../../image/dashed.gif"></TD>
+			</TR>
+
+			<TR>
+				<TD colspan=2>
+				<table border="0" cellpadding="0" cellspacing="0"
+					style="margin-top:16px">
+					<tr>
+						<td>可选列项：<br>&nbsp;<div id="neTreeDiv" class='TreeDIV' style="PADDING:5px 0px 0px 5px;"></div></td>
+						<td>
+						<table>
+							<tr>
+								<td align="center"><div><IE:button value=">" width="30"
+									onclick="addNe(neTarget,true)"
+									id="addOneNe" /></div></td>
+							</tr>
+							<tr>
+								<td align="center"><div><IE:button value="<" width="30" onclick="delNe()" id="delOneNe"/></div></td>
+							</tr>
+						</table>
+						</td>
+						<td>已选列项：<br><br>&nbsp;<IE:XmlSelect id="neTarget" size="3" onOptionDblClick="delOneNe.click()" class='TreeDIV'/></td>
+					</tr>
+				</table>
+				</TD>
+			</TR>
+
+		</table>
+		</td>
+	</tr>
+	<TR>
+		<TD background="../../image/dashed.gif" colspan="2"></TD>
+	</TR>
+</table>
+<div style="margin-top:10px;text-align:right">
+    <IE:button value="确&nbsp;&nbsp;定" onclick="returnValues()" />&nbsp; 
+	<IE:button value="取&nbsp;&nbsp;消" onclick="window.close()" />&nbsp;&nbsp;</div>
+<script>
+var neTree;//树对象
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var httpUrl = "../../../servlet/perManagerServlet?";
+var params=null;
+var ne_kpi=new Array();
+var current_flag;
+var neConfigId;
+var neConfigName;
+var neId;//提供网元参数，可查询该网元及网元下的配置项 jiangmt add 2010-08-23
+
+//页面初始化
+function iniPage(){
+	//父窗口传进参数
+    var dialogArgObj = window.dialogArguments;
+    if(dialogArgObj!=null)
+    {
+		neConfigId=dialogArgObj.neConfigId;
+		neConfigName=dialogArgObj.neConfigName;
+		neId=dialogArgObj.neId;
+		neTarget.getObject().length = 0;
+		neTarget.getObject().style.display="none";
+		if(neConfigId!=null && neConfigId!="")
+			initSelectedNes(neConfigId,neConfigName);
+    }
+    var sendUrl;
+    if(neId)
+    	sendUrl = httpUrl+'tag=31&flag=2&id='+neId;
+    else
+    	sendUrl = httpUrl+'tag=31&flag=0&id=0';
+	//初始化网元树
+	neTree = new XMLTree();
+	neTree.xmlUrl = sendUrl;
+	neTree.setPretreatmentAction(new newTree());
+	neTree.isOpenChildAtferClick = true;
+	neTree.isDynamicLoad = true;
+	neTree.isRightFireOnClick = false;
+	neTree.setDynamicLoadAction(new DynamicLoadAction());
+	neTree.setDblClickAction(new DblClickAction());
+	neTree.setClickAction(new ClickAction());
+	neTree.showAt(neTreeDiv);
+}
+
+//初始化已选择网元配置项
+function initSelectedNes(nes,neNames)
+{
+	var nesArray=nes.split(",");
+	var neNamesArray=neNames.split(",");
+	var object = neTarget.getObject();
+	for(var i=0;i<nesArray.length;i++)
+	{
+		neTarget.getObject().style.display="block";
+		object.length++;
+		object.size++;
+		object.options[i].text = neNamesArray[i];
+		object.options[i].value = nesArray[i];
+	}
+	/*var object = neTarget.getObject();
+	xmlhttp.open("POST",httpUrl+"tag=39&id="+nes,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var doc = new ActiveXObject("Microsoft.XMLDOM");
+		doc.load(xmlhttp.responseXML);
+		var nodeList = doc.selectNodes("/root/rowSet");
+		for(var i=0;i<nodeList.length;i++)
+		{
+			object.length++;
+			object.options[i].text = nodeList[i].getAttribute("value");
+			object.options[i].value = nodeList[i].getAttribute("id");
+			addKPI(nodeList[i].getAttribute("id"));
+		}
+	}*/
+}
+//自定义初始化树
+function newTree()
+{
+	this.parent = new XMLTree_onBeforeXMLTrans_Action
+	this.parent.pretreatment = function(oDoc)
+	{
+		var temp = oDoc.selectNodes("//MenuItem[@id=4]");
+		temp.removeAll();
+		return oDoc;
+	}
+	return this.parent;
+}
+//动态加载下级菜单
+function DynamicLoadAction()
+{
+	this.parent = new XMLTree_onDynamicLoad_Action;
+	this.parent.dynamicLoad = function(oItem)
+	{
+		//if(oItem.NE_FLAG!=2)
+			return httpUrl+"tag=31&flag=1&id="+oItem.id;
+	}
+	return this.parent;
+}
+
+function ClickAction()
+{
+	this.parent = new XMLTree_onClick_Action;
+	this.parent.click = function(oItem)
+	{
+		//TODO
+	}
+	return this.parent;
+}
+//双击事件
+function DblClickAction()
+{
+	this.parent = new XMLTree_onDblClick_Action;
+	this.parent.dblclick = function(oItem)
+	{
+		document.getElementById("addOneNe").click();
+	}
+	return this.parent;
+}
+//移动网元
+function addNe(oTargetSelect,isOnly)
+{
+	var oItem = neTree.getSelectedItem();
+	var oTarget = oTargetSelect.getObject();
+	//if(oItem!=null && oItem.NE_FLAG==3)
+	if(oItem!=null)
+	{
+		neTarget.getObject().style.display="block";
+		addNeOption(oItem,oTarget,isOnly);
+	}
+}
+
+//移动网元配置项
+function addNeOption(oItem,oTarget,isOnly)
+{
+	var text;
+	xmlhttp.open("POST",httpUrl+"tag=39&id="+oItem.id,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var doc = new ActiveXObject("Microsoft.XMLDOM");
+		doc.load(xmlhttp.responseXML);
+		var nodeList = doc.selectNodes("/root/rowSet");
+		text=nodeList[0].getAttribute("value");	
+	}
+	//var text=xmlhttp.responseText;
+	var oOption = document.createElement("OPTION");
+	oOption.text = text;
+	oOption.value = oItem.id;
+
+	if(isOnly == null)
+	{
+		isOnly = false;
+	}
+	oTarget.parentElement.fireMoveOptionIn(oOption);
+	if(isOnly)
+	{
+		for(var i=0;i<oTarget.options.length&&!isSame(oOption,oTarget.options[i]);i++);
+		if(i==oTarget.options.length)
+		{
+			oTarget.size = oTarget.options.length+3;
+			oTarget.add(oOption);
+		}
+	}
+	else
+	{
+		oTarget.size = oTarget.options.length+3;
+		oTarget.add(oOption);
+	}
+}
+
+//删除选择
+function delNe()
+{
+	neTarget.delSelectedOption();
+	neTarget.getObject().size--;
+	if(neTarget.getObject().length==0){
+		//neTarget.getObject().size = 20;
+		neTarget.getObject().style.display="none";
+	}
+}
+
+function isSame(oOption1,oOption2)
+{
+	return (oOption1.text==oOption2.text && oOption1.value==oOption2.value);
+}
+
+//返回
+function returnValues(){
+	var neOptions = neTarget.getObject().options;
+    var neIds = "";
+    var neNames = "";
+	for (var i = 0; i<neOptions.length; i++){
+		neIds += neOptions[i].value + ",";
+		neNames += neOptions[i].text + ",";
+	}
+	/*
+    if(neIds.length == 0){
+		MMsg("请选择网元配置项!");
+		return;
+	}*/
+	neIds=neIds.substring(0,neIds.length-1);
+	neNames=neNames.substring(0,neNames.length-1);
+	params = new Object();
+	params.neConfigId=neIds;
+	params.neConfigName=neNames;
+	//window.returnValue = params;
+	window.close();
+}
+//关闭窗口
+function winClose()
+{
+	window.returnValue = params;
+}
+</script>
+</body>
+</html>

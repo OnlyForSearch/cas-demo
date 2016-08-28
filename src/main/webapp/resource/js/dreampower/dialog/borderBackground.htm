@@ -1,0 +1,244 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>边框和背景</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		listImage(myEditor.designer.document,document.all('sltBackground-Image'))
+		initFormFromTag(myEditor.selectionElement,myEditor.form,true)
+		with(myEditor.selectionElement.style){
+			myEditor.formElements('chkStyle').checked	=borderTopStyle==borderRightStyle
+														&&borderTopStyle==borderBottomStyle
+														&&borderTopStyle==borderLeftStyle
+			myEditor.formElements('chkWidth').checked	=borderTopWidth==borderRightWidth
+														&&borderTopWidth==borderBottomWidth
+														&&borderTopWidth==borderLeftWidth
+			myEditor.formElements('chkColor').checked	=borderTopColor==borderRightColor
+														&&borderTopColor==borderBottomColor
+														&&borderTopColor==borderLeftColor
+		}
+		
+	}
+	doSame('Style')
+	doSame('Width')
+	doSame('Color')
+	document.all('Border-Top-WidthUnits').onchange=function(){
+		doSame('Width')
+	}
+}
+function doSame(t){
+	var arr=["Top","Right","Bottom","Left"]
+	if(myEditor.formElements('chk'+t).checked){
+		for(var i=1;i<arr.length;i++){
+			if(t=='Style'){
+				var slt=document.all('sltBorder-'+arr[i]+'-Style')
+				var value=getSelectValue(document.all('sltBorder-Top-Style'))
+				if(!findOption(slt,value) && slt.editable && slt.editable.toLowerCase()=='true'){
+					document.frames(slt.ifrmId).tf.hiddenValue=document.frames(slt.ifrmId).tf.value=value
+				}
+				setSelectDisabled(document.all('sltBorder-'+arr[i]+'-Style'),true)
+			}else if(t=='Width'){
+				var slt=document.all('sltBorder-'+arr[i]+'-Width')
+				var value=getSelectValue(document.all('sltBorder-Top-Width'))
+				if(!findOption(slt,value) && slt.editable && slt.editable.toLowerCase()=='true'){
+					document.frames(slt.ifrmId).tf.hiddenValue=document.frames(slt.ifrmId).tf.value=value
+				}
+				setSelectDisabled(document.all('sltBorder-'+arr[i]+'-Width'),true)
+				slt=document.all('Border-'+arr[i]+'-WidthUnits')
+				value=getSelectValue(document.all('Border-Top-WidthUnits'))
+				findOption(slt,value)
+				document.all('Border-'+arr[i]+'-WidthUnits').disabled=true
+			}else{
+				document.all('tfBorder-'+arr[i]+'-Color').parentNode.parentNode.firstChild.firstChild.style.backgroundColor=document.all('tfBorder-'+arr[i]+'-Color').value=document.all('tfBorder-Top-Color').value
+				document.all('tfBorder-'+arr[i]+'-Color').disabled=true
+				document.all('tfBorder-'+arr[i]+'-Color').parentNode.parentNode.firstChild.firstChild.disabled=true
+			}
+		}
+	}else{
+		for(var i=1;i<arr.length;i++){
+			if(t=='Style'){
+				setSelectDisabled(document.all('sltBorder-'+arr[i]+'-Style'),false)
+			}else if(t=='Width'){
+				setSelectDisabled(document.all('sltBorder-'+arr[i]+'-Width'),false)
+				document.all('Border-'+arr[i]+'-WidthUnits').disabled=false
+			}else{
+				document.all('tfBorder-'+arr[i]+'-Color').disabled=false
+				document.all('tfBorder-'+arr[i]+'-Color').parentNode.parentNode.firstChild.firstChild.disabled=false
+			}
+		}
+	}
+}
+function doOK(){
+	modify()
+	
+}
+function modify(){
+	var arrAttribute=[],arrValue=[]
+	var form=myEditor.form
+	var elts=form.elements
+	for(var i=0;i<elts.length;i++){
+		if(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/.test(elts[i].id)){
+			var id=elts[i].id
+			var elt=elts[i]
+			var attributeName=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk))/,'')
+			var prefix=id.replace(/^((slt)|(tf)|(ta)|(rb)|(chk)).+/,'$1')
+			var value=''
+			switch(prefix){
+				case 'slt'://下拉框
+					value=getSelectValue(elt)
+					break;
+				case 'rb'://单选框
+				case 'chk'://复选框
+					if(elt.checked)value=elt.value;
+					break;
+				default://其它控件
+					value=elt.value
+			}
+			var eltUnit=form.elements(attributeName+'Units')
+			//如果此属性带有单位,则加入单位
+			if(eltUnit && /^\-?\d+$/.test(value) && value!=''){
+				value+=eltUnit.value
+			}
+			arrAttribute.push(attributeName.toUncapitalize())
+			arrValue.push((/image$/i.test(attributeName)&&value!=''?'url('+value+')':value))
+		}
+	}
+	myEditor.srcElement.previousSibling.arrAttribute=arrAttribute
+	myEditor.srcElement.previousSibling.arrValue=arrValue
+	myEditor.srcElement.previousSibling.onclick()
+	var obj=myEditor.srcElement.previousSibling.previousSibling
+	if(obj && obj.tagName=='DIV'){
+		setOrRemoveAttribute(obj.firstChild,form,true)
+	}
+	window.close()
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td height="25" colspan="2">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="28">边框</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+    </tr>
+  <tr>
+    <td height="22" colspan="2"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="40" align="right">&nbsp;</td>
+        <td width="70">样式</td>
+        <td>粗细</td>
+        <td width="90">颜色</td>
+      </tr>
+      <tr>
+        <td align="right">&nbsp;</td>
+        <td>          <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="1"><input type="checkbox" name="chkStyle" value="Style"  onClick="doSame(this.value)" checked></td>
+              <td style="padding-top:5px">相同</td>
+            </tr>
+          </table></td>
+        <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="1"><input type="checkbox" name="chkWidth" value="Width" onClick="doSame(this.value)" checked></td>
+            <td style="padding-top:5px">全部都相同</td>
+          </tr>
+        </table></td>
+        <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="1"><input type="checkbox" name="chkColor" value="Color" onClick="doSame(this.value)"  checked></td>
+            <td style="padding-top:5px">相同</td>
+          </tr>
+        </table></td>
+      </tr>
+	  <script>
+	  var arrPos=['Top','上','Right','右','Bottom','下','Left','左']
+	  var arrWidth=['','','细','thin','中','medium','粗','thick']
+	  var arrStyle=['','','无','none','点划线','dotted','虚线','dashed','实线','solid','双线','double','槽状','groove','脊状','ridge','凹陷','inset','凸出','outset']
+      for(var i=0;i<arrPos.length;i=i+2){
+	  	document.write('<tr><td align="right">'+arrPos[i+1]+':</td><td>')
+		writeEditableSelect('Border-'+arrPos[i]+'-Style',60,arrStyle,i==0?'doSame(\'Style\')':'',i==0?'parent.doSame(\'Style\')':'')
+		document.write('</td><td>')
+		writeEditableSelect('Border-'+arrPos[i]+'-Width',50,arrWidth,'unitIsEnabled(document.all(\'Border-'+arrPos[i]+'-WidthUnits\'),this.value);'+(i==0?'doSame(\'Width\')':''),'parent.unitIsEnabled(parent.document.all(\'Border-'+arrPos[i]+'-WidthUnits\'),this.value);'+(i==0?'parent.doSame(\'Width\')':''))
+		document.write('\n\r')
+		writeDigitalUnits('Border-'+arrPos[i]+'-Width','',true,true)
+		document.write('</td><td>')
+		writeColorTable('Border-'+arrPos[i]+'-Color','doSame(\'Color\')')
+		document.write('</td></tr>')
+	  }
+	  </script>
+    </table>
+</td>
+    </tr>
+  <tr>
+    <td height="25" colspan="2">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="28">背景</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+    </tr>
+  <tr>
+    <td width="80" height="22" align="right">背景颜色:</td>
+    <td><script>writeColorTable('Background-Color')</script></td>
+  </tr>
+  <tr>
+    <td width="80" height="22" align="right">背景图像:</td>
+    <td><script>writeUrlSelector('Background-Image')</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">重复:</td>
+    <td><script>writeEditableSelect('Background-Repeat',75,['','','不重复','no-repeat','重复','repeat','横向重复','repeat-x','纵向重复','repeat-y'])</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">附件:</td>
+    <td><script>writeEditableSelect('Background-Attachment',75,['','','固定','fixed','滚动','scroll'])</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">水平位置:</td>
+    <td><script>writeEditableSelect('Background-Position-X',75,['','','左对齐','left','居中对齐','center','右对齐','right'],'unitIsEnabled(document.all(\'Background-Position-XUnits\'),this.value)','parent.unitIsEnabled(parent.document.all(\'Background-Position-XUnits\'),this.value)')</script>
+	<script>writeDigitalUnits('Background-Position-X','',true,true)</script>
+	</td>
+  </tr>
+  <tr>
+    <td height="22" align="right">垂直位置:</td>
+    <td><script>writeEditableSelect('Background-Position-Y',75,['','','顶部','top','居中','center','底部','bottom'],'unitIsEnabled(document.all(\'Background-Position-YUnits\'),this.value)','parent.unitIsEnabled(parent.document.all(\'Background-Position-YUnits\'),this.value)')</script>
+	<script>writeDigitalUnits('Background-Position-Y','',true,true)</script>
+	</td>
+  </tr>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <script>writeButtonsRight()</script>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

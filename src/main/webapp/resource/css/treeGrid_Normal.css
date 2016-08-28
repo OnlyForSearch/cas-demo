@@ -1,0 +1,72 @@
+.gridbox 
+{
+     OVERFLOW: hidden;
+     BORDER-RIGHT: #c2d5dc 1px solid; 
+     BORDER-TOP: #c2d5dc 1px solid; 
+     BORDER-LEFT: #c2d5dc 1px solid; 
+     BORDER-BOTTOM: #c2d5dc 1px solid
+}
+.xhdr 
+{
+     BACKGROUND-COLOR: #d4d0c8
+}
+
+TABLE.hdr 
+{
+     BACKGROUND-IMAGE: url(imgs/skin_light_header.png)
+}
+
+TABLE.hdr TD
+{
+     BORDER-RIGHT: #93afba 1px solid; 
+     BORDER-TOP: #fdfdfd 1px solid;
+     FONT-WEIGHT: bold; 
+     FONT-SIZE: 11px; 
+     VERTICAL-ALIGN: top; 
+     BORDER-LEFT: #fdfdfd 1px solid; 
+     COLOR: #055a78; 
+     BORDER-BOTTOM: #93afba 1px solid;
+     FONT-FAMILY: Tahoma;
+     BACKGROUND-COLOR: transparent; 
+     TEXT-ALIGN: left
+}
+
+TABLE.hdr TD DIV.hdrcell 
+{
+     PADDING-LEFT: 10px;
+     height:20px
+}
+.objbox 
+{
+     BACKGROUND-COLOR: white
+}
+
+TABLE.obj 
+{
+     BORDER-BOTTOM: #d6d6d6 1px solid
+}
+
+
+TABLE.row20px TR TD 
+{
+    PADDING-RIGHT: 4px; 
+    PADDING-LEFT: 4px
+}
+
+TABLE.obj TD 
+{
+    BORDER-RIGHT: gray 1px solid; 
+    BORDER-TOP: white 1px solid; 
+    FONT-SIZE: 12px; 
+    PADDING-BOTTOM: 0px;
+    OVERFLOW: hidden; 
+    BORDER-LEFT: white 1px solid;
+    PADDING-TOP: 0px; 
+    BORDER-BOTTOM: gray 1px solid;
+    FONT-FAMILY: Arial; moz-user-select: none;
+}
+
+TABLE.row20px TR TD 
+{
+    PADDING-RIGHT: 4px; PADDING-LEFT: 4px
+}

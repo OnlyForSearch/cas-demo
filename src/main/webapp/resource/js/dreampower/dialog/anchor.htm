@@ -1,0 +1,122 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>命名锚记</title>
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument('tfName')
+	if(myEditor.designer){
+		var dom=myEditor.designer.document
+		var allAnchors = dom.getElementsByTagName("A");
+		var slt=myEditor.form.elements('sltAnchor')
+		var anchorName;
+		for (var i=0; i < allAnchors.length; i++){
+			if (allAnchors[i]){
+				anchorName = allAnchors[i].getAttribute("NAME");
+				if (anchorName){
+					slt.options[slt.length]=new Option(anchorName,anchorName)
+					slt.options[slt.length-1].obj=allAnchors[i]
+				}
+			}
+		}
+	}
+}
+
+function doOK(){
+	objectTag()
+}
+function objectTag(){
+	var strAttributes	=compileAttributesString(myEditor.form).trim()
+	if(strAttributes){
+		myEditor.window.insert('<A '+strAttributes+'>'+myEditor.selectionHTML+'</A>','select')
+	}
+	window.close()
+}
+function doReplace(){
+	var name=myEditor.form.elements('tfName').value.trim()
+	var slt=myEditor.form.elements('sltAnchor')
+	if(name&&slt.selectedIndex>-1){
+		with(slt.options[slt.selectedIndex]){
+			obj.setAttribute('name',name)
+			text=value=name
+		}
+		myEditor.window.doSameContent()
+	}
+}
+function doRemove(){
+	var slt=myEditor.form.elements('sltAnchor')
+	if(slt.selectedIndex>-1){
+		slt.options[slt.selectedIndex].obj.outerHTML=slt.options[slt.selectedIndex].obj.innerHTML
+		slt.options.remove(slt.selectedIndex)
+		myEditor.window.doSameContent()
+	}
+}
+function doGoto(){
+	var slt=myEditor.form.elements('sltAnchor')
+	if(slt.selectedIndex>-1){
+		var rng=myEditor.designer.document.body.createTextRange()
+		rng.moveToElementText(slt.options[slt.selectedIndex].obj)
+		rng.select()
+	}
+}
+</script>
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="no" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+  <tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+  <tr>
+    <td height="25" colspan="2">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="28">常规</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+    </tr>
+  <tr>
+    <td width="80" height="22" align="right">锚记名称:</td>
+    <td><input id="tfName" type="text" class="longWidth" ></td>
+  </tr>
+  <tr>
+  <td height="25" colspan="2"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="53">辅助功能</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+</tr>
+  <tr>
+    <td height="22" align="right" valign="top">现有锚记:</td>
+    <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="1"><select name="sltAnchor" size="5" class="longWidth">
+        </select></td>
+        <td valign="top"><img width=0 height=0>
+		<input type="button" value="替换" onClick="doReplace()">
+		<br>
+		<img width=0 height=0>
+		<input type="button" value="移除" onClick="doRemove()">
+		<br>
+		<img width=0 height=0>
+		<input type="button" value="转到" onClick="doGoto()">			</td>
+      </tr>
+    </table></td></tr>
+</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+    <script language="JavaScript" type="text/JavaScript">writeButtonsRight()</script></td></tr>
+</table>
+</body>
+</html>

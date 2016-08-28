@@ -1,0 +1,1092 @@
+body {
+	margin: 0;
+	font: 12px verdana, geneva, arial, helvetica, sans-serif, 宋体;
+	background: url(/resource/image/indexHK/bg.jpg);
+	scrollbar-3dlight-color: #FFFFFF; 		/*- 最外左 -*/
+	scrollbar-highlight-color: #F1F9FF; 		/*- 左二 -*/
+	scrollbar-shadow-color: #AEBAC2; 		/*- 右二 -*/
+	scrollbar-darkshadow-color: #FFFFFF; 	/*- 右一 -*/
+	scrollbar-face-color: #D7D7D7;			/*- 面子 -*/
+	scrollbar-arrow-color: #242424;			/*- 箭头 -*/
+	scrollbar-base-color: #FFFFFF; 			/*- 基色 -*/
+	scrollbar-track-color: #F2F2F2;			/*- 滑道 -*/
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+span {
+	font-size: 13px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+img,iframe {
+	border: 0px;
+}
+
+li {
+	list-style: none;
+}
+
+/*logo的一些样式*/
+.banner {
+	height: 80px;
+	overflow: hidden;
+	white-space: noWrap;
+	width: 100%;
+	padding: 0;
+}
+
+.logoInner {
+	float: left;
+	width: 100%;
+	height: 80px;
+	color: #32939E;
+}
+
+.logoImg {
+	width: 40%;
+	height: 80px;
+	float: left;
+	background-image: url(/resource/image/indexHK/logo.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.topLink {
+	float: right;
+	width: 500px;
+	line-height: 90px;
+	position: relative;
+}
+.topLink a {
+	text-decoration: none;
+}
+.userName {
+	float: right;
+	width: 100px;
+	height: 80px;
+	position: relative;
+	/*color:#b3580e;*/
+	font-family: "Microsoft YaHei";
+	line-height: 90px;
+}
+
+.userName>span#userName {
+	color: #D86829;
+}
+
+.topLink li {
+	float: left;
+	padding: 0 5px;
+}
+
+.topLink li a {
+	color: #32939E;
+}
+
+.topLink li.division {
+	font-size: 16px;
+}
+
+.popup {
+	font-family: "Microsoft YaHei";
+	font-size: 13px;
+}
+
+.popup_center {
+	float: left;
+	height: 31px;
+	line-height: 19px;
+	padding: 3px 4px;
+	background: url(/resource/image/indexJt2/index/popup_bg.gif) repeat-x
+		center top;
+}
+
+.menuBar {
+	height: 38px;
+	z-index: 9999;
+	line-height: 180%;
+	background: url(/resource/image/indexJt2/index/menu_bg.png) repeat-x;
+	overflow: hidden;
+	white-space: noWrap;
+	padding-left: 10px;
+}
+
+.menuBar label {
+	float: left;
+	line-height: 180%;
+}
+
+.menuBar a {
+	padding: 0px 3px;
+	font-family: "Microsoft YaHei";
+	font-size: 14px;
+	color: #FFFFFF;
+	display: inline-block;
+	height: 38px;
+	line-height: 38px;
+	cursor: hand;
+}
+
+.menuBar a:hover {
+	color: #124873;
+	background: url(/resource/image/indexJt2/index/menu_bg_sel.png) repeat-x
+		;
+}
+
+/*总体布局*/
+.wrap {
+	width: expression(( document . body . clientWidth < 1360) ?   '1360px' :
+		  document . body . clientWidth );
+}
+
+.main {
+	overflow: hidden;
+	white-space: noWrap;
+	width: 94%;
+	margin:0 auto;
+	padding: 20px 0px 0px 20px;
+	background: #ffffff;
+}
+
+.mainLeft {
+	float: left;
+	width: 250px;
+}
+
+.mainRight {
+	float: left;
+	overflow: hidden;
+	white-space: noWrap;
+}
+
+.mainLeftArea {
+	padding: 0 0 5px 0;
+}
+
+.mainRightArea {
+	padding: 0 0 0 0;
+}
+
+.mainRightArea2 {
+	padding: 15px 0 0 0;
+	margin-bottom: 5px;
+}
+
+.mainRightCol1 { /*生产运营*/
+	float: left;
+	width: 69%;
+	padding: 1px 5px 0 5px;
+}
+
+.mainRightCol2 {
+	float: right;
+	width: 31%;
+	padding: 0px 5px 0 0;
+}
+.mainRightCol3 {
+	float: right;
+	width: 99.5%;
+	padding: 0px 5px 0 0;
+}
+.chartStyle {
+	float:left;
+}
+.chart_active {
+	display:block;
+}
+.chart_disActive {
+	display:none;
+}
+.b1,.b2,.b3,.b4,.b5,.b6,.b7,.b8 {
+	height: 1px;
+	font-size: 1px;
+	overflow: hidden;
+	display: block;
+}
+
+.b1,.b8 {
+	margin: 0 2px;
+}
+
+.b2,.b7 {
+	margin: 0 1px;
+	border-right: 1px solid;
+	border-left: 1px solid;
+}
+
+.b3,.b6 {
+	border-right: 1px solid;
+	border-left: 1px solid;
+}
+
+.b4,.b5 {
+	border-right: 1px solid;
+	border-left: 1px solid;
+	height: 1px;
+}
+
+.content {
+	border-right: 1px solid;
+	border-left: 1px solid;
+	overflow: hidden;
+}
+
+.color1 .b2,.color1 .b3,.color1 .b4,.color1 .b5,.color1 .b6,.color1 .b7,.color1 .content
+	{
+	border-color:#DBDBDB;
+}
+
+.color1 .b1,.color1 .b8 {
+	background:#DBDBDB;
+}
+
+.color1 .b2,.color1 .b3,.color1 .b4,.color1 .b5,.color1 .b6,.color1 .b7,.color1 .content
+	{
+	background: #ffffff;
+}
+
+.color2 .b2,.color2 .b3,.color2 .b4,.color2 .b5,.color2 .b6,.color2 .b7,.color2 .content
+	{
+	/*border-color: #f7bd5e;*/
+	border-color:#DBDBDB;
+}
+
+.color2 .b1,.color2 .b8 {
+	background:#DBDBDB;
+}
+
+.color2 .b2,.color2 .b3,.color2 .b4,.color2 .b5,.color2 .b6,.color2 .b7,.color2 .content
+{
+	background:#DBDBDB;
+}
+
+.color3 .b2,.color3 .b3,.color3 .b4,.color3 .b5,.color3 .b6,.color3 .b7,.color3 .content
+{
+	border-color:#DBDBDB;
+}
+
+.color3 .b1,.color3 .b8 {
+	background: #DBDBDB;
+}
+
+.color3 .b2,.color3 .b3,.color3 .b4,.color3 .content {
+	background: #ffffff;
+}
+
+.color3 .b5,.color3 .b6,.color3 .b7 {
+	background: #DBDBDB;
+}
+
+/* 以下四个是helpFlow协助流程相关的一些样式*/
+.helpFlowTitle {
+	padding: 10px 0 5px 20px;
+	text-align: left;
+	color: #20679e;
+	font-size: 15px;
+	font-weight: bold;
+	font-family: "SimSun";
+	color:#242424 !important;
+}
+.helpFlowMenuTitle a {
+	color: #20679e;
+}
+
+.helpFlowMenuTitle a:hover {
+	color: #9d661e;
+}
+
+.helpFlow {
+	padding-top: 20px;
+	background: #ffffff;
+	width: 99%;
+	overflow: hidden;
+	white-space: noWrap;
+	text-overflow: ellipsis;
+	text-align:center;
+}
+.helpFlowWord {
+	width: 93%;
+	height: 35px;
+	background-repeat: no-repeat;
+	float: left;
+	line-height: 35px;
+	color: #636363;
+	font-family:'SimSun';
+	font-size: 14px;
+	margin:0 auto;
+	cursor: pointer;
+	white-space: noWrap;
+}
+
+.helpFlow ul li {
+	width:45%;
+	float:left;
+}
+
+.helpFlow_a {
+	width:93%;
+}
+.helpFlow a {
+	text-decoration: none;
+}
+.helpFlow a i{
+	width: 50px;
+	height:50px;
+	display:block;
+	background-image: url(/resource/image/indexHK/helpFlow.png);
+	background-repeat: no-repeat;
+}
+.helpFlow div.helpFlow_a1 i{
+	background-position: -29px -110px;
+}
+.helpFlow .helpFlow_a2 i{
+	background-position: -133px -110px;
+}
+
+.helpFlow .helpFlow_a3 i{
+	background-position: -29 -196px;
+}
+.helpFlow .helpFlow_a4 i{
+	background-position: -133 -202px;
+}
+.helpFlow .helpFlow_a5 i{
+	background-position: -29 -282px;
+}
+.helpFlow .helpFlow_a6 i{
+	background-position: -133 -288px;
+}
+.helpFlow .helpFlow_a7 i{
+	background-position: -29 -377px;
+}
+.helpFlow .helpFlow_a8 i{
+	background-position: -29 -462px;
+}
+.helpFlow .helpFlow_a9 i{
+	background-position: -29 -721px;
+}
+.helpFlow .helpFlow_a10 i{
+	background-position: -29px -549px;
+}
+.helpFlow .helpFlow_a11 i{
+	background-position: -133px -377px;
+}
+.helpFlow a .helpFlowWord {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.li_able {
+	display:block;
+}
+
+.li_disable {
+	display:none;
+}
+
+/* 以下三个是快速通道相关的一些样式*/
+.check {
+	font-family: "Microsoft YaHei";
+	font-weight: bold;
+	color: #818181;
+	padding: 5px 5px;
+	padding-left: 10px;
+}
+
+.checkWandP {
+	float: left;
+	width: 93%;
+	height: 30px;
+	background-image: url(/resource/image/indexJt2/index/11_center.png);
+	border-left: 1px solid #AAD0E8;
+	border-right: 1px solid #AAD0E8;
+	line-height: 28px;
+	font-size: 12px;
+	text-align: center;
+	color: #c3c3c;
+	cursor: pointer;
+}
+
+.rowOneCheck a:hover .checkWandP {
+	background-image: url(/resource/image/indexJt2/index/22_center.png);
+}
+
+/*个性菜单*/
+.shortCutMenuCss {
+	text-align: left;
+	width: 100%;
+	height: 285px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	margin:0 auto;
+	padding: 0 15px 15px 15px;
+}
+
+.shortCutMenuCss a {
+	float: left;
+	width: 250px;
+	font-family: "Microsoft YaHei";
+	color: #666666;
+	display: block;
+	overflow: hidden;
+	white-space: noWrap;
+	text-overflow: ellipsis;
+	text-decoration: none;
+	border-bottom: 1px dashed #dbdbdb;
+	padding:7px;
+}
+
+.shortCutMenuCss a:hover {
+	color: #ff0000;
+}
+.customLinkTitle {
+	padding: 10px;
+	text-align: left;
+	color: #20679e;
+	font-size: 13px;
+	font-weight: bold;
+}
+.customMenuTitle {
+	height: 19px;
+	line-height: 19px;
+	float: left;
+	font-family: "SimSun";
+	color:#242424;
+	font-size: 15px;
+}
+
+.customMoreLink {
+	float: right;
+}
+
+.customMoreLink a {
+	color: #20679e;
+}
+
+.customMoreLink a:hover {
+	color: #9d661e;
+}
+
+/*快速链接*/
+.workLinkSpan {
+	text-align: left;
+	height: 277px; /*此处控制左边方块的高*/
+	overflow: auto;
+	padding: 0 15px 10px 15px;
+	font-size: 13px;
+	background-color: #F5F9FD;
+}
+
+.workLinkSpan a {
+	float: left;
+	width: 221px;
+	font-family: "Microsoft YaHei";
+	color: #000000;
+	display: block;
+	overflow: hidden;
+	white-space: noWrap;
+	text-overflow: ellipsis;
+	font-size: 13px;
+}
+
+.workLinkSpan a:hover {
+	color: #ff0000;
+}
+
+.rightColContent {
+	/*background: #f5f9fd;*/
+	background:#ffffff;
+	height: 284px; /*此处控制中间方块的高*/
+	width: 100%;
+	overflow: hidden;
+	white-space: noWrap;
+	text-overflow: ellipsis;
+}
+
+.rightColContentProd {
+	/*background: #f5f9fd;*/
+	background: #ffffff;
+	width: 99.5%;
+	overflow: hidden;
+	white-space: noWrap;
+	text-overflow: ellipsis;
+	padding:1%;
+}
+
+/*此处控制生产类管理其他类的鼠标经过颜色切换*/
+.rightColContent a {
+	cursor: hand;
+}
+
+.mainRightColHead {
+	padding: 15px 20px 5px 20px;
+	width: 100%;
+	white-space: noWrap;
+	overflow: hidden;
+}
+
+.mainRightColHead li {
+	display: block;
+	padding-bottom: 3px;
+	float: left;
+}
+
+.mainRightColHead a {
+	color: #535353;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+	cursor: hand;
+}
+
+.mainRightColHead a:hover .colHeadLeft {
+	background: url(/resource/image/indexJt2/index/title_left.png) no-repeat
+		;
+}
+
+.mainRightColHead a:hover .colHeadRight {
+	background: url(/resource/image/indexJt2/index/title_right.png)
+		no-repeat;
+}
+
+.mainRightColHead a:hover .colHead {
+	color: #408cc8;
+	background: url(/resource/image/indexJt2/index/title_bg.png) repeat-x;
+}
+
+.footerWrap {
+	height: 64px;
+	color: 124873;
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+	padding: 5px 0 0 0;
+	text-align: center;
+}
+
+a.moreACss {
+	color: #20679E !important;
+	text-align: right;
+	width: 20px;
+	float: right;
+	font-family: "Microsoft YaHei";
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+a.moreACss :hover {
+	color: #9d661e !important;
+}
+
+a.moreACss :active {
+	color: #20679E !important;
+}
+
+/*代办标题样式切换*/
+.colHeadSel {
+	height: 21px;
+	line-height: 20px;
+	color: #408cc8;
+	background: url(/resource/image/indexJt2/index/title_bg.png) repeat-x;
+	float: left;
+}
+
+.colHeadLeftSel {
+	width: 10px;
+	height: 21px;
+	background: url(/resource/image/indexJt2/index/title_left.png) no-repeat
+		;
+	float: left;
+}
+
+.colHeadRightSel {
+	width: 10px;
+	height: 21px;
+	background: url(/resource/image/indexJt2/index/title_right.png)
+		no-repeat;
+	float: left;
+}
+
+.colHead {
+	height: 21px;
+	line-height: 20px;
+	float: left;
+}
+
+.colHeadLeft {
+	width: 10px;
+	height: 21px;
+	float: left;
+}
+
+.colHeadRight {
+	width: 10px;
+	height: 21px;
+	float: left;
+}
+
+/*代办内容文字样式*/
+.mid_content_d {
+	border-bottom-width: 1px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	text-align: left;
+	padding-top: 2px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-left: 11px;
+	font-size: 13px;
+}
+
+#billInfos td {
+	font-family: "Microsoft YaHei";
+	font-size: 12px;
+	text-align: center;
+}
+
+#billInfos a {
+	color: #434343;
+}
+
+#billInfos a:hover {
+	color: #535353;
+}
+
+/*菜单栏*/
+#subMenuBar {
+	left: 0px;
+	position: absolute;
+	top: 115px;
+	width: 100%;
+	z-index: 9999;
+	text-align: left;
+}
+
+#subMenuBar div {
+	display: none;
+	float: left;
+	margin-top: -2px;
+	filter: Alpha(opacity = 97);
+	position: absolute;
+}
+
+#subMenuBar dl {
+	float: left;
+	position: relative;
+}
+
+#subMenuBar dd {
+	float: left;
+	width: 100%;
+	border: 1px solid #E4E4E4;
+	background: url(/resource/image/indexJt2/index/subnav_bg.gif) repeat-x
+		scroll 0 bottom #FFFFFF;
+}
+
+#subMenuBar ul {
+	float: left;
+	padding: 15px;
+	text-align: left;
+	width: 130px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#subMenuBar li a {
+	color: #20679e;
+	font-family: "Microsoft YaHei";
+	cursor: hand;
+}
+
+#subMenuBar li a:hover {
+	color: #ff3300;
+}
+
+#eventPage {
+	padding: 5px 0 0 0;
+}
+
+.twoLevelMenu {
+	font-size: 14px;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+}
+
+#billInfos {
+	padding: 6px 0 6px 12px;
+}
+
+.daibanType {
+	display: -moz-inline-box;
+	display: inline-block;
+	width: 88px;
+	text-align: center;
+	font-family: Microsoft YaHei;
+	letter-spacing: 1px;
+	font-size: 11px;
+	white-space: noWrap;
+}
+
+.daibanName {
+	font-family: Microsoft YaHei;
+	letter-spacing: 1px;
+	width: 410px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 新菜单栏 样式*/
+.niMenu {
+	float: center;
+	width: 100%;
+	height: 35px;
+	/*background:url(/resource/image/indexJt2/index/menu_bg.png) repeat-x;*/
+	background: #33929D;
+	white-space: noWrap;
+	padding-left: 10px;
+	z-index: 3;
+}
+
+.niMenuWorkPage {
+	float: center;
+	width: 100%;
+	height: 35px;
+	background: url(/resource/image/indexJt2/index/menu_bg.png) repeat-x;
+	white-space: noWrap;
+	z-index: 3;
+}
+
+.menusel {
+	float: left;
+	width: 90px;
+	position: relative;
+	height: 35px;
+	line-height: 35px;
+	margin-left: 1px; *
+	margin-left: 0px;
+	_margin-left: -1px;
+	font-family: Microsoft YaHei;
+	border: 0px solid #ffe;
+}
+
+.menusel h2 {
+	white-space: nowrap;
+	/*border-left: 1px solid #61B2DF;*/
+	z-index: 5;
+}
+
+.menusel h2 a {
+	width: auto;
+	display: block;
+	color: #FFFFFF;
+	font-size: 15px;
+	font-weight: normal;
+	text-align: center;
+	white-space: nowrap;
+	text-decoration: none;
+	padding: 0 18px 0 10px;
+	height: 35px;
+	position: relative;
+	z-index: 5;
+}
+
+.menusel h2 a:hover {
+	width: auto;
+	display: block;
+	color: #FF0000;
+	font-size: 15px;
+	font-weight: normal;
+	text-align: center;
+	white-space: nowrap;
+	text-decoration: none;
+	padding: 0 18px 0 10px;
+	height: 35px;
+	position: relative;
+	z-index: 5;
+	background: #61B2DF;
+}
+
+.menusel h2 a:active {
+	width: auto;
+	display: block;
+	color: #FFFFFF;
+	font-size: 15px;
+	font-weight: normal;
+	text-align: center;
+	white-space: nowrap;
+	text-decoration: none;
+	padding: 0 18px 0 10px;
+	height: 35px;
+	position: relative;
+	z-index: 5;
+	background: #1E737E;
+}
+
+.position {
+	position: absolute;
+	left: 0px;
+	z-index: 9999;
+}
+
+.position a {
+	width: 160px;
+	display: block;
+	color: #000000;
+	font-size: 13px;
+	font-weight: normal;
+	text-align: left;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: break-all;
+	text-decoration: none;
+	height: auto;
+	line-height: 16px;
+	padding: 5px 3px 4px 8px;
+	position: relative;
+	z-index: 9;
+}
+
+.position a:hover {
+	width: 160px;
+	display: block;
+	color: #FF0000;
+	font-size: 13px;
+	font-weight: normal;
+	text-align: left;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: break-all;
+	text-decoration: none;
+	height: auto;
+	line-height: 16px;
+	padding: 5px 3px 4px 8px;
+	position: relative;
+	z-index: 9;
+}
+
+.position a:active {
+	width: 160px;
+	display: block;
+	color: #000000;
+	font-size: 13px;
+	font-weight: normal;
+	text-align: left;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: break-all;
+	text-decoration: none;
+	height: auto;
+	line-height: 16px;
+	padding: 5px 3px 4px 8px;
+	position: relative;
+	z-index: 9;
+}
+
+.position a.hasDomRight {
+	background-image: url(../image/indexITSM/ni_menuRight.gif);
+	background-position: right;
+	background-repeat: no-repeat;
+	width: 160px;
+	display: block;
+	color: #000000;
+	font-size: 13px;
+	font-weight: normal;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: break-all;
+	height: auto;
+	line-height: 16px;
+	padding: 5px 3px 4px 8px;
+	position: relative;
+	z-index: 9;
+}
+
+.position a.hasDomRight:hover {
+	background-image: url(../image/indexITSM/ni_menuRight.gif);
+	background-position: right;
+	background-repeat: no-repeat;
+	color: #FF0000;
+	font-size: 13px;
+	position: relative;
+	z-index: 9;
+	height: auto;
+	line-height: 16px;
+	padding: 5px 3px 4px 8px;
+}
+
+.menusel ul {
+	width: 160px;
+	background: #EEEEFF;
+	border: 1px solid #5CA9DD;
+	margin-top: -1px;
+	position: relative;
+	z-index: 9;
+	display: none;
+}
+
+.menusel .block {
+	display: block;
+}
+
+.typeul li {
+	border-top: 1px dashed #A0C7E2;
+	width: 160px;
+	position: relative;
+	float: left;
+}
+
+.typeul li a {
+	border: none;
+	width: 160px;
+}
+
+.typeul li a:hover {
+	border: none;
+	background: #5CACDF;
+}
+
+.typeul {
+	margin-left: 0;
+}
+
+.typeul ul {
+	left: 160px;
+	top: 0;
+	position: absolute;
+}
+
+.fli {
+	margin-left: -1px;
+	border-left: #eeeeee solid 1px;
+}
+
+.menusel .noBorderLi {
+	border: none;
+}
+
+.clearfix:after {
+	content: " ";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+.hasDomMenu {
+	color: #FFFFFF;
+}
+
+/*数据统计*/
+.msgTitle {
+	height: 19px;
+	line-height: 19px;
+	float: left;
+	font-family: "SimSun";
+	text-align: left;
+	color:#242424;
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.msgTotalCout {
+	margin-right: 50px;
+}
+
+.moreMsg {
+	float: right;
+	font-family: "Microsoft YaHei";
+	text-align: left;
+	color: #20679e;
+	font-size: 13px;
+	font-weight: bold;
+	padding-right: 6px;
+	height: 22px;
+	line-height: 22px;
+	letter-spacing: 1px;
+}
+
+.moreMsg a {
+	color: #20679E !important;
+}
+
+.moreMsg a:hover { #
+	color: #9d661e !important;
+}
+
+.moreMsg A:active {
+	color: #20679E !important;
+}
+
+.moreMsg A:active {
+	color: #20679e;
+}
+
+.msgTr {
+	font-size: 13px;
+	font-family: "Microsoft YaHei";
+	color: #808080;
+	width: 100%;
+	height: 25px;
+}
+
+.msgContent {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-top: 1px;
+	width: 75%;
+	cursor: hand;
+}
+
+.msgDate {
+	width: 110px;
+	overflow: hidden;
+	position: absolute;
+	right: 10px;
+}
+
+.unifiedQueryTitle {
+	height: 19px;
+	line-height: 19px;
+	float: left;
+	font-family: "Microsoft YaHei";
+	letter-spacing: 2px;
+}
+
+.currentTime {
+	float: right;
+	height: 35px;
+	line-height: 35px;
+	padding-right: 30px;
+}
+.chartMenu {
+	float:left;
+}
+.chartMenu ul {
+	background: #F5F9FD;
+	margin-top:10px;
+}
+.chartMenu ul li {
+	line-height:50px;
+	background: rgb(211, 228, 245);
+	color:#7f3402;
+	font-size:13px;
+	font-family: "Microsoft YaHei";
+	border:1px solid #F5F9FD;
+	cursor:pointer;
+	text-align:left;
+	padding:0 10px;
+}
+.chartMenu ul li.active{
+	background-color:rgb(247, 189, 94);
+}

@@ -1,0 +1,220 @@
+<HTML>
+<HEAD>
+<public:component literalcontent="true"  tagName=line                        >
+<public:ATTACH   EVENT="ondocumentready" HANDLER="doInit"                   />
+<public:PROPERTY NAME="from"             get="getFrom" put="setFrom"        />
+<public:PROPERTY NAME="to"               get="getTo" put="setTo"            />
+<public:PROPERTY NAME="color"            get="getColor" put="setColor"      />
+<public:PROPERTY NAME="weight"           get="getWeight" put="setWeight"    />
+<public:PROPERTY NAME="position"         get="getPosition" put="setPosition" />
+<public:EVENT    NAME="onLineOver"       ID="oLineOver"                     />
+<public:EVENT    NAME="onLineClick"      ID="oLineClick"                    />
+<public:EVENT    NAME="onLineMove"       ID="oLineMove"                    />
+</public:component>
+<SCRIPT LANGUAGE="javascript">
+var gFrom;
+var gTo;
+var gColor="black";
+var oLine=null;
+var gWeight="5pt";
+var gPosition;
+function doInit()
+{   
+   link();
+}
+
+function getFrom()
+{
+   return gFrom;
+}
+
+function setFrom(pFrom)
+{
+    gFrom=pFrom;
+} 
+
+function getTo()
+{
+   return gTo;
+}
+
+function setTo(pTo)
+{
+    gTo=pTo;
+}
+
+function getColor()
+{
+   return gColor;
+}
+
+function setColor(pColor)
+{
+    gColor=pColor;
+    if(oLine!=null)
+    {
+       oLine.children[0].color=gColor;
+    }
+}
+
+function getWeight()
+{
+   return gColor;
+}
+
+function setWeight(pWeight)
+{
+    gWeight=pWeight;
+    if(oLine!=null)
+    {
+       oLine.children[0].weight=gWeight;
+    }
+}
+
+function setPosition(pPostion)
+{
+   var aPosition=eval("["+pPostion+"]");
+   gPosition={};
+   gPosition.fromX=aPosition[0];
+   gPosition.fromY=aPosition[1];
+   gPosition.toX=aPosition[2];
+   gPosition.toY=aPosition[3];
+}
+
+function getPosition()
+{
+    var iFromX=parseInt(oLine.style.left,10);
+    var iFromY=parseInt(oLine.style.top,10);
+    var sTo=oLine.to+"";
+    var aTo=sTo.split(",");
+    var iToX=(parseFloat(aTo[0])*12)/9;
+    var iToY=(parseFloat(aTo[1])*12)/9;
+    return iFromX+","+iFromY+","+iToX+","+iToY;
+}
+
+function link()
+{
+   var oForm=window.document.getElementById(gFrom);
+   var oTo=window.document.getElementById(gTo);
+   if(oForm && oTo)
+   {
+       connectionNode(oForm,oTo)
+   }
+}
+
+function connectionNode(oNodePre,oNodeNext)
+{
+     var x1,y1,x2,y2;
+     var aArray=getLinkPos(oNodePre,oNodeNext);
+     var fromX,fromY,toX,toY
+     x1=aArray[0];
+     y1=aArray[1];
+     x2=aArray[2];
+     y2=aArray[3];
+     if(gPosition)
+     {
+        x1=gPosition.fromX;
+        y1=gPosition.fromY;
+        x2=gPosition.toX;
+        y2=gPosition.toY;
+     }
+     drawLine(x1,y1,x2-x1,y2-y1);
+}
+
+
+function drawLine(x1,y1,x2,y2)
+{
+     var lineHTML,strokeHTML,oStroke,sLinkVML;
+     lineHTML="<v:line style='position:absolute;left:"+x1
+		  +    ";top:"+y1+";' to='"+x2+","+y2+"' strokecolor='black' strokeweight=1 "
+	          +     "typeName='link'>" 
+	          +"</v:line>"
+     strokeHTML="<v:stroke weight='"+gWeight+"' startarrow='none' color='"+gColor+"' endarrow = 'classic'/>";
+     oLine=window.document.createElement(lineHTML);
+     oStroke=window.document.createElement(strokeHTML);
+     oLine.appendChild(oStroke);
+     oLine.attachEvent("onmouseover",function(){doLineOver(this)});
+     oLine.attachEvent("onmousemove",function(){doLineMove(this)});
+     oLine.attachEvent("onclick",function(){doLineClick(this)});
+     window.document.body.appendChild(oLine);
+}
+
+function doLineOver(oLine)
+{
+   doFireEvent(oLineOver,"srcLine",oLine);
+}
+
+function doLineMove(oLine)
+{
+	doFireEvent(oLineMove,"srcLine",oLine);
+}
+
+function doLineClick(oLine)
+{
+   doFireEvent(oLineClick,"srcLine",oLine);
+}
+
+function doFireEvent(oEventId,name,value)
+{
+   var oEvent = createEventObject();
+   oEvent.setAttribute(name,value);
+   oEventId.fire(oEvent)
+}
+
+function  getLinkPos(oNodePre,oNodeNext)
+{
+     var x1,x2,y1,y2;
+     var iWidth,iHeight;
+     var iArc;
+     var iX1,iY1,iW1,iH1;
+     var iX2,iY2,iW2,iH2;
+     var iCoordX1,iCoordY1,iCoordX2,iCoordY2;
+     var aOvalPreLink,aOvalNextLink;
+     if(!oNodePre || !oNodeNext) return;
+     var aArray=new Array(4);
+     iX1=oNodePre.style.pixelLeft;
+     iY1=oNodePre.style.pixelTop;
+     iW1=oNodePre.clientWidth;
+     iH1=oNodePre.clientHeight;
+     iX2=oNodeNext.style.pixelLeft;  
+     iY2=oNodeNext.style.pixelTop;   
+     iW2=oNodeNext.clientWidth; 
+     iH2=oNodeNext.clientHeight;
+
+     x1=iX1+iW1/2;
+     y1=iY1+iH1/2;
+     x2=iX2+iW2/2;
+     y2=iY2+iH2/2;
+
+     iWidth=x2-x1;
+     iHeight=y2-y1;
+     if(iHeight==0) 
+     {
+	   aArray[0]=(x2-x1>0)?(iX1+iW1):iX1;
+	   aArray[1]=iY1+iH1/2;
+	   aArray[2]=(x2-x1>0)?iX2:(iX2+iW2);
+	   aArray[3]=iY2+iH2/2;
+     }
+     else
+     {
+	   iArc=Math.atan2(iHeight,iWidth);
+	   iCoordX1=Math.abs(iH1/(Math.tan(iArc)*2));
+	   if(iCoordX1>iW1/2) iCoordX1=iW1/2;
+	   iCoordY1=Math.abs(Math.tan(iArc)*iW1/2);
+	   if(iCoordY1>iH1/2) iCoordY1=iH1/2;
+	   aArray[0]=(iArc<Math.PI/2 && iArc>-Math.PI/2)?(iX1+iW1/2+iCoordX1):(iX1+iW1/2-iCoordX1);
+           aArray[1]=(iArc>0 && iArc<Math.PI)?(iY1+iH1/2+iCoordY1):(iY1+iH1/2-iCoordY1);
+	   iCoordX2=Math.abs(iH2/(Math.tan(iArc)*2));
+	   if(iCoordX2>iW2/2) iCoordX2=iW2/2;
+	   iCoordY2=Math.abs(Math.tan(iArc)*iW2/2);
+	   if(iCoordY2>iH2/2) iCoordY2=iH2/2;
+	   aArray[2]=(iArc<Math.PI/2 && iArc>-Math.PI/2)?(iX2+iW2/2-iCoordX2):(iX2+iW2/2+iCoordX2);
+           aArray[3]=(iArc>0 && iArc<Math.PI)?(iY2+iH2/2-iCoordY2):(iY2+iH2/2+iCoordY2);
+      }
+      return aArray;
+}
+</SCRIPT>
+</head>
+<body>
+</body>
+<HTML>

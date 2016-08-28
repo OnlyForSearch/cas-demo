@@ -1,0 +1,46 @@
+.comp-tool-bar
+{
+    padding:0 10 0 10 !important;
+    height:38px !important;
+    border-bottom:2px solid #B6BABF !important;
+    background-color:#D5EAFC !important;
+    filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#0066BB, endcolorstr=#0072BB) !important;
+}
+
+.comp-tool-bar-prefix
+{
+    font-size:20px;
+    display:none !important;
+}
+
+.comp-tool-bar-item
+{
+    font-size:20px;
+    line-height:36px !important;
+    margin-right:6px !important;
+}
+
+.comp-tool-bar-text
+{
+    font-size:20px;
+    padding-top:0px !important;
+    font-size:14px !important;
+    font-weight:bold !important;
+    color:#00FFCC !important;
+}
+
+.comp-tool-bar-ico
+{
+    font-size:20px;
+    padding-top:8px !important;
+}
+
+.comp-tool-bar-itm-bg
+{
+    height:33px !important;
+}
+
+.comp-tool-bar-itm-tag
+{
+    top:11px !important;
+}

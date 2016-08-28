@@ -1,0 +1,62 @@
+.gridbox 
+{
+     OVERFLOW: hidden;
+}
+.xhdr 
+{
+     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#F9F9F9, endColorstr=#EEEFF1);
+     overflow:hidden;
+}
+
+TABLE.hdr 
+{
+}
+
+TABLE.hdr TD
+{
+     BORDER-RIGHT: 1px solid #D0D0D0;
+     BORDER-LEFT: 1px solid #EEEEEE;
+     BORDER-BOTTOM: 1px solid #D0D0D0;
+     BACKGROUND-COLOR: transparent; 
+     TEXT-ALIGN: left;
+}
+
+TABLE.hdr TD DIV.hdrcell 
+{
+     height:21px;
+     padding:5 0 0 5;
+     font:9pt;
+}
+.objbox 
+{
+     BACKGROUND-COLOR: white;
+}
+
+TABLE.obj 
+{
+     /*BORDER-BOTTOM: 1px solid #d6d6d6;*/
+}
+
+
+TABLE.row20px TR TD 
+{
+    PADDING-RIGHT: 4px; 
+    PADDING-LEFT: 4px
+}
+
+TABLE.obj TD 
+{
+    BORDER-RIGHT: 1px solid #EDEDED;
+    BORDER-BOTTOM: 1px solid #EDEDED;
+    FONT-SIZE: 12px; 
+    PADDING-BOTTOM: 0px;
+    OVERFLOW: hidden; 
+    PADDING-TOP: 0px; 
+    FONT-FAMILY: Arial; moz-user-select: none;
+    cursor:default;
+}
+
+TABLE.row20px TR TD 
+{
+    PADDING-RIGHT: 4px; PADDING-LEFT: 4px
+}

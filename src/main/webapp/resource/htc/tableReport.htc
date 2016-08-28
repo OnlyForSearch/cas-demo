@@ -1,0 +1,780 @@
+<public:component>
+<public:attach   EVENT="ondblclick" HANDLER="doDblClick"                          />
+<PROPERTY NAME="imgPath"                                                          />
+<PROPERTY NAME="oDataHead"     put="setHead"       get="getHead"                  />
+<PROPERTY NAME="xmlSrc"        put="setXmlSrc"                                    />
+<PROPERTY NAME="selectType"    put="setSelectType" get="getSelectType"            />
+<PROPERTY NAME="dblAction"                                                        />
+<PROPERTY NAME="isShowWait"                                                       />
+<PROPERTY NAME="rightMenu"           put="setMenu"                                />
+<METHOD   NAME="doRefresh"	                                                      />
+<METHOD   NAME="getPropertys"	                                                  />
+<METHOD   NAME="getSelectedRowIndexs"                                             />
+<METHOD   NAME="getSelectedColumnIndexs"                                          />
+<METHOD   NAME="getSelectedCells"	                                              />
+<METHOD   NAME="getDataList"	                                                  />
+<METHOD   NAME="getDataTable"	                                                  />
+<METHOD   NAME="getErrorCode"	                                                  />
+<METHOD   NAME="unSelect"	                                                      />
+<PUBLIC:EVENT NAME="onDoubleClick" ID="oDblclick"/>
+<PUBLIC:EVENT NAME="onRightClick" ID="oRightId"/>
+ 
+<SCRIPT LANGUAGE="javascript">
+var oXMLDoc= new ActiveXObject("Microsoft.XMLDOM");    //接收的xml流
+var oXMLSend= new ActiveXObject("Microsoft.XMLDOM");   //发送的xml流
+var oXMLHTTP;                                          //发送的xmlhttp
+var crossCursor="cross.cur";
+var rightCursor="right.cur";
+var downCursor="down.cur";
+var cellBorderColor="#CCCCD4";
+var rowBgColor="#A9B2CA";
+var iErrorCode=0;   
+var oHead;
+var gXmlSrc;
+var gSendXML;
+var oRightMenu;
+var aSelectType={cell:"1",column:"2",row:"3",tableHis:"4",tableMid:"5"};
+var gSelectType=aSelectType.cell;                     //选择的方式
+var aSelectCells=new Array();
+var icurRowIndex=-1;
+var icurCellIndex=-1;
+// **********************************************************************
+//                      事件处理函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//  函数:    doInit
+//  说明:    初始化表头和表格数据
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+ 
+function setXmlSrc(pXMlSrc)
+{
+   gXmlSrc=pXMlSrc;
+   if(gXmlSrc!="" && gXmlSrc!=null)
+      getData();
+}
+function setHead(sHead)
+{
+    oHead=eval("window.document.getElementById('"+sHead+"')");
+	if(oHead!=null)
+    { 
+		var sDataTable=oHead.innerHTML;
+	    var sTable='<TABLE cellSpacing=1 cellPadding=0 width="100%" border=0 class="bordercolor" '
+		           +'id="oDataTable_'+uniqueID+'" style="border-collapse:collapse">'
+				   +  sDataTable
+				   + '</TABLE>'
+		element.innerHTML=sTable;			
+		var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+		if(oTable.rows.length>0)
+		{
+		    oTable.rows(0).attachEvent("onclick",doColumnSelect);
+		    //oTable.rows(0).style.position="relative";
+		    //oTable.rows(0).style.top="expression(window.("+uniqueID+").scrollTop)";
+		}
+   }
+}
+function getHead()
+{
+    return oHead.innerHTML;
+}
+
+function getDataTable()
+{
+    return window.document.getElementById("oDataTable_"+uniqueID);
+}
+
+function setMenu(pRightMenu)
+{
+    if(pRightMenu!="")
+       oRightMenu=eval("window."+pRightMenu);
+    else
+       oRightMenu=null;
+}
+
+function setSelectType(pSelectType)
+{
+    gSelectType=pSelectType;
+    unSelect();
+    icurRowIndex=-1;
+    icurCellIndex=-1;
+}
+
+function getSelectType()
+{
+    return gSelectType;
+}
+
+// **********************************************************************
+//                      对外接口函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getPropertys
+//  说明:    获得选中行的属性值
+//  参数:    sProperty 属性名
+//  返回:    属性值数组
+//----------------------------------------------------------------------------------------
+
+function getPropertys(sProperty)
+{
+	var returnArray = new Array();
+    var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var curSelRowArray=getSelectRowIndexs();	
+	for(var i=0;i<curSelRowArray.length;i++)
+	{
+       returnArray[i]=(oDataTable.rows(curSelRowArray[i]).getAttribute(sProperty));
+    }
+    return returnArray;
+}
+
+
+function getErrorCode()
+{
+   return iErrorCode;
+}
+
+function doDblClick()
+{
+    fireDblClick();
+}
+
+function fireDblClick()
+{
+    var srcE=event.srcElement;
+    var sTag=srcE.tagName;
+    sTag=sTag.toUpperCase();
+	if(sTag=="TABLE" ||sTag=="TR" ||sTag=="THEAD" ||sTag=="TBODY") return;
+	var oEvent = createEventObject();
+	oEvent.setAttribute("srcRow",srcE.parentElement);
+	oEvent.setAttribute("srcCell",srcE);
+	oDblclick.fire(oEvent);
+}
+// **********************************************************************
+//                      内部函数
+// **********************************************************************
+//----------------------------------------------------------------------------------------
+
+//  函数:    getDataList
+//  说明:    发送xml到servlet并异步加载数据
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function getDataList()
+{
+
+    oXMLHTTP= new ActiveXObject("Microsoft.XMLHTTP");
+    if(""!=gXmlSrc && null!=gXmlSrc)
+    {
+        oXMLHTTP.onreadystatechange= handleStateChange;
+        oXMLHTTP.open("POST",gXmlSrc, true);
+		oXMLHTTP.send(oXMLSend);
+    }
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    getData
+//  说明:    判断是否加载等待页面，然后加载数据
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function getData()
+{
+	var bShowWait=element.isShowWait;
+	if("true"==bShowWait)
+	{
+		var oWait=window.document.getElementById("oWait"+uniqueID);
+		if(oWait==null)
+		{
+			insertShowWait();
+			oWait=window.document.getElementById("oWait"+uniqueID);
+		}
+		oWait.style.pixelLeft=(window.document.body.clientWidth-oWait.style.pixelWidth)/2;
+		oWait.style.pixelTop=(window.document.body.clientHeight-oWait.style.pixelHeight)/2;
+		oWait.style.display="block";
+		window.setTimeout("window."+uniqueID+".getDataList()",100);
+	}
+	else
+        getDataList();
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    handleStateChange
+//  说明:    异步调用XMLHTTP
+//  参数: 
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function handleStateChange()
+{
+	try
+	{
+		var state = oXMLHTTP.readyState;
+		if(state==4)
+		{
+			if(isSuccess(oXMLHTTP))
+			{
+				oXMLDoc.load(oXMLHTTP.responseXML);
+				buildData(oXMLDoc);
+			}
+			else
+			{
+			   iErrorCode=1;
+			}
+			oXMLHTTP=null;
+			if("true"==element.isShowWait)
+			{
+				var oWait=window.document.getElementById("oWait"+uniqueID);
+				if(oWait!=null) 
+					oWait.style.display="none";
+				
+			}
+		}
+	}
+	catch(e){}
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    buildData
+//  说明:    调用xml数据建立表格
+//  参数:    oXMLDoc  xml文档流
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function buildData(oXMLDoc)
+{
+    var oRows=oXMLDoc.selectNodes("//rowSet")
+	var iLen=oRows.length;
+	var oDataTable=eval("window.oDataTable_"+uniqueID);
+	var oTR,oTD;
+	var oChildRows;
+	var iChildLen;
+	delTableRow(oDataTable);
+	for(var i=0;i<iLen;i++)
+	{
+	    //oTR=oDataTable.insertRow();
+	    oTR=window.document.createElement("TR");
+	    var attributes=oRows[i].attributes;
+	    var iAttiLen=attributes.length;
+	    for(var j=0;j<iAttiLen;j++)
+	    {
+	        oTR.setAttribute(attributes[j].name,attributes[j].value);
+	    }
+        oTR.className="border";
+		oChildRows=oRows[i].childNodes;
+		iChildLen=oChildRows.length;
+		var sReg=/\n/gi;
+		for(var j=0;j<iChildLen;j++)
+		{
+		    //oTD=oTR.insertCell();
+		    oTD=window.document.createElement("TD");
+		   	oTD.align="center";
+			if(j==0)
+			{
+			    oTD.className="listTitle";
+				oTD.style.height="25px";
+				oTD.style.width="25px";
+				oTD.onclick=function(){doRowSelect(this.parentElement);};
+			}
+			else
+			{
+			    oTD.onclick=function(){doCellClick(this);};
+			    oTD.onmouseover=function(){doCellOver(this);};
+			    oTD.onmouseout=function(){doCellOut(this);};
+				oTD.oncontextmenu=function(){doCellRightClick(this);};	
+			}
+		    var sHTML=(oChildRows[j].hasChildNodes() && oChildRows[j].firstChild.nodeType==1)?oChildRows[j].firstChild.xml:oChildRows[j].text;
+		    sHTML=sHTML.replace(sReg,"<br>");
+			oTD.innerHTML=sHTML;
+			oTR.appendChild(oTD);
+		}
+		oDataTable.childNodes[0].appendChild(oTR);
+	}
+}
+
+//----------------------------------------------------------------------------------------
+
+//  函数:    delTableRow
+//  说明:    删除表格行
+//  参数:    oTable  表格对象
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function delTableRow(oTable)
+{
+    var iLen=oTable.rows.length;
+    for(var i=iLen-1;i>0;i--)
+    {
+        oTable.deleteRow(i);
+    }
+
+}
+
+function doCellClick(oTD)
+{
+    switch(gSelectType)
+    {
+        case aSelectType.cell:
+        case aSelectType.tableHis:
+        case aSelectType.tableMid:
+           doCellSelect(oTD);
+           break;
+        case aSelectType.column:
+           doColumnSelect();
+           break
+        case aSelectType.row:
+           doRowSelect(oTD.parentElement);
+           break;        
+    }
+}
+
+function doCellSelect(oTD)
+{
+	var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+	var iCellIndex=oTD.cellIndex;
+	var iRowIndex=oTD.parentElement.rowIndex;
+	if(iCellIndex==0 || iRowIndex==0) return;
+	if(event.shiftKey || event.ctrlKey)
+	{
+	    doCellKeySelect(oTD);
+	}
+	else
+	{
+		unSelect();
+		pushSelectedCell(oTD);
+		icurCellIndex=iCellIndex;
+		icurRowIndex=iRowIndex;
+	}		
+}
+
+function doCellKeySelect(oCell)
+{
+    var iCellIndex=oCell.cellIndex;
+	var iRowIndex=oCell.parentElement.rowIndex;
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oRows=oTable.rows;
+	if(event.shiftKey)
+	{
+	    unSelect();
+	    if(icurCellIndex==-1 && icurRowIndex==-1) 
+	    {
+	        pushSelectedCell(oCell);
+	        icurCellIndex=iCellIndex;
+			icurRowIndex=iRowIndex;
+	        return;
+	    }
+		var iMinCellIndex=(iCellIndex>=icurCellIndex)?icurCellIndex:iCellIndex;
+	    var iMaxCellIndex=(iCellIndex>=icurCellIndex)?iCellIndex:icurCellIndex;
+		var iMinRowIndex=(iRowIndex>=icurRowIndex)?icurRowIndex:iRowIndex;
+	    var iMaxRowIndex=(iRowIndex>=icurRowIndex)?iRowIndex:icurRowIndex;
+	    for(var i=iMinRowIndex;i<=iMaxRowIndex;i++)
+	    {
+			for(var j=iMinCellIndex;j<=iMaxCellIndex;j++)
+			{
+	            pushSelectedCell(oRows(i).cells(j));
+		    }
+	    }
+	}
+	if(event.ctrlKey)
+	{
+		var bSelected=checkCellSelected(oCell);
+		//if(icurCellIndex==-1) unSelect();
+        if(bSelected==true)
+        {
+            popCell(oCell);
+        }
+        else
+        {
+            pushSelectedCell(oCell);
+        }
+		icurCellIndex=iCellIndex;
+		icurRowIndex=iRowIndex;
+	}
+	window.document.execCommand("unSelect");
+}
+
+function doCellRightClick(oCell)
+{
+     doBeforeRightClick();
+     event.cancelBubble=true;
+     event.returnValue=false;
+     var bSelected=checkCellSelected(oCell);
+     if(!bSelected)
+     {
+	    doCellClick(oCell);
+	 }
+	 if(oRightMenu!=null)
+	    oRightMenu.show();           
+}
+
+function doCellOver(oCell)
+{
+    var iCellIndex=oCell.cellIndex;
+    var iRowIndex=oCell.parentElement.rowIndex;
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var sCellName=oTable.rows(0).cells(iCellIndex).innerText;
+    oCell.title="行:"+iRowIndex+" \r\n列:"+iCellIndex+"("+sCellName+")";         
+}
+
+
+function doCellOut(oCell)
+{ 
+
+}
+
+function doColumnSelect()
+{
+	if(gSelectType==aSelectType.cell || gSelectType==aSelectType.tableHis ||gSelectType==aSelectType.tableMid) return;
+	icurRowIndex=-1;
+    var srcE=event.srcElement;
+	var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+	if(srcE.tagName=="TD")
+	{
+	    var iCellIndex=srcE.cellIndex;
+		if(iCellIndex==0) return;
+		if(event.shiftKey || event.ctrlKey)
+	    {
+	        doColumnKeySelect(srcE);
+	    }
+	    else
+	    {
+			unSelect();
+	        pushColumnCells(srcE);
+			icurCellIndex=iCellIndex;
+		}		
+	}
+}
+
+function doColumnKeySelect(oTD)
+{
+    var iCellIndex=oTD.cellIndex;
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oRows=oTable.rows;
+	if(event.shiftKey)
+	{
+	    unSelect();
+	    if(icurCellIndex==-1) 
+	    {
+	        pushColumnCells(oTD);
+	        icurCellIndex=iCellIndex;
+	        return;
+	    }
+		var iMinIndex=(iCellIndex>=icurCellIndex)?icurCellIndex:iCellIndex;
+	    var iMaxIndex=(iCellIndex>=icurCellIndex)?iCellIndex:icurCellIndex;
+	    for(var k=iMinIndex;k<=iMaxIndex;k++)
+	    {
+	        pushColumnCells(oRows(0).cells(k));
+	    }
+	}
+	if(event.ctrlKey)
+	{
+		var bSelected=checkColumnSelected(oTD);
+		if(icurCellIndex==-1) unSelect();
+        if(bSelected==true)
+        {
+            popColumnCells(oTD);
+        }
+        else
+        {
+            pushColumnCells(oTD);
+        }
+		icurCellIndex=iCellIndex;
+	}
+	window.document.execCommand("unSelect");	
+}
+function doRowSelect(oTR)
+{
+	if(gSelectType==aSelectType.cell || gSelectType==aSelectType.tableHis || gSelectType==aSelectType.tableMid) return;
+	icurCellIndex=-1;
+	if(event.shiftKey || event.ctrlKey)
+	{
+	    doRowKeySelect(oTR)
+	}
+	else
+	{
+	    unSelect();
+        pushRowCells(oTR)
+		icurRowIndex=oTR.rowIndex;
+    }
+}
+
+function doRowKeySelect(oTR)
+{
+    var iRowIndex=oTR.rowIndex;
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oRows=oTable.rows;
+	if(event.shiftKey)
+	{
+	    unSelect();
+	    if(icurRowIndex==-1) 
+	    {
+	        pushRowCells(oTR);
+	        icurRowIndex=iRowIndex;
+	        return;
+	    }
+		var iMinIndex=(iRowIndex>=icurRowIndex)?icurRowIndex:iRowIndex;
+	    var iMaxIndex=(iRowIndex>=icurRowIndex)?iRowIndex:icurRowIndex;
+	    for(var k=iMinIndex;k<=iMaxIndex;k++)
+	    {
+	        pushRowCells(oRows[k]);
+	    }
+	}
+	if(event.ctrlKey)
+	{
+		var bSelected=checkRowSelected(oTR);
+		if(icurRowIndex==-1) unSelect();
+        if(bSelected==true)
+        {
+            popRowCells(oTR);
+        }
+        else
+        {
+            pushRowCells(oTR);
+        }
+		icurRowIndex=iRowIndex;
+	}
+	window.document.execCommand("unSelect");	
+}
+
+function checkRowSelected(oRow)
+{
+	var bSelected=false;
+	if(aSelectCells!="" && aSelectCells!=null)
+	{
+	    for(var i=0;i<aSelectCells.length;i++)
+		{
+		    if(aSelectCells[i]==oRow.cells(0))
+			{
+			    bSelected=true;
+			    break;
+			}
+		}
+	}
+    return bSelected;
+}
+
+function checkColumnSelected(oTD)
+{
+	var bSelected=false;
+	var iCellIndex=oTD.cellIndex;
+	var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+	if(aSelectCells!="" && aSelectCells!=null)
+	{
+	    for(var i=0;i<aSelectCells.length;i++)
+		{
+		    if(aSelectCells[i]==oTable.rows(0).cells(iCellIndex))
+			{
+			    bSelected=true;
+			    break;
+			}
+		}
+	}
+    return bSelected;
+}
+
+function checkCellSelected(oTD)
+{
+	var bSelected=false;
+	var iCellIndex=oTD.cellIndex;
+	if(aSelectCells!="" && aSelectCells!=null)
+	{
+	    for(var i=0;i<aSelectCells.length;i++)
+		{
+		    if(aSelectCells[i]==oTD)
+			{
+			    bSelected=true;
+			    break;
+			}
+		}
+	}
+    return bSelected;
+}
+
+function unSelect()
+{
+	var iLen=aSelectCells.length;
+    if(aSelectCells!=null && iLen!=0)
+	{
+	     for(var i=0;i<iLen;i++)
+		 {
+			 aSelectCells[i].runtimeStyle.backgroundColor="";
+		     aSelectCells[i].runtimeStyle.border="";
+		 }
+	}
+	aSelectCells=null;
+	aSelectCells=new Array();
+}
+
+
+function pushSelectedCell(oCell)
+{
+	aSelectCells.push(oCell);
+	oCell.runtimeStyle.backgroundColor=rowBgColor;
+}   
+
+function getSelectedCells()
+{
+    return aSelectCells;
+}
+
+function getSelectedRowIndexs()
+{
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oRows=oTable.rows;
+	var iLen=oRows.length;
+	var aRowIndexs=new Array();
+	for(var i=0;i<iLen;i++)
+	{
+	    var sBgColor=oRows(i).cells(0).runtimeStyle.backgroundColor.toUpperCase();
+	    if(sBgColor==rowBgColor)
+	    {
+	        aRowIndexs.push(i);
+	    }
+	}
+	return aRowIndexs;
+}
+function getSelectedColumnIndexs()
+{
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oCells=oTable.rows(0).cells;
+	var iLen=oCells.length;
+	var aCellIndexs=new Array();
+	for(var i=0;i<iLen;i++)
+	{
+	    var sBgColor=oCells(i).runtimeStyle.backgroundColor.toUpperCase();
+	    if(sBgColor==rowBgColor)
+	    {
+	        aCellIndexs.push(i);
+	    }
+	}
+	return aCellIndexs;
+}
+
+function pushRowCells(oTR)
+{
+	var oCells=oTR.cells;
+	var iLen=oCells.length;
+	for(var i=0;i<iLen;i++)
+	{
+		var oCell=oCells(i);
+	    pushSelectedCell(oCell);
+		//oCell.runtimeStyle.backgroundColor=rowBgColor;
+	}
+}
+function pushColumnCells(oTD)
+{
+    var iCellIndex=oTD.cellIndex;
+    var oTable=window.document.getElementById("oDataTable_"+uniqueID);
+    var oRows=oTable.rows;
+	var iLen=oRows.length;
+	for(var i=0;i<iLen;i++)
+	{
+	    var oCell=oRows(i).cells(iCellIndex);
+		pushSelectedCell(oCell);
+	    //oCell.runtimeStyle.backgroundColor=rowBgColor;
+	}
+}
+function popRowCells(oTR)
+{
+    var aNewSelectCells=new Array();
+	var iLen=aSelectCells.length;
+    if(aSelectCells!=null && iLen!=0)
+	{
+	     for(var i=0;i<iLen;i++)
+		 {
+             var oCell=aSelectCells[i];
+             if(oCell.parentElement==oTR)
+             {
+                 oCell.runtimeStyle.backgroundColor="";
+             }
+             else
+             {
+                 aNewSelectCells.push(oCell);
+             }
+		 }
+	}
+	aSelectCells=null;
+	aSelectCells=aNewSelectCells;
+
+}
+
+function popColumnCells(oTD)
+{
+    var aNewSelectCells=new Array();
+	var iLen=aSelectCells.length;
+    if(aSelectCells!=null && iLen!=0)
+	{
+	     for(var i=0;i<iLen;i++)
+		 {
+             var oCell=aSelectCells[i];
+             if(oCell.cellIndex==oTD.cellIndex)
+             {
+                 oCell.runtimeStyle.backgroundColor="";
+             }
+             else
+             {
+                 aNewSelectCells.push(oCell);
+             }
+		 }
+	}
+	aSelectCells=null;
+	aSelectCells=aNewSelectCells;
+
+}
+
+function popCell(oTD)
+{
+    var aNewSelectCells=new Array();
+	var iLen=aSelectCells.length;
+    if(aSelectCells!=null && iLen!=0)
+	{
+	     for(var i=0;i<iLen;i++)
+		 {
+             var oCell=aSelectCells[i];
+             if(oCell==oTD)
+             {
+                 oCell.runtimeStyle.backgroundColor="";
+             }
+             else
+             {
+                 aNewSelectCells.push(oCell);
+             }
+		 }
+	}
+	aSelectCells=null;
+	aSelectCells=aNewSelectCells;
+}
+
+function doBeforeRightClick()
+{
+	oEvent = createEventObject();
+	oRightId.fire(oEvent);
+}
+//----------------------------------------------------------------------------------------
+
+//  函数:    insertShowWait
+//  说明:    插入等待的层
+//  参数:    
+//  返回:    
+//----------------------------------------------------------------------------------------
+
+function insertShowWait()
+{
+    var sDivHTML="<div style='width:250px;height:100px;border:1px solid black;display:none;position:absolute;"
+	             +  "background-color:white' id='oWait"+uniqueID+"'>"
+	             +   "<img src='"+imgPath+"ani_wait.gif' style='float:left'/>"
+                 +   "<span style='font-family:宋体;font-size:9pt;font-weight:bold'>"
+				 +       "<br><br><br>正在读取数据<br>请稍候......"
+				 +   "</span>"
+				 +"</div>";
+    window.document.body.insertAdjacentHTML("afterBegin",sDivHTML);
+}
+</SCRIPT>
+</component>

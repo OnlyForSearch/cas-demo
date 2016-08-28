@@ -1,0 +1,242 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择员工</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:tree{behavior:    url(../../htc/tree.htc);}
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto
+}
+</STYLE>
+</head>
+<body onload="iniPage()" onunload="winClose()">
+<fieldset>
+<legend>选择值班线</legend>
+<table border="0" cellpadding="1" cellspacing="8" width="100%">
+	<tr>
+		<td width=60>值班线:</td>
+		<td><select id="dutySelect" style="width:100%" onchange="changeEvent()"></select></td>
+	</tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:10px">
+<legend>选择员工</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:10px">
+  <tr height="20">
+  	<td ALIGN="center">待&nbsp;选&nbsp;员&nbsp;工</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;员&nbsp;工</td>
+  </tr>
+  <tr>
+    <td><IE:XmlSelect id="staffByOrgList" size="11" width="160" onOptionDblClick="addBtn.click()"/></td>
+    <td width="80">
+    	<table border="0" cellspacing="5" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="staffByOrgList.addSelectedTo(selectedStaffList,true)" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="selectedStaffList.delSelectedOption()" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn" style="display:none">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="staffByOrgList.addAllTo(selectedStaffList,true)"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn" style="display:none">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="selectedStaffList.delAllOption()"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="11" width="160" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/DutyAction?action=5&id=';
+var dutyList= '../../../servlet/DutyAction?action=38';
+var isMultiple;
+var isReturn = false;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var isSetRoot;
+var orgId;
+var oAction;
+var parWin;
+var filterStaffWhere;
+function iniPage()
+{
+	var params = window.dialogArguments;
+	isMultiple = params[0];
+	orgId = params[1];
+	var orgText = params[2];
+	var isReadOnly = params[3];
+	var filter = params[4];
+	var iniName = params[5];
+	var iniId = params[6];
+	isSetRoot = params[7];
+	oAction = params[8];
+	parWin = params[9];
+	filterStaffWhere = typeof(params[10])=="undefined"?"":params[10];
+	if(filter!=null)
+	{
+		staffByOrgList.filter = filter;
+	}
+	if(isMultiple)
+	{
+		staffByOrgList.multiple = true;
+		selectedStaffList.multiple = true;
+		multipleAddBtn.style.display = "inline";
+		multipleDelBtn.style.display = "inline";
+	}
+	dutySelect.disabled = isReadOnly;
+	initSelect();
+	initDuty(orgId);
+	if(iniName!=null)
+	{
+		selectedStaffList.addOptions(iniName,iniId);
+	}
+}
+
+function initSelect() {
+	if(orgId && isSetRoot) {
+		dutySelect.disabled = true;
+	}
+}
+
+function initDuty(dutyId)
+{
+	var hasDuty = false;
+	xmlhttp.open("POST",dutyList,false);
+	xmlhttp.send();
+	if(isSuccess(xmlhttp))
+	{
+		var list = xmlhttp.responseXML.selectNodes('/root/rowSet');
+		for(var n,oOption,i=0;n=list[i];i++)
+		{
+			hasDuty = true;
+			oOption = document.createElement("OPTION");
+			oOption.text=n.selectSingleNode('DUTY_NAME').text;
+			oOption.value=n.selectSingleNode('DUTY_ID').text;
+			oOption.selected = (oOption.value==dutyId);
+			dutySelect.add(oOption);
+		}
+	}
+	if(hasDuty)
+	{
+		changeEvent();
+	}
+}
+
+function initTree()
+{
+	var oXML = event.xmlDom;
+	if(isSetRoot && orgId)
+	{
+		var root = oXML.selectSingleNode('//MenuItem[@id='+orgId+']');
+		var menuRoot = oXML.selectSingleNode('/root/Menu');
+		menuRoot.appendChild(root);
+		oXML.selectNodes("/root/Menu/MenuItem[@id!="+orgId+"]").removeAll();
+	}
+	if(!isNull(oAction))
+	{
+		oAction.pretreatment(oXML);
+	}
+}
+
+function changeEvent()
+{	
+	var dutyId = dutySelect.options[dutySelect.selectedIndex].value;
+	var url = actionURL+dutyId+"&filterStaffWhere="+filterStaffWhere;;
+	if(!isNull(oAction))
+	{
+		var _url = oAction.change(event);
+		if(oAction.isReplace)
+		{
+			url = getXMLSrc(parWin.document.URL,_url);
+		}
+	}
+	getStaffList(url);
+}
+
+function getStaffList(_url)
+{
+	staffByOrgList.xmlsrc = _url;
+}
+
+function moveIn()
+{
+	if(!isMultiple)
+	{
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter()
+{
+	isReturn = true;
+	window.close();
+}
+
+function winClose()
+{
+	if(isReturn)
+	{
+		var staffObj = new Object();
+		var oSelect = selectedStaffList.getObject();
+		if(selectedStaffList.getLength()==0)
+		{
+			staffObj.id = "";
+			staffObj.name = "";
+		}
+		else
+		{
+			if(isMultiple)
+			{
+				var idArray = new Array();
+				var nameArray = new Array();
+				for(i=0;i<oSelect.options.length;i++)
+				{
+					idArray.push(oSelect.options[i].value);
+					nameArray.push(oSelect.options[i].text);
+				}
+				staffObj.id = idArray.join(",");
+				staffObj.name = nameArray.join(",");
+			}
+			else
+			{
+				staffObj.id = oSelect.options[0].value;
+				staffObj.name = oSelect.options[0].text;
+			}
+		}
+		window.returnValue = staffObj;
+	}
+}
+
+function getXMLSrc(documentURL,xmlSrc)
+{
+	var re = /(.*\/)(.*)/g;
+	return  documentURL.replace(re, "$1"+xmlSrc);
+}
+
+function isNull(value)
+{
+    return (typeof value == "undefined" || value==null);
+}
+</SCRIPT>
+</body>
+</html>

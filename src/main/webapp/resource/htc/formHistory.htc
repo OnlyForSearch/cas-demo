@@ -1,0 +1,105 @@
+<public:component>
+
+<public:PROPERTY NAME="type"                             PUT="setType"          />
+<public:PROPERTY NAME="value"                            PUT="setValue"         />
+<public:PROPERTY NAME="text"                             GET="getText"          />
+<METHOD   NAME="showDetail"	                                                    />
+<METHOD   NAME="doInit"	                                                        />
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var formHistoryHtcDefaultLang = {
+	userName : '用户',
+	action : '动作',
+	time : '时间',
+	details : '详情',
+	flowId : '关联流程标识'
+};
+//获取语言资源
+function getFormHistoryHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('formHistoryHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.formHistoryHtc.' + code);
+	}
+}
+
+var oTable;
+var oConfig = [{xmlSrc:"/servlet/formDispatch?OperType=5&requestId=",tableHead:getFormHistoryHtcLan('userName') + ',' + getFormHistoryHtcLan('action') + ',' + getFormHistoryHtcLan('time'),headWidth:"33,33,34"},
+	{xmlSrc:"/servlet/formDispatch?OperType=118&requestId=",tableHead:getFormHistoryHtcLan('userName') + ',' + getFormHistoryHtcLan('action') + ',' + getFormHistoryHtcLan('time') + ',' + getFormHistoryHtcLan('flowId'),headWidth:"10,10,30,50"},
+	{xmlSrc:"/servlet/formDispatch?OperType=20&requestId=",tableHead:getFormHistoryHtcLan('userName') + ',' + getFormHistoryHtcLan('action') + ',' + getFormHistoryHtcLan('time') + ',' + getFormHistoryHtcLan('details') + ',' + getFormHistoryHtcLan('flowId'),headWidth:"10,10,19,50,16"}];
+//TODO OperType 18 被占用所以改成 118
+//默认显示流程标识和详情,后面要改成默认选择1
+var oIndex = 1;
+
+function doInit()
+{  
+   initTable();
+   initHead();
+   oTable=window.document.getElementById("oData"+uniqueID);
+   oTable.oDataHead="oHead"+uniqueID;
+
+}
+
+function setValue(pValue)
+{
+   if(pValue)
+   {
+      //oTable.xmlSrc="/servlet/formDispatch?OperType=5&requestId="+pValue;
+      oTable.xmlSrc=oConfig[oIndex].xmlSrc+pValue;
+   }
+}
+
+function setType(pType)
+{
+	oIndex=pType;
+}
+
+function getText()
+{
+   return oTable.getDataTable().outerHTML;
+}
+
+function showDetail()
+{
+   var historyId=oTable.getPropertys("FORM_HISTORY_ID");
+   var sFeatures = new Array();
+   sFeatures.push("width="+580);
+   sFeatures.push("height="+580);
+   sFeatures.push("location="+0);
+   sFeatures.push("menubar="+0);
+   sFeatures.push("resizable="+1);
+   sFeatures.push("scrollbars="+0);
+   sFeatures.push("status="+0);
+   sFeatures.push("titlebar="+0);
+   sFeatures.push("toolbar="+0);
+   //window.open("/workshop/form/historyDetail.html?OperType=6&historyId="+historyId,"",sFeatures.join(","));
+   window.showModalDialog("/workshop/form/historyDetail.html?OperType=6&historyId="+historyId,window,sFeatures.join(";"));
+}
+function initHead()
+{
+   var aryTableHead = oConfig[oIndex].tableHead.split(",");
+   var arrHeadWidth = oConfig[oIndex].headWidth.split(",");
+   var sHead='<TABLE id="oHead'+uniqueID+'" style="display:none">'+
+	          '<THEAD>'+
+		        '<TR align="center" bgcolor="#F1F1F6" height="23">';
+   for(var i=0;i<aryTableHead.length;i++)
+   {
+   		sHead = sHead + '<TD width="'+arrHeadWidth[i]+'%"><div>'+aryTableHead[i]+'</div></TD>';
+   }	        
+   sHead = sHead +  '</TR>'+ '</THEAD>'+ '</TABLE>';
+   insertAdjacentHTML("beforeEnd",sHead);
+}
+
+function initTable()
+{
+   var sTable='<div align="center" style="behavior:url(/resource/htc/table.htc);width:100%;cursor:hand;"'+
+              ' isMultiply="false" id="oData'+uniqueID+'" dblAction="'+uniqueID+'.showDetail()">'+
+              '</div>'
+   insertAdjacentHTML("beforeEnd",sTable);
+}
+</SCRIPT>
+</component>

@@ -1,0 +1,306 @@
+<HEAD>
+<public:component literalcontent="true"  tagName=CalendarIpt >
+<public:ATTACH   EVENT="ondocumentready" HANDLER="DoInit"     />
+<public:EVENT    NAME="onerror"    ID="error"                 />
+<public:PROPERTY NAME="value"       get="GetValue" put="SetValue"/>
+<public:PROPERTY NAME="disable"       get="getDisabled" put="setDisabled"/>
+<public:PROPERTY NAME="disabled"       get="getDisabled" put="setDisabled"/>
+<public:METHOD   NAME="GetDate"	  />
+<public:METHOD   NAME="setYear"	  />
+<public:METHOD   NAME="setMonth"	  />
+<public:METHOD   NAME="setDay"	      />
+<public:METHOD   NAME="ShowCalendar" />
+<public:METHOD   NAME="SetCurDate"   />
+<public:METHOD   NAME="setDate"   />
+</public:component>
+<style>
+.DPFrame
+{
+	BACKGROUND-color:white;
+	/*BACKGROUND-color:transparent;*/
+	BORDER:1px solid #ABACA9;
+	font:9pt;
+	width:135;
+	height:5;
+}
+.DPYear
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+	display:inline;
+}
+
+.DPYearDes
+{
+	BACKGROUND-color:transparent;
+	display:inline;
+}
+
+.DPMonth
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+	display:inline;
+}
+
+.DPMonthDes
+{
+	BACKGROUND-color:transparent;
+	display:inline;
+}
+
+.DPDay
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+	display:inline;
+}
+
+.DPDayDes
+{
+	BACKGROUND-color:transparent;
+	display:inline;
+}
+.DPDropBtn
+{
+    cursor:hand;
+    display:inline;
+}
+.calendar
+{
+    width:250;
+	height:175;
+	border:1px solid black;
+    position:absolute;
+	display:none;
+	top:100;
+	left:184;
+}
+</style>
+<SCRIPT LANGUAGE="jscript">
+var oCalendar=null;
+var oHidden=null;
+var oPopup;
+var sCalendarPath="/resource/htc/calendar.htc";
+var iCalendarHeight=160;
+var iCalendarWidth=250;
+var gValue="";
+//var oYear,oMonth,oDay;
+var oDoc,oTime
+var sDisabled = false;
+function DoInit()
+{
+	iniText();
+   InsertInputCalendar();
+   document.body.className="DPFrame";
+   //alert(element.cssText);
+}
+function InsertInputCalendar()
+{
+	sYear=gValue.substr(0,4);
+	sMonth=gValue.substr(5,2);
+	sDay=gValue.substr(8,2);
+    doSetDate(sYear,sMonth,sDay);
+	element.style.height=20;
+	defaults.viewLink = document;
+}
+
+function setYear(sYear)
+{
+	oYear.value=sYear;
+}
+function setMonth(sMonth)
+{
+	sMonth = parseInt(sMonth,10);
+	oMonth.value=(sMonth<10)?"0"+sMonth:sMonth;
+}
+function setDay(sDay)
+{
+	sDay = parseInt(sDay,10);
+	oDay.value=(sDay<10)?"0"+sDay:sDay;
+}
+function GetValue()
+{
+    gValue=GetDate();
+    return gValue;
+}
+function SetValue(pValue)
+{
+    gValue=pValue;
+    if(element.readyState!="complete") return;
+    var sYear=pValue.substr(0,4);
+	var sMonth=pValue.substr(5,2);
+	var sDay=pValue.substr(8,2);
+    doSetDate(sYear,sMonth,sDay);
+}
+function GetDate()
+{
+    if(element.readyState!="complete") return "";
+    var sYear=oYear.value;
+    var sMonth=oMonth.value;
+    var sDay=oDay.value;
+    sDate=sYear+"-"+sMonth+"-"+sDay;
+    if(sYear=="" && sMonth=="" && sDay=="") sDate="";
+    return sDate;
+}
+function SetCurDate()//todo 测试
+{
+	var d=new Date();
+	var sYear=d.getYear();
+	var sMonth=d.getMonth()+1;
+	var sDay=d.getDate();
+	sMonth=(sMonth<10)?"0"+sMonth:sMonth;
+	sDay=(sDay<10)?"0"+sDay:sDay;
+	doSetDate(sYear,sMonth,sDay);
+}
+function ShowCalendar()
+{
+	
+	if(sDisabled){
+		return;
+	}
+	if(oPopup==null) 
+	{   
+	   oPopup = window.createPopup();	   
+	   oDoc=oPopup.document;
+	   if(oDoc.readyState == "complete")
+         show()
+       else
+         oDoc.attachEvent("onreadystatechange", show);
+    }
+    else
+    {
+		var iLeft = element.getBoundingClientRect().left + getWinScreenLeft(window);
+		var iTop = element.getBoundingClientRect().top +element.offsetHeight+getWinScreenTop(window);
+		oPopup.show(iLeft, iTop, iCalendarWidth, iCalendarHeight);
+    }
+}
+function show()
+{
+   if(oDoc.readyState == "complete")
+   {
+        var oNamespace =oDoc.namespaces.add("IE","IE");
+        oNamespace.doImport(sCalendarPath);
+		var oCalendar = oDoc.createElement("IE:calendar");
+		if(typeof(ItmLang) != 'undefined')
+		{
+			oCalendar.ItmLang = ItmLang;
+		}
+        oDoc.body.appendChild(oCalendar);
+        var d=new Date();
+        var sYear=d.getYear();
+	    var sMonth=d.getMonth()+1;
+	    var sDay=d.getDate();
+        oCalendar.giYear=(oYear.value=="")?parseInt(sYear,10):parseInt(oYear.value,10);
+        oCalendar.giMonth=(oMonth.value=="")?parseInt(sMonth,10):parseInt(oMonth.value,10);
+        oCalendar.giDay=(oDay.value=="")?parseInt(sDay,10):parseInt(oDay.value,10);
+        oCalendar.goInput=element;
+        oCalendar.onAfterClick=function (){
+        	setDate(this.giYear,this.giMonth,this.giDay);oPopup.hide();
+        };
+		var iLeft = element.getBoundingClientRect().left + getWinScreenLeft(window);
+		var iTop = element.getBoundingClientRect().top +element.offsetHeight+getWinScreenTop(window);
+		oPopup.show(iLeft, iTop, iCalendarWidth, iCalendarHeight);
+		oDoc.detachEvent("onreadystatechange", show);
+	}
+}
+
+var igaMonthNames = new Array(
+  new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
+  new Array('一月', '二月', '三月', '四月', '五月', '六月', '七月', 
+            '八月', '九月', '十月', '十一月', '十二月')
+  );
+
+var igaDayNames = new Array( 
+  new Array('S', 'M', 'T', 'W', 'T', 'F', 'S'),
+  new Array('日','一', '二', '三', '四', '五', '六'),
+  new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')
+  );
+
+function doSetDate(sYear,sMonth,sDay)
+{
+	if(typeof(ItmLang) != 'undefined' && typeof(ItmLang.widgets) != 'undefined' 
+			&& typeof(ItmLang.widgets.calendarHTC) != 'undefined'
+			&& ItmLang.widgets.calendarHTC.language == 'US')
+	{
+		if(sMonth)
+		{
+			sMonth = igaMonthNames[0][sMonth-1];
+			DPDayDes.innerHTML = ",";
+		}
+		else
+		{
+			DPDayDes.innerHTML = "";
+		}
+	}
+	oYear.value=sYear;
+	oMonth.value=sMonth;
+	oDay.value=sDay;
+}
+
+function setDate(iYear,iMonth,iDay)
+{
+   var sMonth=(iMonth<10)?"0"+iMonth:iMonth;
+   var iMonthDay  = new Date(iYear, iMonth, 0).getDate();//月份包含多少天
+   var iTmpDay=(iMonthDay<iDay)?iMonthDay:iDay;
+   var sDay=(iTmpDay<10)?"0"+iTmpDay:iTmpDay;
+   doSetDate(iYear,sMonth,sDay);   
+}
+
+function setDisabled(_disabled){
+	if(!_disabled||_disabled=="false")
+		sDisabled = false;
+	else
+		sDisabled = true;
+	if(sDisabled){
+		document.body.disabled=true;
+	}else{
+		document.body.disabled=false;
+	}
+}
+
+function getDisabled(){
+	return sDisabled;
+}
+var calendarInputHTCDefaultLang = {
+	selectDate : '选择日期',
+	year : '年',
+	month : '月',
+	day : '日'
+};
+//获取语言资源
+function getCalendarInputHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('calendarInputHTCDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.calendarInputHTC.' + code);
+	}
+}
+function iniText(){
+	document.getElementById('DPYearDes').innerHTML = getCalendarInputHtcLan('year');
+	document.getElementById('DPMonthDes').innerHTML = getCalendarInputHtcLan('month');
+	document.getElementById('DPDayDes').innerHTML = getCalendarInputHtcLan('day');
+	document.getElementById('DPDropBtn').title = getCalendarInputHtcLan('selectDate');
+}
+</SCRIPT>
+</head>
+<body style="margin:0px;padding:0px;" >
+<input class=DPYear type=text value="" size=4 maxlength=4 id="oYear" readonly><div id="DPYearDes" class=DPYearDes></div>
+<input class=DPMonth type=text value="" size=2 maxlength=2 id="oMonth" readonly><div id="DPMonthDes" class=DPMonthDes></div>
+<input class=DPDay type=text value="" size=2 maxlength=2 id="oDay" readonly><div id="DPDayDes" class=DPDayDes></div>
+<div class=DPDropBtn id="DPDropBtn" onclick='ShowCalendar()'>▼</div>
+</body>

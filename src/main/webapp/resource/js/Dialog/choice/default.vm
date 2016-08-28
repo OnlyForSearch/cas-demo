@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=gb18030"%>
+<%@ page import="com.bsnnms.bean.common.propertyCfg.PropertyConfig"%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb18030">
+<title>$locale.msg("dialog.SELECT_DIALOG")</title>
+<link rel="stylesheet" type="text/css" href="../../ext/resources/css/ext-all-notheme.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+<link rel="stylesheet" type="text/css" href="default.css" />
+<script src="../../ext/adapter/ext/ext-base.js"></script>
+<script src="../../ext/ext-all.js"></script>
+<script src="../../Common.js"></script>
+<SCRIPT src="../../Dialog.js"></SCRIPT>
+<SCRIPT src="../../Error.js"></SCRIPT>
+$locale.loadLangJs("global")
+$locale.loadLangJs("widgets")
+<SCRIPT src="../../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../../XMLTree/XMLTreeAction.js"></SCRIPT>
+<script src="default.js"></script>
+<script>
+	var projectLabel = "$propertyConfig.getValue("PROJECT_LABEL")";
+	function hideMask(){
+		document.getElementById("maskDivId").style.display = "none";
+	}
+	
+	function saveMask(){
+		if(document.getElementById("DEFINE_NAME").value==""||document.getElementById("DEFINE_NAME").value==null ){
+			Choice.Message.warn(getDefaultJsLan('pleaseEnterGroupName'));
+			return;
+		}
+		    
+		document.getElementById("maskDivId").extObject.save();
+		hideMask();
+	}
+</script>
+</head>
+<body onload="iniPage()">
+<div class="maskCss" id="maskDivId">
+			<div style="margin-top:130px;font-family:'Microsoft YaHei';font-size:14px;color:#fff;font-weight:bold" id="maskDivName">
+				设置常用小组名称X
+			</div>
+			<div style="margin-top:5px;">
+				<input type="text" style="width:150px;height:25px" id="DEFINE_NAME">				
+			</div>
+			<div style="margin-top:5px;">
+				<input  type="button" value='$locale.msg("HKFormFile.FORM_SURE")' onclick="saveMask()"/> 
+				<input  type="button" value='$locale.msg("HKFormFile.SHUT_DOWN")' onclick="hideMask()"/> 
+			</div>
+		</div>
+</body>
+</html>

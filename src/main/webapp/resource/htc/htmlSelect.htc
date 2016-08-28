@@ -1,0 +1,401 @@
+<html xmlns:v>
+<HEAD>
+<public:component tagName=SELECT >
+<public:attach   EVENT="ondocumentready"   HANDLER="doInit"                                    />
+<public:property name="width"              get="getWidth"         put="setWidth"               />
+<public:property name="height"             get="getHeight"        put="setHeight"              />
+<public:property name="containHeight"      get="getContainHeight" put="setContainHeight"       />
+<public:property name="value"              get="getValue"         put="putValue"               />
+<public:property name="text"               get="getText"                                       />
+<public:property name="selectedIndex"      get="getIndex"         put="setIndex"               />
+<public:property name="xmlSrc"             get="getXmlSrc"        put="setXmlSrc"              />
+<public:property name="HTML"               get="getHTML"                                       />
+<public:property name="length"             get="getLength"                                     />
+<public:property name="callback"                                  put="setCallbackObj"         />
+
+<public:method   name="doShowContainer"	                                                       />
+<public:method   name="doItemOver"	                                                           />
+<public:method   name="doItemOut"	                                                           />
+<public:method   name="doItemClick"	                                                           />
+<public:method   name="addOption"	                                                           />
+<public:method   name="removeOption"	                                                       />
+<public:method   name="reload"	                                                               />
+<public:method   name="removeAll"	                                                           />
+<public:method   name="getOptions"	                                                           />
+<public:method   name="doBoxOver"	                                                           />
+<public:method   name="doTest"	                                                               />
+<PUBLIC:EVENT NAME="onChange" ID="oChange"/>
+</public:component>
+<?IMPORT NAMESPACE="V" IMPLEMENTATION="#default#VML">
+<SCRIPT LANGUAGE="jscript">
+var gImgSrc="/resource/image/arrowDown.gif";
+var gFileName="htmlSelect.htc";
+var giBoxWidth="150";         //宽度
+var giBoxHeight="18";         //高度
+var giArrowWidth="14";        //箭头宽度
+var giContainHeight="133";
+var giPopupHeight;
+var giPopupWidth;
+var gSelectedIndex=0;
+
+var oPopup;
+var oTmpPopup;
+var gXmlDoc=null;
+var gHashData = new Object();
+var gXmlSrc="";
+var gCallback="parent."+uniqueID;            //回调对象
+
+//------------------------------------属性----------------------------------------------------
+
+function getWidth()
+{
+    return giBoxWidth;
+}
+function setWidth(piWidth)
+{
+    giBoxWidth=piWidth;  
+}
+function getHeight()
+{
+    return giBoxHeight;
+}
+function setHeight(piHeight)
+{
+    giBoxHeight=piHeight;  
+}
+function getContainHeight()
+{
+    return giContainHeight;
+}
+function setContainHeight(piContainHeight)
+{
+    giContainHeight=piContainHeight;  
+}
+function getValue()
+{
+   var oContainer=document.getElementById("oContainer_"+uniqueID);
+   return oContainer.value;
+}
+function putValue(pValue)
+{
+   if(element.readyState!="complete") return;
+   var oContainer=document.getElementById("oContainer_"+uniqueID);
+   var oBox=document.getElementById("oBox_"+uniqueID);
+   oContainer.value=pValue;
+   var iIndex=0;
+   var sText="";
+   if(gHashData[pValue]!=null)
+   {
+        iIndex=gHashData[pValue].index;
+        sText=gHashData[pValue].text;
+   }
+   oBox.innerHTML=sText;
+   gSelectedIndex=iIndex;
+   
+}
+
+function getOptions()
+{
+   return gHashData;
+}
+
+function getLength()
+{
+    var oContainer=document.getElementById("oContainer_"+uniqueID);
+    return oContainer.rows.length;
+}
+
+function getHTML()
+{
+   var oContainer=document.getElementById("oContainer_"+uniqueID);
+   return oContainer.rows(gSelectedIndex).cells(0).innerHTML;
+}
+
+function getText()
+{
+   var oContainer=document.getElementById("oContainer_"+uniqueID);
+   return oContainer.rows(gSelectedIndex).cells(0).innerText;
+}
+
+function setIndex(pIndex)
+{
+    var oBox=document.getElementById("oBox_"+uniqueID);	
+    var oContainer=document.getElementById("oContainer_"+uniqueID);
+    oBox.innerHTML=oContainer.rows(pIndex).cells(0).innerHTML;
+    oContainer.value=oContainer.rows(pIndex).value;
+    gSelectedIndex=pIndex;
+}
+function setXmlSrc(pXMLSrc)
+{
+    gXmlSrc=pXMLSrc;
+    gXmlDoc=new ActiveXObject("MSXML.DOMDocument");
+    gXmlDoc.async = false;
+    gXmlDoc.load(gXmlSrc);
+}
+
+function getXmlSrc()
+{
+    return gXmlSrc;
+}
+
+function getIndex()
+{
+    return gSelectedIndex;
+}
+
+function setCallbackObj(pCallBack)
+{
+    gCallback=pCallBack;
+}
+//----------------------------------事件------------------------------------------------------------
+
+function doInit()
+{
+    var iBoxTextWidth=parseInt(giBoxWidth)-17;
+	var iContainerHeight;
+	var sCurURL=document.URLUnencoded;
+	//var sImageSrc=sCurURL.replace(gFileName,gImgSrc);
+	var sImageSrc=gImgSrc;
+	var aItem=getItemArray();
+    var sHTML='<div style="width:'+giBoxWidth+';height:20;">'
+            +   '<div id="oBox_'+uniqueID+'" style="width:'+iBoxTextWidth+';height:18;display:inline;'
+			+       'overflow-x:hidden;overflow-y:hidden;margin-bottom:0px;border-left:1px outset black;'
+			+       'border-top:1px outset black;border-bottom:1px outset black;"'
+			+    ' onclick="doShowContainer()" onmouseover="doBoxOver(this)">'
+            +   '</div>'
+			+   '<div style="display:inline;'
+			+      'color:#808080;'
+			+      'cursor:hand;"'
+			+       '  onclick="doShowContainer()'
+			+       '"><img src="'+sImageSrc+'" style="margin-top:0px" align="absmiddle">'
+			+   '</div>'
+            +'</div>'
+			+'<table id="oContainer_'+uniqueID+'" cellpadding="0" CELLSPACING="0" '
+			+'value="" selectedIndex="0" '
+			+' style="display:none;">'
+            +aItem.join("")
+	        +'</table>';
+    document.body.innerHTML=sHTML;
+    if(aItem.length>0)
+       setIndex(gSelectedIndex);
+    defaults.viewLink = document;
+}
+
+//----------------------------------方法-----------------------------------------------------------
+
+function getItemArray()
+{
+     var aHTML=new Array();
+     var iLen,i,value,text,bSelected;
+     if(gXmlDoc!=null)
+     {
+          var oRows=gXmlDoc.selectNodes("//rowSet");
+          iLen=oRows.length;
+          for(i=0;i<iLen;i++)
+          {
+              value=oRows[i].getAttribute("id");
+              text=oRows[i].childNodes[0].text;
+              aHTML[i]='<tr onmouseover="'+gCallback+'.doItemOver(this)" '
+				       +'onmouseout="'+gCallback+'.doItemOut(this)" height='+giBoxHeight
+					   +' onclick="'+gCallback+'.doItemClick(this)" value="'+value+'">'
+				       +'<td style="width:'+giBoxWidth+';height:100%">'
+					   +'<span style="font-size:13px;height:18">'+text
+					   +"</span></td></tr>";
+		     gHashData[value]={index:i,text:text};
+          }
+     }
+     else
+     {
+		 var oOptions=element.children;
+		 iLen=oOptions.length;
+         for(i=0;i<iLen;i++)
+         {
+              value=oOptions[i].value;
+              text=oOptions[i].innerHTML;
+              bSelected=oOptions[i].selected;
+              aHTML[i]='<tr onmouseover="'+gCallback+'.doItemOver(this)" '
+				       +'onmouseout="'+gCallback+'.doItemOut(this)" height='+giBoxHeight
+					   +' onclick="'+gCallback+'.doItemClick(this)" value="'+value+'">'
+				       +'<td style="width:'+giBoxWidth+';height:100%">'
+					   +text
+					   +"</td></tr>";
+			 if(bSelected=="true") gSelectedIndex=i;
+			 gHashData[value]={index:i,text:text};
+         }
+     }
+     return aHTML;   
+}
+
+function doShowContainer()
+{	
+	var oContainer=document.getElementById("oContainer_"+uniqueID);
+	if(oContainer.rows.length==0) return;
+	var iContainerHeight;
+	if(oPopup==null)
+	{
+		var aReturn = createPop(oContainer);
+		giPopupWidth=aReturn.width;
+		giPopupHeight=aReturn.height;
+		oPopup=aReturn.popup;
+	}
+	var iLeft = element.getBoundingClientRect().left + getWinScreenLeft(window);
+	var iTop = element.getBoundingClientRect().top +element.offsetHeight+getWinScreenTop(window)-2;
+	oPopup.show(iLeft, iTop, giPopupWidth, giPopupHeight);
+	var oPopupTable=oPopup.document.getElementById("oContainer_"+uniqueID);
+	oPopupTable.rows(gSelectedIndex).style.backgroundColor="#B6BDD2";
+	oPopupTable.rows(gSelectedIndex).cells(0).scrollIntoView();
+}
+
+function doItemOver(oItem)
+{
+	var oContainer=oPopup.document.getElementById("oContainer_"+uniqueID);
+    doItemOut(oContainer.rows(gSelectedIndex));
+    oItem.style.backgroundColor="#B6BDD2";
+    oItem.title=oItem.innerText;
+}
+
+function doItemOut(oItem)
+{
+    oItem.style.backgroundColor="";
+}
+
+function doItemClick(oItem)
+{
+    var oContainer=document.getElementById("oContainer_"+uniqueID);
+	var oBox=document.getElementById("oBox_"+uniqueID);
+	var iSelectIndex=oItem.rowIndex;
+	var isChanged=(gSelectedIndex!=iSelectIndex);	
+	oContainer.value=oItem.value;
+	oBox.innerHTML=oItem.cells(0).innerHTML;
+    gSelectedIndex=oItem.rowIndex;
+	if(oPopup!=null)
+	{
+	   oPopup.hide();
+	}
+	if(isChanged)
+	{
+	   doChange();
+	}
+}
+
+function doBoxOver(oBox)
+{
+   oBox.title=oBox.innerText;
+}
+
+function createPop(oContainer)
+{
+	var oPopup = window.createPopup();	
+	var oPopBody = oPopup.document.body;
+	var iContainerWidth=parseInt(giBoxWidth);
+	oPopBody.style.border="1px solid black";
+	oPopBody.style.width=iContainerWidth;
+	oPopBody.scroll="yes";
+	oPopBody.style.overflowY="auto";
+	oPopBody.style.overflowX="hidden";
+	oPopBody.style.scrollbarArrowColor="#003090"
+	oPopBody.style.scrollbar3dLightColor="black"
+	oPopBody.style.scrollbarBaseColor="#F5F5F5"
+	oPopBody.style.scrollbarDarkShadowColor="black";
+	oPopBody.style.scrollbarFaceColor="#CCCCFF";
+	oPopBody.innerHTML=oContainer.outerHTML;    
+	oPopBody.children(0).style.display="block";
+	//oPopup.document.createStyleSheet();
+	//oPopup.document.styleSheets[0].addRule("v\\:*", "behavior:url(#default#VML)");
+	var iRealHeight=oPopBody.children(0).rows.length*18+2;
+	var iHeight=(iRealHeight>parseInt(giContainHeight))?giContainHeight:iRealHeight;		
+	var iWidth=giBoxWidth;
+	var aReturn={height:iHeight,width:iWidth,popup:oPopup};
+	return aReturn;
+}
+
+function addOption(value,sHTML,isSelected)
+{
+    var oTable=document.getElementById("oContainer_"+uniqueID);
+	var oRow=oTable.insertRow();
+	oRow.setAttribute("onmouseover",gCallback+'.doItemOver(this)');
+	oRow.setAttribute("onmouseout",gCallback+'.doItemOut(this)');
+	oRow.setAttribute("onclick",gCallback+'.doItemClick(this)');
+	oRow.value=value;
+    var oCell=oRow.insertCell();
+	oCell.style.width=giBoxWidth;
+	oCell.style.height=giBoxHeight;
+	oCell.innerHTML=sHTML;
+	if(isSelected==true)
+	{
+	    oTable.value=value;
+        var oBox=document.getElementById("oBox_"+uniqueID);	
+        oBox.innerHTML=sHTML;
+        gSelectedIndex=oRow.rowIndex;
+	}
+	gHashData[value]={index:oRow.rowIndex,text:sHTML};
+}
+
+function removeOption(value)
+{
+    var oTable=document.getElementById("oContainer_"+uniqueID);
+    var iRowIndex=gHashData[value].index;
+    oTable.deleteRow(iRowIndex);
+    delete gHashData[value];
+}
+
+function removeAll()
+{
+    var oTable=document.getElementById("oContainer_"+uniqueID);
+    var iLen=oTable.rows.length;
+    for(var i=iLen-1;i>=0;i--)
+    {
+       oTable.deleteRow(i);
+    }
+    gHashData=null;
+    gHashData = new Object();
+    oPopup=null;
+}
+
+function doChange()
+{
+	var oEvent = createEventObject();
+	oChange.fire(oEvent);
+}
+function reload()
+{
+   doInit();
+}
+//得到window真正的ScreenTop值(解决框架中的引用)
+function getWinScreenTop(win)
+{
+    var winScreenTop = 0;
+    var topWin = win.top;
+    while(win.frameElement!=null && topWin != win)
+    {
+        winScreenTop += win.frameElement.getBoundingClientRect().top;
+        win = win.parent;
+    }
+    winScreenTop += win.screenTop;
+    return winScreenTop;
+}
+
+//得到window真正的ScreenLeft值(解决框架中的引用)
+function getWinScreenLeft(win)
+{
+    var winScreenLeft = 0;
+    var topWin = win.top;
+    while(win.frameElement!=null && topWin != win)
+    {
+        winScreenLeft += win.frameElement.getBoundingClientRect().left;
+        win = win.parent;
+    }
+    winScreenLeft += win.screenLeft;
+    return winScreenLeft;
+}
+function doTest()
+{
+   for (key in gHashData)
+   {
+     // alert(key+":::"+gHashData[key].index+":::"+gHashData[key].text);      
+   }
+}
+</SCRIPT>
+<body>
+</body>
+</html>

@@ -1,0 +1,534 @@
+*{
+	font-family: Microsoft YaHei, "微软雅黑", Verdana, Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-size: 18px;
+}
+
+.pl-10{
+	padding-left: 10px;
+}
+
+.pl-20{
+	padding-left: 20px;
+}
+
+.pt-20{
+	padding-top: 20px;
+}
+
+.ph-20{
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+.pr-10{
+	padding-right: 10px;
+}
+
+.pb-10{
+	padding-bottom: 10px;
+}
+
+.pull-left{
+	float: left;
+}
+
+.clearfix{
+	clear: both;
+}
+
+.clearfix:after{
+	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.bg-normal{
+	color: #4CEF70;
+}
+
+.bg-warning{
+	background-color: #EB6100;
+}
+
+.bg-danger{
+	background-color: #FF0000;
+}
+
+.text-label{
+	color: #1582BC;
+}
+
+.text-normal{
+	color: #4CEF70;
+}
+
+.text-warning{
+	color: #EB6100;
+}
+
+.text-danger{
+	color: #FF0000;
+}
+
+.hide{
+	display: none;
+}
+
+
+
+html{
+	overflow: auto;
+	height: 100%;
+}
+
+body{
+	overflow: hidden;
+	height: 1024px;
+	background: url(../../image/zjBaseLSM/bg.jpg) repeat top left;	
+}
+
+ul, ol, li{  
+	list-style-type:none;  
+}
+
+.wrapper{
+	width: 1280px;
+	margin: 0 auto;
+}
+
+.head{
+	padding: 15px 0px;
+	overflow: hidden;
+}
+
+.main{
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.area-left{
+	float: left;
+	width: 750px;
+}
+
+.area-right{
+	float: left;
+	width: 530px; 
+}
+
+.col-area{
+}
+
+.col-head{
+	height: 37px;
+	line-height: 32px;
+	padding-left: 36px;
+	color: #0AFAF9;
+	background: url(../../image/zjBaseLSM/panel-head-bg.png) no-repeat;
+}
+
+.col-body{
+	padding-left: 27px;
+}
+
+
+.lsm-panel-head{
+	height: 20px;
+	line-height: 20px;
+	padding: 15px 15px 10px 15px;
+	color: #0AFAF9;
+}
+
+.lsm-panel-body{
+	padding: 0px 10px;
+	height: 135px;
+	overflow: hidden;
+}
+
+.title{
+	float: left;
+	width: 500px;
+	color: #FECF42;
+	font-size: 26px;
+	font-weight: bold;
+	padding-left: 40px;
+}
+
+.sys-date-area{
+	float: right;
+	padding-right: 40px;
+}
+
+.sys-date-label{
+	color: #00628F;
+	font-weight: bold;
+}
+
+.sys-date{
+	padding-left: 5px;
+	color: #FFFFFF;
+}
+
+/**整体设施监控情况开始**/
+.alarm-total-area{
+	padding: 22px 0px 10px 10px;
+}
+
+.alarm-total-panel{
+	width: 340px;
+	height: 150px;
+    margin: 3px 5px 3px 0;
+	border: 1px solid #053B59;
+	background-color: #020B1A;
+}
+
+.alarm-total-info-item{
+	float: left;
+	height: 100px;
+}
+
+.alarm-total-info-item.rate{
+	width: 110px;
+	background: url(../../image/zjBaseLSM/alarm-rate-bg.gif) no-repeat center center;
+	text-align: center;
+}
+
+.alarm-total-info-item.rate > span{
+	font-size: 14px;	
+	line-height: 100px;
+	color: #FEFEFE;
+}
+
+.alarm-total-info-item.count{
+	width: 70px;
+	color: #00FFFF;
+	font-size: 22px;
+	text-align: center;
+	line-height: 30px;
+	padding-top: 20px;
+}
+
+.alarm-total-info-item.normal{
+	width: 70px;
+	color: #4CEF70;
+	font-size: 22px;
+	text-align: center;
+	line-height: 30px;
+	padding-top: 20px;
+}
+
+.alarm-total-info-item.abnormal{
+	width: 70px;
+	color: #FF0000;
+	font-size: 22px;
+	text-align: center;
+	line-height: 30px;
+	padding-top: 20px;
+}
+
+.alarm-total-info{
+	display: block;
+}
+
+.alarm-total-info.label{
+	color: #1582BC;
+}
+/**整体设施监控情况结束**/
+
+/**主机性能开始**/
+.host-perf-panel{
+	height: 185px;
+	overflow: hidden;
+	background-color: #020B1A;
+    margin: 3px 0px 6px 0;
+	border: 1px solid #053B59;
+}
+
+.tabs{
+	padding: 5px 0px 0px 0px;
+}
+
+.tab-item{
+	float: left;
+	display: block;
+	width: 32px;
+	height: 5px;
+	padding-right: 3px;
+	background: url(../../image/zjBaseLSM/tab-bg.png) no-repeat;
+}
+
+.tab-item.active{
+	background: url(../../image/zjBaseLSM/tab-active-bg.png) no-repeat;
+}
+
+.tab-label{
+	float: left;
+	display: block;
+	color: #00FFFF;
+	margin-top: -8px;
+	padding-left: 10px;
+}
+.host-name{
+	color: #22B8FC;
+	padding: 0px 10px 0px 10px;
+	width: 290px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.host-perf-progressbar{
+	width: 150px;
+}
+
+.host-perf-item{
+	height: 18px;
+	line-height: 18px;
+	padding: 3px 0px 0px 0px;
+}
+
+div.host-perf-rank ul{
+	display: none;
+}
+
+div.host-perf-rank > ul.active{
+	display: inline-block;
+}
+/**主机性能结束**/
+
+/**最近未处理告警开始**/
+.latest-alarm-panel{
+	width: 690px;
+	height: 500px;
+	background-color: #020B1A;
+	margin: 3px 0px 0px 0px;
+	border: 1px solid #053B59;
+	overflow: hidden;
+}
+
+.radar-panel{
+	width: 350px;
+	height: 350px;
+	overflow: hidden;
+	background: url(../../image/zjBaseLSM/radar-bg.gif) no-repeat center center;
+}
+
+.alarm-object-panel{
+	width: 340px;
+	height: 300px;
+	overflow: hidden;
+	margin: 50px 0px 0px; 0px;
+}
+
+.alarm-object-system-panel{
+	width: 260px;
+	margin: 5px auto 0px auto;
+}
+
+.alarm-object-system{
+	font-weight: bold;
+	display: none;
+}
+
+.alarm-object-system.active{
+	display: block;
+}
+
+.alarm-object-list-panel{
+	height: 170px;
+	width: 260px;
+	margin: 10px auto 30px auto;
+	overflow: hidden;
+}
+
+.alarm-object-list{
+	display: none;
+}
+
+.alarm-object-list.active{
+	display: block;
+}
+
+.alarm-object-list > li{
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	margin-bottom: 10px;
+}
+
+.alarm-object-type{
+	width: 100px;
+	display: inline-block;
+}
+
+.alarm-object-name{
+	display: inline-block;
+	color: #4CEF70;
+	padding-left: 23px;
+}
+
+.alarm-object-name.danger{
+	color: #FF0000;
+	background: url(../../image/zjBaseLSM/ico-danger.png) no-repeat;
+}
+
+.alarm-details-panel{
+	padding: 0px 20px;
+	height: 136px;
+	overflow: hidden;
+}
+
+.alarm-details-list{
+	display: none;
+}
+
+.alarm-details-list.active{
+	display: block;
+}
+
+.alarm-details-list > li{
+	display: block;
+	/*height: 20px;*/
+	line-height: 20px;
+	margin-bottom: 8px;
+	word-break:break-all;
+　　word-wrap:break-word;
+}
+
+.split-line{
+	display: block;
+	width: 280px;
+	height: 5px;
+	margin: 0 auto;
+	background: url(../../image/zjBaseLSM/split-line-bg.png) no-repeat center center;
+}
+
+.system-domain{
+	width: 175px;
+	height: 175px;
+	color: #1582BC;
+	float: left;
+	position: relative;
+}
+
+.system-domain .top-left-label{
+	position: relative;
+	top: 40px;
+	left: 20px;
+	width: 60px;
+}
+
+.system-domain .top-right-label{
+	position: relative;
+	top: 40px;
+	left: 90px;
+	width: 60px;
+}
+
+.system-domain .bottom-left-label{
+	position: relative;
+	top: 100px;
+	left: 20px;
+	width: 60px;
+}
+
+.system-domain .bottom-right-label{
+	position: relative;
+	top: 100px;
+	left: 100px;
+	width: 60px;
+}
+
+.system-domain .top-left-point-area{
+	position: relative;
+	width: 96px;
+	height: 99px;
+	top: 52px;
+	left: 78px;
+}
+
+.system-domain .top-right-point-area{
+	position: relative;
+	width: 96px;
+	height: 99px;
+	top: 52px;
+}
+
+.system-domain .bottom-left-point-area{
+	position: relative;
+	width: 96px;
+	height: 99px;
+	top: -25px;
+	left: 78px;
+}
+
+.system-domain .bottom-right-point-area{
+	position: relative;
+	width: 96px;
+	height: 99px;
+	top: -25px;
+}
+
+.ponit-red{
+	width: 20px;
+	height: 20px;
+	display: block;
+	position: relative;
+	z-index: 20;
+	background: url(../../image/zjBaseLSM/point-red.png) no-repeat center center;
+}
+
+.ponit-red.active{
+	background: url(../../image/zjBaseLSM/point-red.gif) no-repeat center center;
+}
+
+.ponit-green{
+	width: 20px;
+	height: 20px;
+	display: block;
+	position: relative;
+	z-index: 20;
+	background: url(../../image/zjBaseLSM/point-green.png) no-repeat center center;
+}
+
+.ponit-green.active{
+	background: url(../../image/zjBaseLSM/point-green.gif) no-repeat center center;
+}
+/**最近未处理告警结束**/
+
+/**
+* webkit 浏览器 hack
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.head{
+		padding: 20px 0px;
+		overflow: hidden;
+	}
+	
+	.host-perf-item{
+		height: 24px;
+		line-height: 18px;
+		padding: 3px 0px 0px 0px;
+	}
+	
+	.lsm-panel-head{
+		height: 20px;
+		line-height: 20px;
+		padding: 10px 15px 10px 15px;
+		color: #0AFAF9;
+	}
+}
+/**
+* Firefox hack
+*/
+@-moz-document url-prefix() { 
+	.host-perf-item{
+		height: 24px;
+		line-height: 18px;
+		padding: 3px 0px 0px 0px;
+	}
+}

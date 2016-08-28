@@ -1,0 +1,48 @@
+.dialog{
+			position:absolute;
+			border:solid 1px #666;
+			z-index:10000;
+			overflow:hidden;
+		 }
+		 .dialog .dialog-title{
+			position:relative;
+			height:26px;
+			width:100%;
+			border-bottom:solid 1px #666;
+		}
+		.dialog-title span{
+			float:right;
+		}
+		.tool-close{
+			width:16px;
+			height:16px;
+			background:url('../images/panel_tools.gif') no-repeat -16px 0px;
+			cursor:pointer;
+			float:right;
+			margin:5px;
+		}
+		.dialog .dialog-content{
+			position:relative;
+			background-color:#fff;
+			height:100%;
+			overflow:hidden;
+		}
+		.dialog .dialog-bottom{
+			position:absolute;
+			height:35px;
+			width:100%;
+			text-align:right;
+			background-color:#eee;
+			bottom:0px;
+			border-top:solid 1px #000;
+		}
+		.dialog-bottom .dialog-btn{
+			border:#666 1px solid;
+			padding:2px;
+			margin:5px 10px 5px 0px;
+			width:65px;
+			height:25px;
+		    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#ece9db;)
+		    cursor:pointer;
+		}
+		

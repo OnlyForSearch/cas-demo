@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div.panel,p.flip,p.flip2,p.flip3
+        {
+            margin:0px;
+            padding:5px;
+            text-align:center;
+            background:#e5eecc;
+            border:solid 1px #c3c3c3;
+        }
+        div.panel
+        {
+            height:120px;
+            display:none;
+        }
+
+    </style>
+
+    <script src="1.10.2/jquery-1.10.2.js"></script>
+    <script !src="">
+
+
+        $(document).ready(function () {
+
+            $("p").click(function () {
+
+                //$(this).hide();
+            });
+
+            $("button").click(function () {
+//                $("p").hide();
+
+            });
+
+
+//            您可以使用 hide() 和 show() 方法来隐藏和显示 HTML 元素：
+            $("#test").click(function (e) {
+
+                $(this).hide();
+
+            });
+            $("h3.cssProp").click(function () {
+
+                $(this).css("background-color", "red");
+            });
+
+            $("button#hide").click(function () {
+                $("p#p1").hide();
+            });
+            $("button#show").click(function () {
+                $("p#p1").show();
+            });
+
+            $("button#btn3").click(function () {
+                $("p.btn3-p").hide(1000);
+            });
+
+
+            $("button#btn4").click(function () {
+                $("p.btn4-p").toggle();
+            });
+
+
+            $("button#btn5").click(function () {
+
+                $("div#div1").fadeIn();
+                $("div#div2").fadeIn("slow");
+                $("div#div3").fadeIn(3000);
+
+            });
+
+
+            $("#btn8").click(function () {
+                $("div#div10").fadeTo("slow", 0.15);
+                $("div#div11").fadeTo("slow", 0.4);
+                $("div#div12").fadeTo("slow", 0.7);
+
+            });
+
+            $("button#btn6").click(function () {
+
+                $("div#div4").fadeOut();
+                $("div#div5").fadeOut("slow");
+                $("div#div6").fadeOut(3090);
+            });
+
+            $("button#btn7").click(function () {
+                $("div#div7").fadeToggle();
+                $("div#div8").fadeToggle("fast");
+                $("div#div9").fadeToggle("4000");
+            });
+
+            $("p.flip").click(function () {
+                $("div.panel").slideDown("slow");
+
+            });
+   $("p.flip2").click(function () {
+                $("div.panel").slideUp("slow");
+
+            });
+
+            $(".flip3").click(function () {
+
+                $("div.panel").slideToggle();
+            });
+
+
+        });
+    </script>
+</head>
+<body>
+<p>如果您点击我，我会消失。12312</p>
+<p>点击我，我会消失。</p>
+<p>也要点击我哦。</p>
+<button type="button">Click me!</button>
+
+<h2>This is a heading</h2>
+<p>This is a paragraphT.</p>
+<p id="test">This is another paragraph.</p>
+<button id="testBtn" type="button">test 消失</button>
+
+<h3 class="cssProp">cssProp</h3>
+
+<button id="hide" type="button">`隐藏</button>
+<button id="show" type="button">显示</button>
+<p id="p1">如果点击隐藏按钮,我就会消失</p>
+
+
+<button id="btn3" type="button">隐藏</button>
+<p class="btn3-p">这是一个段落</p>
+<p class="btn3-p">这是另一个段落</p>
+
+
+<button id="btn4" type="button">切换</button>
+<p class="btn4-p">这是一个段落</p>
+<p class="btn4-p">这是另一个段落</p>
+
+<p>演示带有不同参数的 fadeIn() 方法。</p>
+<button id="btn5">点击这里，使三个矩形淡入</button>
+<div id="div1" style="width: 80px;height: 80px;background: red;display: none"></div>
+<div id="div2" style="width: 80px;height: 80px;background: green;display: none"></div>
+<div id="div3" style="width: 80px;height: 80px;background: blue;display: none"></div>
+<hr>
+<button id="btn6">点击这里，点击这里，使三个矩形淡出</button>
+
+<div id="div4" style="width: 80px;height: 80px;background: red;"></div>
+<div id="div5" style="width: 80px;height: 80px;background: green;"></div>
+<div id="div6" style="width: 80px;height: 80px;background: blue;"></div>
+
+<hr>
+<button id="btn7">点击这里，使三个矩形淡入淡出</button>
+<div id="div7" style="width: 80px;height: 80px;background: red;"></div>
+<div id="div8" style="width: 80px;height: 80px;background: green;"></div>
+<div id="div9" style="width: 80px;height: 80px;background: blue;"></div>
+<hr>
+<button id="btn8">点击这里，使三个矩形淡出</button>
+<div id="div10" style="width: 80px;height: 80px;background: red;"></div>
+<div id="div11" style="width: 80px;height: 80px;background: green;"></div>
+<div id="div12" style="width: 80px;height: 80px;background: blue;"></div>
+
+
+<hr>
+W
+<p class="flip3 ">请点击这里(可以在 slideDown() 与 slideUp() 方法之间进行切换。)</p>
+<div class="panel">
+
+    <p>W3School - 领先的 Web 技术教程站点</p>
+    <p>在 W3School，你可以找到你所需要的所有网站建设教程。</p>
+</div>
+<p class="flip">请点击这里(于向下滑动元素。)</p>
+<p class="flip2 ">请点击这里(向上滑动元素)</p>
+
+
+<hr>
+<h3>自定义动画</h3>
+<script>
+    $(document).ready(function () {
+
+        $("#btn11").click(function () {
+
+            $("#animateDive").animate({
+                "left": "40px",
+                "opacity":"0.5",
+              /*  height:"40px",
+                width:"40px"
+*/              height:"+=20px",
+                width:"+=30px"
+
+            });
+        });
+    });
+
+</script>
+<button id="btn11">开始动画</button>
+<p>默认情况下，所有 HTML 元素的位置都是静态的，并且无法移动。如需对位置进行操作，记得首先把元素的 CSS position 属性设置为 relative、fixed 或 absolute。
+    必须使用 Camel 标记法书写所有的属性名，比如，必须使用 paddingLeft 而不是 padding-left，使用 marginRight 而不是 margin-right，等等。</p>
+<div style="position:relative;width: 200px;height:200px">
+
+    <div id="animateDive" style="width: 20px;height: 20px;position:absolute;background: #98bf21">
+
+    </div>
+
+
+</div>
+<hr>
+
+<script>
+    $(document).ready(function () {
+
+        $("#btn14").click(function () {
+
+            var $btn14Div = $("#btn14Div");
+        /*    $btn14Div.animate({ height: '300px',  opacity: '0.4'}, "fast");
+            $btn14Div.animate({  width: '300px', opacity: '0.8'}, "fast");
+            $btn14Div.animate({ height: '100px', opacity: '0.4'}, "fast");
+            $btn14Div.animate({ width: '100px', opacity: '0.8'}, "fast");*/
+            $btn14Div.animate({height:'300px',opacity:'0.4'},"slow");
+            $btn14Div.animate({width:'300px',opacity:'0.8'},"slow");
+            $btn14Div.animate({height:'100px',opacity:'0.4'},"slow");
+            $btn14Div.animate({width:'100px',opacity:'0.8'},"slow");
+            $btn14Div.animate({left: "100px"}, "slow");
+            $btn14Div.animate({fontSize: "2em"}, "slow");
+
+        });
+
+    });
+</script>
+
+<button id="btn14">开始动画</button>
+<p>默认情况下，所有 HTML 元素的位置都是静态的，并且无法移动。如需对位置进行操作，记得首先把元素的 CSS position 属性设置为 relative、fixed 或 absolute。</p>
+<div  id="btn14Div" style="background:#98bf21;height:100px;width:100px;position:absolute;">
+    Hello World!
+</div>
+
+<hr>
+<style>
+    #stopFlip,#stopPanel {
+        border: 1px solid #C3C3C3;
+        background: #e5eecc;
+        text-align: center;
+        padding: 5px;
+    }
+
+    #stopPanel {
+        height: 50px;
+        display: none;
+    }
+
+</style>
+<script>
+
+    $(document).ready(function () {
+
+        $("#stopFlip").click(function(){
+            $("#stopPanel").slideDown(5000);
+        });
+        $("#stop").click(function(){
+            $("#stopPanel").stop();
+        });
+
+    });
+</script>
+<button id="stop" style="margin-top: 150px;">停止滑动</button>
+
+<div id="stopFlip">  点击这里，向下滑动面板</div>
+<div id="stopPanel">Hello world!</div>
+
+<hr>
+    <h3>错误（没有 callback）</h3>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#btnCallBack").click(function () {
+
+            $(this).next().filter("p").hide(3000);
+
+            alert("警告提示先出现了");
+        });
+
+        $("#btnCallBack2").click(function () {
+            $(this).next().filter("p").hide(3000,function () {
+                alert("警告在动画完成后出现了");
+            });
+        });
+
+    });
+
+</script>
+<button id="btnCallBack">错误没有回调</button>
+
+<p>This is a paragraph with little content.</p>
+
+<button id="btnCallBack2">有回调</button>
+
+<p>This is a paragraph with little content.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

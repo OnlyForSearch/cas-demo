@@ -1,0 +1,514 @@
+<PUBLIC:COMPONENT TAGNAME="XmlSelect">
+	<PUBLIC:PROPERTY NAME="domSrc"/>
+	<PUBLIC:PROPERTY NAME="domFld"/>
+	<PUBLIC:PROPERTY NAME="width"/>
+	<PUBLIC:PROPERTY NAME="height"/>
+	<PUBLIC:PROPERTY NAME="size"/>
+	<PUBLIC:PROPERTY NAME="selectedIndex"/>
+    <PUBLIC:PROPERTY NAME="multiple" PUT="setMultiple" GET="getMultiple"/>
+    <PUBLIC:PROPERTY NAME="xmlsrc"/>
+    <PUBLIC:PROPERTY NAME="isMove" VALUE="true"/>
+    <PUBLIC:PROPERTY NAME="disable" PUT="setDisabled" GET="getDisabled"/>
+    <PUBLIC:PROPERTY NAME="filter"/>
+    <PUBLIC:PROPERTY NAME="xmlDom"/>
+    <PUBLIC:PROPERTY NAME="isAddEmpty"/>
+	<PUBLIC:METHOD NAME="moveSelectedTo" />
+    <PUBLIC:METHOD NAME="moveAllTo" />
+	<PUBLIC:METHOD NAME="addSelectedTo" />
+	<PUBLIC:METHOD NAME="addAllTo" />
+	<PUBLIC:METHOD NAME="delSelectedOption" />
+	<PUBLIC:METHOD NAME="delAllOption" />
+	<PUBLIC:METHOD NAME="addOptions" />
+    <PUBLIC:METHOD NAME="getObject" />
+	<PUBLIC:METHOD NAME="getLength" />
+	<PUBLIC:METHOD NAME="setLength" />
+	<PUBLIC:METHOD NAME="isNull" />
+	<PUBLIC:METHOD NAME="getXml" />
+	<PUBLIC:METHOD NAME="getXmlNode" />
+	<PUBLIC:METHOD NAME="getAllValues" />
+	<PUBLIC:METHOD NAME="fireMoveOptionIn" />
+	<PUBLIC:METHOD NAME="fireMoveOptionOut" />
+	<PUBLIC:EVENT NAME="onchange" ID="change"  />
+	<PUBLIC:EVENT NAME="onOptionDblClick" ID="dblClick"  />
+	<PUBLIC:EVENT NAME="onMoveOptionIn" ID="moveIn"  />
+	<PUBLIC:EVENT NAME="onMoveOptionOut" ID="moveOut"  />
+	<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="xmlSelectIni()" />
+    <PUBLIC:ATTACH EVENT="onpropertychange" ONEVENT="propertychange()" />
+</PUBLIC:COMPONENT>
+
+<SCRIPT LANGUAGE="JScript">
+	var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    var i;
+	var isDisable;
+	var isMultiple;
+	var oSelect;
+	var loadCount = 0;
+	var iFilter;
+
+	function setDisabled(is)
+	{
+		isDisable = is;
+	}
+	
+	function getDisabled()
+	{
+		return isDisable;
+	}
+	
+	function setMultiple(is)
+	{
+		if(is!=null && oSelect==null)
+		{	
+			isMultiple = true;
+		}
+		else
+		{
+			isMultiple = is;
+			oSelect.multiple = isMultiple;
+		}
+	}
+	
+	function getMultiple()
+	{
+		if(isMultiple==null)
+		{
+			isMultiple = false;
+		}
+		return isMultiple;
+	}
+	
+	//初始化各个对象
+	function xmlSelectIni()
+	{
+		if(selectedIndex == null || isNaN(parseInt(selectedIndex,10)))
+		{
+			selectedIndex = -1;
+		}
+		if(xmlsrc)
+        {
+            sendXMLHttpRequest();
+        }
+        else
+        {
+            addObject();
+        }
+	}
+
+    function propertychange()
+    {
+        var propertyName = window.event.propertyName;
+        switch(propertyName)
+        {
+        	case "xmlsrc":
+        		xmlSelectIni();
+        		break;
+        }
+    }
+
+    function sendXMLHttpRequest()
+    {
+        xmlhttp.open("POST",xmlsrc,false);
+        xmlhttp.send();
+        loadXML();
+    }
+    
+    function addObject(optionArray)
+    {
+        element.innerHTML = '';
+        oSelect = document.createElement("SELECT");
+        element.appendChild(oSelect);
+        if(width)
+        {
+            oSelect.style.width = width;
+        }
+        if(height)
+        {
+            oSelect.style.height = height;
+        }
+        if(size)
+        {
+            oSelect.size = size;
+        }
+        if(multiple)
+        {
+            oSelect.multiple = true;
+        }
+		if(domSrc)
+		{
+			oSelect.dataSrc = domSrc;
+		}
+		if(domFld)
+		{
+			oSelect.dataFld = domFld;
+		}
+		
+		if(isDisable=="true")
+		{
+			oSelect.disabled = true;
+		}
+        if(optionArray!=null)
+        {
+	        for(i=0;i<optionArray.length;i++)
+	        {
+	            oSelect.add(optionArray[i]);
+	        }
+        }
+        oSelect.selectedIndex = selectedIndex;        
+        oSelect.attachEvent('onchange',fireChange);
+        oSelect.attachEvent('ondblclick',dblClickEvent);
+    }
+    
+    function addOptions(texts,vals,separator,groups)
+    {
+    	if(texts==null || texts=="")
+    	{
+    		return ;
+    	}
+    	var oOption;
+    	if(separator==null)
+    	{
+    		separator = ",";
+    	}
+    	var textArr = texts.split(separator);
+    	if(vals!=null)
+    	{
+    		var valArr = vals.split(separator);
+    	}
+    	if(groups!=null)
+    	{
+    		var groupArr = groups.split(separator);
+    	}
+    	for(var i=0;i<textArr.length;i++)
+    	{
+    		if(vals==null)
+    		{
+    			oOption = createOption(textArr[i]);
+    		}
+    		else if(groups!=null)
+    		{
+    			oOption = createOption(textArr[i],valArr[i],groupArr[i]);
+    		}else
+    		{
+    			oOption = createOption(textArr[i],valArr[i]);
+    		}
+    		oSelect.add(oOption);
+		}
+    }
+    
+    function fireChange()
+    {
+    	oEvent = createEventObject();
+    	oEvent.selectElement = element.getObject();
+    	oEvent.selectedIndex = element.getObject().selectedIndex;
+        change.fire(oEvent);
+    }
+    
+    function loadXML()
+    {
+        var filters
+        if(filter)
+        {
+        	filters =filter.split(',');
+        }
+        var optionArray = new Array();
+        if(isSuccess(xmlhttp))
+        {
+			var doc = new ActiveXObject("Microsoft.XMLDOM");
+			doc.load(xmlhttp.responseXML);
+			element.xmlDom = doc;
+			var nodeList = doc.selectNodes("/root/rowSet");
+			if(isAddEmpty == 'true')
+			{
+				optionArray.push(createOption("",""));
+			}
+			var useItem = typeof(filters)=="undefined" || filters == null ? false : true;
+			var existItem = false;
+			for(i=0;i<nodeList.length;i++)
+			{
+				if(useItem){existItem = hasItem(filters,nodeList[i].getAttribute("id"))}
+				if(filter==null||!existItem)
+				//if(filter==null||!hasItem(filters,nodeList[i].getAttribute("id")))
+				{
+					optionArray.push(getOption(nodeList[i]));
+				}
+			}
+        }
+        addObject(optionArray);
+    }
+
+    function getOptionHTML(oNode)
+    {
+        return  '<option value="'+oNode.getAttribute("id")+'">'+oNode.firstChild.text+'</option>';
+    }
+    
+    function getOption(oNode)
+    {
+        var groupObj = oNode.childNodes[1];
+        var group = "";
+        if(groupObj!=null) group=groupObj.text;
+        return createOption(oNode.firstChild.text,oNode.getAttribute("id"),group);
+    }
+    
+    function createOption(text,val,gro)
+    {
+    	var oOption = document.createElement("OPTION");
+    	oOption.text=text;
+    	if(val!=null)
+    	{
+    		oOption.value=val;
+    	}
+    	if(gro==null) gro="";
+    	oOption.group=gro;
+    	return oOption;
+    }
+
+    function dblClickEvent()
+    {
+    	oEvent = createEventObject();    	
+        dblClick.fire(oEvent);
+    }
+    
+    function getObject()
+    {
+        return oSelect;
+    }
+	
+	function setLength(iLength)
+	{
+		getObject().options.length = iLength;
+	}
+	
+	function getLength()
+	{
+		return element.getObject().options.length;
+	}
+	
+	function isNull()
+	{
+		return (element.getLength()==0);
+	}
+	
+	function getXml(tagName)
+	{
+		var oSelect = element.getObject();
+		if(typeof(tagName) == "undefined")
+		{
+			tagName = "Item";
+		}
+		var xmlReturn = '';
+		for(i=0;i<oSelect.options.length;i++)
+		{
+			xmlReturn += '<'+tagName+' id="'+oSelect.options[i].value+'"/>';
+		}
+		return xmlReturn;
+	}
+	
+	function getXmlNode(root,tagName)
+	{
+		if(tagName == null)
+		{
+			tagName = "Item";
+		}
+		var oSelect = element.getObject();
+		var oItem;
+		var dom = root.ownerDocument;
+		for(i=0;i<oSelect.options.length;i++)
+		{
+			oItem = dom.createElement(tagName);
+			oItem.setAttribute("id",oSelect.options[i].value);
+			root.appendChild(oItem);
+		}
+		return root;
+	}
+
+	function getAllValues()
+	{
+		var returnValue = '';
+		var oSelect = element.getObject();
+		for(i=0;i<oSelect.options.length;i++)
+		{
+			returnValue = returnValue + ',' + oSelect.options[i].value;
+		}
+		if (returnValue != ''){
+			returnValue = returnValue.substring(1,returnValue.length);
+		}
+		return returnValue;
+	}
+
+    function moveSelectedTo(oTargetSelect)
+    {
+        var oSelect = element.getObject();
+        var oTarget = oTargetSelect.getObject();
+        var oOption;
+        for(i=0;i<oSelect.options.length;i++)
+        {
+            if(oSelect.options[i].selected)
+            {
+                if(moveOption(i,oSelect,oTarget))
+                {
+                	i--;
+                }
+                else
+                {
+                	break;
+                }
+            }
+        }
+        if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+
+    function moveAllTo(oTargetSelect)
+    {
+        var oSelect = element.getObject();
+        var oTarget = oTargetSelect.getObject();
+        var oOption;
+        while(oSelect.options.length>0&&moveOption(0,oSelect,oTarget));
+		if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+    
+    function delSelectedOption()
+    {
+    	var oSelect = getObject();
+    	var oOption;
+    	for(i=0;i<oSelect.options.length;i++)
+        {
+            oOption = oSelect.options[i];
+            if(oOption.selected)
+            {
+                if(delOption(i,oSelect))
+                {
+                	i--;
+                }
+                else
+                {
+                	break;
+                }
+            }
+        }
+        if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+    
+    function delAllOption()
+    {
+        var oSelect = getObject();
+        var oOption;
+        while(oSelect.options.length>0&&delOption(0,oSelect));
+		if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+
+    function addSelectedTo(oTargetSelect,isOnly)
+    {
+    	var oSelect = element.getObject();
+        var oTarget = oTargetSelect.getObject();
+        var oOption;
+        for(i=0;i<oSelect.options.length;i++)
+        {
+            if(oSelect.options[i].selected)
+            {
+                addOption(i,oSelect,oTarget,isOnly);
+            }
+        }
+        if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+    
+    function addAllTo(oTargetSelect,isOnly)
+    {
+    	var oSelect = element.getObject();
+        var oTarget = oTargetSelect.getObject();
+        var oOption;
+        for(i=0;i<oSelect.options.length;i++)
+        {
+            addOption(i,oSelect,oTarget,isOnly);
+        }
+        if(!isMove)
+		{
+			isMove = true;
+		}
+    }
+    
+    function moveOption(oIndex,oSource,oTarget)
+    {
+        var oOption = oSource.options[oIndex];
+        oSource.parentElement.fireMoveOptionOut(oOption);
+        oTarget.parentElement.fireMoveOptionIn(oOption);
+        if(isMove)
+        {
+        	//oSource.removeChild(oOption);
+        	oTarget.appendChild(oOption);
+        }
+        return isMove;
+    }
+    
+    function delOption(oIndex,oSource)
+    {
+    	var oOption = oSource.options[oIndex];
+    	fireMoveOptionOut(oOption);
+    	if(isMove)
+    	{
+    		oSource.removeChild(oOption);
+    	}
+    	return isMove;
+    }
+    
+    function addOption(oIndex,oSource,oTarget,isOnly)
+    {
+    	var oOption = document.createElement("OPTION");
+		oOption.text = oSource.options[oIndex].text;
+		oOption.value = oSource.options[oIndex].value;
+    	oOption.group = oSource.options[oIndex].group;
+    	if(isOnly == null)
+    	{
+    		isOnly = false;
+    	}
+    	oTarget.parentElement.fireMoveOptionIn(oOption);
+    	if(isMove)
+    	{
+    		if(isOnly)
+    		{
+    			for(var i=0;i<oTarget.options.length&&!isSame(oOption,oTarget.options[i]);i++);
+    			if(i==oTarget.options.length)
+    			{
+    				oTarget.add(oOption);
+    			}
+    		}
+    		else
+    		{
+    			oTarget.add(oOption);
+    		}
+    	}
+    }
+    
+    function isSame(oOption1,oOption2)
+    {
+    	return (oOption1.value==oOption2.value);
+    }
+    
+    function fireMoveOptionIn(oOption)
+    {
+    	oEvent = createEventObject();
+        oEvent.moveOption = oOption;
+        moveIn.fire(oEvent);
+    }
+    
+    function fireMoveOptionOut(oOption)
+    {
+    	oEvent = createEventObject();
+        oEvent.moveOption = oOption;
+        moveOut.fire(oEvent);
+    }
+</SCRIPT>

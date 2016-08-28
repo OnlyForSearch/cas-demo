@@ -1,0 +1,455 @@
+<!-- ---------------------------------------------------------------------
+//
+//  分页控件
+//
+//  文件名:		mpc.htc
+//
+//  说  明:	分页显示内容
+//
+//
+//-------------------------------------------------------------------- -->
+
+<PUBLIC:COMPONENT>
+
+	<PUBLIC:PROPERTY NAME="selectedIndex" PUT="setSelectedIndex" GET="getSelectedIndex"/>
+    <PUBLIC:PROPERTY NAME="display" PUT="setDisplay" GET="getDisplay"/>
+	<PUBLIC:PROPERTY NAME="ContainerWidth"/> 
+	<PUBLIC:PROPERTY NAME="cssUrl"/> 
+	<PUBLIC:PROPERTY NAME="ContainerHeight" put="setHeight" get="getHeight"/> 
+	<PUBLIC:PROPERTY NAME="ChangePage" put="setChangePage" get="getChangePage"/> 
+	<PUBLIC:PROPERTY NAME="isContentOnly" put="setIsContentOnly" get="getContentOnly"/> 
+	  
+	<PUBLIC:EVENT    NAME="onchange"   ID="change" />
+	<PUBLIC:EVENT    NAME="onfocus"   ID="focus" />
+	
+	<PUBLIC:METHOD   NAME="FireFocus"/>
+	<PUBLIC:METHOD   NAME="getTabList"/>
+    <PUBLIC:METHOD   NAME="getTab"/>
+    <PUBLIC:METHOD   NAME="clear"/>
+    <PUBLIC:METHOD   NAME="addPage"/>
+    <PUBLIC:METHOD   NAME="deletePage"/>
+    <PUBLIC:METHOD   NAME="isFireFocus"/>
+    <PUBLIC:METHOD   NAME="setTabText"/>
+	
+	<PUBLIC:ATTACH   EVENT="ondocumentready" HANDLER="DoInit" />
+	
+</PUBLIC:COMPONENT>
+
+
+<SCRIPT LANGUAGE="jscript">
+
+//+----------------------------------------------------------------------------
+//
+//  Global Variables
+//
+//-----------------------------------------------------------------------------
+var iSelectedIndex = null;
+var iFocusIndex = null;
+var sDisplay = null;
+var isChangePage = true;
+var isContentOnly =false;
+
+var tabs = new Array();
+var isInit;
+var gHeight='98%';
+
+//+----------------------------------------------------------------------------
+//
+//  函数名:    DoInit
+//
+//  说  明:    初始化控件,设置初始化参数
+//
+//  参  数:    none
+//
+//  返回值:    nothing
+//
+//-----------------------------------------------------------------------------
+function DoInit()
+{
+	if(cssUrl && !getCssPath(cssUrl)) {
+		window.document.createStyleSheet(cssUrl);
+	}
+	if(tagName == "container")
+	{
+		isInit = false;
+		style.visibility = 'hidden';
+		//if(ContainerWidth==null) ContainerWidth = '98%';
+		if(ContainerHeight==null) ContainerHeight = '98%';
+		
+		style.paddingTop = 8;
+		if(style.height=="")
+		{
+			style.height = gHeight;
+		}
+		
+		//createPage
+		var i = 0,iIndex=0;
+		var oPage;
+		for(i=0;i<children.length;i++)
+		{
+			oPage = element.children[i];
+			MakeTab(oPage,iIndex);
+			MakeContent(oPage,iIndex);
+			iIndex++;
+			i++;
+		}
+		if(style.width=="")
+		{
+			style.width = ContainerWidth;
+		}
+		isInit = true;
+		selectedIndex = (selectedIndex==null)? 0:selectedIndex;
+		style.visibility  = 'inherit';
+	}
+}
+
+function setHeight(pHeight)
+{
+   gHeight=pHeight;
+   style.height = gHeight;
+}
+
+function getHeight()
+{
+   return gHeight;
+}
+function cancel()
+{
+	return false;
+}
+
+function addPage(oPage)
+{
+	var i = element.children.length/2;
+	MakeTab(oPage,i);
+	element.insertAdjacentElement('beforeEnd',oPage);
+	MakeContent(oPage,i);
+}
+
+function setTabText(sId,sText)
+{
+	for(var i=0;i<tabs.length;i++)
+	{
+		var oTab = tabs[i];
+		var oPage = oTab.pageObj;
+		if(oPage.id == sId)
+		{
+			oPage.TABTEXT = sText;
+			oTab.firstChild.innerText = sText;
+			break;
+		}
+	}
+}
+
+function clear()
+{
+	element.innerHTML = '';
+	tabs = new Array();
+}
+
+function deletePage(iIndex)
+{
+    var oTab = getTab(iIndex);
+    var oContent = getContent(iIndex);
+    
+    if(iIndex == ((element.children.length/2)-1))
+    {
+        tabs.pop();
+        if(iIndex>0) tabs.push(getTab(iIndex-1));
+        if(iIndex==iSelectedIndex) iSelectedIndex = iIndex - 1;
+    }
+    
+    oTab.removeNode(true);
+    oContent.removeNode(true);
+}
+
+function setDisplay(_display)
+{
+    sDisplay = _display;
+    if(element.isComplete)
+    {
+    	var oTab = element.parentElement.getTab(element.index);
+    	oTab.style.display = _display;
+    }
+}
+
+function getDisplay()
+{
+    return sDisplay;
+}
+
+
+function setChangePage(_isChangePage)
+{
+	isChangePage = setBooleanAtt(_isChangePage);
+}
+
+function getChangePage()
+{
+	return isChangePage;
+}
+
+function setIsContentOnly(_isContentOnly)
+{
+    isContentOnly = setBooleanAtt(_isContentOnly);
+}
+
+function getContentOnly()
+{
+    return isContentOnly;
+}
+
+function setBooleanAtt(value)
+{
+	return (typeof(value)=="boolean")?value:(value=="true");
+}
+
+function MakeTab(oPage,iIndex)
+{
+	var oTabSpan = window.document.createElement("span");
+	oTabSpan.pageObj = oPage;
+	oTabSpan.index = iIndex;
+	oTabSpan.type = 'Dormant';
+	with(oTabSpan.style) {
+		borderWidth = "1px 1px 0px 1px";
+		borderStyle = "solid";
+		paddingTop = "3px";
+		marginLeft = "1px";
+		position = "relative";
+		cursor = "default";
+		zIndex = "1";
+		borderColor = "#919B9C";
+		background = "#ECE9D8";
+	}
+	oTabSpan.className = 'mpc-dormant-tab-span-background';	
+	oTabSpan.innerHTML = '<nobr class="mpc-dormant-tab-text-background" style="	background: #ECE9D8;padding: 3px 8px 2px 8px;font-family: 宋体;font-size: 9pt;font-style: normal;font-weight: bold;" title="'+oPage.TABTITLE+'">'+oPage.TABTEXT+'</nobr>';
+	oTabSpan.attachEvent("onclick", TabClick);
+	oTabSpan.attachEvent("onselectstart", cancel);
+	if(oPage.display!=null)
+	{
+		oTabSpan.style.display = oPage.display;
+	}
+	
+	if(iIndex==0)
+	{
+		insertAdjacentElement('afterBegin',oTabSpan);
+	}
+	else
+	{
+		tabs[tabs.length-1].insertAdjacentElement('afterEnd',oTabSpan);
+	}
+	tabs.push(oTabSpan);
+}
+
+function MakeContent(oPage,iIndex)
+{
+	oPage.index = iIndex;
+	with(oPage.style) {
+		marginTop = "1px";
+		border = "1px solid";
+		width = "100%";
+		height = "100%";
+		position = "relative";
+		zIndex = "2";
+		display = "none";
+		overflowY = "auto";
+		borderColor = "#919B9C";
+		background = "white";
+	}
+	oPage.className = 'mpc-dormant-content-background';
+	if(oPage.selected || oPage.selected=="true")
+	{
+		selectedIndex = iIndex;
+	}
+	oPage.isComplete = true;
+}
+
+function TabClick()
+{
+	if(isChangePage)
+	{
+		selectedIndex = getElement(event.srcElement,'span').index;
+	}
+}
+
+function SelectTab(iIndex)
+{
+	oTabSpan = getTab(iIndex);
+	if(oTabSpan.type == 'Dormant')
+	{	
+		var oTabText = oTabSpan.firstChild;
+		var oContentDiv = getContent(iIndex);
+		var oLeftTabSpan = getTab(iIndex-1);
+		var oRightTabSpan = getTab(parseInt(iIndex)+1);
+		
+		if(oLeftTabSpan != null)
+		{
+			oLeftTabSpan.style.borderRightWidth = 0;
+		}
+		if(oRightTabSpan != null)
+		{
+			oRightTabSpan.style.marginLeft = 0;
+			oRightTabSpan.style.borderLeftWidth = 0;
+		}
+		
+		
+		oTabSpan.className = "mpc-select-tab-span-background";
+		oTabSpan.style.background = '#E68B2C';
+		oTabSpan.style.marginLeft = 0;
+		oTabSpan.style.zIndex = 3;
+		
+		oTabText.className = "mpc-select-tab-text-background";
+		oTabText.style.background = 'white';
+		oTabText.style.paddingTop = 6;
+		oTabText.style.paddingLeft = (oLeftTabSpan == null)?9:10;
+		oTabText.style.paddingRight= (oRightTabSpan == null)?9:10;
+		
+		if(!isContentOnly || iIndex==0) oContentDiv.style.display = 'block';
+		oTabSpan.type = 'Active';
+	}
+}
+
+function DeselectTab()
+{
+	if(selectedIndex!=null)
+	{
+		oTabSpan = getTab(selectedIndex);
+		if(oTabSpan)
+		{
+			if(oTabSpan.type == 'Active')
+			{	
+				var oTabText = oTabSpan.firstChild;
+				var oLeftTabSpan = getTab(selectedIndex-1);
+				var oRightTabSpan = getTab(parseInt(selectedIndex)+1);
+				var oContentDiv = getContent(selectedIndex);
+				
+				if(oLeftTabSpan != null)
+				{
+					oLeftTabSpan.style.borderRightWidth = 1;
+				}
+				if(oRightTabSpan != null)
+				{
+					oRightTabSpan.style.marginLeft = 1;
+					oRightTabSpan.style.borderLeftWidth = 1;
+				}
+				
+				oTabSpan.className = "mpc-deselect-tab-span-background";
+				oTabSpan.style.background = '#ECE9D8';
+				oTabSpan.style.marginLeft = 1;
+				oTabSpan.style.zIndex = 1;
+				
+				oTabText.className = "mpc-deselect-tab-text-background";
+				oTabText.style.background = '#ECE9D8';
+				oTabText.style.paddingTop = 3;			
+				oTabText.style.paddingLeft = 8;
+				oTabText.style.paddingRight= 8;
+				
+				if(!isContentOnly) oContentDiv.style.display = 'none';
+				
+				oTabSpan.type = 'Dormant';
+			}
+		}
+	}
+}
+
+function getContent(iIndex)
+{
+	var iContentDivIndex = element.children.length/2+parseInt(iIndex,10);
+	return element.children[iContentDivIndex];
+}
+
+function getTabList()
+{
+	return tabs;
+}
+
+function getTab(iIndex)
+{
+	if(iIndex<0 || iIndex>element.children.length/2-1) return null;
+	return element.children[iIndex];
+}
+
+
+//+----------------------------------------------------------------------------
+//
+//  Function:       FireFocus
+//
+//  Description:    Fires the onfocus event
+//
+//  Arguments:      none
+//
+//  Returns:        nothing
+//
+//-----------------------------------------------------------------------------
+function FireFocus()
+{
+	//fire onfocus Event
+	oEvent = createEventObject();
+	oEvent.content = element;
+	focus.fire(oEvent);
+}
+
+
+
+function setSelectedIndex(iIndex)
+{
+    if(isNaN(parseInt(iIndex,10))) 
+    {
+    	iIndex=0;
+    }
+	if(iIndex<0) 
+	{
+		iIndex = 0;
+	}
+	if(isInit)
+	{
+		if(iIndex>element.children.length/2) 
+		{
+			iIndex = element.children.length/2-1;
+		}
+		
+		DeselectTab();
+		SelectTab(iIndex);
+		
+		if(selectedIndex!=null && selectedIndex != iIndex)
+		{
+			//fire onChage Event
+			oEvent = createEventObject();
+			oEvent.content = getContent(iIndex);
+			change.fire(oEvent);
+		}
+		iSelectedIndex = iIndex;
+		if(iFocusIndex == null || iFocusIndex!=iIndex)
+		{
+			iFocusIndex = iIndex;
+			isFireFocus(getContent(iIndex));
+		}
+	}
+	else
+	{
+		if(iIndex>children.length)
+		{
+			iIndex=children.length-1;
+		}
+        iSelectedIndex = iIndex;
+	}
+}
+
+function isFireFocus(oContent)
+{
+	if(oContent.readyState=="complete")
+	{
+		oContent.FireFocus();
+	}
+	else
+	{
+		window.setTimeout(uniqueID+'.isFireFocus('+oContent.uniqueID+')',100);	
+	}
+}
+
+function getSelectedIndex()
+{
+	return iSelectedIndex;
+}
+
+</SCRIPT>

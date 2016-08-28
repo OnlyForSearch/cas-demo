@@ -1,0 +1,27 @@
+.x-slider-horz .x-slider-bg {
+    background-position: center 44px;
+    position: absolute;
+}
+.x-slider-horz, .x-slider-horz .x-slider-end, .x-slider-horz .x-slider-inner, .x-slider-horz .x-slider-bg {
+	background-image:url(../images/SliderFill-2.0-bg.png);
+}
+
+.x-slider-vert .x-slider-bg {
+	bottom:0;
+	position:absolute;
+	background-position: 44px center;
+	
+	/* For IE */
+	line-height:0;
+}
+.x-slider-vert, .x-slider-vert .x-slider-end, .x-slider-vert .x-slider-inner, .x-slider-vert .x-slider-bg {
+	background-image:url(../images/SliderFill-2.0-v-bg.png);
+}
+
+.x-slider-horz-multi {
+    background-position: left bottom !important;
+}
+
+.x-slider-vert-multi {
+    background-position: -88px bottom !important;
+}

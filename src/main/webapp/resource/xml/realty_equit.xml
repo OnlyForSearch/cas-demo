@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<variables name="showTab">
+		<variable tabId="tab1" tabName="基本信息"/>
+		<variable tabId="tab2" tabName="资产扩容情况"/>
+		<variable tabId="tab5" tabName="主机设备详细情况"/>
+		<variable tabId="tab8" tabName="维保信息"/>
+		<variable tabId="tab7" tabName="网元详细信息"/>
+		<!-- 
+		<variable tabId="tab3" tabName="固定资产历史信息"/>
+		<variable tabId="tab4" tabName="关联固定资产"/>
+		<variable tabId="tab6" tabName="主机设备历史详情"/> 
+		-->
+	</variables>
+	<netArrt>1</netArrt><!-- 基础信息中是否显示网元信息1为显示，0为不显示 -->
+	<fields>
+		<price>0</price>
+		<company>1</company>
+	</fields>
+</properties>

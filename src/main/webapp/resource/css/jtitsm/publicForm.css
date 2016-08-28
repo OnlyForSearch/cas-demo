@@ -1,0 +1,87 @@
+.required
+{
+	color:red;
+	height:20px;
+	vertical-align:middle;
+	width:auto;
+}
+.formTable{
+	margin:30px;
+	width:94%;
+	border:1px solid #999999;
+	border-collapse:collapse;
+	padding:0px;
+	margin:auto;	
+	background-color:#f2f1f6;
+}
+.formTable td{
+	border:1px solid #999999;
+	border-collapse:collapse;
+	padding:5px;
+	margin:0px;	
+	height:auto;
+	font-weight: normal;
+}
+
+.formTable input{
+	border:1px solid #999999;
+	background-color: #ffffff;
+	height:20px;
+	width:85%;
+}
+.formTable label{
+	width:130px;
+	text-align:right;
+	border-collapse:collapse;
+	padding:5px;
+	margin:0px;	
+	height:auto;
+	font-weight: normal;
+	word-break:normal;
+	display:block;
+}
+.formTable select{
+	width:85%;
+}
+.formTable textarea{
+	border:1px solid #999999;
+	background-color: #ffffff;
+	height:70px;
+	width:96%;
+}
+
+.divDescCss{
+	color:#000000;
+	font-size:14px;
+	font-weight:bold;
+	margin:15px 40px 5px 40px;
+	text-align:left;
+}
+
+.formToolBarCss{
+	background-color: #71aa59;
+    padding: 5.5px 0px;
+    position: relative;
+    margin-bottom:15px;
+    top:expression(this.offsetParent.scrollTop);
+}
+
+.flowDivCss{
+	display:none;
+	z-index: 12001; 
+	overflow:true; 
+	background-color:#FFFFFF;
+	text-align:left; 
+	position:absolute;
+	padding:10px;
+	padding-top:7px;
+	border:1px #8f8f8f solid;
+}
+.formTitleCss{
+	text-align: left;
+    font-size:16px;
+    font-weight: bold;
+    font-family:"Î¢ÈíÑÅºÚ";
+    border: solid 0px #71aa59;
+    color:#ffffff;
+}

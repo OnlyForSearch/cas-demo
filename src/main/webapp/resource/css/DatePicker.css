@@ -1,0 +1,64 @@
+.DPFrame
+{
+	BACKGROUND-color:white;
+	/*BACKGROUND-color:transparent;*/
+	BORDER:1px solid #ABACA9;
+	font:9pt;
+	width:135;
+	height:5;
+}
+.DPYear
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+}
+
+.DPYearDes
+{
+	BACKGROUND-color:transparent;
+}
+
+.DPMonth
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+}
+
+.DPMonthDes
+{
+	BACKGROUND-color:transparent;
+}
+
+.DPDay
+{
+	BACKGROUND-color:transparent;
+	text-align:right;
+	border:0;
+	font:9pt;
+	color:blue;
+}
+
+.DPDayDes
+{
+	BACKGROUND-color:transparent;
+}
+.DPDropBtn
+{
+    cursor:hand
+}
+.calendar
+{
+    width:250;
+	height:175;
+	border:1px solid black;
+    position:absolute;
+	display:none;
+	top:100;
+	left:184;
+}

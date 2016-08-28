@@ -1,0 +1,73 @@
+/*
+	table.htc样式集
+*/
+.table-template-background {
+	background-color:#999999 !important;
+}
+
+.table-bgcolor {
+	background-color:#999999 !important;
+}
+
+.table-tr-over-color {
+	background: #F1F1C6 !important;
+}
+
+.table-tr-select-color {
+	background: #F1F1A6 !important;
+}
+
+.table-tr-normal-color {
+	background: #FFFFFF !important;
+}
+
+.table-tr-normal-color,.table-tr-over-color,.table-tr-select-color {
+	height:28px !important;
+}
+
+.table-span-desc-background {
+	background: url(../image/down_table.gif) no-repeat !important;
+	height: 8px !important;
+	width: 7px !important;
+}
+
+.table-span-asc-background {
+	background: url(../image/up_table.gif) no-repeat !important;
+	height: 8px !important;
+	width: 7px !important;
+}
+
+.table-multiply-head-td {
+	width : 40px !important;
+}
+
+.table-cls-check-height {
+		
+}
+.table-wait-div {
+	width:250px !important;
+	height:110px !important;
+	border:1px solid black !important;
+	background-color:white !important;
+}
+
+.table-wait-background {
+	
+}
+
+.table-wait-img-div-background {
+	background : url(../image/ani_wait.gif) no-repeat !important;
+	height:110px !important;
+	width:110px !important;
+}
+
+.table-wait-text-div-font {
+	font-family:宋体 !important;
+	font-size:9pt !important;
+	font-weight:bold !important;
+	margin:-70px 0 0 110px !important;
+}
+
+.table-wait-text-font-color {
+	
+}

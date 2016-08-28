@@ -1,0 +1,331 @@
+.jointInfoDiv{
+	width:800px;
+	display:none;
+	height:60%;
+	z-index: 200;
+	display:none;
+	position: absolute; left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.jointTitleDiv{
+	height:40px;
+	background-color:#3176b1;
+	cursor:move;
+}
+
+.jointCloseBut{
+	cursor: hand;
+	padding-top:3px;
+	float:right;
+}
+
+.jointTitle{
+	float:left;
+	padding-top:10px;
+	padding-left:10px;
+	font-size:16px;
+	color:#ffffff;
+}
+
+.jointTipDiv{
+	text-align:left;
+	padding-left:50px;
+	background-color:#FFFFE0;
+	height:50px;
+	font-size:15px;
+	padding-top:15px;
+	color:#8968CD;
+	vertical-align:middle;
+}
+.mailTipDiv{
+	text-align:left;
+	width:800px;
+	padding-left:10px;
+	background-color:#FFFFFF;
+	height:50px;
+	font-size:15px;
+	padding-top:15px;
+	color:#8968CD;
+	vertical-align:middle;
+}
+.mailTipLeftDiv{
+	width:800px;
+	HEIGHT: 16px; 
+	FLOAT: left;
+	margin-right:5px;
+	vertical-align:middle;
+	width:20px;
+}
+.mailTipRightDiv{
+	HEIGHT: 16px; 
+	vertical-align:middle;
+	width:662px;
+	float:left;
+	padding-left:330px;
+	font-size:14px;
+	color:#747777;
+	font-family:"Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+}
+.mailTipCenterDiv{
+	HEIGHT: 16px; 
+	vertical-align:middle;
+	width:100px;
+	float:left;
+	padding-left:5px;
+}
+
+.jointPageDiv{
+	background-color:#FFFFFF;
+	text-align:left;
+	padding-left:30px;
+	height:30px;
+	font-size:15px;
+	padding-top:5px;
+}
+
+.mailPageDiv{
+	background-color:#FFFFFF;
+	text-align:left;
+	height:30px;
+	font-size:15px;
+	padding-top:5px;
+}
+
+
+.mailPageInfoDiv{
+	background-color:rgb(246, 254, 254);
+	margin:5px 5px 5px 5px;
+	border:1px solid #bee1ed;
+	padding-left:10px;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+.mailPageInfoDiv label{
+	font-size:14px;
+	color:#747777;
+	font-family:"Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+	vertical-align:top;
+}
+.mailPageInfoDiv input{
+	border:1px solid #ccc;
+	height:24px;
+	pading-top:5px;
+}
+
+.mailPageInfoDiv textarea{
+	width:680px;
+	height:100px;
+	border:1px solid #CCCCCC;
+	overflow:hidden;
+}
+.line{
+	box-sizing: border-box;
+	color: rgb(236, 241, 241) !important;
+	display: inline-block;
+	font-family: "Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 30px;
+	margin-bottom: 5px;
+	max-width: 300px;
+}
+
+
+
+.jointPageDiv label{
+	font-size:15px;
+	width:17%;
+	vertical-align:top;
+}
+.jointPageDiv textarea{
+	width:580px;
+	height:100px;
+	border:1px solid #CCCCCC;
+	overflow:hidden;
+}
+.jointPageDiv input{
+	width:580px;
+	border:1px solid #CCCCCC;
+	height:30px;
+	padding:3px;
+}
+
+.jointBtnDiv{
+	background-color:#FFFFFF;
+	text-align:right;
+	padding-left:30px;
+	height:30px;
+	font-size:15px;
+	padding-bottom:10px;
+	padding-right:40px;
+}
+
+.btn-sure-default {
+  background-color: rgb(51, 122, 183);
+  background-image: none;
+  border-color: rgb(46, 109, 164);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18px;
+  overflow: visible;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  margin:5px;
+}
+
+.btn-sure-default-on{
+  background-color: #104E8B;
+  background-image: none;
+  border-color: rgb(46, 109, 164);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18px;
+  overflow: visible;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  margin:5px;
+}
+
+.btn-cancel {
+  background-color: #ffffff;
+  background-image: none;
+  border-color: #CCCCCC;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18px;
+  overflow: visible;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.btn-cancel-on {
+  background-color: rgb(239, 244, 254);
+  background-image: none;
+  border-color: #CCCCCC;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Î¢ÈíÑÅºÚ Bold", "Î¢ÈíÑÅºÚ";
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18px;
+  overflow: visible;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  text-align: center;
+  text-transform: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.mailInfoDiv{
+	width:800px;
+	height:60%;
+	z-index: 200; 
+	display:none;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.singleMailDiv{
+	margin-left:60px;
+	text-align:left;
+}
+
+.singleMailCopyToDiv{
+	margin-left:60px;
+	text-align:left;
+}

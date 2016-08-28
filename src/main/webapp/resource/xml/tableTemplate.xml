@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="gbk"?>
+<root>
+  <TEMPLATE>
+    <![CDATA[
+     <table id="oTotalTable_%UNIQUE_ID%" style="width:100%;" cellspacing="2" cellpadding="0">
+       <tr>
+         <td width="50%" style="padding:2px;"></td><td style="padding:2px 0 0 2px;" valign="bottom"></td>
+       </tr>
+       <tr>
+         <td colSpan="2">
+		     <TABLE border="0" cellpadding="0" style="width:100%" cellspacing="1" bgcolor="#999999" class="table-template-background" id="oDataTable_%UNIQUE_ID%">
+		          %TABLE_HEAD%
+		     </TABLE>
+		 </td>
+	   </tr>
+       <tr>
+         <td width="50%" style="padding:2px;"></td><td style="padding:2px 0 0 2px;" valign="top"></td>
+       </tr>
+	 </table>
+    ]]>
+  </TEMPLATE>
+</root>

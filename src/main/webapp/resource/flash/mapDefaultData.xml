@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <bgcolor id="color" red="111" green="111" blue="111" />
+	<area id="beijing" title="北京" value="北京" regionId="10" />
+	<area id="tianjin" title="天津" value="天津"  regionId="22"  />
+	<area id="xinjiang" title="新疆" value="新疆" regionId="99"/>
+	<area id="xizang" title="西藏" value="西藏"  regionId="891" />
+	<area id="qinghai" title="青海" value="青海"  regionId="971" />
+	<area id="gansu" title="甘肃" value="甘肃"  regionId="931" />
+	<area id="neimenggu" title="内蒙古" value="内蒙古"  regionId="471" />
+	<area id="ningxia" title="宁夏" value="宁夏"  regionId="95" />
+	<area id="shanxi" title="山西" value="山西"  regionId="351" />
+	<area id="liaoning" title="辽宁" value="辽宁"  regionId="24" />
+	<area id="jilin" title="吉林" value="吉林"  regionId="431" />
+	<area id="heilongjiang" title="黑龙江" value="黑龙江"  regionId="451" />
+	<area id="hebei" title="河北" value="河北"  regionId="311" />
+	<area id="shandong" title="山东" value="山东"  regionId="531" />
+	<area id="henan" title="河南" value="河南"  regionId="371" />
+	<area id="shannxi" title="陕西" value="陕西"  regionId="29" />
+	<area id="sichuan" title="四川" value="四川"  regionId="28" />
+	<area id="chongqing" title="重庆" value="重庆"  regionId="23" />
+	<area id="hubei" title="湖北" value="湖北"  regionId="27" />
+	<area id="anhui" title="安徽" value="安徽"  regionId="55" />
+	<area id="jiangsu" title="江苏" value="江苏"  regionId="25" />
+	<area id="shanghai" title="上海" value="上海"  regionId="21" />
+	<area id="zhejiang" title="浙江" value="浙江"  regionId="571" />
+	<area id="fujian" title="福建" value="福建"  regionId="59" />
+	<area id="jiangxi" title="江西" value="江西"  regionId="79" />
+	<area id="hunan" title="湖南" value="湖南"  regionId="73" />
+	<area id="guizhou" title="贵州" value="贵州"  regionId="851" />
+	<area id="guangxi" title="广西" value="广西"  regionId="77" />
+	<area id="guangdong" title="广东" value="广东"  regionId="20" />
+	<area id="xianggang" title="香港" value="香港"  regionId="" />
+	<area id="taiwan" title="台湾" value="台湾"  regionId="" />
+	<area id="hainan" title="海南" value="海南"  regionId="898" />
+	<area id="yunnan" title="云南" value="云南"  regionId="871" />
+</data>

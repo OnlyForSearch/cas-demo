@@ -1,0 +1,738 @@
+<html XMLNS:IE>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>选择员工</title>
+<SCRIPT src="../Common.js"></SCRIPT>
+<SCRIPT src="../Dialog.js"></SCRIPT>
+<SCRIPT src="../Error.js"></SCRIPT>
+<SCRIPT src="../ChoiceDialogAction.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+<STYLE>
+@import url(../../css/default.css);
+@import url(../../css/btn.css);
+@media all
+{
+   IE\:XmlSelect{behavior:    url(../../htc/XmlSelect.htc);}
+   IE\:button{behavior:    url(../../htc/btn.htc);}
+}
+BODY
+{
+	margin:8px 15px 0px 15px;
+	overflow:auto;
+	min-height: 100%;
+}
+
+</STYLE>
+<style type="text/css">
+div#searchDiv {position: relative;}
+div#listDiv ul {border: 1px solid #d9d6c3;text-align: left;background-color: #FFFFFF;}
+div#listDiv li {
+position: relative;
+width: 100%;
+cursor: default;
+line-height: 18px;
+text-indent: 2px;
+}
+div#listDiv li.hov {background-color: #6666FF;color: #FFFFFF;}
+div#listDiv li.hov span {color: #99FFFF;}
+div#listDiv li span {color: #009900;}
+UL {list-style-type: none;}
+.ellipsis_row{   
+  overflow:hidden;   
+  text-overflow:ellipsis;   
+  white-space:nowrap;   
+  }
+.TreeDIV{
+	WIDTH:200px;HEIGHT:300px;OVERFLOW: auto;
+	BORDER:1PX SOLID #ABACA9;
+	background:white;
+	}
+</style>
+
+</head>
+<body onload="iniPage();" onunload="winClose()" onclick="hiddenDiv()">
+<fieldset>
+<legend>搜索</legend>
+<table border="0" cellpadding="1" cellspacing="4" width="100%">
+	<tr>
+		<td width=60 nowrap >姓名搜索:</td>
+		<td>
+		    <div id='searchDiv' style="margin-top: 2px;" >
+		    <input type='text' id='searchStaffName'  size="40%" width="330px" />&nbsp;
+		        <div id='listDiv' onclick="hiddenDiv()"  style="position:absolute;visibility: hidden;left: -40px;top: 20px; width:300px;height: 200px; overFlow-x:hidden; overFlow-y:auto; display:none; z-index:100">
+		        </div>
+		        <iframe  id="DivShim"   scrolling="no" frameborder="0" style="position:absolute; top:0px; left:-40px; display:none;">
+                </iframe>
+		        <IE:button value="搜&nbsp;&nbsp;索" width="33" onclick='searchStaff()'/>
+		    </div>
+		</td>
+	</tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:5px">
+<legend>选择员工</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr height="20">
+    <td ALIGN="center">员&nbsp;工&nbsp;部&nbsp;门</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">待&nbsp;选&nbsp;员&nbsp;工</td>
+  	<td>&nbsp;</td>
+  	<td ALIGN="center">选&nbsp;中&nbsp;员&nbsp;工</td>
+  </tr>
+  <tr>
+    <td width="200" valign="top"><div id="orgTreeDiv" class='TreeDIV'></div></td>
+    <td align="center">&nbsp;&nbsp;</td>
+    
+    <td>
+    <IE:XmlSelect id="staffByOrgList" size="20" width="90"  onOptionDblClick="addBtn.click()"/>
+    <!--<select id="staffByOrgList" size="11"  style=" width:160px;" ondblclick="addBtn.click()"/>-->
+    </td>
+    <td width="33">
+    	<table border="0" cellspacing="2" cellpadding="0" width="100%" valign="center">
+    	    <tr>
+    	    	<td align="center"><IE:button value=">" width="33" onclick="staffByOrgList.addSelectedTo(selectedStaffList,true)" id="addBtn"/></td>
+    	    </tr>
+    	    <tr>
+    	    	<td align="center"><IE:button value="<" width="33" onclick="selectedStaffList.delSelectedOption()" id="delBtn"/></td>
+    	    </tr>
+    	    <tr id="multipleAddBtn" style="display:none">
+    	    	<td align="center"><IE:button value=">>" width="33" onclick="staffByOrgList.addAllTo(selectedStaffList,true)"/></td>
+    	    </tr>
+    	    <tr id="multipleDelBtn" style="display:none">
+    	    	<td align="center"><IE:button value="<<" width="33" onclick="selectedStaffList.delAllOption()"/></td>
+    	    </tr>
+   	    </table>
+    </td>
+    <td><IE:XmlSelect id="selectedStaffList" size="20" width="90" 
+    		onOptionDblClick="delBtn.click()" onMoveOptionIn="moveIn()"/></td>
+  </tr>
+</table>
+</fieldset>
+<fieldset style="margin-top:5px">
+<legend>描述信息</legend>
+<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  <tr>
+  	<table border="0" cellpadding="0" cellspacing="0" style="margin:4px">
+  		<tr>
+		    <TD colspan="7" width="655">
+				<TEXTAREA id="oReamrk" style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid;WIDTH: 100%; height: 100;"></TEXTAREA>
+			</TD>
+		  </tr>
+  	</table>
+  </tr>
+  
+</table>
+</fieldset>
+<div style="margin-top:10px;text-align:right">
+	<IE:button value="确&nbsp;&nbsp;定" width="33" onclick="enter()"/>&nbsp;
+  	<IE:button value="取&nbsp;&nbsp;消" width="33" onclick="window.close()"/>
+</div>
+<SCRIPT language="javascript">
+var actionURL = '../../../servlet/staff_manage?tag=36&id=';
+var defaultOrg= '../../../servlet/staff_manage?tag=43';
+var isMultiple;
+var isReturn = false;
+var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+var isSetRoot;
+var orgId;
+var oAction;
+var parWin;
+
+var sendRequest;
+var searchDiv;
+var listDiv;
+var searchStaffName;
+var searchUrl = '../../../servlet/staff_manage?tag=78';
+var filters;
+var isRead = false;
+var sendXml;
+
+var isKeyToDo = false;       //是否键盘操作
+var isLiOnclick = false;     //是否是Li点击操作
+
+var keyControlClass = null;  //键盘操作类
+var isChange = false;        //查询内容是否重新加载过
+
+var orgTree;
+
+function iniPage()
+{
+	keyControlClass  = new initKeyControl();
+	var params = window.dialogArguments;
+	isMultiple = params[0];
+	//有传多个orgId的情况，以逗号分隔。目前如果传多个orgId默认选中第一个。
+	orgId = params[1] ? new String(params[1]) : params[1];
+	var orgText = params[2];
+	var isReadOnly = params[3];
+	var filter = params[4];
+	var iniName = params[5];
+	var iniId = params[6];
+	isSetRoot = params[7];
+	oAction = params[8];
+	parWin = params[9];
+	if(filter!=null)
+	{
+		filters = filter.split(',');
+		staffByOrgList.filter = filter;
+	}
+	if(isMultiple)
+	{
+		staffByOrgList.multiple = true;
+		selectedStaffList.multiple = true;
+		multipleAddBtn.style.display = "inline";
+		multipleDelBtn.style.display = "inline";
+	}
+	if(!orgId)
+	{
+		xmlhttp.open("POST",defaultOrg,false);
+		xmlhttp.send();
+		var orgIdNode = xmlhttp.responseXML.selectSingleNode('//ORG_ID');
+		if(orgIdNode!=null)
+		{
+			orgId = orgIdNode.text;
+		}
+	}
+
+	if(orgId)
+	{
+		var url = actionURL+getOrgId(orgId);
+		if(!isNull(oAction) && oAction.isInit)
+		{
+			url = getXMLSrc(parWin.document.URL,oAction.init(getOrgId(orgId)));
+		}
+		getStaffList(url);		
+	}
+	if(isReadOnly)
+	{
+		isRead = true;
+	}
+
+    orgTree = new XMLTree();
+	orgTree.xmlUrl = '../../../servlet/staffmenu';
+	orgTree.setClickAction(new ClickAction());
+	orgTree.setPretreatmentAction(new newTree());
+	orgTree.setLoadAction(new LoadAction());
+	orgTree.showAt(orgTreeDiv);
+	
+	if(iniName!=null && iniName!="")
+	{
+		//修改人员挑选出现混乱的问题
+		url = "../../../servlet/staff_manage?tag=81&ids="+iniId;
+		xmlhttp.open("POST",url,false);
+		xmlhttp.send();
+		var oRows=xmlhttp.responseXML.selectNodes("/root/rowSet");
+		iniName = [],iniId = [];
+		for(var i=0;i<oRows.length;i++)
+		{
+			iniId.push(oRows[i].childNodes[0].text);
+			iniName.push(oRows[i].childNodes[1].text);
+		}		
+		selectedStaffList.addOptions(iniName.join(','),iniId.join(','));
+	}
+	initSearch();	
+}
+
+function initTree(oDoc)
+{
+	if(isSetRoot && orgId)
+	{
+		var menuRoot = oDoc.selectSingleNode('/root/Menu');
+		var vaOrg = orgId.split(','),xpath = [];
+		for(var i = 0;i< vaOrg.length;i++)
+		{
+			menuRoot.appendChild(oDoc.selectSingleNode('//MenuItem[@id='+vaOrg[i]+']'));
+			xpath[i] = "@id!=" + vaOrg[i];
+		}
+		
+		oDoc.selectNodes("/root/Menu/MenuItem["+xpath.join(" and ")+"]").removeAll();
+	}
+	if(!isNull(oAction))
+	{
+		oAction.pretreatment(oDoc);
+	}
+}
+
+function treeChangeEvent(oItem)
+{
+	if(!oItem || isRead) return;
+	var selectedValue = oItem.id;
+	if(selectedValue!="")
+	{
+		var url = actionURL+selectedValue;
+		if(!isNull(oAction))
+		{
+			var _url = oAction.change(event);
+			if(oAction.isReplace)
+			{
+				url = getXMLSrc(parWin.document.URL,_url);
+			}
+		}
+		getStaffList(url);
+	}
+	else
+	{
+		staffByOrgList.xmlsrc = "";
+	}
+}
+
+//如果以","分隔返回第一个","前面的数据,否则直接返回。
+function getOrgId(orgId)
+{
+	if(!orgId) return orgId;
+	var index = orgId.indexOf(',');
+	if(index < 0)
+		return orgId;
+	else
+		return orgId.substring(0,index);
+}
+
+function ClickAction()
+{
+	this.parent = new XMLTree_onClick_Action;;
+	this.parent.click = function(oItem)
+	{
+		treeChangeEvent(oItem);
+	}
+
+	return this.parent
+}
+
+function newTree()
+{
+	this.parent = new XMLTree_onBeforeXMLTrans_Action
+	this.parent.pretreatment = function(oDoc)
+	{
+		initTree(oDoc);		
+		return oDoc;
+	}
+	return this.parent;
+}
+
+function LoadAction() 
+{
+	this.parent = new XMLTree_onLoad_Action;
+	this.parent.load = function() 
+	{
+		if(orgId)
+		{
+			//默认选中某个组织
+			var rootOrgId;
+			if(isSetRoot && orgId)
+				rootOrgId = getOrgId(orgId);
+			else
+				rootOrgId = 0;
+			var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			var url = "../../../servlet/staff_manage?tag=82&orgId="+getOrgId(orgId)+"&rootOrgId="+rootOrgId;
+			xmlhttp.open("POST",url,false);
+			xmlhttp.send();
+			var path = xmlhttp.responseXML.selectSingleNode('//PATH');
+			if(path)			
+				orgTree.selectItemByPath(path.text.replace(/^\//g, ""));
+			else
+			{
+				var oItem = document.getElementById(getOrgId(orgId));
+				if(oItem) oItem.click();
+			}
+		}
+		
+		if(isRead)
+		{
+			orgTree.isReadOnly = true;
+			orgTreeDiv.disabled = true;			
+		}
+	}
+	
+	return this.parent;
+}
+
+function getStaffList(_url)
+{
+	staffByOrgList.xmlsrc = _url;
+}
+
+function moveIn()
+{
+	if(!isMultiple)
+	{
+		event.srcElement.setLength(0);
+	}
+}
+
+function enter()
+{
+	isReturn = true;
+	window.close();
+}
+
+function winClose()
+{
+	if(isReturn)
+	{
+		var staffObj = new Object();
+		var oSelect = selectedStaffList.getObject();
+		if(selectedStaffList.getLength()==0)
+		{
+			staffObj.id = "";
+			staffObj.name = "";
+			staffObj.remark = oReamrk.value;
+		}
+		else
+		{
+			if(isMultiple)
+			{
+				var idArray = new Array();
+				var nameArray = new Array();
+				for(i=0;i<oSelect.options.length;i++)
+				{
+					idArray.push(oSelect.options[i].value);
+					nameArray.push(oSelect.options[i].text);
+				}
+				staffObj.id = idArray.join(",");
+				staffObj.name = nameArray.join(",");
+				staffObj.remark = oReamrk.value;
+			}
+			else
+			{
+				staffObj.id = oSelect.options[0].value;
+				staffObj.name = oSelect.options[0].text;
+				staffObj.remark = oReamrk.value;
+			}
+		}
+		window.returnValue = staffObj;
+	}
+}
+
+function getXMLSrc(documentURL,xmlSrc)
+{
+	var re = /(.*\/)(.*)/g;
+	return  documentURL.replace(re, "$1"+xmlSrc);
+}
+
+function isNull(value)
+{
+    return (typeof value == "undefined" || value==null);
+}
+//初始化查询数值
+function initSearch(){
+	sendRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	listDiv = document.getElementById('listDiv');
+	searchDiv = document.getElementById('searchDiv');
+	searchStaffName = document.getElementById('searchStaffName');
+	searchStaffName.onpropertychange = searchChange;
+	listDiv.onmouseover=searchOnMouseOver;
+	listDiv.onblur= function(){
+	listDiv.style.visibility = "hidden";
+	}
+}
+//搜索
+function searchChange(){
+    var DivRef = document.getElementById('listDiv');
+    var IfrRef = document.getElementById('DivShim');
+    if(!isKeyToDo && ! isLiOnclick)
+    {
+        if(searchStaffName.value!='')
+	    {
+		    if (sendRequestSendXml()&&sendRequest.readyState == 4 && sendRequest.status == 200){	    
+			    var xmlDoc = sendRequest.responseXML;
+			    var items = xmlDoc.getElementsByTagName("row");
+			    if(items&&items.length>0)
+			    {
+				    var str = '';
+				    for(var i=0;i<items.length;i++)
+				    {
+					    var item = items[i];
+					    var path = item.text;
+					    var id = item.getAttribute('id');
+					    var name = item.getAttribute('staff_name');
+					    if(!filters||!hasItem(filters,id))
+					    {
+						    str +="<li title='"+item.text+"' onclick=\"searchItemClick('"+id+"','"+name+"','0')\" class='ellipsis_row'>&nbsp;&nbsp;"+"<span id='staff_"+id+"' spanid='"+id+"' spanname='"+name+"'>"+path+"</span></li>";
+					    }
+				    }
+
+				    DivRef.style.visibility = "visible";
+				    DivRef.innerHTML = "<ul>"+str+"</ul>";	
+				   
+				    DivRef.style.display = "block";
+                    IfrRef.style.width = DivRef.offsetWidth;
+                    IfrRef.style.height = DivRef.offsetHeight;
+                    IfrRef.style.width = 260;
+                    //IfrRef.style.width = DivRef.style.width;
+                    if(20*(items.length) > 200)
+                    {
+                        IfrRef.style.height = DivRef.style.height;
+                    }
+                    else
+                    {
+                        IfrRef.style.height = 20*(items.length);
+                    }
+                    IfrRef.style.top = DivRef.style.top;
+                    //IfrRef.style.left = DivRef.style.left;
+                    IfrRef.style.left = 0;
+                    IfrRef.style.zIndex = DivRef.style.zIndex - 1;
+                    IfrRef.style.display = "block";
+                    isChange = true;
+			    }
+		    }	
+	    }
+	    else
+	    {
+		    listDiv.style.visibility = "hidden";
+		    IfrRef.style.display = "none";
+	    }
+    }
+    else
+    {
+        isKeyToDo = false;
+        isLiOnclick = false;
+    }
+
+}
+
+//鼠标上移
+function searchOnMouseOver(e){	
+	e||(e=window.event);
+	var eveSrc = (typeof e.target != "undefined")?e.target:e.srcElement;
+	eveSrc = eveSrc.tagName=="SPAN"?eveSrc.parentNode:eveSrc;
+	if(eveSrc.tagName=="LI")
+	{
+		var eveParent = eveSrc.parentNode;
+		for(i=0;i<eveParent.childNodes.length;i++)
+		eveParent.childNodes[i].style.backgroundColor = "";
+		eveSrc.style.backgroundColor='#d3d7d4';
+	}
+}
+//单击事件
+function searchItemClick(id,name,tag){
+    if(tag == "0")/// lionclik 
+	{
+		isLiOnclick = true;
+	}
+	else if(tag == "1")
+	{
+	    isKeyToDo = true;
+	}
+	
+	var selectOjb = selectedStaffList.getObject();
+	var option = document.createElement("OPTION");
+	option.value = id;
+	option.text = name;
+	if(isMultiple){
+		addSelectOption(selectOjb,option);
+	}else{
+		if(selectOjb.options.length<=1)
+		{
+			selectOjb.options.length=0;
+			selectOjb.add(option);
+		}
+	}
+	searchStaffName.value=name;
+	listDiv.style.visibility = "hidden";
+    var IfrRef = document.getElementById('DivShim');
+	IfrRef.style.display = "none";
+
+}
+//判断是否已经存在option后再添加option
+function addSelectOption(selectOjb,option)
+{
+	var flag = true;
+	for(var j=0;j<selectOjb.options.length;j++)
+	{
+		if(selectOjb.options[j].value==option.value)
+		{
+			flag = false;
+			break;
+		}
+	}
+	if(flag)
+	{
+		selectOjb.add(option);
+	}
+}
+//搜索
+function searchStaff(){
+	
+	if(searchStaffName.value!='')
+	{
+		if (sendRequestSendXml()&&sendRequest.readyState == 4 && sendRequest.status == 200){
+			var xmlDoc = sendRequest.responseXML;
+			var items = xmlDoc.getElementsByTagName("row");
+			var staffListObj = staffByOrgList.getObject();
+			staffListObj.options.length=0;
+			if(items&&items.length>0)
+			{
+				for(var i=0;i<items.length;i++)
+				{
+					var option = document.createElement("OPTION");
+					var id = items[i].getAttribute('id');
+					if(!filters||!hasItem(filters,id))
+					{
+						option.value = id;
+						option.text = items[i].getAttribute('staff_name');
+						staffListObj.add(option);
+					}
+				
+				}
+			}
+		}	
+	}else{
+		MMsg('请输入查询参数...');
+	}
+}
+function sendRequestSendXml(){
+
+	if(isRead&&!orgId)	//只读无默认：不查询
+	{
+		return false;
+	}
+	var sendXml = new ActiveXObject("Microsoft.XMLDOM");
+	var root = sendXml.createElement("root");
+	sendXml.appendChild(root);
+	//只读有默认：只查询该组织
+	if((isRead&&orgId)||(isSetRoot&&orgId)){
+		var orgObj = sendXml.createElement("orgId");	
+		orgObj.text = orgId;
+		root.appendChild(orgObj);
+	}
+	var searchStaffNameObj = sendXml.createElement("searchStaffName");	
+	searchStaffNameObj.text=searchStaffName.value;
+	root.appendChild(searchStaffNameObj);
+	
+	var currentPage = sendXml.createElement("currentPage");
+	currentPage.text=1;
+	root.appendChild(currentPage);
+
+	sendRequest.open("POST",searchUrl, false);
+	sendRequest.send(sendXml);
+	return true;
+}
+function hiddenDiv(){
+    var IfrRef = document.getElementById('DivShim');
+    if(listDiv != undefined)
+    {
+        if(listDiv.style)
+	    {
+		    if(listDiv.style.visibility!="hidden"&& window.event.srcElement!=listDiv)
+		    {
+			    listDiv.style.visibility = "hidden";
+		    }	
+	    }
+    	
+        if(listDiv.style.visibility == "hidden")
+        {
+    	    listDiv.innerHTML = "";
+            IfrRef.style.display = "none";
+        }
+    }
+    //单击IFRAME空白处
+    if(window.event.srcElement == listDiv )
+    {
+          listDiv.innerHTML = "";
+          listDiv.style.visibility = "hidden";
+          IfrRef.style.display = "none";
+    }
+}
+
+
+</SCRIPT>
+<script type="text/javascript">
+var initKeyControl = function ()
+{
+//----方向键控制选项的移动--begin----
+var upKeyCode    = 38;   //
+var downKeyCode  = 40;   //
+var enterKeyCode = 13;   // 
+
+//this.oInputObj =document.getElementById("searchStaffName");//
+//var oInput = this.oInputObj;
+var oInput = document.getElementById("searchStaffName");//
+oInput.options = document.getElementById("listDiv").getElementsByTagName("li");
+oInput.seletedIndex = -1;
+oInput.focus();
+ 
+function clearSelectedOptBgColor(target)
+{
+    for(var i = 0 ;i < target.options.length ; i ++)
+    {
+        if (target.seletedIndex >= 0 && target.options[i] !=undefined)
+        {
+            target.options[i].style.backgroundColor = "";
+        }
+    }
+}
+
+function setSelectedOptBgColor(target)
+{
+    if(target.options[target.seletedIndex] !=undefined)
+    {   
+        target.options[target.seletedIndex].style.backgroundColor = "#d3d7d4";
+    }
+    
+}
+
+oInput.onkeyup = function(event){
+    if (event == undefined)
+    {
+        event = window.event;
+    }
+        
+    if(isChange)
+    {
+        this.seletedIndex = -1;
+        isChange = false;
+    }
+    
+    switch (event.keyCode)
+    {
+        case upKeyCode:
+            clearSelectedOptBgColor(this);
+            isKeyToDo = true;
+            this.seletedIndex--;
+            if (this.seletedIndex < 0)
+            {
+                isKeyToDo = true;
+                this.seletedIndex = this.options.length - 1;
+                document.getElementById('listDiv').scrollTop = document.getElementById('listDiv').scrollHeight;
+            }
+            setSelectedOptBgColor(this);
+            if(this.seletedIndex <= 10)
+            {
+                document.getElementById('listDiv').scrollTop -= 17* (10 - this.seletedIndex);
+            }
+            break;
+
+        case downKeyCode:
+            clearSelectedOptBgColor(this);
+            isKeyToDo = true;
+            this.seletedIndex++;
+            if (this.seletedIndex >= this.options.length)
+            {
+                isKeyToDo = true;
+                this.seletedIndex = 0;
+                document.getElementById('listDiv').scrollTop = 0;
+            }
+            setSelectedOptBgColor(this);
+            if(this.seletedIndex >=10)
+            {
+                document.getElementById('listDiv').scrollTop = 20* (this.seletedIndex -10);
+            }
+            break;
+
+        case enterKeyCode:
+            isKeyToDo = true;
+            if(this.options[this.seletedIndex] != undefined)
+            {
+                var tmpid  = this.options[this.seletedIndex].children[0].spanid;
+                var tmpname  = this.options[this.seletedIndex].children[0].spanname;
+                searchItemClick(tmpid,tmpname,'1')
+                hiddenDiv();
+            }
+            break;
+    }
+};
+}
+//---end-----------
+</script>
+</body>
+</html>

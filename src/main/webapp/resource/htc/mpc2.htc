@@ -1,0 +1,221 @@
+<PUBLIC:COMPONENT tagname="mpc2" literalcontent="true">
+	<PUBLIC:PROPERTY NAME="width"/>
+	<PUBLIC:PROPERTY NAME="height"/>
+	<PUBLIC:PROPERTY NAME="id"/>
+	<PUBLIC:PROPERTY NAME="selectedIndex" PUT="setSelectedIndex" GET="getSelectedIndex"/>
+	<PUBLIC:METHOD NAME="selected"/>
+	<PUBLIC:METHOD NAME="getPages"/>
+	<PUBLIC:ATTACH event="oncontentready" onevent="init()" />
+</PUBLIC:COMPONENT>
+<SCRIPT language="JScript">
+var SELECTED_BORDER = '#49598E';
+var SELECTED_BACKGROUND = '#7996C3';
+var SELECTED_COLOR = 'white';
+var UNSELECTED_BORDER = '#7996C3';
+var UNSELECTED_BACKGROUND = '#D5DFEC';
+var UNSELECTED_COLOR = '#49598E';
+var TAB_HEIGHT = 20;
+
+var oMpcDoc;
+var idTab,idContent;
+var sMapStyle,sTabStyle,sBorderStyle,sContentStyle,sTabSpanStyle;
+var iMaxZIndex;
+var iSelectedIndex = 0;
+
+function init()
+{
+	element.style.display = 'none';
+	iniXml();
+	iniStyle();
+	iniMpc();
+}
+
+function iniXml()
+{
+	oMpcDoc = new ActiveXObject("Microsoft.XMLDOM");
+	oMpcDoc.async = false;
+	oMpcDoc.loadXML('<mpc_root xmlns:IE="bossnm" xmlns:bar="bossnm">'+element.innerHTML+'</mpc_root>');
+}
+
+function iniStyle()
+{
+	sMapStyle = 'width:'+element.width+';'
+              + 'height:'+element.height+';'
+              + 'overflow:hidden;'
+              + 'position:relative;'
+              
+    sTabStyle = 'width:100%;'
+              + 'height:'+TAB_HEIGHT+';'
+              + 'overflow:hidden;padding-left:10px;'
+              
+    sBorderStyle = 'background:#7996C3;height:2;width:100%;overflow:hidden;'
+    
+    sContentStyle = 'position:absolute;'
+                  + 'left:0;'
+                  + 'top:0;'
+                  + 'width:100%;'
+                  + 'height:100%;'
+                  + 'padding:'+(TAB_HEIGHT+2)+' 0 0 0;'
+                  + 'overflow:hidden;'
+                  
+	sTabSpanStyle = 'height:100%;'
+				  + 'overflow:hidden;'
+	              + 'position:relative;'
+	              + 'cursor:default;'
+}
+
+function iniMpc()
+{
+	var oMpc = document.createElement('div');
+	element.insertAdjacentElement('afterEnd',oMpc);
+	oMpc.id = element.id;
+	oMpc.style.cssText = sMapStyle;
+	
+	idTab = document.uniqueID;
+	idContent = document.uniqueID;
+	oMpc.innerHTML = '<div id="'+idTab+'" style="'+sTabStyle+'"></div>'
+	               + '<div style="'+sBorderStyle+'"></div>'
+	               + '<div id="'+idContent+'" style="'+sContentStyle+'"></div>';
+	               
+	var sTabHtml = '',sContentHtml = '';
+	var oPageList = oMpcDoc.selectNodes('/mpc_root/IE:page');
+	iMaxZIndex = oPageList.length;
+	for(var i=0;i<iMaxZIndex;i++)
+	{
+		sTabHtml += createTab(oPageList[i].getAttribute("tab"),i);
+		sContentHtml += createContent(oPageList[i],i);
+	}
+	eval(idTab).innerHTML = sTabHtml;
+	eval(idContent).innerHTML = sContentHtml;
+	
+	var pageList = eval(idContent).childNodes;
+	for(var i=0;i<pageList.length;i++)
+	{
+		pageList[i].firstChild.style.display = 'block';
+	}
+}
+
+function createTab(sText,iIndex)
+{
+	var borderColor;
+	var backgroundColor;
+	var color;
+	var zIndex;
+	if(iSelectedIndex == iIndex)
+	{
+		borderColor = SELECTED_BORDER;
+		backgroundColor = SELECTED_BACKGROUND;
+		color = SELECTED_COLOR;
+		zIndex = iMaxZIndex + 1;
+	}
+	else
+	{
+		borderColor = UNSELECTED_BORDER;
+		backgroundColor = UNSELECTED_BACKGROUND;
+		color = UNSELECTED_COLOR;
+		zIndex = iMaxZIndex-iIndex;
+	}
+	
+	var sHtml = '<span style="'+sTabSpanStyle+'left:'+(-10*iIndex)+';z-index:'+zIndex+'" tabIndex='+iIndex+' onClick="'+element.uniqueID+'.selected('+iIndex+')">'
+	          +   '<span style="vertical-align:bottom;width:1px;height:'+(TAB_HEIGHT-5)+';overflow:hidden;border-top:'+(TAB_HEIGHT-5)+' solid '+borderColor+';background:'+backgroundColor+'"></span>'
+	          +   '<span style="vertical-align:bottom;width:1px;height:'+(TAB_HEIGHT-3)+';overflow:hidden;border-top:2 solid '+borderColor+';background:'+backgroundColor+'"></span>'
+	          +   '<span style="vertical-align:bottom;width:1px;height:'+(TAB_HEIGHT-2)+';overflow:hidden;border-top:1 solid '+borderColor+';background:'+backgroundColor+'"></span>'
+	          +   '<span style="vertical-align:bottom;width:2px;height:'+(TAB_HEIGHT-1)+';overflow:hidden;border-top:1 solid '+borderColor+';background:'+backgroundColor+'"></span>'
+	          +   '<span style="vertical-align:bottom;height:'+TAB_HEIGHT+';overflow:hidden;padding:4 10 0 10;color:'+color+';border-top:1 solid '+borderColor+';background:'+backgroundColor+'">'
+	          +      sText
+	          +   '</span>';
+    for(var i=TAB_HEIGHT-1;i>=1;i--)
+    {	
+    	sHtml += '<span style="vertical-align:bottom;width:1;height:'+i+'px;overflow:hidden;border-top:1 solid '+borderColor+';background:'+backgroundColor+'"></span>';
+    }
+    sHtml += '</span>';
+	return sHtml;
+}
+
+function createContent(oContent,iIndex)
+{
+	var isDisplay = (iSelectedIndex == iIndex)?'block':'none';
+	sHtml = '<div style="width:100%;height:100%;overflow:auto;'
+	      +     'display:'+isDisplay+';'
+	      +     'background:'+oContent.getAttribute("background")+'" '
+	      +   '>'
+	      +     oContent.xml
+	      + '</div>';
+	return sHtml;
+}
+
+function selected(iIndex)
+{
+	element.selectedIndex = iIndex;
+}
+
+function setContentState(oContent,state)
+{
+	oContent.style.display = state;
+}
+
+function setTabState(oTab,state)
+{
+	var borderColor;
+	var backgroundColor;
+	var color;
+	var zIndex;
+	
+	if(state == 1)
+	{
+		borderColor = SELECTED_BORDER;
+		backgroundColor = SELECTED_BACKGROUND;
+		color = SELECTED_COLOR;
+		zIndex = iMaxZIndex + 1;
+	}
+	else
+	{
+		borderColor = UNSELECTED_BORDER;
+		backgroundColor = UNSELECTED_BACKGROUND;
+		color = UNSELECTED_COLOR;
+		zIndex = iMaxZIndex - oTab.tabIndex;
+	}
+	
+	oTab.style.zIndex = zIndex;
+	for(var i=0;i<oTab.childNodes.length;i++)
+	{
+		var oTabItem = oTab.childNodes[i];
+		oTabItem.style.borderTopColor = borderColor;
+		oTabItem.style.backgroundColor = backgroundColor;
+		if(i==4)
+		{
+			oTabItem.style.color = color;
+		}
+	}
+}
+
+function getPages()
+{
+	var pageList = eval(idContent).childNodes;
+	var listReturn = new Array(pageList.length);
+	for(var i=0;i<pageList.length;i++)
+	{
+		listReturn[i] = pageList[i].firstChild;
+	}
+	return listReturn;
+}
+
+function getSelectedIndex()
+{
+	return iSelectedIndex;
+}
+
+function setSelectedIndex(_iSelectedIndex)
+{
+	var oTab = eval(idTab).childNodes[iSelectedIndex];
+	var oContent = eval(idContent).childNodes[iSelectedIndex];
+	setTabState(oTab,0);
+	setContentState(oContent,'none');
+	oTab = eval(idTab).childNodes[_iSelectedIndex];
+	oContent = eval(idContent).childNodes[_iSelectedIndex];
+	setTabState(oTab,1);
+	setContentState(oContent,'');
+	iSelectedIndex = _iSelectedIndex;
+}
+</SCRIPT>
+</html>

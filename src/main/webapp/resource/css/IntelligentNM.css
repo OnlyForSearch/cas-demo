@@ -1,0 +1,256 @@
+body{
+	font-size:12px; 
+	font-family:"Î¢ÈíÑÅºÚ"; 
+	font-weight:normal; 
+	margin:0; 
+	padding:0; 
+	overflow:auto; 
+	background-color:#05070A;
+	
+	scrollbar-3dlight-color:#0E232F; 
+	scrollbar-highlight-color:#0E232F;
+	scrollbar-face-color:#0A0F15; 
+	scrollbar-arrow-color:#173647;
+	scrollbar-shadow-color:#0E232F;
+	scrollbar-darkshadow-color:#07141C; 
+	scrollbar-base-color:#07141C; 
+	scrollbar-track-color:#07141C;
+}
+img{border:0;}
+
+a.cMenuButDef       {float:left; width:96px; height:25px; font-size:14px; line-height:23px; color:#FFF; margin: 1px 5px; background:url(/resource/image/IntelligentNM/childMenu.png) 0 0 no-repeat; text-align:center; cursor:hand; text-decoration:none;}
+a.cMenuButDef:hover {float:left; width:96px; height:25px; font-size:14px; line-height:23px; color:#F00; margin: 1px 5px; background:url(/resource/image/IntelligentNM/childMenu.png) 0 -25px no-repeat; text-align:center; cursor:hand; text-decoration:none;}
+a.cMenuButDef:active{float:left; width:96px; height:25px; font-size:14px; line-height:23px; color:#FFF; margin: 1px 5px; background:url(/resource/image/IntelligentNM/childMenu.png) 0 0 no-repeat; text-align:center; cursor:hand; text-decoration:none;}
+.cMenuButSel {float:left; width:96px; height:25px; font-size:14px; line-height:23px; color:#FFFFFF; margin: 1px 5px; background:url(/resource/image/IntelligentNM/childMenu.png) 0 -25px no-repeat; text-align:center; cursor:hand; text-decoration:none; font-weight:bold;}
+
+.mMenuUl{
+	width:100%;
+	padding:0px;
+	margin:0px;
+	border:1px solid #2D5B6C;
+	border-top-width:0;
+}
+.mMenuUl li{
+	float:left;
+	width:100%;
+	color:#FFF;
+	font-size:15px;
+	word-break:break-all;
+	margin:0;
+	padding:0;
+	background-color:#0F232A;
+	border-bottom:1px solid #1D3842;
+	cursor:hand;
+}
+
+a.mMenuList       {width:100%;height:100%;font-size:15px;color:#FFF;text-decoration:none;padding:2px 12px;background-color:#0F232A;}
+a.mMenuList:hover {width:100%;height:100%;font-size:15px;color:#F00;text-decoration:none;padding:2px 12px;background-color:#467588;filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#64A2BB, endcolorstr=#152D35);}
+a.mMenuList:active{width:100%;height:100%;font-size:15px;color:#FFF;text-decoration:none;padding:2px 12px;background-color:#0F232A;}
+
+.jkMainTable {border-collapse:collapse; width:98%; margin: 0 1%; text-align:center;}
+.jkMainTable th {border:1px #595959 solid; height:27px; padding:4px 0 0 10px; background:url(/resource/image/IntelligentNM/jkTbg.png); vertical-align:top;}
+.jkMainTable th .thTitle{float:left;font-size:14px; line-height:17px; font-family:'Î¢ÈíÑÅºÚ'; font-weight:normal; color:#FFFFFF; text-align:left;}
+.jkMainTable th .thMore{float:right;margin-right:10px; font-size:13px; line-height:17px; font-family:'Î¢ÈíÑÅºÚ'; font-weight:normal; color:#FFFFFF; text-align:right;}
+.jkMainTable th .thBut{float:right;width:14px;height:14px;padding:0;margin:2px 10px 0 0;cursor:hand;}
+.jkMainTable td {border:1px #595959 solid; background:url(/resource/image/IntelligentNM/jkTCbg.png) repeat;}
+
+
+
+.reportPageUl   { width:12px; padding:0px; margin:0px; border-top-width:0;}
+.reportPageUl li{ width:12px; height:14px; margin:0 0 1px 1px; padding:0; list-style:none; }
+.reportPageSel  {width:12px;height:14px;line-leight:10px;font-size:10px;color:#FFF;font-family:'Î¢ÈíÑÅºÚ';text-decoration:none;padding:0;margin:0;text-align:center;background-color:#CE4B2D;border:1px solid #9F9F9F;}
+a.reportPage       {width:12px;height:14px;font-size:10px;color:#FFF;font-family:'Î¢ÈíÑÅºÚ';text-decoration:none;line-leight:10px;padding:0;margin:0;text-align:center;background-color:#595959;border:1px solid #595959;}
+a.reportPage:hover {width:12px;height:14px;font-size:10px;color:#FFF;font-family:'Î¢ÈíÑÅºÚ';text-decoration:none;line-leight:10px;padding:0;margin:0;text-align:center;background-color:#CE4B2D;border:1px solid #9F9F9F;}
+a.reportPage:active{width:12px;height:14px;font-size:10px;color:#FFF;font-family:'Î¢ÈíÑÅºÚ';text-decoration:none;line-leight:10px;padding:0;margin:0;text-align:center;background-color:#595959;border:1px solid #595959;}
+
+
+
+.conBorder{
+	float:left;
+	width:22.9%;
+	height:270px;
+	border:1px solid #ccc;
+	margin:0 1%;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#182F38, endcolorstr=#00080C);
+}
+.conTitle{
+	font-size:15px;
+	color:#FFF;
+	text-align:center;
+	font-weight:bold;
+	padding:5px 0;
+}
+.sysListUl{
+	width:100%;
+	padding:0px;
+	margin:0px;
+	border:0px solid #ccc;
+}
+.sysListUl li{
+	float:left;
+	width:45.5%;
+	color:#FFF;
+	font-size:14px;
+	height:40px;
+	word-break:break-all;
+	line-height:14px;
+	padding:5px;
+	margin:5px 2%;
+	text-align:center;
+	background-color:#677E76;
+	border:1px solid #aaa;
+}
+.spLine{
+	height:1px;
+	line-height:1px;
+	font-size:1px;
+	border-top:1px dashed #ccc;
+	margin:7px 0;
+}
+
+
+
+.tabDef{
+	float:left;
+	margin:0 2px;
+	padding:0;
+	cursor:hand;
+}
+.tabDef .tab_left{
+	float:left;
+	width:auto;
+	height:22px;
+	margin:0;
+	padding:0 0 0 4px;
+	background:url(/resource/image/IntelligentNM/tabBut.png) 0 26px repeat;
+}
+.tabDef .tab_left .tab_font{
+	color:#000;
+	font-size:14px;
+	word-break:break-all;
+	margin:0 13px;
+	line-height:14px;
+}
+.tabDef .tab_right{
+	float:left;
+	width:4px;
+	height:22px;
+	background:url(/resource/image/IntelligentNM/tabBut.png) 100% 26px repeat;
+}
+
+.tabSel{
+	float:left;
+	margin:0 2px;
+	padding:0;
+	cursor:hand;
+}
+.tabSel .tab_left{
+	float:left;
+	width:auto;
+	height:22px;
+	margin:0;
+	padding:0 0 0 4px;
+	background:url(/resource/image/IntelligentNM/tabBut.png) left top repeat;
+}
+.tabSel .tab_left .tab_font{
+	color:#FFF;
+	font-size:14px;
+	word-break:break-all;
+	margin:0 13px;
+	line-height:14px;
+}
+.tabSel .tab_right{
+	float:left;
+	width:4px;
+	height:22px;
+	background:url(/resource/image/IntelligentNM/tabBut.png) right top repeat;
+}
+
+.ssList{
+	padding:3px 5px;
+}
+.ssList ul{
+	padding:0px;
+	margin:0;
+	border:0px solid #ccc;
+}
+.ssList li{
+	list-style:none;
+	width:100%;
+	height:85px;
+	padding:0;
+	margin:5px 0;
+	text-align:center;
+	background-color:#000000;
+	border:1px solid #797979;
+	cursor:hand;
+}
+.ssList li .itemImg{
+	width:100%;
+	height:55px;
+	padding:0;
+	margin:0;
+	border:1px solid #000000;
+	background:url(/resource/image/IntelligentNM/sys.png) center center no-repeat;
+}
+.ssList li .itemTitle{
+	width:100%;
+	height:28px;
+	color:#00FF00;
+	font-size:15px;
+	line-height:28px;
+	padding:0;
+	margin:0;
+	text-align:center;
+	background-color:#060606;
+	border-width:0;
+}
+
+.jkWindTable {width:350px;border-collapse:collapse;margin:0; text-align:center; border:1px #FFF solid;}
+.jkWindTable th {height:27px; font-size:14px; line-height:14px; font-family:"Î¢ÈíÑÅºÚ"; font-weight:normal; color:#ccc; text-align:left; padding:0 0 0 10px; filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#5E5E5E, endcolorstr=#020202);}
+.jkWindTable td {height:120px; color:#fff; vertical-align:top; background-color:#282929;}
+
+.conItem	   {width:100%;padding:5px 0;}
+.conItem_title {float:left;;width:120px;height:16px;line-height:12px;padding:3px 0 0 0; font-family:"Î¢ÈíÑÅºÚ";text-align:right;font-size:13px;color:#FFF;}
+.conItem_score {float:left;width:100px;height:16px; text-align:center;border:0px solid #ccc;margin:0 2px;padding:2px 0 0 0;color:#000;font-family: ËÎÌå; font-size:12px; font-weight: normal; font-style: normal;}
+.conItem_remark{float:left;;width:100px;height:16px; font-family:"Î¢ÈíÑÅºÚ";line-height:12px;padding:3px 0 0 0;text-align:left;font-size:12px;color:#FFF; }
+
+
+
+.servicePandectList{
+	padding:0;
+	margin:0;
+}
+.servicePandectList ul{
+	width:100%;
+	padding:0px;
+	margin:0;
+	border:0px solid #ccc;
+}
+.servicePandectList li{
+	float:left;
+	list-style:none;
+	width:129px;
+	padding:0;
+	margin:0 7%;
+	text-align:center;
+	cursor:hand;
+}
+.servicePandectList li .itemImg{
+	width:100%;
+	height:127px;
+	padding:0;
+	margin:0;
+}
+.servicePandectList li .itemTitle{
+	width:100%;
+	height:23px;
+	color:#FFFFFF;
+	font-size:15px;
+	line-height:24px;
+	padding:0;
+	margin:5px 0;
+	text-align:center;
+	background-color:#00CC00;
+	border-width:0;
+}

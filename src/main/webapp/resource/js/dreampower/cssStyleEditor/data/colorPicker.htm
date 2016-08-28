@@ -1,0 +1,208 @@
+<html>
+<head>
+<title>Color Picker</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="colorPicker.js"></SCRIPT>
+<body onLoad="init()">
+<div style="position:absolute; width:373px; z-index:1; height: 176px;"> 
+  <table width="373" height="176" border="0" align="center" cellpadding="0" cellspacing="5">
+    <tr> 
+      <td valign="top"><table border="0" cellspacing="1" cellpadding="0">
+          <tr> 
+            <td><img width="6" height="6"></td>
+            <td valign="top"><img id=imgTopArrow src="bottomArrow.gif" class="imgArrow" onMouseMove="getColorFromXY(this.style.pixelLeft-oX1,imgLeftArrow.style.pixelTop-oY1)"></td>
+            <td ></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr> 
+            <td valign="top"><img id=imgLeftArrow src="rightArrow.gif" class="imgArrow" onMouseMove="getColorFromXY(imgTopArrow.style.pixelLeft-oX1,this.style.pixelTop-oY1)"></td>
+            <td class="downBorder"><img id="imgHue" onDrag="return false" src="hueBoard.jpg" onMouseDown="this.style.cursor='crosshair';this.flag='1';getColorFromXY(event.offsetX,event.offsetY);" onMouseUp="this.flag='0';this.style.cursor=''" onMouseMove="if(this.flag=='1'){getColorFromXY(event.offsetX,event.offsetY);}" ondragleave="this.flag='0'"></td>
+            <td><img width=5></td>
+            <td class="downBorder">
+			<table id=tblWhiteness onMouseMove="if(this.flag)tblWhitenessMD();" onMouseup="this.flag=0;" onMouseDown="this.flag=1;tblWhitenessMD();" width="16" height="128" border="0" cellpadding="0" cellspacing="0">
+                <script language=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TR BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '><TD></TD></TR>');
+</script>
+              </table></td>
+            <td valign="top"><img onMouseMove="HBWchangeColor()" id=imgRightArrow src="leftArrow.gif" class="imgArrow"></td>
+          </tr>
+          <tr> 
+            <td></td>
+            <td height="5"></td>
+            <td ></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table></td>
+      <td width="37%"><table width="100%" border="0" cellspacing="2" cellpadding="0">
+          <tr> 
+            <td height="23" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr> 
+                  <td width="110"><table width="100" height="21" border="0" cellpadding="0" cellspacing="0" class="downBorder">
+                      <tr> 
+                        <td bgcolor="#003300" id="tdOldColor"></td>
+                        <td bgcolor="#990000" id="tdNewColor"></td>
+                      </tr>
+                    </table></td>
+                  <td align="center">Hex:</td>
+                  <td width="21" align="right"><input id="txtHex" type="text" class="txtDownBorder" maxlength="7" onKeyUp=if(event.keyCode==13){txtHexChange(this)} onchange=txtHexChange(this)></td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr> 
+            <td><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                <tr> 
+                  <td align="right">R:</td>
+                  <td width="130" class="downBorder"><img id=imgR class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('R')" id=tblR width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                      <TR> 
+                        <SCRIPT LANGUAGE=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TD  BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '></TD>');
+</SCRIPT>
+                      </TR>
+                    </table></td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input id="txtR" type="text" class="txtNoBorder" maxlength="3" onKeyUp=txtRGBHSV_change(this,'R') onchange=txtRGBHSV_change(this,'R')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'R',true)" onMouseUp="arrowMU(this);" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'R',false)" onMouseUp="arrowMU(this)" onDragLeave="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr> 
+                  <td align="right">G:</td>
+                  <td width="130" class="downBorder"><img id=imgG class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('G')"  id=tblG width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                      <TR> 
+                        <SCRIPT LANGUAGE=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TD  BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '></TD>');
+</SCRIPT>
+                      </TR>
+                    </table></td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input id="txtG" type="text" class="txtNoBorder" maxlength="3"  onKeyUp=txtRGBHSV_change(this,'G') onchange=txtRGBHSV_change(this,'G')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'G',true)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'G',false)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr> 
+                  <td align="right">B:</td>
+                  <td width="130" class="downBorder"><img id=imgB class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('B')"  id=tblB width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                      <TR> 
+                        <SCRIPT LANGUAGE=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TD  BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '></TD>');
+</SCRIPT>
+                      </TR>
+                    </table></td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input type="text" class="txtNoBorder" id="txtB" maxlength="3" onKeyUp=txtRGBHSV_change(this,'B') onchange=txtRGBHSV_change(this,'B')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'B',true)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'B',false)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr> 
+            <td><table width="100%" border="0" cellspacing="2" cellpadding="0">
+                <tr> 
+                  <td align="right">H:</td>
+                  <td width="130" class="downBorder"><img id=imgH class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('H')"  id=tblH width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                    <SCRIPT LANGUAGE=JavaScript>
+  for(i = 0; i <12; i ++)
+     document.write('<TR><TD background="hueBoard.jpg"></TD></TR>');
+</SCRIPT>
+                    </table></td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input type="text" class="txtNoBorder" id="txtH" maxlength="3" onKeyUp=txtRGBHSV_change(this,'H') onchange=txtRGBHSV_change(this,'H')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'H',true)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'H',false)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr> 
+                  <td align="right">S:</td>
+                  <td width="130" class="downBorder"><img id=imgS class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('S')"  id=tblS width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                      <tr> 
+                        <script language=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TD  BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '></TD>');
+</script>
+                      </tr>
+                    </table> </td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input type="text" class="txtNoBorder" id="txtS" maxlength="3" onKeyUp=txtRGBHSV_change(this,'S') onchange=txtRGBHSV_change(this,'S')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'S',true)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'S',false)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr> 
+                  <td align="right">V:</td>
+                  <td width="130" class="downBorder"><img id=imgV class="imgBar"> 
+                    <table onMouseDown="tblRGBHSV_MD('V')"  id=tblV width="128" height="14" border="0" cellpadding="0" cellspacing="0">
+                      <TR> 
+                        <SCRIPT LANGUAGE=JavaScript>
+  for(i = 0; i <= 255; i +=4)
+     document.write('<TD  BGCOLOR=#' + toHex(i) + toHex(i) + toHex(i) + '></TD>');
+</SCRIPT>
+                      </TR>
+                    </table></td>
+                  <td><img width="1"></td>
+                  <td class="downBorder"><input type="text" class="txtNoBorder" id="txtV" maxlength="3" onKeyUp=txtRGBHSV_change(this,'V') onchange=txtRGBHSV_change(this,'V')></td>
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr> 
+                        <td><img src="upArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'V',true)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                      <tr> 
+                        <td><img src="downArrow.gif" class="overBorder" onMouseDown="arrowMD(this,'V',false)" onMouseUp="arrowMU(this)" onMouseOut="arrowMU(this)"></td>
+                      </tr>
+                    </table></td>
+                </tr>
+              </table></td>
+          </tr>
+        </table> 
+    <tr align="center"> 
+      <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr align="center">
+		  	<td width="15%">&nbsp;</td>
+            <td class="upBorder" onMouseDown="this.className='downBorder';init();" onMouseUp="this.className='overBorder'" onMouseOver="this.className='overBorder';this.style.cursor='default'" onMouseOut="this.className='upBorder'">重 置</td>
+			<td width="35%">&nbsp;</td>
+            <td class="upBorder" onMouseDown="this.className='downBorder';window.returnValue=txtHex.value;window.close()" onMouseUp="this.className='overBorder'" onMouseOver="this.className='overBorder';this.style.cursor='default'" onMouseOut="this.className='upBorder'">确 定</td>
+            <td width="20%">&nbsp;</td>
+          </tr>
+        </table></td>
+  </table>
+</div>
+</body>
+</html>

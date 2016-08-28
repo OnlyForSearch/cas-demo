@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="gb2312"?>
+<toolbar>
+	<toolbar name="standardbar" menu="">
+		<category id="tabView" label="查看" display="none">
+			<radiogroup name="view">
+				<button id="btCode" image="codeView.gif" tooltip="代码视图" onclick="changeView('Code')"/>
+				<button id="btSplit" image="splitView.gif" tooltip="拆分视图" onclick="changeView('Split')"/>
+				<button id="btDesign" image="designView.gif" tooltip="设计视图" onclick="changeView('Design')"/>
+				<button id="btText" image="textView.gif" tooltip="文本视图" onclick="changeView('Text')"/>
+				<button id="btPreview" image="previewView.gif" tooltip="预览视图" onclick="changeView('Preview')"/>
+			</radiogroup>
+			<separator/>
+			<checkbox id="btVisibleBorder" image="visibleBorder.gif" tooltip="设置可见边框" onclick="showBordersAndHiddenElements()"/>
+			<separator/>
+			<button id="btSizePlus" image="sizePlus.gif" tooltip="增大编辑区" onclick="setEditorSize(200)"/>
+			<button id="btSizeMinus" image="sizeMinus.gif" tooltip="减小编辑区" onclick="setEditorSize(-200)"/>
+		</category>
+		<category id="tabFormat" label="格式" display="">
+			<dropdown name="FormatBlock" tooltip="段落格式" image="format.gif" onclick="">
+				<textfield myevent="doCommand('FormatBlock','',this.hiddenValue)" restrict="" hiddenvalue="&lt;P&gt;" width="70" value="普通" editable="false"/>
+				<options>
+					<option value="&lt;P&gt;">普通</option>
+					<option value="&lt;H1&gt;">标题一</option>
+					<option value="&lt;H2&gt;">标题二</option>
+					<option value="&lt;H3&gt;">标题三</option>
+					<option value="&lt;H4&gt;">标题四</option>
+					<option value="&lt;H5&gt;">标题五</option>
+					<option value="&lt;H6&gt;">标题六</option>
+					<option value="&lt;p&gt;">段落</option>
+					<option value="&lt;dd&gt;">定义</option>
+					<option value="&lt;dt&gt;">术语定义</option>
+					<option value="&lt;dir&gt;">目录列表</option>
+					<option value="&lt;menu&gt;">菜单列表</option>
+					<option value="&lt;PRE&gt;">已编排格式</option>
+				</options>
+			</dropdown>
+			<dropdown name="FontFamily" tooltip="字体名称" image="font.gif" onclick="" previewfield="">
+				<textfield width="70" restrict="" value="宋体" hiddenvalue="宋体" editable="true" myevent="doCommand('FontName','',this.hiddenValue)"/>
+				<options>
+					<option value=""/>
+					<option value="宋体">宋体</option>
+					<option value="黑体">黑体</option>
+					<option value="楷体_GB2312">楷体</option>
+					<option value="仿宋_GB2312">仿宋</option>
+					<option value="隶书">隶书</option>
+					<option value="幼圆">幼圆</option>
+					<option value="新宋体">新宋体</option>
+					<option value="细明体">细明体</option>
+					<option value="Arial">Arial</option>
+					<option value="Arial Black">Arial Black</option>
+					<option value="Arial Narrow">Arial Narrow</option>
+					<option value="Bradley Hand ITC">Bradley Hand ITC</option>
+					<option value="Brush Script MT">Brush Script MT</option>
+					<option value="Century Gothic">Century Gothic</option>
+					<option value="Comic Sans MS">Comic Sans MS</option>
+					<option value="Courier">Courier</option>
+					<option value="Courier New">Courier New</option>
+					<option value="Geneva">Geneva</option>
+					<option value="Impact">Impact</option>
+					<option value="MS Sans Serif">MS Sans Serif</option>
+					<option value="Optima">Optima</option>
+					<option value="Script">Script</option>
+					<option value="System">System</option>
+					<option value="Times">Times</option>
+					<option value="Times New Roman">Times New Roman</option>
+					<option value="Viner Hand ITC">Viner Hand ITC</option>
+					<option value="Verdana">Verdana</option>
+					<option value="Wide Latin">Wide Latin</option>
+					<option value="Wingdings">Wingdings</option>
+				</options>
+			</dropdown>
+			<dropdown name="FontSize" tooltip="字体大小" onclick="" previewfield="">
+				<textfield width="30" restrict="\dpxtinmce%" value="12" hiddenvalue="12" editable="true" myevent="setStyle('font-Size',this.hiddenValue)"/>
+				<options>
+					<option value=""/>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="12">12</option>
+					<option value="14">14</option>
+					<option value="16">16</option>
+					<option value="18">18</option>
+					<option value="24">24</option>
+					<option value="36">36</option>
+					<option value="xx-small">极 小</option>
+					<option value="x-small">特 小</option>
+					<option value="small">小</option>
+					<option value="medium">中</option>
+					<option value="large">大</option>
+					<option value="x-large">特 大</option>
+					<option value="xx-large">极 大</option>
+					<option value="smaller">较 小</option>
+					<option value="larger">较 大</option>
+				</options>
+			</dropdown>
+			<dropdown name="LetterSpacing" tooltip="字间距" image="letterSpacing.gif" onclick="" previewfield="">
+				<textfield width="30" restrict="\dpxtinmce%" value="0" hiddenvalue="0" editable="true" myevent="setStyle('letter-Spacing',this.hiddenValue!=''?(/[pxtinmce%]$/.test(this.hiddenValue)?this.hiddenValue:this.hiddenValue+'px'):'')"/>
+				<options>
+					<option value=""/>
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="12">12</option>
+					<option value="14">14</option>
+					<option value="16">16</option>
+					<option value="18">18</option>
+					<option value="24">24</option>
+					<option value="36">36</option>
+				</options>
+			</dropdown>
+			<dropdown name="LineHeight" tooltip="行高" image="lineHeight.gif" onclick="">
+				<textfield width="30" restrict="\dpxtinmce%" value="14" hiddenvalue="14" editable="true" myevent="setStyle('line-Height',this.hiddenValue!=''?(/[pxtinmce%]$/.test(this.hiddenValue)?this.hiddenValue:this.hiddenValue+'px'):'','span')"/>
+				<options>
+					<option value=""/>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="12">12</option>
+					<option value="14">14</option>
+					<option value="16">16</option>
+					<option value="18">18</option>
+					<option value="24">24</option>
+					<option value="36">36</option>
+				</options>
+			</dropdown>
+			<separator/>
+			<color id="btColor" tooltip="文本颜色" image="fgColor.gif" previewfield="height:3px;width:16px;left:3px;top:17px;" default="" onclick="doCommand('ForeColor','',this.hiddenValue)"/>
+			<color id="btBackgroundColor" tooltip="文本背景颜色" image="bgColor.gif" previewfield="height:3px;width:16px;left:3px;top:17px;" default="" onclick="doCommand('BackColor','',this.hiddenValue)"/>
+		</category>
+		<category id="tabFontStyle" label="字体样式" display="">
+			<button id="btBold" tooltip="粗体" image="bold.gif" onclick="doCommand('Bold')"/>
+			<button id="btBorderColor" tooltip="斜体" image="italic.gif" onclick="doCommand('Italic')"/>
+			<button id="btUnderline" tooltip="下划线" image="underline.gif" onclick="doCommand('Underline')"/>
+			<!-- <button id="btOverline" tooltip="上划线" image="overline.gif" onclick="setStyle('text-Decoration','Overline-Boolean')"/> -->
+			<button id="btStrikeThrough" image="strikeThrough.gif" tooltip="删除线" onclick="doCommand('StrikeThrough')"/>
+			<separator/>
+			<button id="btSubscript" image="subscript.gif" tooltip="上标" onclick="doCommand('Subscript')"/>
+			<button id="btSuperscript" image="superscript.gif" tooltip="下标" onclick="doCommand('superscript')"/>
+			<button id="btToBig" image="tobig.gif" tooltip="增大文字" onclick="insert('big','TAGNAME')"/>
+			<button id="btToSmall" image="tosmall.gif" tooltip="减小文字" onclick="insert('small','TAGNAME')"/>
+		</category>
+		<category id="tabAlign" label="对齐" display="">
+			<button id="btLeftAlign" image="leftAlign.gif" tooltip="左对齐" onclick="doCommand('justifyLeft')"/>
+			<button id="btCenterAlign" image="centerAlign.gif" tooltip="居中" onclick="doCommand('justifycenter')"/>
+			<button id="btRightAlign" image="rightAlign.gif" tooltip="右对齐" onclick="doCommand('justifyright')"/>
+			<button id="btJustifyAlign" image="justifyAlign.gif" tooltip="两端对齐" onclick="doCommand('justifyfull')"/>
+		</category>
+		<category id="tabList" label="列表" display="">
+			<button id="btBulletedList" image="bulletedList.gif" tooltip="项目列表" onclick="doCommand('InsertUnorderedList')"/>
+			<button id="btNumberedList" image="numberedList.gif" tooltip="编号列表" onclick="doCommand('InsertOrderedList')"/>
+			<separator/>
+			<button id="btOutdent" image="outdent.gif" tooltip="文本凸出" onclick="doCommand('outdent')"/>
+			<button id="btIndent" image="indent.gif" tooltip="文本缩进" onclick="doCommand('indent')"/>
+		</category>
+	</toolbar>
+	<insertbar name="insertbar" menu="true">
+		<category id="tabFile" label="文件" display="">
+			<!--button id="btReturn" image="back.gif" tooltip="返回" onclick="parent.back()"/-->
+			<!--button id="btAttach" image="hyperlink.png" tooltip="附件" onclick="parent.addAttach()"/-->
+			<!--button id="btSave" image="save.gif" tooltip="保存" onclick="parent.save()"/-->
+			<!--button id="btSubmit" image="NBSP.gif" tooltip="提交" onclick="parent.submit()"/-->
+		</category>
+		<category id="tabEdit" label="编辑" display="">
+			<button id="btDelete" image="delete.gif" tooltip="删除" onclick="doCommand('delete')"/>
+			<button id="btCut" image="cut.gif" tooltip="剪切" onclick="doCommand('cut')"/>
+			<button id="btCopy" image="copy.gif" tooltip="复制" onclick="doCommand('copy')"/>
+			<button id="btPaste" image="paste.gif" tooltip="粘帖" onclick="doPaste()"/>
+			<separator/>
+			<button id="btUndo" image="undo.gif" tooltip="撤销" onclick="gotoHistory(-1)"/>
+			<button id="btRedo" image="redo.gif" tooltip="重做" onclick="gotoHistory(1)"/>
+			<separator/>
+			<button id="btFindReplace" image="findReplace.gif" tooltip="查找和替换" onclick="showDialog('findReplace.htm')"/>
+		</category>
+		<category id="tabCommon" label="常用对象" display="">
+			<!--<button id="btHyperlink" image="hyperlink.png" tooltip="超级链接" onclick="showDialog('hyperlink.htm',466,170)"/>
+			<button id="btEmail" image="Email.png" tooltip="电子邮件链接" onclick="showDialog('email.htm',466,150)"/>
+			<button id="btAnchor" image="anchor.png" tooltip="命名锚记" onclick="showDialog('anchor.htm',466,201)"/>
+			<separator/>-->
+			<!--<button id="btTable" image="table.png" tooltip="表格" onclick="showDialog('table.htm',466,308)"/>
+			<button id="btLayer" image="layer.png" tooltip="层" onclick="showDialog('layer.htm',466,305)"/>
+			<button id="btFrame" image="frame.png" tooltip="浮动框架" onclick="myEditor.tag='iframe';showDialog('tagEditor.htm',616,404)"/>
+			<separator/>			
+			<separator/>-->
+			<button id="btImage" image="image.png" tooltip="图象" onclick="myEditor.tag='img';showDialog('picEditor.html',450,170)"/>
+			<button id="btHR" image="hr.png" tooltip="水平线" onclick="myEditor.tag='hr';showDialog('tagEditor.htm',616,404)"/>
+			<button id="btDate" image="date.png" tooltip="日期和时间" onclick="showDialog('datetime.htm',466,323)"/>
+		</category>
+		<category id="tabTable" label="表格对象" display="">
+			<button id="btTable" image="table.png" tooltip="表格" onclick="showDialog('table.htm',466,308)"/>
+			<separator/>
+			<button id="btInsertRowAbove" image="insertRowAbove.gif" tooltip="在上面插入行" onclick="insertTableRows(1,true)"/>
+			<button id="btInsertRowBelow" image="insertRowBelow.gif" tooltip="在下面插入行" onclick="insertTableRows(1,false)"/>
+			<button id="btInsertColLeft" image="insertColLeft.gif" tooltip="在左边插入列" onclick="insertTableColumns(1,true)"/>
+			<button id="btInsertColRight" image="insertColRight.gif" tooltip="在右边插入列" onclick="insertTableColumns(1,false)"/>
+			<separator/>
+			<button id="btDeleteRow" image="deleteRow.gif" tooltip="删除行" onclick="deleteTableRows(1)"/>
+			<button id="btDeleteCol" image="deleteCol.gif" tooltip="删除列" onclick="deleteTableColumns(1)"/>
+			<separator/>
+			<button id="btMergeRow" image="mergeRow.gif" tooltip="向下合并行" onclick="mergeTableRows(1,false)"/>
+			<button id="btMergeCol" image="mergeCol.gif" tooltip="向右合并列" onclick="mergeTableColumns(1,false)"/>
+		</category>
+		<category id="tabForms" label="表单对象" display="none">
+			<!--<button id="btForm" image="form.png" tooltip="表单" onclick="myEditor.tag='form';showDialog('tagEditor.htm',616,404)"/>
+			<separator/>-->
+			<button id="btTextfield" image="textfield.png" tooltip="文本字段" onclick="myEditor.tag='input';myEditor.temp='text';showDialog('tagEditor.htm',616,404)"/>
+			<button id="btHiddenfield" image="hiddenfield.png" tooltip="隐藏域" onclick="myEditor.tag='input';myEditor.temp='hidden';showDialog('tagEditor.htm',616,404)"/>
+			<button id="btTextarea" image="textarea.png" tooltip="文本区域" onclick="myEditor.tag='textarea';showDialog('tagEditor.htm',616,404)"/>
+			<separator/>
+			<button id="btCheckbox" image="checkbox.png" tooltip="复选框" onclick="myEditor.tag='input';myEditor.temp='check';showDialog('tagEditor.htm',616,404)"/>
+			<button id="btRadio" image="radio.png" tooltip="单选框" onclick="myEditor.tag='input';myEditor.temp='radio';showDialog('tagEditor.htm',616,404)"/>
+			<separator/>
+			<button id="btListMenu" image="listMenu.png" tooltip="列表/菜单" onclick="myEditor.tag='select';showDialog('tagEditor.htm',616,404)"/>
+			<!--<separator/>-->
+			<button id="btButton" image="button.png" tooltip="按钮" onclick="myEditor.tag='input';myEditor.temp='button';showDialog('tagEditor.htm',616,404)"/>
+			<!--<separator/>
+			<button id="btFieldset" image="fieldset.png" tooltip="字符集" onclick="showDialog('fieldset.htm',466,170)"/>-->
+		</category>
+		<category id="tabCharacters" label="特殊字符" display="none">
+			<button id="btCharsBR" tooltip="换行符(shift+enter)" image="Line Break.gif" onclick="insert('&lt;br&gt;')"/>
+			<button id="btCharsNBSP" tooltip="不换行空格" image="NBSP.gif" onclick="insert('&amp;nbsp;')"/>
+			<button id="btCharsLeftQuote" tooltip="左引号" image="Left Quote.gif" onclick="insert('&amp;#8220;')"/>
+			<button id="btCharsRightQuote" tooltip="右引号" image="Right Quote.gif" onclick="insert('&amp;#8221;')"/>
+			<button id="btCharsEmDash" tooltip="破折号" image="Em-Dash.gif" onclick="insert('&amp;#8212;')"/>
+			<separator/>
+			<button id="btCharsPound" tooltip="英镑符号" image="Pound.gif" onclick="insert('&amp;pound;')"/>
+			<button id="btCharsEuro" tooltip="欧元符号" image="Euro.gif" onclick="insert('&amp;#8364;')"/>
+			<button id="btChars_Yen" tooltip="日元符号" image="yen.gif" onclick="insert('&amp;yen;')"/>
+			<separator/>
+			<button id="btCharsCopyright" tooltip="版权" image="Copyright.gif" onclick="insert('&amp;copy;')"/>
+			<button id="btCharsRegistered" tooltip="注册商标" image="Registered.gif" onclick="insert('&amp;reg;')"/>
+			<button id="btCharsTrademark" tooltip="商标" image="Trademark.gif" onclick="insert('&amp;#8482;')"/>
+			<separator/>
+			<button id="btCharsOther" image="Other.gif" tooltip="其他..." onclick="showDialog('otherCharacters.htm',476,382)"/>
+		</category>
+		<category id="tabOther" label="其它对象" display="none">
+			<button id="btMarquee" image="marquee.png" tooltip="字幕" onclick="myEditor.tag='marquee';showDialog('tagEditor.htm',616,404)"/>
+		</category>
+		<category id="tabGlobalParam" label="全局参数" display="">
+			<button id="btGpPer" image="plugin.png" tooltip="参数：文档期数" onclick="insert(parent.getGlobalParam('Per'))"/>-->
+			<button id="btGpDate" image="param.png" tooltip="参数：日期" onclick="insert(parent.getGlobalParam('Date'))"/>-->
+		</category>
+	</insertbar>
+</toolbar>

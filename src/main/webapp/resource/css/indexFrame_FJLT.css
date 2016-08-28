@@ -1,0 +1,71 @@
+.topBanner
+{
+	background-image:url(/resource/image/indexFJLT/bg_top_heade.png);
+	background-position:top;
+	background-repeat:repeat-x;	
+	WIDTH: 100%;
+	height:93px;
+}
+.topTitle
+{
+	background-image: url(/resource/image/indexFJLT/logo.png);
+    background-repeat:no-repeat;
+    background-position:25px 5px;
+	WIDTH: 100%;
+	height:60px;
+}
+.topMenu
+{
+	position:absolute;
+	top:60px;
+	WIDTH: 100%;
+}
+.niMenu {
+    width: 100%;
+    position: absolute;
+    text-align: center;
+}
+
+.niButton{float:right;width:20px;heigth:20px;margin-right:40px;margin-bottom:10px;}
+
+.top_link { width:250px;height:25px; padding-right:10px;float: right; margin-top:35px; font-size:12px;}
+.top_link ul { white-space:nowrap;}
+.top_link ul li { float:right; border-left:1px solid #fff;}
+.top_link ul li a {  height:16px;  text-align:center; color:#fff; margin:0 13px 0 13px;text-decoration:none;}
+.top_link ul li a:hover {font-weight:bold;}
+
+.menusel {
+    float: left;
+    width: 160px;
+    position: relative;
+    line-height: 30px;
+}
+
+.menusel .h2	{width:auto; height:33px; white-space:nowrap; border-left:1px solid #61B2DF; z-index:9998;}
+.menusel .h2 a		{ word-wrap:normal; word-break:normal; display:block;color:#FFFFFF; font-size:16px;font-weight:normal;text-align:center;white-space:nowrap;text-decoration:none; z-index:-1;}
+.menusel .h2 a:hover {background:url(/resource/image/indexFJLT/bg_menu.png) center no-repeat;}
+.menusel .h2 a:active{background:url(/resource/image/indexFJLT/bg_menu.png) center no-repeat;}
+.menusel .noBorderLi{border:none; }
+
+#secondLevelMenu {height:33px;display:none;}
+.position {
+    position: absolute;
+    left: 0px;
+    display:none;
+    width: 1920px;
+    background:#3E9FDF;
+    line-height: 35px;
+}
+
+
+.position ul {margin-left:0; background:#3E9FDF;border:1px solid #5CA9DD;float:left;  white-space:nowrap;}
+.position ul li{border-left:1px solid #A0C7E2; float:left; }
+.position a			{display:block;color:#FFFFFF;font-size:14px;font-weight:normal;text-align:center;white-space:normal;word-wrap:break-word;word-break:break-all;text-decoration:none; padding:0 10px 0 10px;}
+.position a:hover	{background:#FC9D34;}
+.position a:active	{background:#FC9D34;}
+
+.activeurl	{background:url/(resource/image/indexFJLT/bg_menu.png) center no-repeat;}
+
+.tabs-header-left .tabs LI {
+    layout-flow:vertical-ideographic;
+}

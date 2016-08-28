@@ -1,0 +1,293 @@
+<PUBLIC:COMPONENT tagname="panel" literalcontent="true">
+	<PUBLIC:PROPERTY NAME="label" put="setLabel" get="getLabel"/>
+	<PUBLIC:PROPERTY NAME="width" put="setWidth" get="getWidth"/>
+	<PUBLIC:PROPERTY NAME="height" put="setHeight" get="getHeight"/>
+	<PUBLIC:PROPERTY NAME="top" put="setTop" get="getTop"/>
+	<PUBLIC:PROPERTY NAME="left" put="setLeft" get="getLeft"/>
+	<PUBLIC:PROPERTY NAME="cfgEvent" put="setCfgEvent" get="getCfgEvent"/>
+	<PUBLIC:PROPERTY NAME="titleCssText" put="setTitleCssText" get="getTitleCssText"/>
+	<PUBLIC:PROPERTY NAME="panelCssText" put="setPanelCssText" get="getPanelCssText"/>
+	<PUBLIC:METHOD NAME="getBody"/>
+	<PUBLIC:METHOD NAME="getElementById"/>
+	<PUBLIC:METHOD NAME="openPanel"/>
+	<PUBLIC:METHOD NAME="closePanel"/>
+	<PUBLIC:METHOD NAME="delCfgEvent"/>
+	<PUBLIC:EVENT NAME="onclose" ID="oClose"/>
+	<PUBLIC:ATTACH event="oncontentready" onevent="init()" />
+</PUBLIC:COMPONENT>
+<STYLE>    
+    div.title
+    {
+    	position:absolute;
+    	height:22;
+    	width:100%;
+    	overflow:hidden;
+    	background:slategray;
+    	z-index:2;
+    }
+    
+    span.title
+    {
+    	position:absolute;
+    	height:100%;
+    	width:95%;
+    	overflow:hidden;
+    	white-space:nowrap;
+    	font-size: 9pt;
+    	color:white;
+    	padding:5 0 0 6;
+    	cursor:default;
+    	text-overflow:ellipsis;
+    }
+    
+    span.panelCtrl
+    {
+    	position:absolute;
+    	width:100%;
+    	height:100%;
+    	overflow:hidden;
+    	padding:0 6 0 0;
+    	text-align:right;
+    }
+    
+    span.ctrlIco
+    {
+    	height:100%;
+    	font-family:webdings;
+    	color:white;
+    	cursor:default;
+    	font-size:10px;
+    	padding:2 0 0 3;
+    }
+    
+    div.panel
+    {
+    	position:absolute;
+    	width:100%;
+    	height:100%;
+    	overflow:hidden;
+    	padding-top:22;
+    	border-top:0;
+    	border-right:2 solid slategray;
+    	border-bottom:2 solid slategray;
+    	border-left:2 solid slategray;
+    	z-index:1;
+    }
+    div.body
+    {
+    	position:relative;
+    	width:100%;
+    	height:100%;
+    	overflow:auto;
+    }
+</STYLE>
+<BODY>
+    <div class="title" id="oTitle" onmousedown="dragWin()">
+    	<span class="title" id="oTitleLabel"></span>
+    	<span class="panelCtrl"><img style="display:none" onmousedown="cancelBubbleEvent()"
+    		align="absmiddle" id="oCfgImg"><span class="ctrlIco" onmousedown="cancelBubbleEvent()"
+    		onClick="ctrlPanel()" type="max">0</span><span class="ctrlIco" onmousedown="cancelBubbleEvent()"
+    		onclick="closePanel()">r</span>
+    	</span>
+    </div>
+    <div class="panel" id="oPanel">
+    	<div class="body" id="oBody"></div>
+    </div>
+</BODY>
+<SCRIPT language="JScript">
+var sCfgEventName;
+var iWidth;
+var iHeight;
+var sTitleCssText;
+var sPanelCssText;
+var iTop=20;
+var iLeft=20;
+function init()
+{
+	element.style.position = "absolute";
+	element.style.top = iTop;
+	element.style.left = iLeft;
+	element.style.zIndex = 100;
+	oCfgImg.src = document.URL.replace('panel.htc','../image/ico/')+'config.gif';
+	oBody.innerHTML = element.innerHTML;
+	defaults.viewLink = document;
+}
+
+function setTop(_iTop)
+{
+	iTop = _iTop;
+	element.style.top = iTop;
+}
+
+function getTop()
+{
+	return iTop;
+}
+
+function setLeft(_iLeft)
+{
+	iLeft = _iLeft;
+	element.style.left = iLeft;
+}
+
+function getLeft()
+{
+	return iLeft;
+}
+
+function setWidth(_iWidth)
+{
+	iWidth = _iWidth;
+	element.style.width = iWidth;
+}
+
+function getWidth()
+{
+	return iWidth;
+}
+
+function setHeight(_iHeight)
+{
+	iHeight = _iHeight;
+	element.style.height = iHeight;
+}
+
+function getHeight()
+{
+	return iHeight;
+}
+
+function setTitleCssText(_titleCssText)
+{
+    sTitleCssText=_titleCssText;
+    oTitle.style.cssText=sTitleCssText;
+}
+
+function getTitleCssText()
+{
+   return sTitleCssText;
+}
+
+function setPanelCssText(_panelCssText)
+{
+    sPanelCssText=_panelCssText;
+    oPanel.style.cssText=sPanelCssText;
+}
+
+function getPanelCssText()
+{
+   return sPanelCssText;
+}
+
+function setLabel(sLabel)
+{
+	oTitleLabel.innerHTML = sLabel;
+}
+
+function getLabel()
+{
+	return oTitleLabel.innerText;
+}
+
+function getBody()
+{
+	return oBody;
+}
+
+function getElementById(id)
+{
+	return document.getElementById(id);
+}
+
+function closePanel()
+{
+	element.style.display = 'none';
+	//window.event.cancelBubble = true;
+	doOnClose();
+}
+
+function doOnClose()
+{
+	var oEvent = createEventObject();
+	oClose.fire(oEvent);
+}
+
+function openPanel()
+{
+	element.style.display = 'inline';
+}
+
+function delCfgEvent()
+{
+	sCfgEventName = null
+	oCfgImg.onclick = sCfgEventName;
+	oCfgImg.style.display = 'none';
+}
+
+function dragWin()
+{
+	var d=window.document;
+	var x=event.offsetX,y=event.offsetY;
+	oTitle.setCapture();
+
+	d.onmousemove=function(a)
+	{
+		element.style.left=event.clientX + d.body.scrollLeft - x;
+		element.style.top=event.clientY + d.body.scrollTop - y ;
+	}
+
+	d.onmouseup=function()
+	{
+		oTitle.releaseCapture();
+		d.onmousemove=null;
+		d.onmouseup=null;
+	}
+}
+
+function setCfgEvent(_sCfgEventName)
+{
+	sCfgEventName = _sCfgEventName;
+	oCfgImg.style.display = 'inline';
+	oCfgImg.onclick = function ()
+	{
+		eval(sCfgEventName);
+	}
+}
+
+function getCfgEvent()
+{
+	return sCfgEventName;
+}
+
+function ctrlPanel()
+{
+	var oCtrlSpan = event.srcElement
+	if(oCtrlSpan.type == "max")
+	{
+		oCtrlSpan.innerText = 2;
+		oCtrlSpan.type = "min";
+		setPanelMin();
+	}
+	else
+	{
+		oCtrlSpan.innerText = 0;
+		oCtrlSpan.type = "max";
+		setPanelMax();
+	}
+}
+
+function setPanelMin()
+{
+	element.style.height = 22;
+}
+
+function setPanelMax()
+{
+	element.style.height = iHeight;
+}
+
+function cancelBubbleEvent()
+{
+	event.cancelBubble = true;
+}
+</SCRIPT>

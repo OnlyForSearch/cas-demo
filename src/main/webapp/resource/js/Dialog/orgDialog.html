@@ -1,0 +1,42 @@
+<HTML XMLNS:IE>
+	<head>
+		<META http-equiv="Content-Type" content="text/html; charset=gbk">
+		<title>部门选择</title>
+		<SCRIPT src="../jquery-1.3.2.min.js"></SCRIPT>
+		<SCRIPT src="../Common.js"></SCRIPT>
+		<SCRIPT src="../Dialog.js"></SCRIPT>
+		<SCRIPT src="../Error.js"></SCRIPT>
+		<SCRIPT src="../stringUtil.js"></SCRIPT>
+		<SCRIPT src="../XML.js"></SCRIPT>
+		<SCRIPT src="../XMLTree/XMLTree.js"></SCRIPT>
+		<SCRIPT src="../XMLTree/XMLTreeAction.js"></SCRIPT>
+		<SCRIPT src="../ChoiceDialog.js"></SCRIPT>
+		<SCRIPT src="orgDialog.html.js"></SCRIPT>
+		<STYLE>
+.xmlTable {
+	behavior: url(../../resource/htc/table.htc);
+	cursor: hand;
+}
+</STYLE>
+
+	</head>
+
+	<body onload='onpageload()' leftmargin="10">
+	
+		
+	
+		<div id='orgDiv' style="width: 100%; height: 320px; overflow: auto; padding: 1px">
+			<div id='prvTreeDIV'></div>
+		</div>
+		
+		
+		
+		<div>
+			<input type="button" id="test" value="确定" onclick="getSelected()" />
+			<input type="button" id="test" value="取消" onclick="concal()" />
+		</div>
+		
+		
+	</body>
+
+</html>

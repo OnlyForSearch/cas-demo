@@ -1,0 +1,116 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>页面属性</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		listImage(myEditor.designer.document,document.all('sltBackground'))
+		myEditor.formElements('tfTitle').value=myEditor.designer.document.title
+		initFormFromTag(myEditor.designer.document.body,myEditor.form)
+	}
+}
+function doOK(){
+	modify()
+}
+function modify(){
+	myEditor.designer.document.title=myEditor.formElements('tfTitle').value
+	setOrRemoveAttribute(myEditor.designer.document.body,myEditor.form)
+	myEditor.window.doSameContent('Design')
+	window.close()
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td width="80" height="22" align="right">标题:</td>
+    <td><input name="tfTitle" type="text" class="longWidth"></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">文本颜色:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeColorTable('Text')</script></td>
+          <td width="60" align="right">背景颜色:</td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('BgColor')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">背景图像:</td>
+    <td><script>writeUrlSelector('Background',195)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">链接颜色:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeColorTable('Link')</script></td>
+          <td width="60" align="right">活动链接:</td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('aLink')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">已访问链接:</td>
+    <td><script>writeColorTable('vLink')</script></td>
+  </tr>
+  <tr>
+    <td width="80" height="22" align="right">上边距:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('TopMargin','')</script></td>
+          <td width="80" align="right">边距宽:</td>
+		  <td width="1"></td>
+          <td><script>writeDigitalTextfield('MarginWidth','')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td width="80" height="22" align="right">左边距:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeDigitalTextfield('LeftMargin','')</script></td>
+          <td width="80" align="right">边距高:</td>
+		  <td width="1"></td>
+          <td><script>writeDigitalTextfield('MarginHeight','')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <script>writeButtonsRight()</script>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

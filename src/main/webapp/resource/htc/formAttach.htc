@@ -1,0 +1,570 @@
+<public:component>
+<public:PROPERTY NAME="value"        GET="getValue"      PUT="setValue"         />
+<public:PROPERTY NAME="type"         GET="getType"       PUT="setType"          />
+<public:PROPERTY NAME="readOnly"     GET="isReadOnly"    PUT="setReadOnly"      />
+<public:PROPERTY NAME="isAllowHistory"         SET="setAllowHistory"            />
+<METHOD   NAME="doInit"	                                                        />
+<METHOD   NAME="isUploadFinish"	                                                />
+<METHOD   NAME="loadByXML"	                                                    />
+<METHOD   NAME="getChilds"	                                                    />
+<METHOD   NAME="reload" 	                                                    />
+<PUBLIC:EVENT NAME="onFileAdd"          ID="oFileAdd"                           />
+<PUBLIC:EVENT NAME="onFileUpdate"       ID="oFileUpdate"                        />
+<PUBLIC:EVENT NAME="onFileDel"          ID="oFileDel"                           />
+<SCRIPT LANGUAGE="javascript">
+//定义默认语言资源
+var formAttachHtcDefaultLang = {
+	zipDown : '打包下载',
+	addAttach : '添加附件',
+	attachStaffName : '上传人',
+	uploadTime : '上传时间',
+	tchName : '上传环节'
+};
+//获取语言资源
+function getFormAttachHtcLan(code)
+{
+	if(typeof(ItmLang) == 'undefined' || typeof(ItmLang.widgets) == 'undefined')
+	{
+		return eval('formAttachHtcDefaultLang.' + code);
+	}
+	else
+	{
+		 return eval('ItmLang.widgets.formAttachHtc.' + code);
+	}
+}
+
+var gType;
+var gValue;
+var readOnly = false;
+var isAllowHistory=false;
+var isFlow=false;
+var oForm;
+var oResource;
+function doInit(form,resource)
+{
+	oForm=form;
+	oResource=resource
+    var oAttach=getAttach();
+    oAttach.init();
+}
+
+function getAttach()
+{
+   return attach.getType(gType);
+}
+
+function setType(pType)
+{
+    gType=pType;
+}
+
+function getType()
+{
+    return gType;
+}
+
+function getValue()
+{
+    return getAttach().asXML();
+}
+
+function isReadOnly()
+{
+    return readOnly;
+}
+
+function reload()
+{
+	setValue(gValue);
+	if(!readOnly)
+	{
+		getAttach().showUploader();
+	}
+}
+
+function setReadOnly(pReadOnly)
+{
+    readOnly=pReadOnly;
+    if(element.readyState!="complete") return;
+    var oUploader=getAttach().getElement().attach;
+    if(oUploader)
+    	oUploader.readOnly=readOnly;
+}
+
+function setAllowHistory(pIsAllowHistory)
+{
+	isAllowHistory=(pIsAllowHistory=="true")?true:false;
+}
+
+function execHook(oFire,oHook)
+{
+	var oEvent = createEventObject();
+	oEvent.setAttribute("hook",oHook);
+	oFire.fire(oEvent);
+}
+
+function setValue(pValue)
+{
+   gValue=pValue;
+   var oAttach=getAttach();
+   oAttach.reloadChild();
+   if(pValue)
+   {
+      var iMainRequestId=pValue.requestId||0;
+      var sFieldName=pValue.fieldName;
+      var isFlow=(oForm.isFlow())?1:0;
+      var oXMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+      oXMLHTTP.onreadystatechange= function(){onStateChange(oXMLHTTP)};
+	  oXMLHTTP.open("POST","/servlet/formDispatch?requestId="+iMainRequestId
+	                 +"&OperType=9&fieldName="+sFieldName+"&isFlow="+isFlow,true);
+	  oXMLHTTP.send();
+   }
+   function onStateChange(XMLHTTP)
+   {
+	   	if(XMLHTTP.readyState!=4) return;
+	   	if(isSuccess(XMLHTTP))
+	   	{
+	   		oAttach.reloadChild();
+	   	    var xmlDoc=XMLHTTP.ResponseXML;
+	   	    var oRowSets=xmlDoc.selectNodes("//rowSet");
+	   	    for(var i=0;i<oRowSets.length;i++)
+	   	    {
+	   	       oRowSet=oRowSets[i];
+	   	       oAttach.loadFromDB(oRowSet);
+	   	    }
+	   	    oAttach.onAfterLoadDB(oRowSets);
+	   	}
+   }
+}
+
+function isUploadFinish()
+{
+	return getAttach().isUploadFinish();
+}
+
+function loadByXML(xmlNode)
+{
+	getAttach().loadByXML(xmlNode);
+}
+
+function getChilds()
+{
+   return getAttach().getChilds();
+}
+
+var attach = (function()
+{
+    vAttach.type = { single: "1", multiply: "2" };
+    vAttach.opType = { create: "C", del: "D" ,update:"U"};
+    vAttach.toDir = "form";
+    function vAttach()
+    {
+        var childs = {};
+        this.getChilds=function()
+        {
+        	return childs;
+        }
+        this.init = function()
+        {
+        	initUploaderContainer(this);
+        };
+        this.reloadChild = function()
+        {
+        	for (name in childs)
+        	{
+	            delete childs[name];
+        	}
+        	if(this.getElement().attach.readyState!="complete") return;
+        	this.getElement().attach.removeAll();
+        };
+        this.isUploadFinish=function()
+        {
+        	return (this.getElement().attach.getFileQueuedCnt()==0)
+        }
+        this.showWin = function (sRequestId)
+        {
+        	var sRequestId=sRequestId||'';
+            var sHref = "/workshop/form/attach.html?requestId="+sRequestId;
+            var sPara = 'dialogwidth:30;dialogheight:200px;status:no;help:no;resizable:yes';
+            var oDialogWin = window.showModalDialog(sHref, element, sPara);
+
+        };
+        this.addChild = function(key,oAttach)
+        {
+            childs[key] = oAttach;
+        };
+        this.getFirstKey= function(key,oAttach)
+        {
+        	var sKey=""
+            for(var key in childs)
+            {
+            	sKey=key
+            	break;
+            }
+        	return sKey;
+        };
+        this.onAfterDel = function() {};
+        this.delChild = function()
+        {
+        	var fileId=event.hook.file.id;
+        	if(!childs[fileId]) return;
+            var action=childs[fileId].action;
+            var isSaveDB=false;
+            if (action == vAttach.opType.create)
+            {
+            	if(delServerTmpFile(childs[fileId].relativeName))
+            	{
+                    delete childs[fileId];
+            	}
+            }
+            else
+            {
+            	isSaveDB=true;
+            	delOper();
+            }
+            execHook(oFileDel,{isSaveDB:isSaveDB,id:event.hook.file.id,name:event.hook.file.name})
+            function delOper()
+            {
+            	childs[fileId].action = vAttach.opType.del;
+            	if(oForm.isFlow())
+            		childs[fileId].tchId=oForm.FLOW.TCH_ID;
+            }
+            function delServerTmpFile(sFilePath)
+            {
+            	var oXMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+                oXMLHTTP.open("POST", "/servlet/formDispatch?relativeName="+sFilePath+"&OperType=8", false);
+                oXMLHTTP.send();
+                var isOK=isSuccess(oXMLHTTP);
+                return isOK;
+            }
+        };
+        this.asXML = function()
+        {
+            var aXML = [];
+            for (var id in childs)
+            {
+                aXML.push("<rowSet toDir='" + vAttach.toDir +"'>");
+                for (var key in childs[id])
+                {
+                    aXML.push("<" + key.toUpperCase() + ">");
+                    aXML.push(xmlEncode(childs[id][key]+""));
+                    aXML.push("</" + key.toUpperCase() + ">");
+                }
+                aXML.push("</rowSet>");
+            }
+            return aXML.join("");
+        }
+        this.getElement = function()
+        {
+            var oAttach = window.document.getElementById("oAttach_" + uniqueID);
+            return { attach: oAttach};
+        };
+        this.getLink=function(oAttach)
+        {
+        	return '/servlet/downloadservlet?action=1&module_id=29010&log_code=ITM52301&fullPath='+encodeURIComponent(oAttach.fullName)+
+        	       '&filename='+encodeURIComponent(oAttach.name);
+        };
+        this.loadFromUser = function()
+        {
+        	 var oXMLDoc= new ActiveXObject("Microsoft.XMLDOM");
+		   	 oXMLDoc.loadXML(event.hook.serverData);
+        	 var xmlNode=oXMLDoc.selectSingleNode("/root/rowSet");
+             var oAttach=this.parseXML(xmlNode, event.hook.oldFile,true,event.hook.file);
+             if(event.hook.oldFile)
+             {
+            	 delete childs[event.hook.oldFile.id];
+             }
+             this.addChild(event.hook.file.id,oAttach);
+             event.hook.link.href=this.getLink(oAttach);
+             event.hook.link.title=this.getTitle(oAttach);
+             (event.hook.oldFile)?execHook(oFileUpdate,copyAttach(oAttach)):execHook(oFileAdd,copyAttach(oAttach));
+             function copyAttach(oAttach)
+             {
+            	 var oCopy={};
+            	 var aAttr=["name","size","fullName"];
+            	 for(var i=0;i<aAttr.length;i++)
+            	 {
+            		 oCopy[aAttr[i]]=oAttach[aAttr[i]];
+            	 }
+            	 return oCopy;
+             }
+        };
+        this.getTitle=function(oAttach)
+        {
+       	   var title=[getFormAttachHtcLan('attachStaffName') + ":",oAttach.staffName,"&nbsp;" + getFormAttachHtcLan('uploadTime') + ":",oAttach.uploadTime];
+    	   if(oAttach.tchName)
+    		  title[title.length]= "&nbsp;" + getFormAttachHtcLan('tchName') + ":";
+    	   return title.join("");
+        }
+        this.parseXML=function(xmlNode,oldFile,isNew,file)
+        {
+        	var sRelativeName = xmlNode.getAttribute("relativeName");
+        	var action=getAction(oldFile,isNew);
+        	var sRequestId=(oldFile)?childs[oldFile.id].request_id:xmlNode.getAttribute("requestId");
+        	var sFullName = xmlNode.getAttribute("fullName");
+            var sName = (file)?file.name:xmlNode.selectSingleNode("name").text;
+            var sSize = xmlNode.selectSingleNode("size").text;
+            var sDisplaySize = (sSize)?formatBytes(parseInt(sSize,10)):"";
+            var sStaffName = (isNew)?oForm.globalVar.STAFF_NAME:xmlNode.selectSingleNode("staffName").text;
+            var sUploadTime = xmlNode.selectSingleNode("uploadTime").text;
+            var sStaffId = (isNew)?oForm.globalVar.STAFF_ID:xmlNode.getAttribute("staffId");
+            var sFlowId = (isNew)?(oForm.isFlow()?oForm.FLOW.FLOW_ID:""):xmlNode.getAttribute("flowId");
+            var sTchId = (isNew)?(oForm.isFlow()?oForm.FLOW.TCH_ID:""):xmlNode.getAttribute("tchId");
+            var sTchName = (isNew)?(oForm.isFlow()?oForm.FLOW.TCH_NAME:""):xmlNode.selectSingleNode("tchName").text;
+            var sVersionNum = xmlNode.getAttribute("versionNum");
+            var iVersionNum=parseInt(sVersionNum,10)
+            if(sTchId=="-1") sTchId="0";
+            return{ name: sName, size: sSize, action: action|| "",relativeName:sRelativeName,
+	               staffName : sStaffName, uploadTime:sUploadTime,staffId:sStaffId,
+	               flowId:sFlowId,tchId:sTchId,fullName:sFullName,displaySize:sDisplaySize,
+	               versionNum:iVersionNum,request_id:sRequestId,tchName:sTchName};
+           function getAction(oldFile,isNew)
+           {
+        	  if(!isNew) return "";
+          	  if(!oldFile) return vAttach.opType.create;
+          	  var fileId=oldFile.id;
+          	  var oAttach=childs[fileId];
+          	  if(!oAttach)  return vAttach.opType.create;
+          	  if(!oAttach.action) return vAttach.opType.update;
+          	  return oAttach.action;
+           }
+        }
+        this.showHis=function()
+        {
+        	var oAttach=childs[event.hook.file.id];
+        	if(oAttach && oAttach.versionNum && oAttach.versionNum>1)
+        	{
+        		event.hook.his.onclick=function()
+        		{
+	        		var isFlow=oForm.isFlow()?1:0;
+		        	var sRequestId=oAttach.request_id;
+		        	window.open("/workshop/form/attachVersion.html?requestId="+sRequestId+"&isFlow="+isFlow,null,
+		               "left=100,top=100,height=500,width=700,status=no,toolbar=no,menubar=no,location=no,resizable=1");
+        		}
+        	}
+        	else
+        	{
+        		event.hook.his.style.display="none";
+        	}
+        }
+        this.setStyle=function(oContainer,oAttach){};
+        this.loadFromDB=function(xmlNode)
+        {
+        	add(xmlNode,false,this);
+        };
+        this.loadByXML=function(xmlNode)
+        {
+        	add(xmlNode,true,this);
+        }
+        this.onAfterLoadDB=function(oRowSets){};
+        this.showUploader=function(){};
+        function add(xmlNode,isNew,oAttachService)
+        {
+            if (!xmlNode) return;
+            var oUploader = oAttachService.getElement().attach;
+            var oAttach=oAttachService.parseXML(xmlNode, null,isNew,null);
+            var sRequestId = xmlNode.getAttribute("requestId");
+            var name=xmlNode.selectSingleNode("name").text;
+            var sSize = xmlNode.selectSingleNode("size").text;
+            var file={id:sRequestId,
+            		 name:name,
+            		 size:sSize,
+            		 path:oAttachService.getLink(oAttach),
+            		 title:oAttachService.getTitle(oAttach)};
+            oAttachService.addChild(sRequestId,oAttach);
+            addAttach(oUploader, file);
+        };
+        function addAttach(oUploader, file)
+        {
+            if (oUploader.readyState == "complete")
+            {
+            	oUploader.addAttach(file);
+            }
+            else
+            {
+                setTimeout(function() {addAttach(oUploader, file)});
+            }
+        }
+        function initUploaderContainer(oAttachService)
+        {
+        	var doc=window.document;
+        	var oContainer=initOperContainer();
+        	var oOverlay=initUploaderOverlay(oContainer);
+        	//initDownloader(oContainer);
+        	doc.body.appendChild(oContainer);
+        	var oUploader=initUploader(oOverlay);
+        	doc.body.appendChild(oUploader);
+        	function initOperContainer()
+        	{
+        		var oContainer=doc.createElement("div");
+            	oContainer.style.position="relative";
+            	return oContainer;
+        	}
+        	function initUploaderOverlay(oContainer)
+        	{
+        		var oSelector=doc.createElement("span");
+               	oSelector.id=uniqueID+"_selector";
+               	oSelector.style.cssText="font-weight:bold;font-family:Tahoma, Arial,sans-serif;font-size:14px;"
+               		                    +"float:none;line-height:24px;width:90px;white-space:nowrap;"
+               	oSelector.className="attach_add_button";
+            	oSelector.innerHTML="<img src='"+oResource.selectAttachImg+"' align='absmiddle'/>&nbsp;" + getFormAttachHtcLan('addAttach');
+            	oContainer.appendChild(oSelector);
+            	return oSelector;
+        	}
+        	function initDownloader(oContainer)
+        	{
+        		var oDownloader=doc.createElement("span");
+        		oDownloader.style.cssText="font-weight:bold;font-family:Tahoma, Arial,sans-serif;font-size:14px;"
+                       +"float:none;line-height:24px;width:90px;white-space:nowrap;cursor:hand"
+                oDownloader.className="attach_down_button";
+        		oDownloader.innerHTML="<img src='/resource/image/zipDown.png' align='absmiddle'/>&nbsp;" + getFormAttachHtcLan('zipDown');
+        		oDownloader.onmouseover=function()
+        		{
+        			this.style.textDecoration='underline';
+        			this.className='attach_down_button_hover';
+        		}
+        		oDownloader.onmouseout=function()
+        		{
+        			this.style.textDecoration='none';
+        			this.className='attach_down_button';
+        		}
+            	oContainer.appendChild(oDownloader);
+        	}
+        	function initUploader(oOverlay)
+        	{
+        		var oUploader=doc.createElement("div");
+            	oUploader.style.cssText="behavior:url("+oResource.uploadHTC+");width:100%;overflow:auto;";
+            	oUploader.id="oAttach_"+uniqueID;
+            	oUploader.flashSettings=
+                {
+            	    upload_url:"/servlet/flowAttach?path=temp&OperType=3",
+            	    file_post_name:"attachFile",
+            	    file_size_limit :"1000 MB",
+            	    button_overlay_id:oOverlay.id,
+            	    file_queue_limit:oAttachService.file_queue_limit,
+            	    button_window_mode:"transparent",
+            		flash_url : oResource.flash_url,
+            		flash9_url: oResource.flash9_url,
+            		attach_ico: oResource.attachIco
+            	}
+            	oUploader.onreadystatechange=function()
+            	{
+            		if (this.readyState=="complete")
+            		{
+            			//判断flash版本，如果低于14弹出版本要求提示
+            			var flashVer = getFlashPlayerVer();
+            			if(flashVer < 14)
+            			{
+            				var doc=window.document;
+            				var promptDiv = doc.getElementById("promptDiv");
+            				if(!promptDiv)
+            					versionRequirePrompt();
+            			}
+            		    this.init();
+            		    this.readOnly=readOnly;
+            		    this.allowHistory=isAllowHistory;
+            		    oAttachService.setStyle(oContainer,this);
+            		    this.onFileAdd=function(){oAttachService.loadFromUser();}
+            		    this.onFileUpdate=function(){oAttachService.loadFromUser();}
+            		    this.onFileDel=function(){oAttachService.delChild();}
+            		    this.showFileHis=function(){oAttachService.showHis();}
+            		    //由于flash控件在初始化的时候，如果容器是隐藏的状态，将导致无法初始化，所以在body初始化后，再放到容器中
+            		    element.appendChild(oContainer);
+            		    element.appendChild(oUploader);
+            		}
+            		function getFlashPlayerVer()
+            		{
+            			playerVersion = swfobject.getFlashPlayerVersion();
+            			//返回主版本号
+            			majorVersion = playerVersion.major;
+            			return majorVersion;
+            		}
+            		//在页面顶部显示Flash版本太低提示框
+            		function versionRequirePrompt()
+            		{
+            			var iconPath = "../../../resource/image/ico/alarm.gif";
+            			var flashPath = "../../../resource/js/swfUpload/fp14install.exe";
+            			var promptMsgStyle = "filter:alpha(opacity=90);opacity: 0.9;right:0;top:0;width:100%;position:static;"
+            							+"padding:10px;text-align:center;background:#FFFFCC;"
+            							+"border-bottom-width: 0px;border-bottom-style: solid;border-bottom-color: #BFBFBF;";
+            			var innerHtmlStyle = "background-image:url("
+            								+ iconPath
+            								+");background-repeat: no-repeat;padding-left: 20px;padding-top: 2px;padding-bottom: 2px;"
+            								+"font-weight:bold;font-size:12px;"
+            			var doc=window.document;
+                		var promptDiv=doc.createElement("div");
+                		promptDiv.id = "promptDiv";
+                		promptDiv.style.cssText = promptMsgStyle;
+                		promptDiv.innerHTML = "<span style='"+innerHtmlStyle+"'>您的浏览器Flash插件版本太低，可能无法正常使用流程上传控件！"
+                							+"请点击下载<a style='color:#FF6600' href='"+flashPath+"'>新版Flash插件</a>，安装后重启浏览器。"
+                							+"&nbsp;[<a style='text-decoration: underline;cursor: pointer;' onclick='"
+                							+"document.getElementById(\"promptDiv\").style.display=\"none\"" + " '>关闭</a>]</span>";
+//                		doc.appendChild(promptDiv);
+                		doc.getElementsByTagName("body")[0].insertBefore(promptDiv,doc.getElementsByTagName("body")[0].childNodes[0]);
+            		}
+            	}
+            	return oUploader;
+        	}
+        }
+    };
+
+
+    function singleAttach()
+    {
+        vAttach.call(this);
+        this.file_queue_limit=1;
+        this.setStyle=function(oContainer,oAttach)
+        {
+        	oContainer.style.display="inline";
+		    oAttach.style.display="inline";
+        }
+        this.showUploader=function()
+        {
+        	var oUploader=this.getElement().attach;
+        	oUploader.showUploader();
+        };
+        this.onAfterLoadDB=function(oRowSets)
+        {
+             if(oRowSets.length)
+             {
+            	 var oUploader=this.getElement().attach;
+            	 hideUploader(oUploader);
+             }
+             function hideUploader(oUploader)
+             {
+            	 if (oUploader.readyState == "complete")
+            	 {
+            	     oUploader.hideUploader();
+            	 }
+            	 else
+                 {
+                     setTimeout(function() {hideUploader(oUploader)});
+                 }
+             }
+        };
+    };
+
+    function multiplyAttach()
+    {
+        vAttach.call(this);
+        this.file_queue_limit=0;
+    };
+
+    var Factory =
+	{
+	    aAttachType: (function()
+	    {
+	        var oAttachType = {};
+	        oAttachType[vAttach.type.single] = new singleAttach();
+	        oAttachType[vAttach.type.multiply] = new multiplyAttach();
+	        return oAttachType;
+	    })(),
+	    getType: function(sType)
+	    {
+	        return this.aAttachType[sType];
+	    }
+	};
+    return Factory;
+})();
+</SCRIPT>
+</component>

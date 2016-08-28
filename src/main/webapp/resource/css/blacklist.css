@@ -1,0 +1,150 @@
+body{
+	margin:0;
+	font:12px verdana,geneva,arial,helvetica,sans-serif,宋体;
+	/**/font-family:"Microsoft YaHei";
+	background:#FFFFFF;
+}
+span{font-size:13px;}
+*{ margin:0; padding:0;}
+img,iframe{border:0px;}
+li{list-style:none;}
+
+/* a 链接下划线去除*/
+a:link{
+	text-decoration:none;
+}
+
+a:visited{
+   text-decoration:none;
+}
+
+/*表格样式 开始*/
+table{
+	   border-collapse:collapse; 
+	   border:solid #E4E4E4; 
+	   border-width:1px 0 0 1px; 
+	 }
+table caption {font-size:5px;font-weight:bolder;}
+table th,table td {border:solid #E4E4E4;border-width:0 1px 1px 0;padding:2px; height:37px; font-size:14px;}
+table td {text-align:center; color:#677179;}
+table th{ text-align:center; font-weight:bold; color:#677A91; cursor:default;}
+table tr{cursor:hand;}
+
+/*未选中行*/
+.hilite{
+	background-color:#FFFFFF;
+}
+/*选中行*/
+.hilite1{
+	background-color:#CCDAF1;
+}
+/*表格样式 结束*/
+
+/*查询条件样式*/
+.searchCondition{
+	margin:20px 40px 0px 40px;
+	height:30px;
+	width:100%;
+	background-color:#FFFFFF;
+	/*border:1px solid blue;*/
+}
+
+.blacklistTable{
+	margin:15px 40px 0px 40px;
+	/*height:540px;*/
+	width:100%;
+	/*border:1px solid red;*/
+}
+.blacklistTableDesc{
+	float:left;
+	margin:0px 0px 30px 0px;
+	/*height:40px;*/
+	/*width:100%;*/
+	/*border:1px solid red;*/
+}
+.pageLeftText{
+	color:#677179; 
+	float:left;
+	height:35px;
+	padding:8px 2px 3px 0px;
+	/*border:1px solid red;*/
+ }
+.pageIndexSpan{
+	/*heigth:45px;*/
+	width:100%;
+	text-align:right;
+	padding:6px 0px 3px 3px;
+	/*border:1px solid red;*/
+}
+.searchTableCss{
+	border:0px;
+}
+.flowLegendImgCss{
+    font-family:Webdings;
+    font-size:18px;
+    color:#000000;
+    cursor:hand;
+    font-weight:normal;
+}
+.thText{
+	width:80%;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	font-size:14px;
+	color:#677A91;
+	cursor:default;
+	/*border:1px solid red;*/
+}
+.searchResetButton{
+	float:left;
+	width:70px;
+	height:30px;
+	margin:5px 0px 5px 40px; 
+	padding:0; 
+	background-color:#FFFFFF;
+	font-size:14px; 
+	color:#677A91; 
+	border:1px solid #E4E4E4;
+ }
+
+/*列表 分页样式 开始*/
+
+.pageLeftText{
+	color:#677179; 
+	float:left;
+	height:35px;
+	padding:8px 2px 3px 3px;
+	border:0px solid red;
+}
+
+.pageIndexSpan{
+	/*heigth:45px;*/
+	width:100%;
+	text-align:right;
+	padding:6px 10px 3px 3px;
+	border:0px solid red;
+}
+
+/*上下页*/
+.pagePer{float:inherit;color:#677179; text-align:center;;margin-top:10px;cursor:hand;}
+a.pagePer:hover{color:#64C4F2; !important;}
+
+.pageNext{float:inherit;color:#677179; text-align:center;margin-top:10px;cursor:hand;margin-left:20px;}
+a.pageNext:hover{color:#64C4F2; !important;}
+
+.okButton{color:#FFFFFF; text-align:center; line-height:20px; border:1px solid #64C4F2;width:50px;height:20px;background-color:#64C4F2;margin-left:20px;cursor:hand;}
+
+.pagesIndexA{float:inherit;color:#677179; text-align:center;margin-top:10px;margin-left:20px;cursor:hand;}
+
+.pagesIndexCur{float:inherit;color:#64C4F2; text-align:center;margin-top:10px;margin-left:20px;cursor:hand;}
+
+a.pagesIndexA:hover{color:#64C4F2; !important;}
+
+
+/*分页样式 结束*/
+
+
+
+
+
+

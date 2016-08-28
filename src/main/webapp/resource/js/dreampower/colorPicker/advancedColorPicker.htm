@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>高级调色板</title>
+<style type="text/css">
+<!--
+body {
+	margin: 0px;
+	padding: 0px;
+}
+-->
+</style>
+</head>
+
+<body>
+<script language="JavaScript" type="text/JavaScript">
+var dc=window.dialogArguments==null ? 'EEEEEE' : window.dialogArguments.replace(/#/,'')
+var s='<object id="CP" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="288" height="160">'+
+  '<param name="movie" value="advancedColorPicker.swf?defaultColor='+dc+'">'+
+  '<param name="quality" value="high">'+
+  '<param name="menu" value="false">'+
+  '<embed src="advancedColorPicker.swf?defaultColor='+dc+'" quality="high" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="288" height="160"></embed>'+
+'</object>'
+document.write(s)
+function closeThis(){
+alert('0')
+	//window.close()
+}
+</script>
+<script language=javascript>
+function CP_DoFSCommand(command,args){
+	switch(command){
+		case "close":
+	 		window.close();
+			break;
+		case "return":
+			window.returnValue=args!=''?'#'+args:''
+			window.close();
+			break;
+	}
+}
+</script>
+<SCRIPT LANGUAGE=VBScript>
+Sub CP_FSCommand(ByVal command, ByVal args)
+	  call CP_DoFSCommand(command, args)
+end sub
+</SCRIPT>
+ 
+</body>
+</html>

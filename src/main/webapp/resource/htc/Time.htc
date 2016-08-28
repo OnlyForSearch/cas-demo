@@ -1,0 +1,244 @@
+<PUBLIC:COMPONENT TAGNAME="time">
+	<PUBLIC:PROPERTY NAME="value" put="setValue" get="getValue"/>
+	<PUBLIC:PROPERTY NAME="isAddSecond"/>
+	<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="timeInit()"/>
+</PUBLIC:COMPONENT>
+
+<SCRIPT LANGUAGE="JScript">
+var hour;
+var minute;
+var second;
+var inputEles;
+var timeValue;
+function timeInit()
+{
+	element.innerHTML = "";
+	if(!hour||!minute)
+	{
+		value = "00:00:00";
+	}
+	iniTimeControl();
+}
+
+function setValue(_value)
+{
+    if(typeof isAddSecond!="boolean")
+    {
+	    isAddSecond = (isAddSecond == null || isAddSecond=="true")?true:false;
+    }
+	
+	var timesValue = _value.split(":");
+	hour = parseInt(timesValue[0],10);
+	minute = parseInt(timesValue[1],10);
+	if(isAddSecond)
+	{
+		second = parseInt(timesValue[2],10);
+	}
+	if((hour>23||hour<0||isNaN(hour))
+	     ||(minute>59||minute<0||isNaN(minute))
+	     ||((isAddSecond)&&(second>59||second<0||isNaN(second))))
+	{
+		EMsg("初始化数据错误");
+		hour = 0;
+		minute = 0;
+		second = 0;
+	}
+	
+	hour = formatTime(hour);
+	minute = formatTime(minute);
+	if(isAddSecond)
+	{
+		second = formatTime(second);
+	}
+	
+	if(inputEles)
+	{
+		inputEles[0].value = hour;
+		inputEles[1].value = minute;
+		if(isAddSecond)
+		{
+			inputEles[2].value = second;
+		}
+	}
+}
+
+function getValue()
+{
+	timeValue = hour+":"+minute;
+	if(isAddSecond)
+	{
+		timeValue += ":"+second;
+	}
+	return timeValue;
+}
+
+function iniTimeControl()
+{
+	var i=0;
+	inputEles = new Array();
+	inputEles.length = 5;
+	for(i=0;i<5;i++)
+		inputEles[i] = window.document.createElement("input");
+	var oTimeTable = window.document.createElement("table");
+	oTimeTable.style.border="1px solid #999999";
+	oTimeTable.border=0;
+	oTimeTable.cellSpacing=0;
+	oTimeTable.cellPadding=0;
+	var oTR1 = oTimeTable.insertRow();
+	var oTDs = new Array();
+	oTDs.length=7;
+	for(i=0;i<6;i++)
+	{
+		oTDs[i] = oTR1.insertCell();
+		oTDs[i].rowSpan = 2;
+	}
+	oTDs[i] = oTR1.insertCell();
+	for(i=0;i<3;i++)
+	{
+		inputEles[i].type="text";
+		inputEles[i].size="2";
+		inputEles[i].maxLength="2";
+		inputEles[i].timeEle = this;
+		inputEles[i].style.border="0px solid black";
+		inputEles[i].style.textAlign="right";
+		inputEles[i].style.imeMode="disabled";
+		inputEles[i].id="Time_"+inputEles[i].uniqueID;
+		inputEles[i].attachEvent ("ondragenter",returnFalse);
+		inputEles[i].attachEvent ("onpaste",returnFalse);
+		inputEles[i].attachEvent ("onkeypress",eleKeyPress);
+		inputEles[i].attachEvent ("onkeyup",eleKeyUp);
+		inputEles[i].attachEvent ("onclick",eleClick);
+		inputEles[i].attachEvent ("onblur",eleBlur);
+	}
+	
+	for(i=3;i<5;i++)
+	{
+		inputEles[i].type="button";
+		inputEles[i].ctrlId=inputEles[0].id;
+		inputEles[i].id="Ctrl_"+inputEles[i].uniqueID;
+		inputEles[i].style.width="18px";
+		inputEles[i].style.height="9px";
+		inputEles[i].style.fontFamily="Webdings";
+		inputEles[i].style.fontSize="9px";
+		inputEles[i].style.lineHeight="2px";
+		inputEles[i].style.backgroundColor="#D4D0C8";
+		inputEles[i].style.paddingLeft="2px";
+		inputEles[i].attachEvent ("onfocus",arrowFocus);
+	}
+
+
+	inputEles[0].value = hour;
+	inputEles[0].ctrlDecId = inputEles[3].id
+	inputEles[0].ctrlAddId = inputEles[4].id
+	inputEles[0].ctrlTag = "hour";
+	inputEles[0].radix = "23";
+	oTDs[0].appendChild(inputEles[0]);
+
+	oTDs[1].innerHTML=":";
+
+	inputEles[1].value = minute;
+	inputEles[1].radix = "59";
+	inputEles[1].ctrlDecId = inputEles[3].id
+	inputEles[1].ctrlAddId = inputEles[4].id
+	inputEles[1].ctrlTag = "minute";
+	oTDs[2].appendChild(inputEles[1]);
+
+	oTDs[3].innerHTML=":";
+
+	inputEles[2].value = second;
+	inputEles[2].radix = "59";
+	inputEles[2].ctrlDecId = inputEles[3].id
+	inputEles[2].ctrlAddId = inputEles[4].id
+	inputEles[2].ctrlTag = "second";
+	oTDs[4].appendChild(inputEles[2]);
+
+	oTDs[5].width="20";
+	
+	inputEles[3].value = "5";
+	inputEles[3].attachEvent ("onclick",decTime);
+	oTDs[6].appendChild(inputEles[3]);
+
+	var oTR2 = oTimeTable.insertRow();
+	var oTD2 = oTR2.insertCell();
+	inputEles[4].value = "6";
+	inputEles[4].attachEvent ("onclick",addTime);
+	oTD2.appendChild(inputEles[4]);
+	if(!isAddSecond)
+	{
+		oTDs[3].removeNode(true);
+		oTDs[4].removeNode(true);
+	}
+	element.appendChild(oTimeTable);
+}
+
+function formatTime(timeStr)
+{
+	timeStr = timeStr.toString();
+	if(timeStr.length==0)
+		timeStr = "00";
+	if(timeStr.length==1)
+		timeStr = "0"+timeStr;
+    return timeStr;
+}
+
+function returnFalse()
+{
+	return false;
+}
+
+function eleClick()
+{
+	event.srcElement.select();
+	window.document.getElementById(event.srcElement.ctrlDecId).ctrlId=event.srcElement.id;
+	window.document.getElementById(event.srcElement.ctrlAddId).ctrlId=event.srcElement.id;
+}
+
+function eleKeyPress()
+{
+	if (!/[0-9]/.test(String.fromCharCode(event.keyCode))) 
+		event.keyCode=0
+}
+
+function eleKeyUp()
+{
+	var _timeValue = parseInt(event.srcElement.value);
+	var timeRadix = parseInt(event.srcElement.radix);
+	if (_timeValue>timeRadix||_timeValue<0) 
+	{
+		event.srcElement.value = event.srcElement.value.substr(0,1);
+	}
+}
+
+function eleBlur()
+{
+	event.srcElement.value = formatTime(event.srcElement.value);
+	eval("event.srcElement.timeEle."+event.srcElement.ctrlTag+"=event.srcElement.value");
+}
+
+function arrowFocus()
+{
+	window.document.getElementById(event.srcElement.ctrlId).select();
+}
+
+function decTime()
+{
+	var ctrlElement = window.document.getElementById(event.srcElement.ctrlId);
+	var timeVal = parseInt(ctrlElement.value);
+	timeVal--;
+	if(timeVal<0)
+		timeVal = parseInt(ctrlElement.radix);
+	ctrlElement.value = formatTime(timeVal);
+	eval("ctrlElement.timeEle."+ctrlElement.ctrlTag+"=ctrlElement.value");
+}
+
+function addTime()
+{
+	var ctrlElement = window.document.getElementById(event.srcElement.ctrlId);
+	var timeVal = parseInt(ctrlElement.value);
+	timeVal++;
+	if(timeVal>parseInt(ctrlElement.radix))
+		timeVal = 0;
+	ctrlElement.value = formatTime(timeVal);
+	eval("ctrlElement.timeEle."+ctrlElement.ctrlTag+"=ctrlElement.value");
+}
+</SCRIPT>

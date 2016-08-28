@@ -1,0 +1,285 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb18030">
+<title>派发省份选择</title>
+<link rel="stylesheet" type="text/css" href="../../ext/resources/css/ext-all-notheme.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+<link rel="stylesheet" type="text/css" href="default.css" />
+<script src="../../ext/adapter/ext/ext-base.js"></script>
+<script src="../../ext/ext-all.js"></script>
+<script src="../../Common.js"></script>
+<SCRIPT src="../../Dialog.js"></SCRIPT>
+<SCRIPT src="../../Error.js"></SCRIPT>
+</head>
+<style>
+body{
+	background-color:#EFF4FE;
+	padding:5px;
+}
+
+.flatBut{
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color: #2149C8; 
+	text-align: center; 
+	cursor: hand; 
+	white-space:nowrap;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#EFF4FE, endcolorstr=#C4D4F4);
+	border-top:1px solid #FFFFFF;
+	border-left:1px solid #FFFFFF;
+	border-right:1px solid #4068AA;
+	border-bottom:1px solid #4068AA;
+	background-color:#C8D9FB;
+}
+.flatButOver{
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color: #FF0000; 
+	text-align: center; 
+	cursor: hand; 
+	white-space:nowrap;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#C4D4F4, endcolorstr=#EFF4FE);
+	border-top:1px solid #FFFFFF;
+	border-left:1px solid #FFFFFF;
+	border-right:1px solid #4068AA;
+	border-bottom:1px solid #4068AA;
+	background-color:#D2E0FC;
+}
+.flatButDown{
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color: #FF0000; 
+	text-align: center; 
+	cursor: hand; 
+	white-space:nowrap;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradienttype=0, startcolorstr=#C4D4F4, endcolorstr=#EFF4FE);
+	border-top:1px solid #4068AA;
+	border-left:1px solid #4068AA;
+	border-right:1px solid #FFFFFF;
+	border-bottom:1px solid #FFFFFF;
+	background-color:#DBE5FA;
+}
+</style>
+<body onload="iniPage()">
+	<div id="headDiv" style="height:10px;border:1px solid #94B0CB;background-color:#FFFFFF;padding:2px;"></div>
+	<div id="regDiv" style="height:150px;border:1px solid #94B0CB;background-color:#FFFFFF;padding:2px;"></div>
+	<div style="padding:10px;">
+		<span id="alterAddBut" 
+			style="float:left; width:auto; height:16px; line-height:17px; margin:0 0 0 37%;" 
+			class="flatBut" 
+			onMouseOver="this.className='flatButOver'" 
+			onMouseDown="this.className='flatButDown'" 
+			onMouseOut="this.className='flatBut'" 
+			onclick="windowClose(true)"/>&nbsp;&nbsp;确 定&nbsp;&nbsp;</span>
+		<span id="alterAddBut" 
+			style="float:left; width:auto; height:16px; line-height:17px; margin:0 0 0 20px;" 
+			class="flatBut" 
+			onMouseOver="this.className='flatButOver'" 
+			onMouseDown="this.className='flatButDown'" 
+			onMouseOut="this.className='flatBut'" 
+			onclick="windowClose(false)"/>&nbsp;&nbsp;取 消&nbsp;&nbsp;</span>
+	</div>
+</body>
+</html>
+<script>
+var url = "/servlet/JtitsmModelResourceServlet?tag=";
+var type = "1";//默认为1  
+var disRegion = "";
+var allRegionIds = "";
+function iniPage(){
+	var arrayUrl = getURLSearch();
+	var	groupId = "";
+	var regionIds = "";
+	var isSel = "0";
+	var disContail = "";
+	if (arrayUrl != null) {
+		groupId = arrayUrl.id;
+		regionIds = arrayUrl.regionIds;
+		isSel = arrayUrl.isSel;
+		if(arrayUrl.type){
+			type = arrayUrl.type;
+		}
+		if(arrayUrl.disRegion){
+			disRegion = arrayUrl.disRegion;
+		}
+		if(arrayUrl.allRegionIds){
+			allRegionIds = arrayUrl.allRegionIds;
+		}
+	}
+	var checked = "";//是否选中
+	var valArr = new Array();
+	if(regionIds){
+		valArr = regionIds.split(",");
+	} 
+	var allArr = new Array();
+	if(allRegionIds){
+		allArr = allRegionIds.split(",");
+	}
+	resArr = queryData(groupId,type);
+	/**************修改sql注入问题*********************
+	var sql = "select a.REGION_NAME, a.REGION_ID,b.R_ID from region_code a,(select distinct(r.region_id) r_id from project_group_staff_cfg c,"+
+			"staff s, region_code r where s.staff_id = c.value and s.region_id = r.region_id and c.group_id="+groupId+") b where a.region_level = '97B' ";
+    if(disContain != "" && disContain != null && disContain != undefined){
+		sql += "and a.region_id not in(" + disContain + ")";
+	}
+	sql += "and a.region_id != 9 and a.region_id = b.r_id(%2B) order by b.r_id";
+	var resArr = queryAllData(sql);
+	***************************************************/
+	if (resArr && resArr != undefined && resArr.length > 0) {
+		var headHtmlStr ='<div><table style="float:left;width:70px;margin:3px 0;padding:0;" cellSpacing=0 cellPadding=0 border=0>';
+		    headHtmlStr+='<tr>';
+		    headHtmlStr+='<td style="width:20px;padding:0;"><INPUT TYPE="checkbox" value="" name="select_all" id="select_all" style="margin:0;padding:0;" onclick="selectAll()"/></td>';
+		    headHtmlStr+='<td style="padding:8px 0 0 0;"><LABEL for="select_all" class="choice-check-text" style="margin:0;padding:0;">全选</label></td>';
+		    headHtmlStr+='</tr></table>';
+		    headHtmlStr+='<table style="float:left;width:70px;margin:3px 0;padding:0;" cellSpacing=0 cellPadding=0 border=0><tr>';
+		    headHtmlStr+='<td style="width:20px;padding:0;"><INPUT TYPE="checkbox" value="" name="select_opposite" id="select_opposite" style="margin:0;padding:0;" onclick="selectOpposite()"/></td>';
+		    headHtmlStr+='<td style="padding:8px 0 0 0;"><LABEL for="select_opposite" class="choice-check-text" style="margin:0;padding:0;">反选</label></td>';
+		    headHtmlStr+='</tr>';
+		    headHtmlStr+='</table></div>';
+		var divObj = document.getElementById("headDiv");
+		divObj.insertAdjacentHTML("beforeEnd",headHtmlStr);
+		for(var i=0; i<resArr.length; i++){
+			if(isSel == "1" && valArr.length ==0){
+				checked = "checked";
+			}else{
+				checked = "";
+			}
+			
+			for(var j = 0; j < valArr.length; j++){
+				if(valArr[j] == resArr[i].REGION_ID){
+					checked = "checked";
+					break;
+				}
+			}
+			
+			
+			
+			var inHtmlStr ='<table style="float:left;width:70px;margin:3px 0;padding:0;" cellSpacing=0 cellPadding=0 border=0>';
+			    inHtmlStr+='<tr>';
+			    if (resArr[i].R_ID != '' && resArr[i].R_ID != null && resArr[i].R_ID != 'undefined'){
+			    	inHtmlStr+='<td style="width:20px;padding:0;"><INPUT TYPE="checkbox" value="'+resArr[i].REGION_ID+'" name="REGIONS" id="REGION_'+resArr[i].REGION_ID+'" '+checked+' style="margin:0;padding:0;"/></td>';
+			    }else if(type == 1){
+			    	inHtmlStr+='<td style="width:20px;padding:0;"><INPUT TYPE="checkbox" value="'+resArr[i].REGION_ID+'" name="REGIONS" id="REGION_'+resArr[i].REGION_ID+'" style="margin:0;padding:0;" disabled/></td>';
+			    }else{
+					var disabled = "disabled";
+					if(allArr.length>0){
+						for(var j = 0; j < allArr.length; j++){
+							if(allArr[j] == resArr[i].REGION_ID){
+								disabled = "";
+								break;
+							}
+						}
+					}else{
+						disabled = "";
+					}
+					
+					inHtmlStr+='<td style="width:20px;padding:0;"><INPUT TYPE="checkbox" value="'+resArr[i].REGION_ID+'" name="REGIONS" text="'+resArr[i].REGION_NAME+'" id="REGION_'+resArr[i].REGION_ID+'" '+checked+ ' '+ disabled +' style="margin:0;padding:0;"/></td>';
+
+				}
+			    inHtmlStr+='<td style="padding:8px 0 0 0;"><LABEL for="REGION_'+resArr[i].REGION_ID+'" class="choice-check-text" style="margin:0;padding:0;">'+resArr[i].REGION_NAME+'</label></td>';
+			    inHtmlStr+='</tr>';
+			    inHtmlStr+='</table>';
+			var divObj = document.getElementById("regDiv");
+			divObj.insertAdjacentHTML("beforeEnd",inHtmlStr);
+		}
+	}
+}
+
+function selectAll(){
+	var rObjs = document.getElementsByName("REGIONS");
+	if (document.getElementById("select_all").checked){
+		for(var i=0; i<rObjs.length; i++){
+			if (!rObjs[i].disabled){
+				rObjs[i].checked = true;
+			}
+		}
+	}else{
+		for(var i=0; i<rObjs.length; i++){
+			if (!rObjs[i].disabled){
+				rObjs[i].checked = false;
+			}
+		}
+	}
+}
+
+function selectOpposite(){
+	var rObjs = document.getElementsByName("REGIONS");
+	select_all.checked = false;
+	for(var i=0; i<rObjs.length; i++){
+		if (!rObjs[i].disabled){
+			rObjs[i].checked = !rObjs[i].checked;
+		}
+	}
+}
+
+function windowClose(ok){
+	var retValue = {"REGION_ID":"","FLAG":false,"REGION_NAME":""};
+	var regionIds = "";
+	var regionNames = "";
+	if(ok){
+		var rObjs = document.getElementsByName("REGIONS");
+		for(var i=0; i<rObjs.length; i++){
+			if(rObjs[i].checked){
+				if(regionIds==""){
+					regionIds = rObjs[i].value;
+					regionNames = rObjs[i].text;
+				}else{
+					regionIds = regionIds+','+rObjs[i].value;
+					regionNames = regionNames+','+rObjs[i].text;
+				}
+			}
+		}
+		retValue.REGION_ID = regionIds;
+		retValue.REGION_NAME = regionNames;
+		retValue.FLAG=true;		
+	}else{
+		retValue.FLAG=false;		
+	}
+	window.returnValue = retValue;
+	window.close();
+}
+
+
+function queryData(groupId,type){
+	
+	 var sendXML='<?xml version="1.0" encoding="utf-8"?>'
+           +  '<root>'
+           +  '<GROUP_ID>' + groupId + '</GROUP_ID>'
+		   +  '<TYPE>' + type + '</TYPE>'
+           +  '</root>';
+	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	var retVal = []
+	xmlhttp.Open("GET", url + '4', false);
+	xmlhttp.send(sendXML);
+	if (!isSuccess(xmlhttp))
+		return
+	var dXML = new ActiveXObject("Microsoft.XMLDOM");
+	dXML.load(xmlhttp.responseXML);
+	var element = dXML.selectSingleNode("/root/rowSet");
+	while (element != null) {
+		// 读取所有元素与对应值
+		var childs = element.childNodes
+		var obj = {}
+		for (var i = 0; i < childs.length; i++) {
+			var e = childs[i]
+			var toel = 'obj.' + e.nodeName + '="' + e.text + '"';
+			toel = toel.replace(/\n/g, '<br/>')
+			try{
+			    eval(toel)
+			}catch(ex){
+			    var errKey = "err" + i
+			    obj[errKey] = e.text
+			}
+		}
+		retVal.push(obj)
+		element = element.nextSibling;
+	}
+	return retVal
+
+}
+
+</script>
+

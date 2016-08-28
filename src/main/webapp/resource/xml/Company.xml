@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="gb2312"?>
+<root>
+  <COMPANY>
+    <EASY_EVAL_SERVICE>1</EASY_EVAL_SERVICE><!-- 0:开启供应商管理下的"厂商服务评估"登记页面, 1-关闭. 非广西地区设置为1, 广西地区设置为0 -->
+    <COMP_EVAL_SERVICE>0</COMP_EVAL_SERVICE><!-- 0:开启供应商管理下的"厂商服务支撑情况"登记页面, 1-关闭. 非广西地区设置为0,广西地区设置为1 -->
+  </COMPANY>
+</root>

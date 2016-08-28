@@ -1,0 +1,127 @@
+body {
+	font-size: 12px;
+	background-color: #E0DFE3;
+	margin: 0px;
+	padding: 0px;
+	cursor:default;
+}
+table,td,select {
+	font-size: 12px;
+}
+
+.dropdown{
+	position:absolute;
+	margin: 0px;
+	border:1px solid #7C7C94;
+	display:none;
+	width:1px;
+	height:1px;
+	z-index:-1;
+}
+.paddingTop{
+	padding-Top:5px;
+}
+.btUp{
+	border:1px solid #E0DFE3;
+}
+.btOver{
+	border:1px outset;
+	background-color:#F6F6F1;
+}
+.btDown{
+	border:1px inset;
+	background-color:#E5E4DD;
+}
+.overBorder {
+	border:1px outset
+}
+.downBorder {
+	border:1px inset
+}
+.upBorder {
+	border: 1px solid #E0DFE3;
+}
+input{
+	font-size:12px;
+	height:20px;
+}
+.dialogBody{
+	margin:5px;
+	cursor:default;
+}
+.dialogRightButton{
+	height:23px;
+	padding-top:2px;
+	width:80px;
+}
+.sltBorderStyle,.sltBorderWidth{
+	height:20px;
+	width:59px;
+}
+.tfColor{
+	height:20px;
+	width:58px;
+}
+#tblTab tr td img{
+	display:none;
+}
+.tabButton{
+	height:18px;
+	padding-left:3px;
+	padding-right:3px;
+	vertical-align: bottom;
+	cursor:hand;
+}
+.shortWidth {
+	width: 49px;
+}
+.longWidth {
+	width: 195px;
+}
+.normalWidth {
+	width: 120px;
+}
+form {
+	display: inline;
+	
+}
+.bt {
+	width: 12px;
+	height: 8px;
+	font-family: "Webdings";
+	font-size: 7px;
+	line-height: 2px;
+	cursor: default;
+	border: 1px outset;
+	background-color: #EEEEEE;
+}
+.input{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	height: 20px;
+	padding-top:1px;
+	padding-bottom:4px;
+	border:none;
+	text-align: right;
+	font-weight: bold;
+}
+.close {
+	font-size: 16px;
+	font-weight: bold;
+	color: #FF0000;
+}
+.hightLight {
+	color: #FF0000;
+}
+.commandButton{
+	padding-right:3px;
+	padding-left:3px;
+	event:expression(
+		onmouseover=function(){
+			this.style.textDecoration='underline'
+		},
+		onmouseout=function(){
+			this.style.textDecoration='none'
+		}
+	);
+}

@@ -1,0 +1,140 @@
+
+<html><!-- InstanceBegin template="/Templates/dialog.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>层</title>
+<!-- InstanceEndEditable -->
+<link href="../includes/style.css" rel="stylesheet" type="text/css">
+</head>
+<script language="JavaScript" type="text/JavaScript" src="../includes/data.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/public.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="../includes/dialogPublic.js"></script>
+<!-- InstanceBeginEditable name="erScript" -->
+<script language="JavaScript" type="text/JavaScript">
+function init(){
+	initDialog()
+	initDocument()
+	if(myEditor.designer){
+		listClass(myEditor.designer.document,document.all('sltClass'))
+		listImage(myEditor.designer.document,document.all('sltBackground-Image'))
+	}
+}
+function doOK(){
+	objectTag()
+}
+function objectTag(){
+	var id='',className='',strAttributes=compileAttributesString(myEditor.form,true,/^((Class)|(Id))$/)
+	id=document.all('tfId').value
+	id=id!=''?'id="'+id+'"':''
+	className=getSelectText(document.all('sltClass'))
+	className=className!=''?'class="'+className+'"':''
+	var strStyle='position:absolute;'+strAttributes
+	var tagName=myEditor.form.elements('sltTagName').value
+	var html='<'+tagName+' '+id+' '+className+' style="'+strStyle+'">'+myEditor.selectionHTML+'</'+tagName+'>'
+	myEditor.window.insert(html,'select')
+	window.close()
+}
+</script>
+<!-- InstanceEndEditable -->
+<body class="dialogBody" onLoad="init()">
+<iframe id="ifrmColorPicker" frameborder="0" scrolling="auto" src="../colorPicker/colorPicker.htm" class="dropdown"></iframe>
+<table width="450"  border="0" cellpadding="0" cellspacing="3">
+<tr valign="top">
+    <td valign="top">
+	<form name="theForm">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="1">
+<!-- InstanceBeginEditable name="erTable" -->
+  <tr>
+    <td height="25" colspan="2">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="28">常规</td>
+    <td><img src="../images/horizontal.gif" width="100%" height="6"></td>
+  </tr>
+</table></td>
+    </tr>
+  <tr>
+    <td width="80" height="22" align="right">标签名称:</td>
+    <td><select name="sltTagName">
+      <option value="DIV">DIV</option>
+      <option value="SPAN">SPAN</option>
+    </select></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">左边位置:</td>
+    <td><script>writeDigitalUnits('Left','0',true)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">顶部位置:</td>
+    <td><script>writeDigitalUnits('Top','0',true)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">宽度:</td>
+    <td><script>writeDigitalUnits('Width','80',true)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">高度:</td>
+    <td><script>writeDigitalUnits('Height','60',true)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">Z轴:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1">
+		<script>writeDigitalTextfield('Z-Index','1')</script></td>
+          <td width="66" align="right">背景颜色:</td>
+		  <td width="1"></td>
+          <td><script>writeColorTable('Background-Color')</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">背景图像:</td>
+    <td><script>writeUrlSelector('Background-Image',195)</script></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">溢出:</td>
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="1"><script>writeEditableSelect('Overflow',70,	[	'','',
+		  																'可见','visible',
+		  																'隐藏','hidden',
+																		'滚动','scroll',
+																		'自动','auto'
+		  															])</script>
+		</td>
+          <td width="54" align="right">可见性:</td>
+		  <td width="1"></td>
+          <td><script>writeEditableSelect('Visibility',70,[	'','',
+		  													'继承','inherit',
+															'可见','visible',
+															'隐藏','hidden'
+		  													])</script></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="22" align="right">ID:</td>
+    <td><script>writeTextfield('Id','')</script></td>
+  </tr>
+    <tr>
+    <td height="22" align="right">类:</td>
+    <td><script>writeEditableSelect('Class',120)</script></td>
+  </tr>
+<!-- InstanceEndEditable -->
+	</table>
+	</form>
+	</td>
+    <td width="6" height="100%" valign="top"><img id=img src="../images/separator.gif" width="6" height="100%"></td>
+    <td width="90" align="center">
+      <!-- InstanceBeginEditable name="raButtonsRight" -->
+	  <script>writeButtonsRight()</script>
+	  <!-- InstanceEndEditable -->
+	  </td>
+</tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

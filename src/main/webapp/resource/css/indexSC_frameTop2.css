@@ -1,0 +1,179 @@
+/* CSS Document */
+*{margin:0;padding:0;}
+body {
+	font: 13px/150% microsoft yahei,Helvetica,Tahoma,Arial,sans-serif;
+	background: #e9eef5;
+	margin: 0;
+	padding: 0;
+	color: #274467;
+	}
+a {
+	text-decoration: none;
+	-webkit-transition: 0.2s;
+	-moz-transition: 0.2s;
+	-o-transition: 0.2s;
+	-ms-transition: 0.2s;
+	transition: 0.2s;
+	/*color: #007bc7;*/
+	color: #000000;
+	}
+a:hover {
+	color: #F03
+	}
+img {
+	border: none
+	}
+form{
+	margin: 0;
+	}
+input,select,textarea {
+	font-family: microsoft yahei,Helvetica,Tahoma,Arial,sans-serif
+	}
+.ulhide,
+.ulhide ul,
+.ulhide li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	}
+.Contents {
+	padding: 10px;
+	}
+.fleft {
+	float: left
+	}
+.fright {
+	float: right
+	}
+.clear {
+	clear: both
+	}
+.tleft {
+	text-align: left
+	}
+.tcenter {
+	text-align: center
+	}
+.tright {
+	text-align: right
+	}
+.red {
+	color: #FFF;
+	}
+.white,
+.white a {
+	color: #FFF
+	}
+.white a:hover,
+a:hover.white {
+	color: #CCC
+	}
+.BigFont {
+	font-size: 32px;
+	font-weight: bold;
+	line-height: 48px;
+	color: #00b6f1
+	}
+.BigFont2 {
+	font-size: 25px;
+	line-height: 40px;
+	color: #00b6f1
+	}
+.myBtn {
+	height: 26px;
+	border: none;
+	background: #239cdd;
+	color: #FFF
+	}
+.BlueTable {
+	background: #FFF;
+	width: 100%;
+	border-collapse: collapse;
+	}
+.BlueTable tr {
+	height: 24px;
+	}
+.BlueTable td {
+	border-bottom: 1px solid #d7e6ff;
+	}
+.BlueTable tr:hover {
+	background: #d4e3ff;
+	}
+.BlueTable .Title,
+.BlueTable .Title:hover {
+	background: #FFF;
+	font-size: 14px;
+	font-weight: bold
+	}
+.BlueTable .nbd {
+	border-left: none !important;
+	}
+.BlueTable .Order:hover {
+	background: #8fd3f8;
+	cursor: pointer;
+	}
+.BlueTable .bg1 {
+	background: #f2f7ff
+	}
+.BlueTable label {
+	padding: 10px;
+	display: inline-block
+	}
+.BlueTable tr .Selected {
+	background: #68caff !important;
+	}
+#Head {
+	background: #4f99e9;
+	height: 63px;
+	}
+#Logo {
+	background: url(../image/indexSC2/logo.png) no-repeat;
+	width: 469px;
+	height: 43px;
+	margin: 10px 20px;
+	float: left
+	}
+#Menu1 {
+	height: 45px;
+	background: #4587ce;
+	white-space: nowrap
+	}
+#Menu1 li {
+	float: left;
+	}
+#Menu1 a {
+	padding: 0 10px;
+	line-height: 45px;
+	font-size: 16px;
+	text-align: center;
+	float: left;
+	color: #FFF;
+	}
+#Menu1 a:hover,.Menu1_a_hover {
+	background: #eaeaea;
+	color: #4587ce
+	}
+#UserInfo {
+	height: 108px;
+	width: 700px;
+	margin: -110px 0 0 0;
+	text-align: right;
+	padding: 10px 20px 10px 10px;
+	position: relative;
+	float: right
+	}
+.UserInfoLinks a {
+	/*border-left: 1px solid #fff;*/
+	padding: 0;
+	margin: 0;
+	display: inline-block
+	}
+a.UserInfoLinksEnd {
+	border: none
+	}
+.MainWidth {
+	width: 100%;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	}
